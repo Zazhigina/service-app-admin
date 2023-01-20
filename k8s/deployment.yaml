@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $CONTAINER_NAME
+  labels:
+    app.kubernetes.io/name: tomcat
+    app.kubernetes.io/instance: mirror-test
+    app.kubernetes.io/part-of: mirror
+spec:
+  selector:
+    matchLabels:
+      name: $CONTAINER_NAME
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: $CONTAINER_NAME
+    spec:
+      hostname: $CONTAINER_NAME
+      containers:
+        - name:  $CONTAINER_NAME
+          image: "$CONTAINER_IMAGE:$APPLICATION_VERSION"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: TZ
+              value: Europe/Moscow
+            - name: SPRING_PROFILES_ACTIVE
+              value: $ACTIVE_PROFILE
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: db-connection-secret
+                  key: url
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: db-connection-secret
+                  key: username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-connection-secret
+                  key: password
+            - name: keycloak.jwk-set-uri
+              valueFrom:
+                secretKeyRef:
+                  name: keycloack-secret
+                  key: jwk-set-uri
+            - name: keycloak.with-public-key
+              valueFrom:
+                secretKeyRef:
+                  name: keycloack-secret
+                  key: with-public-key
+            - name: init-adm-rolegroup
+              valueFrom:
+                secretKeyRef:
+                  name: keycloack-secret
+                  key: init-adm-rolegroup
+            - name: mirror-trust-store-password
+              valueFrom:
+                secretKeyRef:
+                  name: keycloack-secret
+                  key: mirror-trust-store-password
+          imagePullPolicy: Always

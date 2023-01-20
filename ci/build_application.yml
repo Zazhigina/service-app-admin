@@ -1,0 +1,22 @@
+cache:
+  paths:
+    - gradle/wrapper
+    - gradle/caches
+
+build_app:
+  stage: build application
+  image: gradle:7.5.1-jdk17-focal
+  needs: ["build_dep"]
+  # when: manual
+  before_script:
+    - export GRADLE_USER_HOME=`pwd`/gradle
+  script:
+    - gradle --build-cache assemble -Dspring.profiles.active="$ACTIVE_PROFILE"
+  artifacts:
+    expire_in: 1h
+    name: "backend"
+    paths:
+      - build/libs
+  only:
+    refs:
+      - main

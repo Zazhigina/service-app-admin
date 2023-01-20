@@ -1,0 +1,22 @@
+deploy_app:
+  stage: deploy application
+  needs: ["build_img"]
+  image: registry.inlinegroup-c.ru/tools/google/cloud-sdk:359.0.0
+  script:
+    - sed -i "s|\$CONTAINER_NAME|$CONTAINER_NAME|g" k8s/service.yaml
+    - kubectl delete -n mirror-test -f k8s/service.yaml --ignore-not-found=true
+    - sed -i "s|\$CONTAINER_NAME|$CONTAINER_NAME|g" k8s/deployment.yaml
+    - sed -i "s|\$CONTAINER_IMAGE|$CONTAINER_IMAGE|g" k8s/deployment.yaml
+    - sed -i "s|\$APPLICATION_VERSION|$APPLICATION_VERSION|g" k8s/deployment.yaml
+    - sed -i "s|\$ACTIVE_PROFILE|$ACTIVE_PROFILE|g" k8s/deployment.yaml
+    - kubectl delete -n mirror-test -f k8s/deployment.yaml --ignore-not-found=true
+#    - sed -i "s|\$CONTAINER_NAME|$CONTAINER_NAME|g" k8s/service.yaml
+    - kubectl apply -n mirror-test -f k8s/service.yaml
+#    - sed -i "s|\$CONTAINER_NAME|$CONTAINER_NAME|g" k8s/deployment.yaml
+#    - sed -i "s|\$CONTAINER_IMAGE|$CONTAINER_IMAGE|g" k8s/deployment.yaml
+#    - sed -i "s|\$APPLICATION_VERSION|$APPLICATION_VERSION|g" k8s/deployment.yaml
+#    - sed -i "s|\$ACTIVE_PROFILE|$ACTIVE_PROFILE|g" k8s/deployment.yaml
+    - kubectl apply -n mirror-test -f k8s/deployment.yaml
+  only:
+    refs:
+      - main

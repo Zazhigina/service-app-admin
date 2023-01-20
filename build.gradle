@@ -1,0 +1,141 @@
+plugins {
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
+    id 'nu.studer.jooq' version "${jooqPluginVersion}"
+    id 'java'
+    id 'war'
+}
+
+group 'igc.mirror'
+war.archiveName "ROOT.war"
+
+sourceCompatibility = 17
+targetCompatibility = 17
+
+repositories {
+    mavenCentral()
+}
+
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+dependencies {
+    // logging
+    implementation "org.springframework.boot:spring-boot-starter-logging"
+
+    // jdbc
+    implementation "org.postgresql:postgresql:${postgreJDBCVersion}"
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude group: "org.junit.vintage", module: "junit-vintage-engine"
+    }
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+
+    //CORE
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security:spring-security-config'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+//    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    // JOOQ
+    implementation 'org.springframework.boot:spring-boot-starter-jooq'
+    jooqGenerator "jakarta.xml.bind:jakarta.xml.bind-api:${xmlBindVersion}"
+    jooqGenerator "org.postgresql:postgresql:${postgreJDBCVersion}"
+
+    // Security
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+
+    // JSON
+
+    // GSON
+//    implementation 'com.google.code.gson:gson:2.10'
+
+    // swagger and OpenAPI
+    implementation "org.springdoc:springdoc-openapi-ui:${springDocOpenApiUiVersion}"
+//    implementation 'org.springdoc:springdoc-openapi-security:1.6.9'
+
+//    implementation 'com.google.guava:guava:31.1-jre'
+
+    // POI
+//    implementation 'org.apache.poi:poi:5.2.2'
+//    implementation 'org.apache.poi:poi-ooxml:5.2.2'
+
+    implementation 'org.apache.httpcomponents:httpclient:4.3.4'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+sourceSets.main.java.srcDirs += "${jooqSrcDirs}"
+
+jooq {
+//    version = '3.16.6'
+    version = "${jooqVersion}"
+
+    configurations {
+        main {
+            generationTool {
+                logging = 'WARN' //org.jooq.meta.jaxb.Logging.WARN
+                jdbc {
+                    driver = 'org.postgresql.Driver'
+                    url = "${dbConnectionString}"
+                    user = "${dbUser}"
+                    password = "${dbPassword}"
+                }
+                generator {
+                    name = 'org.jooq.codegen.JavaGenerator'
+                    database {
+                        name = 'org.jooq.meta.postgres.PostgresDatabase'
+                        includes = '.*'
+                        schemata {
+                            schema {
+                                inputSchema = "${dbSchema}"
+                            }
+                        }
+                    }
+                    target {
+                        packageName = 'jooqdata'
+                        directory = "${jooqSrcDirs}"
+                    }
+                    generate {
+                        javaTimeTypes = true
+                        records = true
+                        relations = true
+                        pojos = true
+                        daos = false
+                        deprecated = false
+                        instanceFields = true
+                    }
+                    strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
+                }
+            }
+        }
+    }
+}
+
+tasks.named('generateJooq').configure {
+    // make jOOQ task participate in incremental builds (which is also a prerequisite for participating in build caching)
+    allInputsDeclared = true
+
+    // make jOOQ task participate in build caching
+    outputs.cacheIf { true }
+}
+
+bootRun{
+    systemProperty "spring.datasource.url", "${dbConnectionString}"
+    systemProperty "spring.datasource.username", "${dbUser}"
+    systemProperty "spring.datasource.password", "${dbPassword}"
+
+    systemProperty "keycloak.jwk-set-uri", "${keycloakJwkSetUri}"
+    systemProperty "keycloak.with-public-key", "${keycloakWithPublicKey}"
+    systemProperty "mirror-trust-store-password", "${mirrorTrustStorePassword}"
+    systemProperty "init-adm-rolegroup", "${initAdmRolegroup}"
+}

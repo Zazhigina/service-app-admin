@@ -1,0 +1,33 @@
+logging:
+  charset:
+    console: UTF-8
+  level:
+    root: INFO
+    org:
+      jooq: DEBUG
+
+springdoc:
+  swagger-ui:
+    path: /public/swagger-ui.html
+server:
+  forward-headers-strategy: framework
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url:
+    username:
+    password:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+
+keycloak:
+  public-key: classpath:app.pub
+  jwk-set-uri:
+  with-public-key:
+
+init-adm-rolegroup:
+mirror-trust-store: classpath:mirror.jks
+mirror-trust-store-password:

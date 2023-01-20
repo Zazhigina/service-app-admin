@@ -1,0 +1,15 @@
+build_img:
+  stage: build image
+  needs: ["build_app"]
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - >-
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/docker/Dockerfile"
+      --destination "${CONTAINER_IMAGE}:${APPLICATION_VERSION}"
+  only:
+    refs:
+      - main

@@ -9,6 +9,7 @@ logging:
 springdoc:
   swagger-ui:
     path: /public/swagger-ui.html
+    
 server:
   forward-headers-strategy: framework
 
@@ -25,9 +26,13 @@ spring:
 
 keycloak:
   public-key: classpath:app.pub
-  jwk-set-uri:
-  with-public-key:
+  jwk-set-uri: https://keycloak.inlinegroup-c.ru/realms/mirror_test/protocol/openid-connect/certs
+  with-public-key: false
 
-init-adm-rolegroup:
-mirror-trust-store: classpath:mirror.jks
-mirror-trust-store-password:
+mirror:
+  services:
+    rbac-base-url: https://mirror.inlinegroup-c.ru/api/rbac/
+  trust-store: classpath:mirror.jks
+  trust-store-password:
+
+init-params: false

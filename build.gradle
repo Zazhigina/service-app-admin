@@ -137,5 +137,6 @@ bootRun{
     systemProperty "keycloak.jwk-set-uri", "${keycloakJwkSetUri}"
     systemProperty "keycloak.with-public-key", "${keycloakWithPublicKey}"
     systemProperty "mirror-trust-store-password", "${mirrorTrustStorePassword}"
-    systemProperty "init-adm-rolegroup", "${initAdmRolegroup}"
+    systemProperty "init-params", "${initParams}"
+    systemProperty "mirror.services.rbac-base-url", "${rbacBaseUrl}"
 }

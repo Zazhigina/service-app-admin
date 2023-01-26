@@ -14,7 +14,7 @@ public class ParamDto {
     private String lastUpdateUser;
 
     public static ParamDto fromModel(Param paramModel){
-        return new ParamDto(paramModel.getKey(), paramModel.getName(), paramModel.getVal(), paramModel.getCreateDate(),
+        return new ParamDto(paramModel.getKey(), paramModel.getName(), paramModel.getVal() != null && !paramModel.getVal().isEmpty() ? paramModel.getVal(): paramModel.getDefaultVal(), paramModel.getCreateDate(),
                 paramModel.getCreateUser(), paramModel.getLastUpdateDate(), paramModel.getLastUpdateUser());
     }
 

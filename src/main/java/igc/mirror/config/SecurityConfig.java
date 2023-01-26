@@ -93,25 +93,17 @@ public class SecurityConfig {
                 Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
                 JSONArray groups = jwt.getClaim("groups");
-//                if (groups != null)
-//                    groups.forEach(group -> {
-//                        grantedAuthorities.add(new SimpleGrantedAuthority("GROUP_" + group.toString()));
-//                    });
 
                 List<String> userRoles = userService.getUserRoles(jwt);
-
-//                if (groups.contains(InitAdmGroup.MIRROR_BASE.getGroup())) {
-////                    List<String> roles = groupService.getRolesByGroupNames(groups.stream().map(group -> group.toString()).collect(Collectors.toList()));
-//                    List<String> roles = userService.getUserRoles(groups.stream().map(group -> group.toString()).collect(Collectors.toList()));
-                    final List<SimpleGrantedAuthority> keycloakAuthorities = userRoles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role)).collect(Collectors.toList());
-                    grantedAuthorities.addAll(keycloakAuthorities);
-//                }
+                final List<SimpleGrantedAuthority> keycloakAuthorities = userRoles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role)).collect(Collectors.toList());
+                grantedAuthorities.addAll(keycloakAuthorities);
 
                 return grantedAuthorities;
             }
         };
     }
 
+    //Временно используется .restOperations(из-за сертификатов)
     @Bean
     public JwtDecoder jwtDecoder() {
         if(keycloakWithPublicKey)

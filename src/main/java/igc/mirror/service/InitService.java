@@ -1,6 +1,6 @@
 package igc.mirror.service;
 
-import igc.mirror.enums.InitParam;
+import igc.mirror.ref.InitParam;
 import igc.mirror.model.Param;
 import igc.mirror.repository.ParamRepository;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public class InitService {
         List<Param> params = new ArrayList<>();
 
         for (InitParam param: InitParam.values()){
-            params.add(new Param(param.getKey(), param.getName(), param.getDefaultValue().toString()));
+            params.add(new Param(param.getKey(), param.getName(), null, param.getDefaultValue().toString()));
         }
 
         try {

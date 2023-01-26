@@ -5,10 +5,9 @@ import igc.mirror.repository.ParamRepository;
 import igc.mirror.utils.qfilter.DataFilter;
 import igc.mirror.utils.qfilter.QueryBuilder;
 import jooqdata.tables.AParam;
-import org.jooq.DSLContext;
-import org.jooq.InsertSetMoreStep;
+import jooqdata.tables.records.AParamRecord;
+import org.jooq.*;
 import org.jooq.Record;
-import org.jooq.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -81,13 +80,16 @@ public class ParamRepositoryImpl implements ParamRepository {
 
     @Override
     public List<Param> saveList(List<Param> dataList) {
-        List<InsertSetMoreStep> recordInsertList = new ArrayList<>();
+        List<InsertOnDuplicateSetMoreStep> recordInsertList = new ArrayList<>();
 
         for(Param paramData: dataList) {
-            recordInsertList.add(
+            InsertOnDuplicateSetMoreStep<AParamRecord> recordInsert =
                     dsl.insertInto(AParam.A_PARAM)
-                            .set( dsl.newRecord(AParam.A_PARAM, paramData) )
-            );
+                        .set( dsl.newRecord(AParam.A_PARAM, paramData) )
+                    .onDuplicateKeyUpdate()
+                            .set( dsl.newRecord(AParam.A_PARAM, paramData) );
+
+            recordInsertList.add(recordInsert);
         }
 
         dsl.batch(recordInsertList).execute();

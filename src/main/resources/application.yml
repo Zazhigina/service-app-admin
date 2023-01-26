@@ -9,7 +9,7 @@ logging:
 springdoc:
   swagger-ui:
     path: /public/swagger-ui.html
-    
+
 server:
   forward-headers-strategy: framework
 
@@ -30,8 +30,10 @@ keycloak:
   with-public-key: false
 
 mirror:
-  services:
-    rbac-base-url: https://mirror.inlinegroup-c.ru/api/rbac/
+  host: https://mirror.inlinegroup-c.ru
+  endpoint:
+    external:
+      rbac: /api/rbac
   trust-store: classpath:mirror.jks
   trust-store-password:
 

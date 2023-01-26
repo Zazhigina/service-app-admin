@@ -1,27 +1,26 @@
 package igc.mirror.service.impl;
 
 import igc.mirror.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
+    static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    @Value("${mirror.services.rbac-base-url}")
-    private String rbacBaseUrl;
     @Autowired
-    RestTemplate restTemplate;
+    @Qualifier("rbac")
+    private WebClient webClient;
+
 
     @Override
     public String getUsername() {
@@ -34,13 +33,23 @@ public class UserServiceImpl implements UserService {
         return jwt.getClaim("preferred_username");
     }
 
+    /**
+     * Получение списка ролей пользователя
+     * {@linkplain //mirror.inlinegroup-c.ru/api/rbac}
+     *
+     * @param jwt Jwt токен
+     * @return Список ролей
+     */
     @Override
     public List<String> getUserRoles(Jwt jwt) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + jwt.getTokenValue());
-        HttpEntity<Void> request = new HttpEntity<>(headers);
-
-        ResponseEntity<List<String>> userRolesResponse = restTemplate.exchange(rbacBaseUrl + "user/roles", HttpMethod.GET, request, new ParameterizedTypeReference<List<String>>(){});
-        return userRolesResponse.getBody();
+        return webClient
+                .get()
+                .uri("/user/roles")
+                .header("Authorization", "Bearer " + jwt.getTokenValue())
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<String>>(){})
+                .log()
+                .doOnError(err -> logger.error("Ошибка запуска удаленного сервиса - {}", err.getMessage()))
+                .block();
     }
 }

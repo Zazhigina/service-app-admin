@@ -7,6 +7,7 @@ import igc.mirror.service.ParamService;
 import igc.mirror.utils.qfilter.DataFilter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("param")
 @SecurityRequirement(name = "bearerAuth")
+@Tag(name = "Ведение параметров")
 public class ParamRestController {
     private ParamService paramService;
 

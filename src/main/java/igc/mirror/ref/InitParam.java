@@ -1,4 +1,4 @@
-package igc.mirror.enums;
+package igc.mirror.ref;
 
 public enum InitParam {
     SEARCH_BY_SUBJECT_MIN_THRESHOLD("SEARCH_BY_SUBJECT.MIN_THRESHOLD", "Поиск по предмету закупок, минимальный порог в % для поиска уч-ков", 65),

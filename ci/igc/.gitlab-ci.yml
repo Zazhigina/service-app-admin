@@ -1,0 +1,19 @@
+variables:
+  FF_GITLAB_REGISTRY_HELPER_IMAGE: 1
+  ACTIVE_PROFILE: "test"
+  APPLICATION_VERSION: v0.1
+  CONTAINER_NAME: service-app-admin
+  DEPLOY_BRANCH: develop-local
+  KUBERNETES_NAMESPACE_OVERWRITE: mirror
+  APP_HOST: mirror.inlinegroup-c.ru
+  APP_ROOT: api/admin
+  APP_URL: https://$APP_HOST/$APP_ROOT
+
+
+stages:
+  - build
+  - deploy
+
+include:
+  - local: ci/igc/build.yml
+  - local: ci/igc/deploy.yml

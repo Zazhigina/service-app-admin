@@ -1,0 +1,16 @@
+build:
+  stage: build
+  environment:
+    name: development
+    action: prepare
+  image:
+    name: registry.inlinegroup-c.ru/tools/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - cat $MIRROR_CA_PEM > ${CI_PROJECT_DIR}/root.ca.pem
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/docker/igc/Dockerfile"
+      --destination "${CI_REGISTRY_IMAGE}:${APPLICATION_VERSION}"
+  rules:
+    - if: $CI_COMMIT_BRANCH == $DEPLOY_BRANCH

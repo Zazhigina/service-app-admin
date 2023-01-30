@@ -18,14 +18,27 @@ spec:
         name: $CONTAINER_NAME
     spec:
       hostname: $CONTAINER_NAME
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/Europe/Moscow
       containers:
         - name:  $CONTAINER_NAME
           image: "$CONTAINER_IMAGE:$APPLICATION_VERSION"
           ports:
             - containerPort: 8080
+          resources:
+            limits:
+              memory: "1200Mi"
+              cpu: "600m"
           env:
             - name: TZ
               value: Europe/Moscow
+            - name: mirror.host
+              valueFrom:
+                configMapKeyRef:
+                  name: $CONTAINER_NAME
+                  key: root_host
             - name: SPRING_PROFILES_ACTIVE
               value: $ACTIVE_PROFILE
             - name: SPRING_DATASOURCE_URL

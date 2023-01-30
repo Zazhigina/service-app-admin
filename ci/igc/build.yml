@@ -8,6 +8,7 @@ build:
     entrypoint: [""]
   script:
     - cat $MIRROR_CA_PEM > ${CI_PROJECT_DIR}/root.ca.pem
+    - cat $MIRROR_CA_PEM > ${CI_PROJECT_DIR}/app.pub
     - /kaniko/executor
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/docker/igc/Dockerfile"

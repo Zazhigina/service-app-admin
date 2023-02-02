@@ -1,16 +1,19 @@
-FROM registry.inlinegroup-c.ru/tools/gradle:7.5.1-jdk17-focal as build
-WORKDIR /app
-COPY . .
-ADD app.pub /app/src/main/resources/app.pub
-ENV GRADLE_USER_HOME=/app/gradle
-RUN gradle --build-cache assemble -Dspring.profiles.active="test"
-#
-FROM tomcat:9.0.70-jdk17
+FROM gitlab.inlinegroup-c.ru/mirror/dependency_proxy/containers/gradle:7.6.0-jdk17-alpine as build
 ENV TZ Europe/Moscow
-# Добавить требуемый сертификат в хранилище
+WORKDIR /application
+COPY . .
+ENV GRADLE_USER_HOME=/application/gradle
+RUN gradle build -Dspring.profiles.active="test"
+RUN java -Djarmode=layertools -jar /application/build/libs/root.jar extract
+#
+FROM gitlab.inlinegroup-c.ru/mirror/dependency_proxy/containers/eclipse-temurin:17-jre-ubi9-minimal
+ENV TZ Europe/Moscow
 ADD root.ca.pem /tmp/root.ca.pem
 RUN keytool -noprompt -import -trustcacerts -cacerts -storepass changeit -alias mirror.pem -file /tmp/root.ca.pem
-# Наименование war сделать переменной
-COPY --from=build /app/build/libs/ROOT.war /usr/local/tomcat/webapps/ROOT.war
+WORKDIR application
+COPY --from=build /application/dependencies/ ./
+COPY --from=build /application/spring-boot-loader/ ./
+COPY --from=build /application/snapshot-dependencies/ ./
+COPY --from=build /application/application/ ./
 EXPOSE 8080
-CMD ["catalina.sh", "run"]
+ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]

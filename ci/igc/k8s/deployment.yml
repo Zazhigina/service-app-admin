@@ -22,6 +22,8 @@ spec:
         - name: tz-config
           hostPath:
             path: /usr/share/zoneinfo/Europe/Moscow
+      imagePullSecrets:
+        - name: registry-credential
       containers:
         - name:  $CONTAINER_NAME
           image: "$CONTAINER_IMAGE:$APPLICATION_VERSION"

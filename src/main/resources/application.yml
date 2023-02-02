@@ -26,15 +26,13 @@ spring:
 
 keycloak:
   public-key: classpath:app.pub
-  jwk-set-uri: https://keycloak.inlinegroup-c.ru/realms/mirror_test/protocol/openid-connect/certs
-  with-public-key: false
+  jwk-set-uri:
+  with-public-key:
 
 mirror:
-  host: https://mirror.inlinegroup-c.ru
+  host:
   endpoint:
     external:
       rbac: /api/rbac
-  trust-store: classpath:mirror.jks
-  trust-store-password:
 
-init-params: false
+init-params:

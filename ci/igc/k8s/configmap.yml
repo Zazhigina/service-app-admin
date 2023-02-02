@@ -8,3 +8,4 @@ metadata:
     app.kubernetes.io/part-of: mirror
 data:
   root_host: "https://$APP_HOST"
+  init-params: "false"

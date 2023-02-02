@@ -24,12 +24,12 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.web.client.RestTemplate;
 
 import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -48,8 +48,6 @@ public class SecurityConfig {
     private RSAPublicKey jwtPublicKey;
     @Value("${keycloak.with-public-key}")
     private Boolean keycloakWithPublicKey;
-    @Autowired
-    private RestTemplate restTemplate;
 
     @Autowired
     private UserService userService;
@@ -94,21 +92,26 @@ public class SecurityConfig {
 
                 JSONArray groups = jwt.getClaim("groups");
 
-                List<String> userRoles = userService.getUserRoles(jwt);
-                final List<SimpleGrantedAuthority> keycloakAuthorities = userRoles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role)).collect(Collectors.toList());
-                grantedAuthorities.addAll(keycloakAuthorities);
+                Optional<List<String>> userRoles = userService.getUserRoles(jwt);
+                userRoles.ifPresent(roles -> {
+                    final List<SimpleGrantedAuthority> keycloakAuthorities = roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role)).collect(Collectors.toList());
+                    grantedAuthorities.addAll(keycloakAuthorities);
+                });
+//                if(userRoles.isPresent()) {
+//                    final List<SimpleGrantedAuthority> keycloakAuthorities = userRoles.get().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role)).collect(Collectors.toList());
+//                    grantedAuthorities.addAll(keycloakAuthorities);
+//                }
 
                 return grantedAuthorities;
             }
         };
     }
 
-    //Временно используется .restOperations(из-за сертификатов)
     @Bean
     public JwtDecoder jwtDecoder() {
         if(keycloakWithPublicKey)
             return NimbusJwtDecoder.withPublicKey(jwtPublicKey).build();
-        return NimbusJwtDecoder.withJwkSetUri(keycloakJwkSetUri).restOperations(restTemplate).build();
+        return NimbusJwtDecoder.withJwkSetUri(keycloakJwkSetUri).build();
     }
 
 }

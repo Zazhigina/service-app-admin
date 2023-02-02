@@ -1,8 +1,5 @@
 package igc.mirror.config;
 
-import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,12 +23,7 @@ public class WebClientConfig {
 
     @Bean("rbac")
     public WebClient webClientRbac() throws SSLException {
-        SslContext sslContext = SslContextBuilder
-                .forClient()
-                .trustManager(InsecureTrustManagerFactory.INSTANCE)
-                .build();
-
-        HttpClient httpClient = HttpClient.create().secure(sslContextSpec -> sslContextSpec.sslContext(sslContext));
+        HttpClient httpClient = HttpClient.create();
         return WebClient.builder()
                 .baseUrl(String.join("", baseURL, rbacEndpoint))
                 .clientConnector(new ReactorClientHttpConnector(httpClient))

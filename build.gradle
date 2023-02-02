@@ -122,9 +122,11 @@ bootRun{
     systemProperty "spring.datasource.username", "${dbUser}"
     systemProperty "spring.datasource.password", "${dbPassword}"
 
+    systemProperty "mirror.host", "${mirrorHost}"
+    systemProperty "javax.net.ssl.trustStore", "${project.rootDir}\\src\\main\\resources\\mirror.jks"
+    systemProperty "javax.net.ssl.trustStorePassword", "mirror"
+
     systemProperty "keycloak.jwk-set-uri", "${keycloakJwkSetUri}"
     systemProperty "keycloak.with-public-key", "${keycloakWithPublicKey}"
-    systemProperty "mirror-trust-store-password", "${mirrorTrustStorePassword}"
     systemProperty "init-params", "${initParams}"
-    systemProperty "mirror.host", "${mirrorHost}"
 }

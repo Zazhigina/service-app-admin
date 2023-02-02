@@ -10,8 +10,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -41,7 +43,7 @@ public class UserServiceImpl implements UserService {
      * @return Список ролей
      */
     @Override
-    public List<String> getUserRoles(Jwt jwt) {
+    public Optional<List<String>> getUserRoles(Jwt jwt) {
         return webClient
                 .get()
                 .uri("/user/roles")
@@ -49,7 +51,10 @@ public class UserServiceImpl implements UserService {
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<String>>(){})
                 .log()
-                .doOnError(err -> logger.error("Ошибка запуска удаленного сервиса - {}", err.getMessage()))
-                .block();
+                .onErrorResume(err -> {
+                    logger.error("Ошибка запуска удаленного сервиса rbac - {}", err.getMessage());
+                    return Mono.empty();
+                })
+                .blockOptional();
     }
 }

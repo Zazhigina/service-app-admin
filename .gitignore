@@ -1,3 +1,5 @@
 /.idea/
 /.gradle/
 /build/
+/src/main/resources/mirror.jks
+/src/main/resources/app.pub

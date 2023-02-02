@@ -46,6 +46,11 @@ spec:
                 secretKeyRef:
                   name: db-connection-secret
                   key: url
+            - name: init-params
+              valueFrom:
+                configMapKeyRef:
+                  name: $CONTAINER_NAME
+                  key: init-params
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -66,14 +71,4 @@ spec:
                 secretKeyRef:
                   name: keycloack-secret
                   key: with-public-key
-            - name: init-adm-rolegroup
-              valueFrom:
-                secretKeyRef:
-                  name: keycloack-secret
-                  key: init-adm-rolegroup
-            - name: mirror-trust-store-password
-              valueFrom:
-                secretKeyRef:
-                  name: keycloack-secret
-                  key: mirror-trust-store-password
           imagePullPolicy: Always

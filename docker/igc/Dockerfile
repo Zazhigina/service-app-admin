@@ -8,6 +8,7 @@ RUN java -Djarmode=layertools -jar /application/build/libs/root.jar extract
 #
 FROM gitlab.inlinegroup-c.ru/mirror/dependency_proxy/containers/eclipse-temurin:17-jre-ubi9-minimal
 ENV TZ Europe/Moscow
+ADD app.pub /tmp/app.pub
 ADD root.ca.pem /tmp/root.ca.pem
 RUN keytool -noprompt -import -trustcacerts -cacerts -storepass changeit -alias mirror.pem -file /tmp/root.ca.pem
 WORKDIR application

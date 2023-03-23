@@ -57,7 +57,7 @@
     <logger name="org.apache.tomcat.util.net.NioEndpoint" level="info"/>
 
     <logger name="org.postgresql.jdbc.PgConnection" level="info"/>
-    <logger name="org.jooq.tools.LoggerListener" level="debug"/>
+    <logger name="org.jooq.tools.LoggerListener" level="info"/>
     <logger name="org.postgresql.core.v3.QueryExecutorImpl" level="info"/>
     <logger name="org.postgresql.core.v3.ConnectionFactoryImpl" level="info"/>
     <logger name="org.postgresql.Driver" level="info"/>

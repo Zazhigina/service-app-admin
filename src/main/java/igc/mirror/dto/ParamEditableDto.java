@@ -3,9 +3,9 @@ package igc.mirror.dto;
 import javax.validation.constraints.NotBlank;
 
 public class ParamEditableDto {
-    @NotBlank(message = "ParamEditableDto.name is empty")
+    @NotBlank
     private String name;
-    @NotBlank(message = "ParamEditableDto.val is empty")
+    @NotBlank
     private String val;
 
     public ParamEditableDto(String name, String val) {

@@ -4,12 +4,12 @@ import igc.mirror.dto.ParamCreationDto;
 import igc.mirror.dto.ParamDto;
 import igc.mirror.dto.ParamEditableDto;
 import igc.mirror.dto.ParamRemovalListDto;
-import igc.mirror.exception.ParamAlreadyExistException;
-import igc.mirror.exception.ParamNotFoundException;
+import igc.mirror.exception.common.EntityNotFoundException;
+import igc.mirror.exception.common.IllegalEntityStateException;
 import igc.mirror.model.Param;
 import igc.mirror.repository.ParamRepository;
 import igc.mirror.service.ParamService;
-import igc.mirror.service.UserService;
+import igc.mirror.utils.UserHelper;
 import igc.mirror.utils.qfilter.DataFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,13 +26,14 @@ import java.util.stream.Collectors;
 @Validated
 public class ParamServiceImpl implements ParamService {
 
-    private UserService userService;
-    private ParamRepository paramRepository;
+    private final UserHelper userHelper;
+    private final ParamRepository paramRepository;
 
     @Autowired
-    public ParamServiceImpl(ParamRepository paramRepository, UserService userService){
+    public ParamServiceImpl(ParamRepository paramRepository,
+                            UserHelper userHelper){
         this.paramRepository = paramRepository;
-        this.userService = userService;
+        this.userHelper = userHelper;
     }
 
     @Override
@@ -47,31 +48,31 @@ public class ParamServiceImpl implements ParamService {
     @Validated
     public ParamDto addNewParam(@Valid ParamCreationDto paramCreationDto) {
         if(paramRepository.checkExist(paramCreationDto.getKey()))
-            throw new ParamAlreadyExistException();
+            throw new IllegalEntityStateException(String.format("Параметр %s уже существует в системе", paramCreationDto.getKey()), null, ParamCreationDto.class);
 
         Param newParam = new Param(paramCreationDto.getKey(), paramCreationDto.getName(), paramCreationDto.getVal());
-        newParam.setCreateUser(userService.getUsername());
+        newParam.setCreateUser(userHelper.getUsername().orElse(null));
 
         return ParamDto.fromModel(paramRepository.save(newParam));
     }
 
     @Override
     @Validated
-    public ParamDto changeParam(@NotBlank(message = "key is empty") String key, @Valid ParamEditableDto paramEditableDto) {
+    public ParamDto changeParam(@NotBlank String key, @Valid ParamEditableDto paramEditableDto) {
         if(!paramRepository.checkExist(key))
-            throw new ParamNotFoundException();
+            throw new EntityNotFoundException(String.format("Параметр %s не найден",key), null, ParamEditableDto.class);
 
         Param changeParam = new Param(key, paramEditableDto.getName(), paramEditableDto.getVal());
-        changeParam.setLastUpdateUser(userService.getUsername());
+        changeParam.setLastUpdateUser(userHelper.getUsername().orElse(null));
 
         return ParamDto.fromModel(paramRepository.save(changeParam));
     }
 
     @Override
     @Validated
-    public void removeParam(@NotBlank(message = "key is empty") String key) {
+    public void removeParam(@NotBlank String key) {
         if(!paramRepository.checkExist(key))
-            throw new ParamNotFoundException();
+            throw new EntityNotFoundException(String.format("Параметр %s не найден", key) , null, null);
 
         paramRepository.delete(key);
     }
@@ -80,7 +81,7 @@ public class ParamServiceImpl implements ParamService {
     @Validated
     public void removeParams(@Valid ParamRemovalListDto paramRemovalListDto) {
         if(paramRemovalListDto.getParamKeys().size() == 0)
-            throw new ParamNotFoundException("Параметры должны быть заполнены");
+            throw new IllegalEntityStateException("Параметры должны быть заполнены", null, null);
 
         paramRepository.deleteList(paramRemovalListDto.getParamKeys());
     }

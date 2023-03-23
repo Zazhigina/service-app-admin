@@ -1,6 +1,5 @@
 package igc.mirror.utils.qfilter;
 
-
 import java.util.List;
 
 public class QueryFilter {
@@ -39,5 +38,4 @@ public class QueryFilter {
     public void setSelectField(String selectField) {
         this.selectField = selectField;
     }
-
 }

@@ -37,6 +37,4 @@ public enum ComparisonOperator {
     public String getOperator() {
         return this.operator;
     }
-
 }
-

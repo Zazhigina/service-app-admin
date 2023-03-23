@@ -35,32 +35,10 @@ public class ParamRestController {
         return paramService.findParamsByFilters(filter, pageable);
     }
 
-//    @PostMapping("add")
-//    @Operation(summary = "Создание нового параметра")
-//    public ResponseEntity<ParamDto> addNewParam(@RequestBody ParamCreationDto paramCreationDto){
-//        return ResponseEntity.ok(paramService.addNewParam(paramCreationDto));
-//    }
-
     @PutMapping("{key}")
     @Operation(summary = "Изменение значения параметра")
     @PreAuthorize("hasRole('CONFIG_VALUE.CHANGE')")
     public ResponseEntity<ParamDto> editParam(@PathVariable String key, @RequestBody ParamEditableDto paramEditableDto){
         return ResponseEntity.ok(paramService.changeParam(key, paramEditableDto));
-    }
-
-    @DeleteMapping("{key}")
-    @Operation(summary = "Удаление параметра")
-    @PreAuthorize("hasRole('CONFIG_VALUE.CHANGE')")
-    public ResponseEntity<?> removeParam(@PathVariable String key){
-        paramService.removeParam(key);
-        return ResponseEntity.ok(true);
-    }
-
-    @PutMapping("removeList")
-    @Operation(summary = "Удаление параметров")
-    @PreAuthorize("hasRole('CONFIG_VALUE.CHANGE')")
-    public ResponseEntity<?> removeParams(@RequestBody ParamRemovalListDto paramRemovalListDto){
-        paramService.removeParams(paramRemovalListDto);
-        return ResponseEntity.ok(true);
     }
 }

@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class ParamRemovalListDto {
-    @NotNull(message = "ParamRemovalListDto.paramKeys is null")
+    @NotNull
     private List<String> paramKeys;
 
     public ParamRemovalListDto(List<String> paramKeys) {

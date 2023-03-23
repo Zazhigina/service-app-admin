@@ -1,48 +1,50 @@
-package igc.mirror.service.impl;
+package igc.mirror.utils;
 
-import igc.mirror.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
-public class UserServiceImpl implements UserService {
-    static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+@Component
+public class UserHelper {
+    static final Logger logger = LoggerFactory.getLogger(UserHelper.class);
 
     @Autowired
     @Qualifier("rbac")
     private WebClient webClient;
 
-
-    @Override
-    public String getUsername() {
-        if(SecurityContextHolder.getContext().getAuthentication() == null)
-            return null;
+    /**
+     * Возвращает имя авторизированного пользователя
+     *
+     * @return username
+     */
+    public Optional<String> getUsername() {
+        if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken ||
+                !Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication()).isPresent())
+            return Optional.empty();
 
         Jwt jwt =
                 (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return jwt.getClaim("preferred_username");
+        return Optional.ofNullable(jwt.getClaim("preferred_username"));
     }
 
     /**
      * Получение списка ролей пользователя
-     * {@linkplain //mirror.inlinegroup-c.ru/api/rbac}
      *
      * @param jwt Jwt токен
      * @return Список ролей
      */
-    @Override
     public Optional<List<String>> getUserRoles(Jwt jwt) {
         return webClient
                 .get()

@@ -1,5 +1,6 @@
 package igc.mirror.repository.impl;
 
+import igc.mirror.exception.common.EntityNotFoundException;
 import igc.mirror.model.Param;
 import igc.mirror.repository.ParamRepository;
 import igc.mirror.utils.qfilter.DataFilter;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.selectOne;
 
 @Repository
 public class ParamRepositoryImpl implements ParamRepository {
@@ -59,7 +61,7 @@ public class ParamRepositoryImpl implements ParamRepository {
     @Override
     public Boolean checkExist(String identifier) {
         return dsl.fetchExists(
-                select()
+                selectOne()
                     .from(AParam.A_PARAM)
                     .where(AParam.A_PARAM.KEY.eq(identifier))
         );
@@ -67,14 +69,16 @@ public class ParamRepositoryImpl implements ParamRepository {
 
     @Override
     public Param save(Param data) {
-            return dsl.insertInto(AParam.A_PARAM)
-                        .set(dsl.newRecord(AParam.A_PARAM, data))
-                    .onDuplicateKeyUpdate()
-                        .set(AParam.A_PARAM.VAL, data.getVal())
-                        .set(AParam.A_PARAM.NAME, data.getName())
-                        .set(AParam.A_PARAM.LAST_UPDATE_USER, data.getLastUpdateUser())
-                    .returningResult(AParam.A_PARAM.fields())
-                    .fetchOneInto(Param.class);
+        return dsl.insertInto(AParam.A_PARAM)
+                    .set(dsl.newRecord(AParam.A_PARAM, data))
+                .onDuplicateKeyUpdate()
+                    .set(AParam.A_PARAM.VAL, data.getVal())
+                    .set(AParam.A_PARAM.NAME, data.getName())
+                    .set(AParam.A_PARAM.LAST_UPDATE_USER, data.getLastUpdateUser())
+                .returningResult(AParam.A_PARAM.fields())
+                .fetchOptional()
+                .map(r -> r.into(Param.class))
+                .orElseThrow(() -> new EntityNotFoundException(null, Param.class));
     }
 
 

@@ -36,7 +36,6 @@ dependencies {
     //CORE
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-//    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.security:spring-security-config'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -123,11 +122,10 @@ bootRun{
     systemProperty "spring.datasource.username", "${dbUser}"
     systemProperty "spring.datasource.password", "${dbPassword}"
 
-    systemProperty "mirror.host", "${mirrorHost}"
     systemProperty "javax.net.ssl.trustStore", "${project.rootDir}\\src\\main\\resources\\mirror.jks"
     systemProperty "javax.net.ssl.trustStorePassword", "mirror"
 
-    systemProperty "keycloak.jwk-set-uri", "${keycloakJwkSetUri}"
-    systemProperty "keycloak.with-public-key", "${keycloakWithPublicKey}"
-    systemProperty "init-params", "${initParams}"
+    systemProperty "mirror.endpoint.rbac", "${rbacBaseUrl}"
+    systemProperty "spring.security.oauth2.resourceserver.jwt.jwk-set-uri", "${keycloakJwkSetUri}"
+    systemProperty "app.config.init-params", "${initParams}"
 }

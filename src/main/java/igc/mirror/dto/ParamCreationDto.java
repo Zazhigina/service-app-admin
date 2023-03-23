@@ -3,11 +3,11 @@ package igc.mirror.dto;
 import javax.validation.constraints.NotBlank;
 
 public class ParamCreationDto {
-    @NotBlank(message = "ParamCreationDto.key is empty")
+    @NotBlank
     private String key;
-    @NotBlank(message = "ParamCreationDto.name is empty")
+    @NotBlank
     private String name;
-    @NotBlank(message = "ParamCreationDto.val is empty")
+    @NotBlank
     private String val;
 
     public ParamCreationDto(String key, String name, String val) {

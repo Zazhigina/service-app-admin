@@ -19,7 +19,7 @@ public class InitService {
     static final Logger logger = LoggerFactory.getLogger(InitService.class);
     private ParamRepository paramRepository;
 
-    @Value("${init-params}")
+    @Value("${app.config.init-params}")
     private Boolean initParamFlag;
     @Autowired
     public InitService(ParamRepository paramRepository) {

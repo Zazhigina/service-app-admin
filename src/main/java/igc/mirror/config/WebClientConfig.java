@@ -9,23 +9,18 @@ import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
-import javax.net.ssl.SSLException;
-
 @Configuration
 public class WebClientConfig {
     static final Logger logger = LoggerFactory.getLogger(WebClientConfig.class);
 
-    @Value("${mirror.host}")
-    private String baseURL;
-
-    @Value("${mirror.endpoint.external.rbac}")
-    private String rbacEndpoint;
+    @Value("${mirror.endpoint.rbac}")
+    private String rbacBaseUrl;
 
     @Bean("rbac")
-    public WebClient webClientRbac() throws SSLException {
+    public WebClient webClientRbac(){
         HttpClient httpClient = HttpClient.create();
         return WebClient.builder()
-                .baseUrl(String.join("", baseURL, rbacEndpoint))
+                .baseUrl(rbacBaseUrl)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }

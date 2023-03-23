@@ -1,6 +1,6 @@
 package igc.mirror.utils.qfilter;
 
-public class DataFilter <T extends SearchCriteria>{
+public class DataFilter<T extends SearchCriteria> {
     private T searchCriteria;
     private QueryFilter subFilter;
 

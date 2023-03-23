@@ -1,6 +1,5 @@
 package igc.mirror.utils.qfilter;
 
-
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum LogicalOperator {
@@ -16,4 +15,3 @@ public enum LogicalOperator {
         return this.operator;
     }
 }
-

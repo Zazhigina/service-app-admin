@@ -41,6 +41,16 @@ spec:
                 configMapKeyRef:
                   name: $CONTAINER_NAME
                   key: root_host
+            - name: app.config.init-params
+              valueFrom:
+                configMapKeyRef:
+                  name: $CONTAINER_NAME
+                  key: init-params
+            - name: mirror.endpoint.rbac
+              valueFrom:
+                configMapKeyRef:
+                  name: $CONTAINER_NAME
+                  key: rbac-endpoint
             - name: SPRING_PROFILES_ACTIVE
               value: $ACTIVE_PROFILE
             - name: SPRING_DATASOURCE_URL
@@ -48,11 +58,6 @@ spec:
                 secretKeyRef:
                   name: db-connection-secret
                   key: url
-            - name: init-params
-              valueFrom:
-                configMapKeyRef:
-                  name: $CONTAINER_NAME
-                  key: init-params
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -63,14 +68,9 @@ spec:
                 secretKeyRef:
                   name: db-connection-secret
                   key: password
-            - name: keycloak.jwk-set-uri
+            - name: spring.security.oauth2.resourceserver.jwt.jwk-set-uri
               valueFrom:
                 secretKeyRef:
                   name: keycloack-secret
                   key: jwk-set-uri
-            - name: keycloak.with-public-key
-              valueFrom:
-                secretKeyRef:
-                  name: keycloack-secret
-                  key: with-public-key
           imagePullPolicy: Always

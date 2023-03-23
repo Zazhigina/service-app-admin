@@ -1,7 +1,6 @@
 package igc.mirror.config;
 
-import com.nimbusds.jose.shaded.json.JSONArray;
-import igc.mirror.service.UserService;
+import igc.mirror.utils.UserHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +17,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
-import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -42,15 +38,11 @@ public class SecurityConfig {
         "/param/**"
     };
 
-    @Value("${keycloak.jwk-set-uri}")
-    private String keycloakJwkSetUri;
-    @Value("${keycloak.public-key}")
-    private RSAPublicKey jwtPublicKey;
-    @Value("${keycloak.with-public-key}")
-    private Boolean keycloakWithPublicKey;
+    @Value("${app.config.allusers-group:test123}")
+    private String allusersGroup;
 
     @Autowired
-    private UserService userService;
+    private UserHelper userHelper;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -90,28 +82,15 @@ public class SecurityConfig {
             public Collection<GrantedAuthority> convert(Jwt jwt) {
                 Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
-                JSONArray groups = jwt.getClaim("groups");
-
-                Optional<List<String>> userRoles = userService.getUserRoles(jwt);
+                Optional<List<String>> userRoles = userHelper.getUserRoles(jwt);
                 userRoles.ifPresent(roles -> {
                     final List<SimpleGrantedAuthority> keycloakAuthorities = roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role)).collect(Collectors.toList());
                     grantedAuthorities.addAll(keycloakAuthorities);
                 });
-//                if(userRoles.isPresent()) {
-//                    final List<SimpleGrantedAuthority> keycloakAuthorities = userRoles.get().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role)).collect(Collectors.toList());
-//                    grantedAuthorities.addAll(keycloakAuthorities);
-//                }
 
                 return grantedAuthorities;
             }
         };
-    }
-
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        if(keycloakWithPublicKey)
-            return NimbusJwtDecoder.withPublicKey(jwtPublicKey).build();
-        return NimbusJwtDecoder.withJwkSetUri(keycloakJwkSetUri).build();
     }
 
 }

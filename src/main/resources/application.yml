@@ -12,6 +12,7 @@ springdoc:
 
 server:
   forward-headers-strategy: framework
+  port: 8090
 
 spring:
   datasource:
@@ -23,16 +24,17 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
-
-keycloak:
-  public-key: classpath:app.pub
-  jwk-set-uri:
-  with-public-key:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri:
 
 mirror:
   host:
   endpoint:
-    external:
-      rbac: /api/rbac
+    rbac:
 
-init-params:
+app:
+  config:
+    init-params:

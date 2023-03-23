@@ -12,9 +12,43 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 public interface ParamService {
+    /**
+     * Возвращает список параметров
+     *
+     * @param dataFilter набор критериев поиска
+     * @param pageable настройки пэджинации и сортировки
+     * @return список параметров
+     */
     Page<ParamDto> findParamsByFilters(DataFilter<?> dataFilter, Pageable pageable);
+
+    /**
+     * Добавляет новый параметр
+     *
+     * @param paramCreationDto данные для добавления нового параметра
+     * @return Данные нового параметра
+     */
     ParamDto addNewParam(@Valid ParamCreationDto paramCreationDto);
-    ParamDto changeParam(@NotBlank(message = "key is empty") String key, @Valid ParamEditableDto paramEditableDto);
-    void removeParam(@NotBlank(message = "key is empty") String key);
+
+    /**
+     * Изменяет данные параметра
+     *
+     * @param key ключ
+     * @param paramEditableDto данные для редактирования параметра
+     * @return отредактированный параметр
+     */
+    ParamDto changeParam(@NotBlank String key, @Valid ParamEditableDto paramEditableDto);
+
+    /**
+     * Удаляет параметр по ключу
+     *
+     * @param key ключ параметра
+     */
+    void removeParam(@NotBlank String key);
+
+    /**
+     * Удаляет параметры по списку ключей
+     *
+     * @param paramRemovalListDto список ключей
+     */
     void removeParams(@Valid ParamRemovalListDto paramRemovalListDto);
 }

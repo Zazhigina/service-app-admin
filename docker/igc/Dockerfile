@@ -1,7 +1,7 @@
 FROM gitlab.inlinegroup-c.ru/mirror/dependency_proxy/containers/gradle:7.6.0-jdk17-alpine as build
 ENV TZ Europe/Moscow
 WORKDIR /application
-ADD app.pub /application/src/main/resources/app.pub
+# ADD app.pub /application/src/main/resources/app.pub
 COPY . .
 ENV GRADLE_USER_HOME=/application/gradle
 RUN gradle build -Dspring.profiles.active="test"

@@ -128,4 +128,6 @@ bootRun{
     systemProperty "mirror.endpoint.rbac", "${rbacBaseUrl}"
     systemProperty "spring.security.oauth2.resourceserver.jwt.jwk-set-uri", "${keycloakJwkSetUri}"
     systemProperty "app.config.init-params", "${initParams}"
+
+    systemProperty "mirror.endpoint.ma", "${maBaseUrl}"
 }

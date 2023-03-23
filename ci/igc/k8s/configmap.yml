@@ -9,4 +9,5 @@ metadata:
 data:
   root_host: "https://$APP_HOST"
   init-params: "false"
-  rbac-endpoint: "https://mirror.inlinegroup-c.ru/api/rbac"
+  rbac_endpoint: "https://mirror.inlinegroup-c.ru/api/rbac"
+  ma_endpoint: "https://mirror.inlinegroup-c.ru/api/ma"

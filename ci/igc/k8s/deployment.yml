@@ -50,7 +50,12 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: $CONTAINER_NAME
-                  key: rbac-endpoint
+                  key: rbac_endpoint
+            - name: mirror.endpoint.ma
+              valueFrom:
+                configMapKeyRef:
+                  name: $CONTAINER_NAME
+                  key: ma_endpoint
             - name: SPRING_PROFILES_ACTIVE
               value: $ACTIVE_PROFILE
             - name: SPRING_DATASOURCE_URL

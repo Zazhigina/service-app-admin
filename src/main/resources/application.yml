@@ -33,6 +33,7 @@ mirror:
   host:
   endpoint:
     rbac:
+    ma:
 
 app:
   config:

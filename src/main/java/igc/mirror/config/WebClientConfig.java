@@ -16,11 +16,23 @@ public class WebClientConfig {
     @Value("${mirror.endpoint.rbac}")
     private String rbacBaseUrl;
 
+    @Value("${mirror.endpoint.ma}")
+    private String masterAssistantUrl;
+
     @Bean("rbac")
     public WebClient webClientRbac(){
         HttpClient httpClient = HttpClient.create();
         return WebClient.builder()
                 .baseUrl(rbacBaseUrl)
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
+    }
+
+    @Bean("ma")
+    public WebClient webClientMasterAssistant() {
+        HttpClient httpClient = HttpClient.create();
+        return WebClient.builder()
+                .baseUrl(masterAssistantUrl)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }

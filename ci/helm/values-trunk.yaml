@@ -10,7 +10,7 @@ application:
       - key: SPRING_PROFILES_ACTIVE
         value: trunk
       - key: MIRROR_ENDPOINT_MA
-        value: http://service-app-ma-tzriu-service-app-ma.mirror:8080
+        value: http://service-app-ma.mirror:8080
       - key: MIRROR_ENDPOINT_RBAC
         value: http://service-app-rbac.mirror:8080
     secret:

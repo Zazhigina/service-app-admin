@@ -15,5 +15,5 @@ stages:
   - deploy
 
 include:
-  - local: ci/igc/build.yml
-  - local: ci/igc/deploy.yml
+  - local: ci/trunk/build.yml
+  - local: ci/trunk/deploy.yml

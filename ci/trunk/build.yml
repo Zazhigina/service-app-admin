@@ -11,7 +11,7 @@ build:
 #    - cat $MIRROR_APP_PUB > ${CI_PROJECT_DIR}/app.pub
     - /kaniko/executor
       --context "${CI_PROJECT_DIR}"
-      --dockerfile "${CI_PROJECT_DIR}/docker/igc/Dockerfile"
+      --dockerfile "${CI_PROJECT_DIR}/docker/Dockerfile-trunk"
       --destination "${CI_REGISTRY_IMAGE}:${APPLICATION_VERSION}"
   rules:
     - if: $CI_COMMIT_BRANCH == $DEPLOY_BRANCH

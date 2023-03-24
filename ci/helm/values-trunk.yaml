@@ -1,0 +1,52 @@
+# Default values for tzriu-be-spring.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+application:
+  env:
+    configmap:
+      - key: DB_SCHEMA
+        value: admin
+      - key: SPRING_PROFILES_ACTIVE
+        value: trunk
+      - key: MIRROR_ENDPOINT_MA
+        value: http://service-app-ma-tzriu-service-app-ma.mirror:8080
+      - key: MIRROR_ENDPOINT_RBAC
+        value: http://service-app-rbac.mirror:8080
+    secret:
+      - key: SPRING_DATASOURCE_URL
+        secretName: db-connection-secret
+        secretKey: url
+      - key: SPRING_DATASOURCE_USERNAME
+        secretName: db-connection-secret
+        secretKey: username
+      - key: SPRING_DATASOURCE_PASSWORD
+        secretName: db-connection-secret
+        secretKey: password
+      - key: KEYCLOAK_JWK_SET_URI
+        secretName: keycloack-secret
+        secretKey: jwk-set-uri
+
+imagePullSecrets:
+  - name: nexus-credential
+
+#fullnameOverride: "service-app-admin"
+
+ingress:
+  enabled: false
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  hosts:
+    - host: mirror-test.inlinegroup-c.ru
+      paths:
+        - path: /api/rbac/?(.*)
+          pathType: Prefix
+
+resources:
+  limits:
+    cpu: 2000m
+    memory: 2048Mi
+  requests:
+    cpu: 1000m
+    memory: 512Mi

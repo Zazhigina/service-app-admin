@@ -3,11 +3,9 @@ plugins {
     id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
     id 'nu.studer.jooq' version "${jooqPluginVersion}"
     id 'java'
-//    id 'war'
 }
 
 group 'igc.mirror'
-//war.archiveName "ROOT.war"
 archivesBaseName = 'root'
 
 sourceCompatibility = 17
@@ -21,9 +19,6 @@ compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 
 dependencies {
-    // logging
-    implementation "org.springframework.boot:spring-boot-starter-logging"
-
     // jdbc
     implementation "org.postgresql:postgresql:${postgreJDBCVersion}"
 

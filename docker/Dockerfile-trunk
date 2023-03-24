@@ -1,20 +1,67 @@
-FROM gitlab.inlinegroup-c.ru/mirror/dependency_proxy/containers/gradle:7.6.0-jdk17-alpine as build
-ENV TZ Europe/Moscow
-WORKDIR /application
-# ADD app.pub /application/src/main/resources/app.pub
-COPY . .
-ENV GRADLE_USER_HOME=/application/gradle
-RUN gradle build -Dspring.profiles.active="test"
-RUN java -Djarmode=layertools -jar /application/build/libs/root.jar extract
+## Set docker registry location
+ARG QUAYIO_IMAGE_REPOSITORY=nexus-quayio-registry.inlinegroup-c.ru
+ARG RH_IMAGE_REPOSITORY=nexus-rh-registry.inlinegroup-c.ru
+## Set maven registry
+ARG MAVEN_REPOSITORY=https://nexus-oss.inlinegroup-c.ru/repository/maven-public/
+ARG MAVEN_REPOSITORY_PLUGIN=https://nexus-oss.inlinegroup-c.ru/repository/maven2-gradle-plugin/
+## Set optional maven registry certificates
+ARG MAVEN_REPOSITORY_ROOT_CA_URL=""
+ARG MAVEN_REPOSITORY_SUB_CA_URL=""
+## Set application build path
+ARG BUILD_APP_DIR='/application'
+
 #
-FROM gitlab.inlinegroup-c.ru/mirror/dependency_proxy/containers/eclipse-temurin:17-jre-ubi9-minimal
+#FROM  $QUAYIO_IMAGE_REPOSITORY/official-images/gradle:7.3.3-jdk17-alpine as build
+FROM  $QUAYIO_IMAGE_REPOSITORY/klovercloud/gradle:7.6.0-jdk17 as build
+
+ARG BUILD_APP_DIR
+ARG MAVEN_REPOSITORY
+ARG MAVEN_REPOSITORY_PLUGIN
+ARG MAVEN_REPOSITORY_ROOT_CA_URL
+ARG MAVEN_REPOSITORY_SUB_CA_URL
+
 ENV TZ Europe/Moscow
+WORKDIR $BUILD_APP_DIR
+COPY . .
+## Add certificate
+RUN if [ -n "$MAVEN_REPOSITORY_ROOT_CA_URL" ]; then wget --no-check-certificate -q -O - $MAVEN_REPOSITORY_ROOT_CA_URL > ./root-ca-maven.crt \
+    && keytool -import -noprompt -alias root -file ./root-ca-maven.crt -keystore ./maven.jks -storepass gradle; fi
+RUN if [ -n "$MAVEN_REPOSITORY_SUB_CA_URL" ]; then wget --no-check-certificate -q -O - $MAVEN_REPOSITORY_SUB_CA_URL > ./sub-ca-maven.crt \
+    && keytool -import -noprompt -alias sub -file ./sub-ca-maven.crt -keystore ./maven.jks -storepass gradle; fi
+ENV GRADLE_USER_HOME=$BUILD_APP_DIR/gradle
+RUN gradle build -PmavenRepository=$MAVEN_REPOSITORY \
+    -PmavenRepositoryPlugin=$MAVEN_REPOSITORY_PLUGIN
+RUN java -Djarmode=layertools -jar $BUILD_APP_DIR/build/libs/root.jar extract
+#
+FROM  $RH_IMAGE_REPOSITORY/ubi9/openjdk-17-runtime:1.14-2.1679391794
+ARG BUILD_APP_DIR
+ARG UID=1001
+
+ENV TZ Europe/Moscow
+USER root
+# add root cert to keystore
 ADD root.ca.pem /tmp/root.ca.pem
 RUN keytool -noprompt -import -trustcacerts -cacerts -storepass changeit -alias mirror.pem -file /tmp/root.ca.pem
-WORKDIR application
-COPY --from=build /application/dependencies/ ./
-COPY --from=build /application/spring-boot-loader/ ./
-COPY --from=build /application/snapshot-dependencies/ ./
-COPY --from=build /application/application/ ./
+
+# Set permissions so that the container runs without root access
+USER 0
+RUN mkdir -p ${BUILD_APP_DIR}
+RUN chown -R $UID:0 ${BUILD_APP_DIR}
+USER $UID
+
+WORKDIR $BUILD_APP_DIR
+COPY --chown=$UID:0 --from=build $BUILD_APP_DIR/dependencies/ ./
+COPY --chown=$UID:0 --from=build $BUILD_APP_DIR/spring-boot-loader/ ./
+COPY --chown=$UID:0 --from=build $BUILD_APP_DIR/snapshot-dependencies/ ./
+COPY --chown=$UID:0 --from=build $BUILD_APP_DIR/application/ ./
+
+## Set application runtime path
+ENV RUNTIME_PATH='/tmp'
+ENV SPRING_DATASOURCE_URL="jdbc:postgresql://localhost:5432"
+ENV SPRING_DATASOURCE_USERNAME=""
+ENV SPRING_DATASOURCE_PASSWORD=""
+
+VOLUME [ $RUNTIME_PATH ]
+
 EXPOSE 8080
 ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]

@@ -1,14 +1,14 @@
 variables:
   FF_GITLAB_REGISTRY_HELPER_IMAGE: 1
-  ACTIVE_PROFILE: "test"
-  APPLICATION_VERSION: v0.1
-  CONTAINER_NAME: service-app-admin
-  DEPLOY_BRANCH: develop-local
+  ACTIVE_PROFILE: "trunk"
+  APPLICATION_VERSION: "0.1.$CI_PIPELINE_IID"
+  APPLICATION_NAME: service-app-admin
+#  DEPLOY_BRANCH: develop-local
+  DEPLOY_BRANCH: task/stronini
+  CHART_NAME: tzriu-be-spring
   KUBERNETES_NAMESPACE_OVERWRITE: mirror
-  APP_HOST: mirror.inlinegroup-c.ru
-  APP_ROOT: api/admin
-  APP_URL: https://$APP_HOST/$APP_ROOT
-
+  IMAGE_REPOSITORY: nexus-registry.inlinegroup-c.ru/tzriu/$APPLICATION_NAME
+  ENVIRONMENT_NAME: $ACTIVE_PROFILE
 
 stages:
   - build

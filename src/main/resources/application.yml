@@ -27,9 +27,9 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri:
+          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI}
 
 mirror:
   endpoint:
-    rbac:
-    ma:
+    rbac: ${MIRROR_ENDPOINT_RBAC}
+    ma: ${MIRROR_ENDPOINT_MA}

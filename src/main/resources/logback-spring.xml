@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -5,48 +6,6 @@
             <pattern>%d{dd.MM.yyyy HH:mm:ss.SSS} | %-5level [%logger{36}:%line]	[%X{req.remoteHost}] [%X{req.requestURI}] [%X{req.method}] - %msg%n</pattern>
         </encoder>
     </appender>
-
-    <springProfile name="!production">
-
-        <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <!-- daily rollover -->
-                <fileNamePattern>build/logs/rbac/%d{yyyy-MM,aux}/%d.log</fileNamePattern>
-                <!-- keep 15 days' worth of history capped at 1GB total size -->
-                <maxHistory>15</maxHistory>
-                <totalSizeCap>1GB</totalSizeCap>
-            </rollingPolicy>
-
-            <encoder>
-                <charset>UTF-8</charset>
-                <pattern>%d{dd.MM.yyyy HH:mm:ss.SSS} | %-5level [%logger{36}:%line]	[%X{req.remoteHost}] [%X{req.requestURI}] [%X{req.method}] - %msg%n</pattern>
-            </encoder>
-        </appender>
-    </springProfile>
-
-    <springProfile name="production">
-
-        <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <!-- daily rollover -->
-                <fileNamePattern>${catalina.base}/logs/rbac/%d{yyyy-MM,aux}/%d.log</fileNamePattern>
-                <!-- keep 15 days' worth of history capped at 1GB total size -->
-                <maxHistory>15</maxHistory>
-                <totalSizeCap>1GB</totalSizeCap>
-            </rollingPolicy>
-
-            <encoder>
-                <charset>UTF-8</charset>
-                <pattern>%d{dd.MM.yyyy HH:mm:ss.SSS} | %-5level [%logger{36}:%line]	[%X{req.remoteHost}] [%X{req.requestURI}] [%X{req.method}] - %msg%n</pattern>
-            </encoder>
-        </appender>
-    </springProfile>
-
-    <root level="INFO">
-        <!-- 		<appender-ref ref="FILE" /> -->
-        <appender-ref ref="ROLLING"/>
-        <appender-ref ref="STDOUT"/>
-    </root>
 
     <logger name="org.springframework.web" level="info"/>
     <logger name="org.springframework" level="info"/>
@@ -57,10 +16,43 @@
     <logger name="org.apache.tomcat.util.net.NioEndpoint" level="info"/>
 
     <logger name="org.postgresql.jdbc.PgConnection" level="info"/>
-    <logger name="org.jooq.tools.LoggerListener" level="info"/>
+
     <logger name="org.postgresql.core.v3.QueryExecutorImpl" level="info"/>
     <logger name="org.postgresql.core.v3.ConnectionFactoryImpl" level="info"/>
     <logger name="org.postgresql.Driver" level="info"/>
     <logger name="com.zaxxer.hikari.pool.HikariPool" level="info"/>
     <logger name="org.jooq.impl.DefaultBinding" level="info"/>
+    <logger name="com.zaxxer.hikari.pool.PoolBase" level="info"/>
+
+    <springProfile name="!local">
+        <root level="INFO">
+            <appender-ref ref="STDOUT" />
+        </root>
+        <!--        <logger name="org.springframework.web" level="DEBUG"/>-->
+        <logger name="org.jooq.tools.LoggerListener" level="info"/>
+    </springProfile>
+
+    <springProfile name="local">
+        <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- daily rollover -->
+                <fileNamePattern>build/logs/%d{yyyy-MM,aux}/%d.log</fileNamePattern>
+                <!-- keep 15 days' worth of history capped at 1GB total size -->
+                <maxHistory>15</maxHistory>
+                <totalSizeCap>1GB</totalSizeCap>
+            </rollingPolicy>
+
+            <encoder>
+                <charset>UTF-8</charset>
+                <pattern>%d{dd.MM.yyyy HH:mm:ss.SSS} | %-5level [%logger{36}:%line]	[%X{req.remoteHost}] [%X{req.requestURI}] [%X{req.method}] - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="ROLLING"/>
+            <appender-ref ref="STDOUT" />
+        </root>
+        <!--        <logger name="org.springframework.web" level="DEBUG"/>-->
+        <logger name="org.jooq.tools.LoggerListener" level="debug"/>
+    </springProfile>
 </configuration>

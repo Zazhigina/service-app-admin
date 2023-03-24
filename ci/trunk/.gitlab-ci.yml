@@ -3,8 +3,7 @@ variables:
   ACTIVE_PROFILE: "trunk"
   APPLICATION_VERSION: "0.1.$CI_PIPELINE_IID"
   APPLICATION_NAME: service-app-admin
-#  DEPLOY_BRANCH: develop-local
-  DEPLOY_BRANCH: task/stronini
+  DEPLOY_BRANCH: develop-local
   CHART_NAME: tzriu-be-spring
   KUBERNETES_NAMESPACE_OVERWRITE: mirror
   IMAGE_REPOSITORY: nexus-registry.inlinegroup-c.ru/tzriu/$APPLICATION_NAME

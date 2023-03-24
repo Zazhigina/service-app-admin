@@ -30,7 +30,7 @@ application:
 imagePullSecrets:
   - name: nexus-credential
 
-#fullnameOverride: "service-app-admin"
+fullnameOverride: "service-app-admin"
 
 ingress:
   enabled: false
@@ -40,7 +40,7 @@ ingress:
   hosts:
     - host: mirror-test.inlinegroup-c.ru
       paths:
-        - path: /api/rbac/?(.*)
+        - path: /api/admin/?(.*)
           pathType: Prefix
 
 resources:

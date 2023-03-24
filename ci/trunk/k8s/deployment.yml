@@ -36,16 +36,6 @@ spec:
           env:
             - name: TZ
               value: Europe/Moscow
-            - name: mirror.host
-              valueFrom:
-                configMapKeyRef:
-                  name: $CONTAINER_NAME
-                  key: root_host
-            - name: app.config.init-params
-              valueFrom:
-                configMapKeyRef:
-                  name: $CONTAINER_NAME
-                  key: init-params
             - name: mirror.endpoint.rbac
               valueFrom:
                 configMapKeyRef:

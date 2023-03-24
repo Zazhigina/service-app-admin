@@ -2,7 +2,6 @@ package igc.mirror.controller;
 
 import igc.mirror.dto.ParamDto;
 import igc.mirror.dto.ParamEditableDto;
-import igc.mirror.dto.ParamRemovalListDto;
 import igc.mirror.service.ParamService;
 import igc.mirror.utils.qfilter.DataFilter;
 import io.swagger.v3.oas.annotations.Operation;

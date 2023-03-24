@@ -30,11 +30,6 @@ spring:
           jwk-set-uri:
 
 mirror:
-  host:
   endpoint:
     rbac:
     ma:
-
-app:
-  config:
-    init-params:

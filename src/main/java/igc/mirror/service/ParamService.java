@@ -3,11 +3,10 @@ package igc.mirror.service;
 import igc.mirror.dto.ParamDto;
 import igc.mirror.dto.ParamEditableDto;
 import igc.mirror.utils.qfilter.DataFilter;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 
 public interface ParamService {
     /**

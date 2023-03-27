@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -29,10 +29,12 @@ import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 public class SecurityConfig {
     static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
-    private static final String PUBLIC_ENDPOINT = "/public/**";
+    private static final String[] PUBLIC_ENDPOINT = {
+            "/public/**", "/v3/api-docs/**", "/actuator/**"
+    };
     private static final String[] API_ENDPOINT = {
         "/param/**"
     };
@@ -54,11 +56,10 @@ public class SecurityConfig {
                 .and())
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests()
-                .antMatchers(PUBLIC_ENDPOINT,
-                        "/v3/api-docs/**", "/actuator/**" ).permitAll()
-                .antMatchers(API_ENDPOINT).hasAuthority("APP_ADMIN.EXEC")
-                .anyRequest().authenticated();
+                .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers(PUBLIC_ENDPOINT).permitAll()
+                        .anyRequest().hasAuthority("APP_ADMIN.EXEC")
+                );
 
         return http.build();
     }

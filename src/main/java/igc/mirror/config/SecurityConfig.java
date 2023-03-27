@@ -4,7 +4,6 @@ import igc.mirror.utils.UserHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -38,9 +37,6 @@ public class SecurityConfig {
         "/param/**"
     };
 
-    @Value("${app.config.allusers-group:test123}")
-    private String allusersGroup;
-
     @Autowired
     private UserHelper userHelper;
 
@@ -61,7 +57,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(PUBLIC_ENDPOINT,
                         "/v3/api-docs/**", "/actuator/**" ).permitAll()
-                .antMatchers(API_ENDPOINT).hasRole("APP_ADMIN.EXEC")
+                .antMatchers(API_ENDPOINT).hasAuthority("APP_ADMIN.EXEC")
                 .anyRequest().authenticated();
 
         return http.build();
@@ -84,7 +80,8 @@ public class SecurityConfig {
 
                 Optional<List<String>> userRoles = userHelper.getUserRoles(jwt);
                 userRoles.ifPresent(roles -> {
-                    final List<SimpleGrantedAuthority> keycloakAuthorities = roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role)).collect(Collectors.toList());
+                    final List<SimpleGrantedAuthority> keycloakAuthorities = roles.stream()
+                            .map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
                     grantedAuthorities.addAll(keycloakAuthorities);
                 });
 

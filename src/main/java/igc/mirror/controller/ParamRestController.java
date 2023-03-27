@@ -29,14 +29,14 @@ public class ParamRestController {
 
     @PostMapping("find")
     @Operation(summary = "Поиск параметров, поддерживается фильтрация/сортировка/пагинация")
-    @PreAuthorize("hasRole('CONFIG_VALUE.READ')")
+    @PreAuthorize("hasAuthority('CONFIG_VALUE.READ')")
     public Page<ParamDto> findParamsByFilters(@RequestBody(required = false) DataFilter<?> filter, @ParameterObject Pageable pageable){
         return paramService.findParamsByFilters(filter, pageable);
     }
 
     @PutMapping("{key}")
     @Operation(summary = "Изменение значения параметра")
-    @PreAuthorize("hasRole('CONFIG_VALUE.CHANGE')")
+    @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
     public ResponseEntity<ParamDto> editParam(@PathVariable String key, @RequestBody ParamEditableDto paramEditableDto){
         return ResponseEntity.ok(paramService.changeParam(key, paramEditableDto));
     }

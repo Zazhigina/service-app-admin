@@ -1,6 +1,8 @@
 package igc.mirror.exception.handler;
 
 import igc.mirror.exception.common.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,8 +15,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -93,25 +93,25 @@ public class EntityExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(exceptionInfo, HttpStatus.BAD_REQUEST);
     }
 
-    /**
-     * @param e       the exception
-     * @param headers the headers to be written to the response
-     * @param status  the selected response status
-     * @param request the current request
-     * @return TODO: проверить возможно стандартный метод из класса ResponseEntityExceptionHandler подойдет
-     * или убрать, если не будем использовать валидацию параметров методов контролллера
-     */
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
-                                                                  HttpHeaders headers, HttpStatus status, WebRequest request) {
-        List<ExceptionInfo> exceptions = e.getBindingResult().getFieldErrors()
-                .stream()
-                .map(error -> new EntityExceptionInfo(error.getDefaultMessage(), null, null, null,
-                        error.getField()))
-                .peek(ex -> ex.setPublicErrorInfo(null, HttpStatus.BAD_REQUEST))
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
-    }
+//    /**
+//     * @param e       the exception
+//     * @param headers the headers to be written to the response
+//     * @param status  the selected response status
+//     * @param request the current request
+//     * @return TODO: проверить возможно стандартный метод из класса ResponseEntityExceptionHandler подойдет
+//     * или убрать, если не будем использовать валидацию параметров методов контролллера
+//     */
+//    @Override
+//    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
+//                                                                  HttpHeaders headers, HttpStatus status, WebRequest request) {
+//        List<ExceptionInfo> exceptions = e.getBindingResult().getFieldErrors()
+//                .stream()
+//                .map(error -> new EntityExceptionInfo(error.getDefaultMessage(), null, null, null,
+//                        error.getField()))
+//                .peek(ex -> ex.setPublicErrorInfo(null, HttpStatus.BAD_REQUEST))
+//                .collect(Collectors.toList());
+//        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+//    }
 
     @ExceptionHandler(EntityDuplicatedException.class)
     ResponseEntity<ExceptionInfo> handleEntityNotFound(EntityDuplicatedException ex, HttpServletRequest request) {

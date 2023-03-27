@@ -8,6 +8,8 @@ import igc.mirror.repository.ParamRepository;
 import igc.mirror.service.ParamService;
 import igc.mirror.utils.UserHelper;
 import igc.mirror.utils.qfilter.DataFilter;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,8 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import java.util.stream.Collectors;
 
 @Service

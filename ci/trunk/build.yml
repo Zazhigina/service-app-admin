@@ -8,7 +8,6 @@ build:
     entrypoint: [""]
   script:
     - cat $NEXUS_REGISTRY_CRED > /kaniko/.docker/config.json
-    - cat $MIRROR_CA_PEM > ${CI_PROJECT_DIR}/root.ca.pem
     - /kaniko/executor
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/docker/Dockerfile-trunk"

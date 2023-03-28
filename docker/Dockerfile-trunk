@@ -7,11 +7,13 @@ ARG MAVEN_REPOSITORY_PLUGIN=https://nexus-oss.inlinegroup-c.ru/repository/maven2
 ## Set optional maven registry certificates
 ARG MAVEN_REPOSITORY_ROOT_CA_URL=""
 ARG MAVEN_REPOSITORY_SUB_CA_URL=""
+## Set keycloak host certificates
+ARG KEYCLOAK_ROOT_CA_URL=https://nexus-oss.inlinegroup-c.ru/repository/local-repo/CA/root.ca.pem
+ARG KEYCLOAK_SUB_CA_URL=""
 ## Set application build path
 ARG BUILD_APP_DIR='/application'
 
 #
-#FROM  $QUAYIO_IMAGE_REPOSITORY/official-images/gradle:7.3.3-jdk17-alpine as build
 FROM  $QUAYIO_IMAGE_REPOSITORY/klovercloud/gradle:7.6.0-jdk17 as build
 
 ARG BUILD_APP_DIR
@@ -39,9 +41,11 @@ ARG UID=1001
 
 ENV TZ Europe/Moscow
 USER root
-# add root cert to keystore
-ADD root.ca.pem /tmp/root.ca.pem
-RUN keytool -noprompt -import -trustcacerts -cacerts -storepass changeit -alias mirror.pem -file /tmp/root.ca.pem
+## Add keycloak cert to keystore
+RUN if [ -n "$KEYCLOAK_ROOT_CA_URL" ]; then wget --no-check-certificate -q -O - $KEYCLOAK_ROOT_CA_URL > ./root.ca.pem \
+    && keytool -noprompt -import -trustcacerts -cacerts -storepass changeit -alias mirror.pem -file ./root.ca.pem; fi
+RUN if [ -n "$KEYCLOAK_SUB_CA_URL" ]; then wget --no-check-certificate -q -O - $KEYCLOAK_SUB_CA_URL > ./sub-root.ca.pem \
+    && keytool -noprompt -import -trustcacerts -cacerts -storepass changeit -alias mirror.pem -file ./sub-root.ca.pem; fi
 
 # Set permissions so that the container runs without root access
 USER 0
@@ -61,7 +65,7 @@ ENV SPRING_DATASOURCE_URL="jdbc:postgresql://localhost:5432"
 ENV SPRING_DATASOURCE_USERNAME=""
 ENV SPRING_DATASOURCE_PASSWORD=""
 
-VOLUME [ $RUNTIME_PATH ]
+VOLUME ["$RUNTIME_PATH"]
 
 EXPOSE 8080
 ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]

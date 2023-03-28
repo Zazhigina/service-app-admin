@@ -37,15 +37,17 @@ RUN java -Djarmode=layertools -jar $BUILD_APP_DIR/build/libs/root.jar extract
 #
 FROM  $RH_IMAGE_REPOSITORY/ubi9/openjdk-17-runtime:1.14-2.1679391794
 ARG BUILD_APP_DIR
+ARG KEYCLOAK_ROOT_CA_URL
+ARG KEYCLOAK_SUB_CA_URL
 ARG UID=1001
 
 ENV TZ Europe/Moscow
 USER root
 ## Add keycloak cert to keystore
 RUN if [ -n "$KEYCLOAK_ROOT_CA_URL" ]; then wget --no-check-certificate -q -O - $KEYCLOAK_ROOT_CA_URL > ./root.ca.pem \
-    && keytool -noprompt -import -trustcacerts -cacerts -storepass changeit -alias mirror.pem -file ./root.ca.pem; fi
+    && keytool -noprompt -import -trustcacerts -cacerts -storepass changeit -alias keycloak.ca.pem -file ./root.ca.pem; fi
 RUN if [ -n "$KEYCLOAK_SUB_CA_URL" ]; then wget --no-check-certificate -q -O - $KEYCLOAK_SUB_CA_URL > ./sub-root.ca.pem \
-    && keytool -noprompt -import -trustcacerts -cacerts -storepass changeit -alias mirror.pem -file ./sub-root.ca.pem; fi
+    && keytool -noprompt -import -trustcacerts -cacerts -storepass changeit -alias keycloak.subca.pem -file ./sub-root.ca.pem; fi
 
 # Set permissions so that the container runs without root access
 USER 0

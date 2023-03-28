@@ -43,10 +43,11 @@ ARG UID=1001
 
 ENV TZ Europe/Moscow
 USER root
+
 ## Add keycloak cert to keystore
-RUN if [ -n "$KEYCLOAK_ROOT_CA_URL" ]; then wget --no-check-certificate -q -O - $KEYCLOAK_ROOT_CA_URL > ./root.ca.pem \
+RUN if [ -n "$KEYCLOAK_ROOT_CA_URL" ]; then curl -k $KEYCLOAK_ROOT_CA_URL --output ./root.ca.pem \
     && keytool -noprompt -import -trustcacerts -cacerts -storepass changeit -alias mirror.pem -file ./root.ca.pem; fi
-RUN if [ -n "$KEYCLOAK_SUB_CA_URL" ]; then wget --no-check-certificate -q -O - $KEYCLOAK_SUB_CA_URL > ./sub-root.ca.pem \
+RUN if [ -n "$KEYCLOAK_SUB_CA_URL" ]; then curl -k $KEYCLOAK_SUB_CA_URL --output ./sub-root.ca.pem \
     && keytool -noprompt -import -trustcacerts -cacerts -storepass changeit -alias mirror.pem -file ./sub-root.ca.pem; fi
 
 # Set permissions so that the container runs without root access

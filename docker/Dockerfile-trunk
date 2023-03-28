@@ -46,9 +46,9 @@ USER root
 
 ## Add keycloak cert to keystore
 RUN if [ -n "$KEYCLOAK_ROOT_CA_URL" ]; then curl -k $KEYCLOAK_ROOT_CA_URL --output ./root.ca.pem \
-    && keytool -noprompt -import -trustcacerts -cacerts -storepass changeit -alias mirror.pem -file ./root.ca.pem; fi
+    && keytool -noprompt -import -trustcacerts -cacerts -storepass changeit -alias keycloak.ca.pem -file ./root.ca.pem; fi
 RUN if [ -n "$KEYCLOAK_SUB_CA_URL" ]; then curl -k $KEYCLOAK_SUB_CA_URL --output ./sub-root.ca.pem \
-    && keytool -noprompt -import -trustcacerts -cacerts -storepass changeit -alias mirror.pem -file ./sub-root.ca.pem; fi
+    && keytool -noprompt -import -trustcacerts -cacerts -storepass changeit -alias keycloak.subca.pem -file ./sub-root.ca.pem; fi
 
 # Set permissions so that the container runs without root access
 USER 0

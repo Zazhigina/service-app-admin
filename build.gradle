@@ -49,6 +49,9 @@ dependencies {
 
     // swagger and OpenAPI
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocOpenApiStarterWebmvcUiVersion}"
+
+    // flyway
+    implementation "org.flywaydb:flyway-core:${flaywayVersion}"
 }
 
 test {
@@ -58,7 +61,6 @@ test {
 sourceSets.main.java.srcDirs += "${jooqSrcDirs}"
 
 jooq {
-//    version = '3.16.6'
     version = "${jooqVersion}"
 
     configurations {
@@ -76,6 +78,7 @@ jooq {
                     database {
                         name = 'org.jooq.meta.postgres.PostgresDatabase'
                         includes = '.*'
+                        excludes = '^(flyway).*'
                         schemata {
                             schema {
                                 inputSchema = "${dbSchema}"
@@ -87,6 +90,7 @@ jooq {
                         directory = "${jooqSrcDirs}"
                     }
                     generate {
+                        newline = '\\r\\n'
                         javaTimeTypes = true
                         records = true
                         relations = true

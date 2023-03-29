@@ -15,13 +15,13 @@ application:
         value: http://service-app-rbac.mirror:8080
     secret:
       - key: SPRING_DATASOURCE_URL
-        secretName: db-connection-secret
+        secretName: mirror-pg-cred
         secretKey: url
       - key: SPRING_DATASOURCE_USERNAME
-        secretName: db-connection-secret
+        secretName: mirror-pg-cred
         secretKey: username
       - key: SPRING_DATASOURCE_PASSWORD
-        secretName: db-connection-secret
+        secretName: mirror-pg-cred
         secretKey: password
       - key: KEYCLOAK_JWK_SET_URI
         secretName: keycloack-secret

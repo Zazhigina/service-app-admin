@@ -48,7 +48,7 @@ public class ParamServiceImpl implements ParamService {
             throw new EntityNotFoundException(String.format("Параметр %s не найден",key), null, ParamEditableDto.class);
 
         Param changeParam = new Param(key, paramEditableDto.getName(), paramEditableDto.getVal());
-        changeParam.setLastUpdateUser(userHelper.getUsername().orElse(null));
+        changeParam.setLastUpdateUser(userHelper.getUsername());
 
         return ParamDto.fromModel(paramRepository.save(changeParam));
     }

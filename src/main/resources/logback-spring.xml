@@ -6,6 +6,7 @@
                 <charset>UTF-8</charset>
                 <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
                     <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter"/>
+                    <timestampFormat>yyyy.MM.dd' 'HH:mm:ss.SSS</timestampFormat>
                     <appendLineSeparator>true</appendLineSeparator>
                 </layout>
             </encoder>

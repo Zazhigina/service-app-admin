@@ -1,0 +1,33 @@
+application:
+  env:
+    configmap:
+      - key: DB_SCHEMA
+        value: admin
+      - key: SPRING_PROFILES_ACTIVE
+        value: trust
+      - key: MIRROR_ENDPOINT_MA
+        value: http://service-app-ma.tzriu:8080
+      - key: MIRROR_ENDPOINT_RBAC
+        value: http://service-app-rbac.tzriu:8080
+      - key: KEYCLOAK_JWK_SET_URI
+        value: https://sso-apps-745.apps.test.gazprom-neft.local/auth/realms/U200004739/protocol/openid-connect/certs
+    secret:
+      - key: SPRING_DATASOURCE_URL
+        secretName: mirror-pg-cred
+        secretKey: url
+      - key: SPRING_DATASOURCE_USERNAME
+        secretName: mirror-pg-cred
+        secretKey: username
+      - key: SPRING_DATASOURCE_PASSWORD
+        secretName: mirror-pg-cred
+        secretKey: password
+
+fullnameOverride: "service-app-admin"
+
+resources:
+  limits:
+    cpu: 2000m
+    memory: 2048Mi
+  requests:
+    cpu: 1000m
+    memory: 512Mi

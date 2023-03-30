@@ -25,18 +25,17 @@ public class UserHelper {
 
     /**
      * Возвращает имя авторизированного пользователя
-     *
+     * В случае, если endpoint включен в разрешенные(e.g. permitAll()) - метод вернет null
      * @return username
      */
-    public Optional<String> getUsername() {
-        if(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken ||
-                !Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication()).isPresent())
-            return Optional.empty();
-
-        Jwt jwt =
-                (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        return Optional.ofNullable(jwt.getClaim("preferred_username"));
+    public String getUsername() {
+        try{
+            Jwt jwt =
+                    (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            return jwt.getClaim("preferred_username");
+        }catch (Exception e){
+            return null;
+        }
     }
 
     /**

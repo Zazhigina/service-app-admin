@@ -3,8 +3,6 @@ logging:
     console: UTF-8
   level:
     root: INFO
-    org:
-      jooq: DEBUG
 
 springdoc:
   swagger-ui:
@@ -12,19 +10,32 @@ springdoc:
 
 server:
   forward-headers-strategy: framework
+  shutdown: "graceful"
+
+management:
+  endpoint:
+    health.probes.enabled: true
+  health:
+    livenessState.enabled: true
+    readinessState.enabled: true
 
 spring:
+  main:
+    log-startup-info: false
+    banner-mode: "off"
   datasource:
     driver-class-name: org.postgresql.Driver
     url:
     username:
     password:
+    hikari:
+      maximum-pool-size: 10
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: none
   flyway:
-    defaultSchema: admin
+    defaultSchema: ${DB_SCHEMA}
     baselineOnMigrate: true
     enabled: true
   security:
@@ -34,6 +45,8 @@ spring:
           jwk-set-uri: ${KEYCLOAK_JWK_SET_URI}
 
 mirror:
+  config:
+    allusers-group: ${ALLUSERS_GROUP}
   endpoint:
     rbac: ${MIRROR_ENDPOINT_RBAC}
     ma: ${MIRROR_ENDPOINT_MA}

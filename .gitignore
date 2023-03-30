@@ -3,3 +3,6 @@
 /build/
 /src/main/resources/mirror.jks
 /src/main/resources/app.pub
+/src/main/resources/application-*.yml
+profile-*.gradle
+/ci/profile-*.gradle

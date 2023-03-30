@@ -1,38 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <charset>UTF-8</charset>
-            <pattern>%d{dd.MM.yyyy HH:mm:ss.SSS} | %-5level [%logger{36}:%line]	[%X{req.remoteHost}] [%X{req.requestURI}] [%X{req.method}] - %msg%n</pattern>
-        </encoder>
-    </appender>
-
-    <logger name="org.springframework.web" level="info"/>
-    <logger name="org.springframework" level="info"/>
-
-    <logger name="org.springframework.boot" level="info"/>
-    <logger name="org.hibernate" level="info"/>
-    <logger name="org.apache.catalina.util.LifecycleBase" level="info"/>
-    <logger name="org.apache.tomcat.util.net.NioEndpoint" level="info"/>
-
-    <logger name="org.postgresql.jdbc.PgConnection" level="info"/>
-
-    <logger name="org.postgresql.core.v3.QueryExecutorImpl" level="info"/>
-    <logger name="org.postgresql.core.v3.ConnectionFactoryImpl" level="info"/>
-    <logger name="org.postgresql.Driver" level="info"/>
-    <logger name="com.zaxxer.hikari.pool.HikariPool" level="info"/>
-    <logger name="org.jooq.impl.DefaultBinding" level="info"/>
-    <logger name="com.zaxxer.hikari.pool.PoolBase" level="info"/>
-
     <springProfile name="!local">
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+                <charset>UTF-8</charset>
+                <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+                    <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter"/>
+                    <appendLineSeparator>true</appendLineSeparator>
+                </layout>
+            </encoder>
+        </appender>
+
         <root level="INFO">
             <appender-ref ref="STDOUT" />
         </root>
-        <!--        <logger name="org.springframework.web" level="DEBUG"/>-->
-        <logger name="org.jooq.tools.LoggerListener" level="info"/>
     </springProfile>
 
     <springProfile name="local">
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <charset>UTF-8</charset>
+                <pattern>%d{dd.MM.yyyy HH:mm:ss.SSS} | %-5level [%logger{36}:%line]	[%X{req.remoteHost}] [%X{req.requestURI}] [%X{req.method}] - %msg%n</pattern>
+            </encoder>
+        </appender>
         <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
                 <!-- daily rollover -->
@@ -47,12 +37,9 @@
                 <pattern>%d{dd.MM.yyyy HH:mm:ss.SSS} | %-5level [%logger{36}:%line]	[%X{req.remoteHost}] [%X{req.requestURI}] [%X{req.method}] - %msg%n</pattern>
             </encoder>
         </appender>
-
         <root level="INFO">
             <appender-ref ref="ROLLING"/>
             <appender-ref ref="STDOUT" />
         </root>
-        <!--        <logger name="org.springframework.web" level="DEBUG"/>-->
-        <logger name="org.jooq.tools.LoggerListener" level="debug"/>
     </springProfile>
 </configuration>

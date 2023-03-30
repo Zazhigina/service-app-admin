@@ -13,6 +13,8 @@ application:
         value: http://service-app-ma.mirror:8080
       - key: MIRROR_ENDPOINT_RBAC
         value: http://service-app-rbac.mirror:8080
+      - key: KEYCLOAK_JWK_SET_URI
+        value: https://keycloak.inlinegroup-c.ru/realms/mirror_test/protocol/openid-connect/certs
     secret:
       - key: SPRING_DATASOURCE_URL
         secretName: mirror-pg-cred
@@ -23,9 +25,6 @@ application:
       - key: SPRING_DATASOURCE_PASSWORD
         secretName: mirror-pg-cred
         secretKey: password
-      - key: KEYCLOAK_JWK_SET_URI
-        secretName: keycloack-secret
-        secretKey: jwk-set-uri
 
 imagePullSecrets:
   - name: nexus-credential
@@ -38,7 +37,7 @@ ingress:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
   hosts:
-    - host: mirror-test.inlinegroup-c.ru
+    - host: mirror.inlinegroup-c.ru
       paths:
         - path: /api/admin/?(.*)
           pathType: Prefix

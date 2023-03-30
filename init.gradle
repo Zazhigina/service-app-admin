@@ -1,0 +1,8 @@
+settingsEvaluated { settings ->
+    startParameter.excludedTaskNames= ["generateJooq"]
+    settings.pluginManagement {
+        repositories {
+            maven { url settings.providers.gradleProperty('mavenRepositoryPlugin').get() }
+        }
+    }
+}

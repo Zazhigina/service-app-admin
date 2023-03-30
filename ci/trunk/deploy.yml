@@ -14,6 +14,7 @@ deploy:
       --namespace ${KUBERNETES_NAMESPACE_OVERWRITE}
       --set image.repository=$IMAGE_REPOSITORY
       --set image.tag=$APPLICATION_VERSION
+      --set ingress.enabled=true
       -f ./ci/helm/values-trunk.yaml
       helm-hosted/${CHART_NAME}
   rules:

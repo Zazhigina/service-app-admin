@@ -1,0 +1,63 @@
+#!groovy
+
+// import shared library
+@Library("dsoLibrary@master") _
+
+// populate variables from folder
+withFolderProperties{
+    DEPLOY_ENVIRONMENT = "${env.DEPLOY_ENVIRONMENT}"
+    OCP_URL_TARGET = "${env.OCP_URL_TARGET}"
+    OCP_NAMESPACE = "${env.OCP_NAMESPACE}"
+    OCP_CRED_ID = "${env.OCP_CRED_ID}"
+    VAULT_URL = "${env.VAULT_URL}"
+    REGISTRY_TRUST = "${env.REGISTRY_TRUST}"
+    REGISTRY_TRUST_CRED_ID = "${env.REGISTRY_TRUST_CRED_ID}"
+    REGISTRY_DEV = "${env.REGISTRY_DEV}"
+    REGISTRY_DEV_CRED_ID = "${env.REGISTRY_DEV_CRED_ID}"
+}
+
+if (DEPLOY_ENVIRONMENT == 'trust') {
+    REGISTRY = REGISTRY_TRUST
+    REGISTRY_CRED_ID = REGISTRY_TRUST_CRED_ID
+}
+
+if (DEPLOY_ENVIRONMENT == 'dev') {
+    REGISTRY = REGISTRY_DEV
+    REGISTRY_CRED_ID = REGISTRY_DEV_CRED_ID
+}
+pipeline {
+    agent {
+        label "$DEPLOY_ENVIRONMENT"
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '100', artifactNumToKeepStr: '100'))
+        timeout(time: 30, unit: 'MINUTES')
+    }
+
+    environment {
+        GIT_COMMIT_SHORT = sh(
+            script: "printf \$(git rev-parse --short ${GIT_COMMIT})",
+            returnStdout: true
+        )
+    }
+
+    stages {
+        stage("Set build name") {
+            steps {
+                script {
+                    buildSetter()
+                }
+            }
+        }
+
+        stage("Helm uninstall") {
+            steps {
+                withKubeConfig([login_type: "ocp", auth_provider: "vault"]) {
+                    doHelm "uninstall"
+                }
+            }
+        }
+    }
+
+}

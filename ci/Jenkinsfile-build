@@ -1,0 +1,141 @@
+#!groovy
+
+// import shared library
+@Library("dsoLibrary@master") _
+
+// populate variables from folder
+withFolderProperties{
+    RH_REGISTRY_TRUST = "${env.RH_REGISTRY_TRUST}"
+    RH_REGISTRY_TRUST_CRED_ID = "${env.RH_REGISTRY_TRUST_CRED_ID}"
+    RH_REGISTRY_DEV = "${env.RH_REGISTRY_DEV}"
+    RH_REGISTRY_DEV_CRED_ID = "${env.RH_REGISTRY_DEV_CRED_ID}"
+    QUAY_REGISTRY_TRUST = "${env.QUAY_REGISTRY_TRUST}"
+    QUAY_REGISTRY_TRUST_CRED_ID = "${env.QUAY_REGISTRY_TRUST_CRED_ID}"
+    QUAY_REGISTRY_DEV = "${env.QUAY_REGISTRY_DEV}"
+    QUAY_REGISTRY_DEV_CRED_ID = "${env.QUAY_REGISTRY_DEV_CRED_ID}"
+    REGISTRY_TRUST = "${env.REGISTRY_TRUST}"
+    REGISTRY_TRUST_CRED_ID = "${env.REGISTRY_TRUST_CRED_ID}"
+    REGISTRY_DEV = "${env.REGISTRY_DEV}"
+    REGISTRY_DEV_CRED_ID = "${env.REGISTRY_DEV_CRED_ID}"
+    PROJECT_ID = "${env.PROJECT_ID}"
+}
+
+if (BUILD_ENVIRONMENT == 'trust') {
+    REGISTRY = REGISTRY_TRUST
+    REGISTRY_CRED_ID = REGISTRY_TRUST_CRED_ID
+    RH_REGISTRY = RH_REGISTRY_TRUST
+    RH_REGISTRY_CRED_ID = RH_REGISTRY_TRUST_CRED_ID
+    QUAY_REGISTRY = QUAY_REGISTRY_TRUST
+    QUAY_REGISTRY_CRED_ID = QUAY_REGISTRY_TRUST_CRED_ID
+} else if (BUILD_ENVIRONMENT == 'dev') {
+    REGISTRY = REGISTRY_DEV
+    REGISTRY_CRED_ID = REGISTRY_DEV_CRED_ID
+    RH_REGISTRY = RH_REGISTRY_DEV
+    RH_REGISTRY_CRED_ID = RH_REGISTRY_DEV_CRED_ID
+    QUAY_REGISTRY = QUAY_REGISTRY_DEV
+    QUAY_REGISTRY_CRED_ID = QUAY_REGISTRY_DEV_CRED_ID
+}
+
+def scan_repos = [
+    ("$OCP_APP_NAME" as String): "$BRANCH"
+]
+
+pipeline {
+    parameters {
+        string name: 'email', defaultValue: 'Sergeev.EO@gazprom-neft.ru,Stronin.IYu@omsk.gazprom-neft.ru', description: 'Email address for reports', trim: true
+    }
+
+    agent {
+        label "$BUILD_ENVIRONMENT"
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '100', artifactNumToKeepStr: '100'))
+    }
+
+    environment {
+        GIT_COMMIT_SHORT = sh(
+                script: "printf \$(git rev-parse --short ${GIT_COMMIT})",
+                returnStdout: true
+        )
+    }
+
+    stages {
+        stage('Sast scan') {
+            when {
+                equals(actual: BUILD_ENVIRONMENT, expected: 'trust')
+            }
+            steps {
+                doSastCheck "manualWithParameters", [sast_lang: "Java", "repos_for_scan": scan_repos, "sast_generate_reports": true]
+            }
+        }
+
+        stage('Run CodeScoring Check') {
+            when {
+                equals(actual: BUILD_ENVIRONMENT, expected: 'trust')
+            }
+            steps {
+                script {
+                    def result = doScaCheck('git_url': "ssh://alm-itsk.gazprom-neft.local:8180/TFS/GPN/${PROJECT_ID}/_git/${OCP_APP_NAME}", 'git_branch': "${BRANCH}", 'email': params.email)
+                    println("=== pipeline scan result ===\npassed: $result.passed\nreport: $result.report\nmessage: $result.message")
+                    if (!result.passed) {
+                        error('SCA сканирование завершено. Обнаружены критические уязвимости')
+                    }
+                }
+            }
+        }
+
+        stage("Set build name") {
+            steps {
+                script {
+                    buildSetter()
+                }
+            }
+        }
+
+        stage("Docker registry login") {
+            steps {
+                doDocker("login", ["registryCred": "$REGISTRY_CRED_ID",
+                                   "registry": "$REGISTRY"])
+                doDocker("login", ["registryCred": "$RH_REGISTRY_CRED_ID",
+                                   "registry": "$RH_REGISTRY"])
+                doDocker("login", ["registryCred": "$QUAY_REGISTRY_CRED_ID",
+                                   "registry": "$QUAY_REGISTRY"])
+            }
+        }
+
+        stage("Docker build image") {
+            steps {
+                doDocker("build", ["registry": "$REGISTRY",
+                                   "registry_path": "$PROJECT_ID",
+                                   "image_name": "$OCP_APP_NAME",
+                                   "image_tag": "$GIT_COMMIT_SHORT",
+                                   "dockerfileName": "$DOCKERFILE_NAME",
+                                   "additionalArgs": ""])
+            }
+        }
+
+        stage("Docker push image") {
+            steps {
+                doDocker("push", ["registry": "$REGISTRY",
+                                  "registry_path": "$PROJECT_ID",
+                                  "image_name": "$OCP_APP_NAME",
+                                  "image_tag": "$GIT_COMMIT_SHORT"])
+            }
+        }
+
+        stage ("Run Container Security check") {
+            when {
+                equals(actual: BUILD_ENVIRONMENT, expected: 'trust')
+            }
+            steps {
+                script {
+                    doContainerSecurityCheck(["registry": "$REGISTRY",
+                                              "image": "$PROJECT_ID/$OCP_APP_NAME:$GIT_COMMIT_SHORT",
+                                              "mail": params.email
+                    ])
+                }
+            }
+        }
+    }
+}

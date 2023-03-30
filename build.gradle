@@ -1,8 +1,15 @@
+import nu.studer.gradle.jooq.JooqEdition
+
 plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
     id 'nu.studer.jooq' version "${jooqPluginVersion}"
     id 'java'
+}
+if (!hasProperty('buildProfile')) ext.buildProfile = "${defaultBuildProfile}"
+
+if (project.file("profile-${buildProfile}.gradle").exists()) {
+    if (buildProfile == "${defaultBuildProfile}") apply from: "profile-${buildProfile}.gradle"
 }
 
 group 'igc.mirror'
@@ -12,13 +19,36 @@ sourceCompatibility = 17
 targetCompatibility = 17
 
 repositories {
-    mavenCentral()
+//    mavenCentral()
+    maven {
+        url "${mavenRepository}"
+    }
 }
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 
+configurations {
+    compileClasspath {
+        resolutionStrategy.activateDependencyLocking()
+    }
+    runtimeClasspath {
+        resolutionStrategy.activateDependencyLocking()
+    }
+    annotationProcessor {
+        resolutionStrategy.activateDependencyLocking()
+    }
+}
+
+dependencyLocking {
+    lockMode = LockMode.STRICT
+}
+
 dependencies {
+    // logging
+    implementation "ch.qos.logback.contrib:logback-json-classic:${loogbackContribJSONVersion}"
+    implementation "ch.qos.logback.contrib:logback-jackson:${loogbackContribJacksonVersion}"
+
     // jdbc
     implementation "org.postgresql:postgresql:${postgreJDBCVersion}"
 
@@ -34,7 +64,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.security:spring-security-config'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     // Actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
@@ -45,7 +74,6 @@ dependencies {
 
     // Security
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-
 
     // swagger and OpenAPI
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocOpenApiStarterWebmvcUiVersion}"
@@ -58,10 +86,12 @@ test {
     useJUnitPlatform()
 }
 
-sourceSets.main.java.srcDirs += "${jooqSrcDirs}"
+//sourceSets.main.java.srcDirs += "${jooqSrcDirs}"
 
 jooq {
+//    version = dependencyManagement.importedProperties['jooq.version']
     version = "${jooqVersion}"
+    edition = JooqEdition.OSS
 
     configurations {
         main {
@@ -115,14 +145,8 @@ tasks.named('generateJooq').configure {
 }
 
 bootRun{
-    systemProperty "spring.datasource.url", "${dbConnectionString}"
-    systemProperty "spring.datasource.username", "${dbUser}"
-    systemProperty "spring.datasource.password", "${dbPassword}"
-
-    systemProperty "javax.net.ssl.trustStore", "${project.rootDir}\\src\\main\\resources\\mirror.jks"
-    systemProperty "javax.net.ssl.trustStorePassword", "mirror"
-
-    systemProperty "mirror.endpoint.rbac", "${rbacBaseUrl}"
-    systemProperty "mirror.endpoint.ma", "${maBaseUrl}"
-    systemProperty "spring.security.oauth2.resourceserver.jwt.jwk-set-uri", "${keycloakJwkSetUri}"
+    println "Current profile: " + "${buildProfile}"
+    systemProperty "spring.profiles.active", "${buildProfile}"
+    systemProperty "javax.net.ssl.trustStore", "${project.rootDir}" + "${trustStore}"
+    systemProperty "javax.net.ssl.trustStorePassword", "${trustStorePassword}"
 }

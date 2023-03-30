@@ -1,15 +1,15 @@
 ## Set docker registry location
-ARG QUAYIO_IMAGE_REPOSITORY=nexus-quayio-registry.inlinegroup-c.ru
-ARG RH_IMAGE_REPOSITORY=nexus-rh-registry.inlinegroup-c.ru
+ARG QUAYIO_IMAGE_REPOSITORY=quay-registry.dso.techpark.local
+ARG RH_IMAGE_REPOSITORY=rh-registry.dso.techpark.local
 ## Set maven registry
-ARG MAVEN_REPOSITORY=https://nexus-oss.inlinegroup-c.ru/repository/maven-public/
-ARG MAVEN_REPOSITORY_PLUGIN=https://nexus-oss.inlinegroup-c.ru/repository/maven2-gradle-plugin/
+ARG MAVEN_REPOSITORY=https://nexus.dso.techpark.local/repository/maven2-gradle-external-dso
+ARG MAVEN_REPOSITORY_PLUGIN=https://nexus.dso.techpark.local/repository/maven2-gradle-external-dso
 ## Set optional maven registry certificates
-ARG MAVEN_REPOSITORY_ROOT_CA_URL=""
-ARG MAVEN_REPOSITORY_SUB_CA_URL=""
+ARG MAVEN_REPOSITORY_ROOT_CA_URL=https://nexus.dso.techpark.local/repository/local-repo/CA/root-ca-gazprom-neft.pem
+ARG MAVEN_REPOSITORY_SUB_CA_URL=https://nexus.dso.techpark.local/repository/local-repo/CA/sub-ca.pem
 ## Set keycloak host certificates
-ARG KEYCLOAK_ROOT_CA_URL=https://nexus-oss.inlinegroup-c.ru/repository/local-repo/CA/root.ca.pem
-ARG KEYCLOAK_SUB_CA_URL=""
+ARG KEYCLOAK_ROOT_CA_URL=https://nexus.dso.techpark.local/repository/local-repo/CA/root-ca-gazprom-neft.pem
+ARG KEYCLOAK_SUB_CA_URL=https://nexus.dso.techpark.local/repository/local-repo/CA/sub-ca.pem
 ## Set application build path
 ARG BUILD_APP_DIR='/application'
 
@@ -32,7 +32,7 @@ RUN if [ -n "$MAVEN_REPOSITORY_SUB_CA_URL" ]; then wget --no-check-certificate -
     && keytool -import -noprompt -alias sub -file ./sub-ca-maven.crt -keystore ./maven.jks -storepass gradle; fi
 ENV GRADLE_USER_HOME=$BUILD_APP_DIR/gradle
 RUN gradle build --init-script init.gradle -PmavenRepository=$MAVEN_REPOSITORY \
-    -PmavenRepositoryPlugin=$MAVEN_REPOSITORY_PLUGIN
+    -PmavenRepositoryPlugin=$MAVEN_REPOSITORY_PLUGIN -Djavax.net.ssl.trustStore="/application/maven.jks" -Djavax.net.ssl.trustStorePassword=gradle
 RUN java -Djarmode=layertools -jar $BUILD_APP_DIR/build/libs/root.jar extract
 #
 FROM  $RH_IMAGE_REPOSITORY/ubi9/openjdk-17-runtime:1.14-2.1679391794
@@ -68,7 +68,7 @@ ENV SPRING_DATASOURCE_URL="jdbc:postgresql://localhost:5432"
 ENV SPRING_DATASOURCE_USERNAME=""
 ENV SPRING_DATASOURCE_PASSWORD=""
 
-VOLUME ["$RUNTIME_PATH"]
+VOLUME [ $RUNTIME_PATH ]
 
 EXPOSE 8080
 ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]

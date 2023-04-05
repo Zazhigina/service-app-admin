@@ -6,7 +6,7 @@
                 <charset>UTF-8</charset>
                 <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
                     <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter"/>
-                    <timestampFormat>yyyy.MM.dd' 'HH:mm:ss.SSS</timestampFormat>
+                    <timestampFormat>yyyy-MM-dd'T'HH:mm:ssXXX</timestampFormat>
                     <appendLineSeparator>true</appendLineSeparator>
                 </layout>
             </encoder>
@@ -21,7 +21,7 @@
         <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
             <encoder>
                 <charset>UTF-8</charset>
-                <pattern>%d{dd.MM.yyyy HH:mm:ss.SSS} | %-5level [%logger{36}:%line]	[%X{req.remoteHost}] [%X{req.requestURI}] [%X{req.method}] - %msg%n</pattern>
+                <pattern>%d{yyyy-MM-dd'T'HH:mm:ssXXX} | %-5level | %X | [%logger{36}:%line]	[%X{req.remoteHost}] [%X{req.requestURI}] [%X{req.method}] - %msg%n</pattern>
             </encoder>
         </appender>
         <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -35,7 +35,7 @@
 
             <encoder>
                 <charset>UTF-8</charset>
-                <pattern>%d{dd.MM.yyyy HH:mm:ss.SSS} | %-5level [%logger{36}:%line]	[%X{req.remoteHost}] [%X{req.requestURI}] [%X{req.method}] - %msg%n</pattern>
+                <pattern>%d{yyyy-MM-dd'T'HH:mm:ssXXX} | %-5level | %X | [%logger{36}:%line]	[%X{req.remoteHost}] [%X{req.requestURI}] [%X{req.method}] - %msg%n</pattern>
             </encoder>
         </appender>
         <root level="INFO">

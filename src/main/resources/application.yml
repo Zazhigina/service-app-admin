@@ -45,8 +45,9 @@ spring:
           jwk-set-uri: ${KEYCLOAK_JWK_SET_URI}
 
 mirror:
-#  config:
-#    allusers-group: ${ALLUSERS_GROUP}
   endpoint:
     rbac: ${MIRROR_ENDPOINT_RBAC}
     ma: ${MIRROR_ENDPOINT_MA}
+  application:
+    name: service-app-admin
+    version: ${APPLICATION_VERSION:local}

@@ -7,16 +7,17 @@ deploy:
     action: start
     on_stop: stop_deploy
   script:
-    - helm repo add --username ${NEXUS_USER} --password ${NEXUS_USER_PASSWORD} helm-hosted ${NEXUS_HELM_REPO}
     - helm upgrade
-      --reuse-values
+      --reset-values
+      --repo ${NEXUS_HELM_REPO}
+      --username ${NEXUS_USER}
+      --password ${NEXUS_USER_PASSWORD}
       --install ${APPLICATION_NAME}
       --namespace ${KUBERNETES_NAMESPACE_OVERWRITE}
-      --set image.repository=$IMAGE_REPOSITORY
       --set image.tag=$APPLICATION_VERSION
       --set ingress.enabled=true
       -f ./ci/helm/values-trunk.yaml
-      helm-hosted/${CHART_NAME}
+      ${CHART_NAME}
   rules:
     - if: $CI_COMMIT_BRANCH == $DEPLOY_BRANCH
 

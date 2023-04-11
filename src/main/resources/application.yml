@@ -25,7 +25,7 @@ spring:
     banner-mode: "off"
   datasource:
     driver-class-name: org.postgresql.Driver
-    url:
+    url: ${MIRROR_DATASOURCE_URL}?ApplicationName=${SPRING_APPLICATION_NAME}/${APPLICATION_VERSION}
     username:
     password:
     hikari:
@@ -49,5 +49,5 @@ mirror:
     rbac: ${MIRROR_ENDPOINT_RBAC}
     ma: ${MIRROR_ENDPOINT_MA}
   application:
-    name: service-app-admin
+    name: ${SPRING_APPLICATION_NAME}
     version: ${APPLICATION_VERSION:local}

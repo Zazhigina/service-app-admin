@@ -12,7 +12,7 @@ application:
       - key: KEYCLOAK_JWK_SET_URI
         value: https://sso-apps-745.apps.test.gazprom-neft.local/auth/realms/U200004739/protocol/openid-connect/certs
     secret:
-      - key: SPRING_DATASOURCE_URL
+      - key: MIRROR_DATASOURCE_URL
         secretName: mirror-pg-cred
         secretKey: url
       - key: SPRING_DATASOURCE_USERNAME
@@ -26,8 +26,8 @@ fullnameOverride: "service-app-admin"
 
 resources:
   limits:
-    cpu: 2000m
+    cpu: 400m
     memory: 2048Mi
   requests:
-    cpu: 1000m
+    cpu: 200m
     memory: 512Mi

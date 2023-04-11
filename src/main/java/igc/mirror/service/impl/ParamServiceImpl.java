@@ -10,11 +10,14 @@ import igc.mirror.utils.UserHelper;
 import igc.mirror.utils.qfilter.DataFilter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.stream.Collectors;
@@ -22,7 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @Validated
 public class ParamServiceImpl implements ParamService {
-
+    static final Logger logger = LoggerFactory.getLogger(ParamServiceImpl.class);
     private final UserHelper userHelper;
     private final ParamRepository paramRepository;
 
@@ -42,8 +45,11 @@ public class ParamServiceImpl implements ParamService {
     }
 
     @Override
+    @Transactional
     @Validated
     public ParamDto changeParam(@NotBlank String key, @Valid ParamEditableDto paramEditableDto) {
+        logger.info("Изменение параметра с ключом - {}", key);
+
         if(!paramRepository.checkExist(key))
             throw new EntityNotFoundException(String.format("Параметр %s не найден",key), null, ParamEditableDto.class);
 

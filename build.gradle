@@ -4,6 +4,7 @@ plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
     id 'nu.studer.jooq' version "${jooqPluginVersion}"
+    id("org.springdoc.openapi-gradle-plugin") version "${springDocOpenApiGradlePluginVersion}"
     id 'java'
 }
 if (!hasProperty('buildProfile')) ext.buildProfile = "${defaultBuildProfile}"
@@ -135,6 +136,10 @@ jooq {
             }
         }
     }
+}
+
+openApi {
+    outputDir.set(file("/docs"))
 }
 
 tasks.named('generateJooq').configure {

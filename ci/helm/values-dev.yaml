@@ -21,6 +21,12 @@ application:
       - key: SPRING_DATASOURCE_PASSWORD
         secretName: mirror-pg-cred
         secretKey: password
+      - key: MIRROR_SCHEDULE_TASKS_USERNAME
+        secretName: mirror-sched-tasks-cred
+        secretKey: username
+      - key: MIRROR_SCHEDULE_TASKS_PASSWORD
+        secretName: mirror-sched-tasks-cred
+        secretKey: password
 
 fullnameOverride: "service-app-admin"
 

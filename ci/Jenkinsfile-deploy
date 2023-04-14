@@ -63,7 +63,7 @@ pipeline {
                         helm_chart: "tzriu-be-spring",
                         from_repo: true,
                         helm_commands: "--version ${CHART_VERSION} \
-                            --reuse-values \
+                            --reset-values \
                             --set image.repository=${REGISTRY}/${OCP_NAMESPACE}/${OCP_APP_NAME} \
                             --set image.tag=${GIT_COMMIT_SHORT} \
                             -f ./ci/helm/values-${DEPLOY_ENVIRONMENT}.yaml"

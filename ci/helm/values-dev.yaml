@@ -9,6 +9,8 @@ application:
         value: http://service-app-ma.tzriu:8080
       - key: MIRROR_ENDPOINT_RBAC
         value: http://service-app-rbac.tzriu:8080
+      - key: KEYCLOAK_JWK_SET_URI
+        value: http://localhost
       - key: MIRROR_KEYCLOAK_BASE_URL
         value: http://localhost
       - key: MIRROR_KEYCLOAK_REALM

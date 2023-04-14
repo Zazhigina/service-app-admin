@@ -47,7 +47,7 @@ public class RequestSearchHistoryTask {
                 .bodyToMono(Void.class)
                 .log()
                 .doOnError(err -> logger.error("Ошибка запуска удаленного сервиса - {}", err.getMessage()))
-                .doOnSuccess(success -> logger.info("Выполнение задания по сбору и отправке истории поиска в Python завершено."))
+                .doOnSuccess(success -> logger.info("Задание по сбору и отправке истории поиска в Python запущено."))
                 .subscribe();
     }
 }

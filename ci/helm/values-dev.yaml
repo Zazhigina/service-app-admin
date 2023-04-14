@@ -32,7 +32,7 @@ fullnameOverride: "service-app-admin"
 
 resources:
   limits:
-    cpu: 400m
+    cpu: 600m
     memory: 2048Mi
   requests:
     cpu: 200m

@@ -9,8 +9,12 @@ application:
         value: http://service-app-ma.tzriu:8080
       - key: MIRROR_ENDPOINT_RBAC
         value: http://service-app-rbac.tzriu:8080
-      - key: KEYCLOAK_JWK_SET_URI
-        value: https://sso-apps-745.apps.test.gazprom-neft.local/auth/realms/U200004739/protocol/openid-connect/certs
+      - key: MIRROR_KEYCLOAK_BASE_URL
+        value: https://sso-apps-745.apps.test.gazprom-neft.local/auth/
+      - key: MIRROR_KEYCLOAK_REALM
+        value: U200004739
+      - key: MIRROR_KEYCLOAK_CLIENT_ID
+        value: tzriu-mrp
     secret:
       - key: MIRROR_DATASOURCE_URL
         secretName: mirror-pg-cred
@@ -21,6 +25,9 @@ application:
       - key: SPRING_DATASOURCE_PASSWORD
         secretName: mirror-pg-cred
         secretKey: password
+      - key: MIRROR_KEYCLOAK_CLIENT_SECRET
+        secretName: mirror-sso-confid-cred
+        secretKey: secret
       - key: MIRROR_SCHEDULE_TASKS_USERNAME
         secretName: mirror-sched-tasks-cred
         secretKey: username

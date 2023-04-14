@@ -15,8 +15,12 @@ application:
         value: http://service-app-ma.mirror:8080
       - key: MIRROR_ENDPOINT_RBAC
         value: http://service-app-rbac.mirror:8080
-      - key: KEYCLOAK_JWK_SET_URI
-        value: https://keycloak.inlinegroup-c.ru/realms/mirror_test/protocol/openid-connect/certs
+      - key: MIRROR_KEYCLOAK_BASE_URL
+        value: https://keycloak.inlinegroup-c.ru
+      - key: MIRROR_KEYCLOAK_REALM
+        value: mirror_test
+      - key: MIRROR_KEYCLOAK_CLIENT_ID
+        value: mirror-integration-app
     secret:
       - key: MIRROR_DATASOURCE_URL
         secretName: mirror-pg-cred
@@ -27,6 +31,9 @@ application:
       - key: SPRING_DATASOURCE_PASSWORD
         secretName: mirror-pg-cred
         secretKey: password
+      - key: MIRROR_KEYCLOAK_CLIENT_SECRET
+        secretName: mirror-sso-confid-cred
+        secretKey: secret
       - key: MIRROR_SCHEDULE_TASKS_USERNAME
         secretName: mirror-sched-tasks-cred
         secretKey: username

@@ -1,6 +1,6 @@
 deploy:
   stage: deploy
-  image: registry.inlinegroup-c.ru/tools/devth/helm:v3.9.0
+  image: nexus-docker-hub.inlinegroup-c.ru/devth/helm:v3.9.0
   environment:
     name: $ENVIRONMENT_NAME
     url: $APP_URL
@@ -23,7 +23,7 @@ deploy:
 
 stop_deploy:
   stage: deploy
-  image: registry.inlinegroup-c.ru/tools/devth/helm:v3.9.0
+  image: nexus-docker-hub.inlinegroup-c.ru/devth/helm:v3.9.0
   environment:
     name: $ENVIRONMENT_NAME
     action: stop

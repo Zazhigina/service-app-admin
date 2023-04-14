@@ -4,7 +4,7 @@ build:
     name: $ENVIRONMENT_NAME
     action: prepare
   image:
-    name: registry.inlinegroup-c.ru/tools/kaniko-project/executor:debug
+    name: nexus-registry.inlinegroup-c.ru/gcr.io/kaniko-project/executor:v1.9.2-debug
     entrypoint: [""]
   script:
     - cat $NEXUS_REGISTRY_CRED > /kaniko/.docker/config.json

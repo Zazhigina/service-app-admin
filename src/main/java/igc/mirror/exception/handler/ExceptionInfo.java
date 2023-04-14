@@ -2,6 +2,7 @@ package igc.mirror.exception.handler;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
 import java.util.Date;
 import java.util.List;
@@ -45,7 +46,7 @@ public class ExceptionInfo {
         return advice;
     }
 
-    public void setPublicErrorInfo(HttpServletRequest request, HttpStatus status){
+    public void setPublicErrorInfo(HttpServletRequest request, HttpStatusCode status){
         this.timestamp = new Date();
         this.error = this.cause;
         this.status = status.value();

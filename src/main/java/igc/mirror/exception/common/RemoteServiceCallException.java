@@ -1,16 +1,16 @@
 package igc.mirror.exception.common;
 
 import igc.mirror.exception.handler.ExceptionInfo;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
 public class RemoteServiceCallException extends Exception{
-    private HttpStatus remoteStatus;
+    private HttpStatusCode remoteStatus;
 
     private String remoteUrl;
 
     private String originalMessage;
 
-    public RemoteServiceCallException(String message, HttpStatus remoteStatus, String remoteUrl, String originalMessage) {
+    public RemoteServiceCallException(String message, HttpStatusCode remoteStatus, String remoteUrl, String originalMessage) {
         super(message);
         this.remoteStatus = remoteStatus;
         this.remoteUrl = remoteUrl;
@@ -21,7 +21,7 @@ public class RemoteServiceCallException extends Exception{
         super(message, throwable);
     }
 
-    public HttpStatus getRemoteStatus() {
+    public HttpStatusCode getRemoteStatus() {
         return remoteStatus;
     }
 

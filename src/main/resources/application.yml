@@ -60,5 +60,13 @@ mirror:
     rbac: ${MIRROR_ENDPOINT_RBAC}
     ma: ${MIRROR_ENDPOINT_MA}
   application:
-    name: ${SPRING_APPLICATION_NAME}
-    version: ${APPLICATION_VERSION:local}
+    user-agent: ${SPRING_APPLICATION_NAME}/${APPLICATION_VERSION}
+  keycloak:
+    base-url: ${MIRROR_KEYCLOAK_BASE_URL}
+    realm: ${MIRROR_KEYCLOAK_REALM}
+    client-id: ${MIRROR_KEYCLOAK_CLIENT_ID}
+    client-secret: ${MIRROR_KEYCLOAK_CLIENT_SECRET}
+  schedule:
+    tasks:
+      username:
+      password:

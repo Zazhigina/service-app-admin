@@ -9,6 +9,8 @@ import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
+import javax.net.ssl.SSLException;
+
 @Configuration
 public class WebClientConfig {
     static final Logger logger = LoggerFactory.getLogger(WebClientConfig.class);
@@ -18,6 +20,9 @@ public class WebClientConfig {
 
     @Value("${mirror.endpoint.ma}")
     private String masterAssistantUrl;
+
+    @Value("${mirror.keycloak.base-url}")
+    private String keycloakBaseUrl;
 
     @Bean("rbac")
     public WebClient webClientRbac(){
@@ -33,6 +38,15 @@ public class WebClientConfig {
         HttpClient httpClient = HttpClient.create();
         return WebClient.builder()
                 .baseUrl(masterAssistantUrl)
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
+    }
+
+    @Bean("keycloak")
+    public WebClient webClientKeycloak() throws SSLException {
+        HttpClient httpClient = HttpClient.create();
+        return WebClient.builder()
+                .baseUrl(keycloakBaseUrl)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }

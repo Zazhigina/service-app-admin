@@ -16,6 +16,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
 
+import java.util.UUID;
+
+import static igc.mirror.config.LoggingConstants.USER_AGENT_KEY;
+import static igc.mirror.config.LoggingConstants.X_REQUEST_ID_KEY;
+
 public class RequestSearchHistoryTask {
     static final Logger logger = LoggerFactory.getLogger(RequestSearchHistoryTask.class);
 
@@ -36,9 +41,11 @@ public class RequestSearchHistoryTask {
     private String userAgent;
 
     //@Scheduled(cron = "0 0/30 23 * * *")
-    @Scheduled(cron = "0 20 15 * * *")
+    @Scheduled(cron = "0 20 18 * * *")
     public void sendRequestSearchHistory() {
-        logger.info("Подготовка к запуску задания по сбору и отправке истории поиска в Python, user-agent {}", userAgent);
+        MDC.put(USER_AGENT_KEY, userAgent);
+        MDC.put(X_REQUEST_ID_KEY, UUID.randomUUID().toString());
+        logger.info("Подготовка к запуску задания по сбору и отправке истории поиска в Python, user-agent {}, http_request_id {}", userAgent, MDC.get(X_REQUEST_ID_KEY));
 
         AuthResponseDto authResponseDto = keycloakAuthClient.authenticate(scheduleTasksUserName, cheduleTasksPassword);
 
@@ -49,7 +56,7 @@ public class RequestSearchHistoryTask {
                 .uri(uri)
                 .header("Authorization", "Bearer " + authResponseDto.getAccessToken())
                 .header(HttpHeaders.USER_AGENT, userAgent)
-                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
+                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(X_REQUEST_ID_KEY))
                 .retrieve()
                 .bodyToMono(Void.class)
                 .log()

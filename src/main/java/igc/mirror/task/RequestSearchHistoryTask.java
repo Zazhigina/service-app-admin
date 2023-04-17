@@ -2,9 +2,11 @@ package igc.mirror.task;
 
 import igc.mirror.auth.client.KeycloakAuthClient;
 import igc.mirror.auth.dto.AuthResponseDto;
+import igc.mirror.config.LoggingConstants;
 import igc.mirror.exception.common.RemoteServiceCallException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,9 +35,10 @@ public class RequestSearchHistoryTask {
     @Value("${mirror.application.user-agent}")
     private String userAgent;
 
-    @Scheduled(cron = "0 0/30 23 * * *")
+    //@Scheduled(cron = "0 0/30 23 * * *")
+    @Scheduled(cron = "0 0 15 * * *")
     public void sendRequestSearchHistory() {
-        logger.info("Подготовка к запуску задания по сбору и отправке истории поиска в Python");
+        logger.info("Подготовка к запуску задания по сбору и отправке истории поиска в Python, user-agent {}", userAgent);
 
         AuthResponseDto authResponseDto = keycloakAuthClient.authenticate(scheduleTasksUserName, cheduleTasksPassword);
 
@@ -46,6 +49,7 @@ public class RequestSearchHistoryTask {
                 .uri(uri)
                 .header("Authorization", "Bearer " + authResponseDto.getAccessToken())
                 .header(HttpHeaders.USER_AGENT, userAgent)
+                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
                 .retrieve()
                 .bodyToMono(Void.class)
                 .log()

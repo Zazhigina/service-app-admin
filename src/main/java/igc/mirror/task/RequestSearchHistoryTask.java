@@ -41,7 +41,7 @@ public class RequestSearchHistoryTask {
     private String userAgent;
 
     //@Scheduled(cron = "0 0/30 23 * * *")
-    @Scheduled(cron = "0 20 18 * * *")
+    @Scheduled(cron = "0 30 18 * * *")
     public void sendRequestSearchHistory() {
         MDC.put(USER_AGENT_KEY, userAgent);
         MDC.put(X_REQUEST_ID_KEY, UUID.randomUUID().toString());

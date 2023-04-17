@@ -36,7 +36,7 @@ public class RequestSearchHistoryTask {
     private String userAgent;
 
     //@Scheduled(cron = "0 0/30 23 * * *")
-    @Scheduled(cron = "0 0 15 * * *")
+    @Scheduled(cron = "0 20 15 * * *")
     public void sendRequestSearchHistory() {
         logger.info("Подготовка к запуску задания по сбору и отправке истории поиска в Python, user-agent {}", userAgent);
 

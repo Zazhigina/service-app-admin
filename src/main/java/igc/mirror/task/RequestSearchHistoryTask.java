@@ -40,12 +40,12 @@ public class RequestSearchHistoryTask {
     @Value("${mirror.application.user-agent}")
     private String userAgent;
 
-    //@Scheduled(cron = "0 0/30 23 * * *")
-    @Scheduled(cron = "0 30 18 * * *")
+    @Scheduled(cron = "0 30 23 * * *")
     public void sendRequestSearchHistory() {
         MDC.put(USER_AGENT_KEY, userAgent);
         MDC.put(X_REQUEST_ID_KEY, UUID.randomUUID().toString());
-        logger.info("Подготовка к запуску задания по сбору и отправке истории поиска в Python, user-agent {}, http_request_id {}", userAgent, MDC.get(X_REQUEST_ID_KEY));
+
+        logger.info("Подготовка к запуску задания по сбору и отправке истории поиска в Python");
 
         AuthResponseDto authResponseDto = keycloakAuthClient.authenticate(scheduleTasksUserName, cheduleTasksPassword);
 
@@ -64,5 +64,8 @@ public class RequestSearchHistoryTask {
                 .doOnError(err -> logger.error("Ошибка запуска удаленного сервиса - {}", err.getMessage()))
                 .doOnSuccess(success -> logger.info("Задание по сбору и отправке истории поиска в Python запущено."))
                 .subscribe();
+
+        MDC.remove(USER_AGENT_KEY);
+        MDC.remove(X_REQUEST_ID_KEY);
     }
 }

@@ -9,8 +9,6 @@ application:
         value: http://service-app-ma.tzriu:8080
       - key: MIRROR_ENDPOINT_RBAC
         value: http://service-app-rbac.tzriu:8080
-      - key: KEYCLOAK_JWK_SET_URI
-        value: https://sso-apps-745.apps.test.gazprom-neft.local/auth/realms/U200004739/protocol/openid-connect/certs
       - key: MIRROR_KEYCLOAK_BASE_URL
         value: https://sso-apps-745.apps.test.gazprom-neft.local/auth/
       - key: MIRROR_KEYCLOAK_REALM

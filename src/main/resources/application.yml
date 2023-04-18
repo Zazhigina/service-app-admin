@@ -53,7 +53,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI}
+          jwk-set-uri: ${MIRROR_KEYCLOAK_BASE_URL}/realms/${MIRROR_KEYCLOAK_REALM}/protocol/openid-connect/certs
 
 mirror:
   endpoint:

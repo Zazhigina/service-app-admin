@@ -25,9 +25,6 @@ public class RequestResponseLoggingFilter implements Filter {
         if (httpRequest.getHeader(X_REQUEST_ID_HEADER) != null) {
             MDC.put(X_REQUEST_ID_KEY, httpRequest.getHeader(X_REQUEST_ID_HEADER));
         }
-//        else {
-//            MDC.put(X_REQUEST_ID_KEY, UUID.randomUUID().toString());
-//        }
 
         try {
             chain.doFilter(request, response);

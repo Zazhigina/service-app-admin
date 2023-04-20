@@ -1,6 +1,6 @@
 package igc.mirror.config;
 
-import igc.mirror.utils.UserHelper;
+import igc.mirror.auth.UserDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class SecurityConfig {
     };
 
     @Autowired
-    private UserHelper userHelper;
+    private UserDetails userDetails;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -79,7 +79,7 @@ public class SecurityConfig {
             public Collection<GrantedAuthority> convert(Jwt jwt) {
                 Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
-                Optional<List<String>> userRoles = userHelper.getUserRoles(jwt);
+                Optional<List<String>> userRoles = userDetails.getUserRoles(jwt);
                 userRoles.ifPresent(roles -> {
                     final List<SimpleGrantedAuthority> keycloakAuthorities = roles.stream()
                             .map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());

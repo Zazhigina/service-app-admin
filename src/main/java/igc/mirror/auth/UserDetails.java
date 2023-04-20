@@ -1,11 +1,10 @@
-package igc.mirror.utils;
+package igc.mirror.auth;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
@@ -16,8 +15,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class UserHelper {
-    static final Logger logger = LoggerFactory.getLogger(UserHelper.class);
+public class UserDetails {
+    static final Logger logger = LoggerFactory.getLogger(UserDetails.class);
 
     @Autowired
     @Qualifier("rbac")

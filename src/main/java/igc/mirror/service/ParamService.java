@@ -2,13 +2,39 @@ package igc.mirror.service;
 
 import igc.mirror.dto.ParamDto;
 import igc.mirror.dto.ParamEditableDto;
+import igc.mirror.exception.common.EntityNotFoundException;
+import igc.mirror.model.Param;
+import igc.mirror.repository.ParamRepository;
+import igc.mirror.auth.UserDetails;
 import igc.mirror.utils.qfilter.DataFilter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
-public interface ParamService {
+import java.util.stream.Collectors;
+
+@Service
+@Validated
+public class ParamService {
+    static final Logger logger = LoggerFactory.getLogger(ParamService.class);
+    private final UserDetails userDetails;
+    private final ParamRepository paramRepository;
+
+    @Autowired
+    public ParamService(ParamRepository paramRepository,
+                            UserDetails userDetails){
+        this.paramRepository = paramRepository;
+        this.userDetails = userDetails;
+    }
+
     /**
      * Возвращает список параметров
      *
@@ -16,7 +42,12 @@ public interface ParamService {
      * @param pageable настройки пэджинации и сортировки
      * @return список параметров
      */
-    Page<ParamDto> findParamsByFilters(DataFilter<?> dataFilter, Pageable pageable);
+    public Page<ParamDto> findParamsByFilters(DataFilter<?> dataFilter, Pageable pageable) {
+        Page<Param> paramPage = paramRepository.findByFilters(dataFilter, pageable);
+
+        return new PageImpl<>(paramPage.getContent().stream().map(paramModel -> ParamDto.fromModel(paramModel)).collect(Collectors.toList()),
+                pageable, paramPage.getTotalElements());
+    }
 
     /**
      * Изменяет данные параметра
@@ -25,5 +56,18 @@ public interface ParamService {
      * @param paramEditableDto данные для редактирования параметра
      * @return отредактированный параметр
      */
-    ParamDto changeParam(@NotBlank String key, @Valid ParamEditableDto paramEditableDto);
+    @Transactional
+    @Validated
+    public ParamDto changeParam(@NotBlank String key, @Valid ParamEditableDto paramEditableDto) {
+        logger.info("Изменение параметра с ключом - {}", key);
+
+        if(!paramRepository.checkExist(key))
+            throw new EntityNotFoundException(String.format("Параметр %s не найден",key), null, ParamEditableDto.class);
+
+        Param changeParam = new Param(key, paramEditableDto.getName(), paramEditableDto.getVal());
+        changeParam.setLastUpdateUser(userDetails.getUsername());
+
+        return ParamDto.fromModel(paramRepository.save(changeParam));
+    }
+
 }

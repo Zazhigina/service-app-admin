@@ -15,6 +15,10 @@ application:
         value: U200004739
       - key: MIRROR_KEYCLOAK_CLIENT_ID
         value: tzriu-mrp
+      - key: KEYCLOAK_ROOT_CA_URL
+        value: https://nexus.gazprom-neft.local/repository/local-repo/CA/root-ca-gazprom-neft.pem
+      - key: KEYCLOAK_SUB_CA_URL
+        value: https://nexus.gazprom-neft.local/repository/local-repo/CA/sub-ca.pem
     secret:
       - key: MIRROR_DATASOURCE_URL
         secretName: mirror-pg-cred

@@ -21,6 +21,10 @@ application:
         value: mirror_test
       - key: MIRROR_KEYCLOAK_CLIENT_ID
         value: mirror-integration-app
+      - key: KEYCLOAK_ROOT_CA_URL
+        value: https://nexus-oss.inlinegroup-c.ru/repository/local-repo/CA/root.ca.pem
+#      - key: KEYCLOAK_SUB_CA_URL
+#        value: ""
     secret:
       - key: MIRROR_DATASOURCE_URL
         secretName: mirror-pg-cred

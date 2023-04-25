@@ -49,7 +49,7 @@ public class RequestSearchHistoryTask {
 
         AuthResponseDto authResponseDto = keycloakAuthClient.authenticate(scheduleTasksUserName, cheduleTasksPassword);
 
-        String uri = String.join("/", "", "request/history/send");
+        String uri = String.join("/", "", "request/history-saving");
 
         webClient
                 .post()

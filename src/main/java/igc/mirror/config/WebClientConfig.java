@@ -24,6 +24,9 @@ public class WebClientConfig {
     @Value("${mirror.keycloak.base-url}")
     private String keycloakBaseUrl;
 
+    @Value("${mirror.endpoint.integration}")
+    private String integrationUrl;
+
     @Bean("rbac")
     public WebClient webClientRbac(){
         HttpClient httpClient = HttpClient.create();
@@ -47,6 +50,15 @@ public class WebClientConfig {
         HttpClient httpClient = HttpClient.create();
         return WebClient.builder()
                 .baseUrl(keycloakBaseUrl)
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
+    }
+
+    @Bean("integration")
+    public WebClient webClientIntegration() throws SSLException {
+        HttpClient httpClient = HttpClient.create();
+        return WebClient.builder()
+                .baseUrl(integrationUrl)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }

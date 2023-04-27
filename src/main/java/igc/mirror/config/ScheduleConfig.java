@@ -1,5 +1,6 @@
 package igc.mirror.config;
 
+import igc.mirror.task.EisContractsTask;
 import igc.mirror.task.RequestSearchHistoryTask;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,5 +28,10 @@ public class ScheduleConfig implements SchedulingConfigurer {
     @Bean
     public RequestSearchHistoryTask requestSearchHistoryTask() {
         return new RequestSearchHistoryTask();
+    }
+
+    @Bean
+    public EisContractsTask eisContractsTask() {
+        return new EisContractsTask();
     }
 }

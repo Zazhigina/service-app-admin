@@ -15,6 +15,8 @@ application:
         value: http://service-app-ma.mirror:8080
       - key: MIRROR_ENDPOINT_RBAC
         value: http://service-app-rbac.mirror:8080
+      - key: MIRROR_ENDPOINT_INTEGRATION
+        value: http://service-app-integration.mirror:8080
       - key: MIRROR_KEYCLOAK_BASE_URL
         value: https://keycloak.inlinegroup-c.ru
       - key: MIRROR_KEYCLOAK_REALM
@@ -25,6 +27,10 @@ application:
         value: https://nexus-oss.inlinegroup-c.ru/repository/local-repo/CA/root.ca.pem
 #      - key: KEYCLOAK_SUB_CA_URL
 #        value: ""
+      - key: MIRROR_SCHEDULE_TASKS_CRON_REPLICATE_PROCEDURE_RECORDS
+        value: 0 0 1 4 * ?
+      - key: MIRROR_SCHEDULE_TASKS_CRON_SAVE_SEARCH_HISTORY
+        value: 0 30 23 * * *
     secret:
       - key: MIRROR_DATASOURCE_URL
         secretName: mirror-pg-cred

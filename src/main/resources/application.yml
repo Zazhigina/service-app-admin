@@ -59,6 +59,7 @@ mirror:
   endpoint:
     rbac: ${MIRROR_ENDPOINT_RBAC}
     ma: ${MIRROR_ENDPOINT_MA}
+    integration: ${MIRROR_ENDPOINT_INTEGRATION}
   application:
     user-agent: ${SPRING_APPLICATION_NAME}/${APPLICATION_VERSION}
   keycloak:
@@ -70,3 +71,6 @@ mirror:
     tasks:
       username:
       password:
+      cron:
+        replicate-procedure-records: ${MIRROR_SCHEDULE_TASKS_CRON_REPLICATE_PROCEDURE_RECORDS:0 0 1 4 * ?}
+        save-search-history: ${MIRROR_SCHEDULE_TASKS_CRON_SAVE_SEARCH_HISTORY:0 30 23 * * *}

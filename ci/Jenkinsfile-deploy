@@ -21,7 +21,7 @@ withFolderProperties{
 if (DEPLOY_ENVIRONMENT == 'trust') {
     REGISTRY = REGISTRY_TRUST
     REGISTRY_CRED_ID = REGISTRY_TRUST_CRED_ID
-    CHART_VERSION = '0.1.4'
+    CHART_VERSION = '0.1.6'
 }
 
 if (DEPLOY_ENVIRONMENT == 'dev') {

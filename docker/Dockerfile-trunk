@@ -32,7 +32,7 @@ RUN gradle build --init-script init.gradle -PmavenRepository=$MAVEN_REPOSITORY \
     -PmavenRepositoryPlugin=$MAVEN_REPOSITORY_PLUGIN
 RUN java -Djarmode=layertools -jar $BUILD_APP_DIR/build/libs/root.jar extract
 #
-FROM  $RH_IMAGE_REPOSITORY/ubi9/openjdk-17-runtime:1.14-2.1679391794
+FROM  $RH_IMAGE_REPOSITORY/ubi9/openjdk-17-runtime:1.14-2.1681917142
 ARG BUILD_APP_DIR
 ARG UID=1001
 

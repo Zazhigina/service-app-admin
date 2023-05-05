@@ -13,6 +13,8 @@ server:
   shutdown: "graceful"
 
 management:
+  server:
+    port: 8081
   metrics:
     tags:
       application: ${spring.application.name}/${APPLICATION_VERSION}

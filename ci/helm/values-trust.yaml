@@ -47,6 +47,9 @@ application:
 
 fullnameOverride: "service-app-admin"
 
+service:
+  managementPort: 8081
+
 resources:
   limits:
     cpu: 400m

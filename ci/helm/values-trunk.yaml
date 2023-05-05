@@ -56,6 +56,9 @@ imagePullSecrets:
 
 fullnameOverride: "service-app-admin"
 
+service:
+  managementPort: 8081
+
 ingress:
   enabled: false
   className: "nginx"

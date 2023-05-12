@@ -5,7 +5,9 @@ package jooqdata;
 
 
 import jooqdata.tables.AParam;
+import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.records.AParamRecord;
+import jooqdata.tables.records.TLetterTemplateRecord;
 
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
@@ -25,4 +27,5 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final UniqueKey<AParamRecord> A_PARAM_PK = Internal.createUniqueKey(AParam.A_PARAM, DSL.name("a_param_pk"), new TableField[] { AParam.A_PARAM.KEY }, true);
+    public static final UniqueKey<TLetterTemplateRecord> T_LETTER_TEMPLATE_PK = Internal.createUniqueKey(TLetterTemplate.T_LETTER_TEMPLATE, DSL.name("t_letter_template_pk"), new TableField[] { TLetterTemplate.T_LETTER_TEMPLATE.ID }, true);
 }

@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import jooqdata.tables.AParam;
+import jooqdata.tables.TLetterTemplate;
 
 import org.jooq.Catalog;
 import org.jooq.Sequence;
@@ -34,6 +35,11 @@ public class Admin extends SchemaImpl {
     public final AParam A_PARAM = AParam.A_PARAM;
 
     /**
+     * Шаблон письма
+     */
+    public final TLetterTemplate T_LETTER_TEMPLATE = TLetterTemplate.T_LETTER_TEMPLATE;
+
+    /**
      * No further instances allowed
      */
     private Admin() {
@@ -56,7 +62,8 @@ public class Admin extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.asList(
-            AParam.A_PARAM
+            AParam.A_PARAM,
+            TLetterTemplate.T_LETTER_TEMPLATE
         );
     }
 }

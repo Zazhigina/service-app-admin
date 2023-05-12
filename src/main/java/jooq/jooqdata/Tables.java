@@ -5,6 +5,7 @@ package jooqdata;
 
 
 import jooqdata.tables.AParam;
+import jooqdata.tables.TLetterTemplate;
 
 
 /**
@@ -17,4 +18,9 @@ public class Tables {
      * Ведение параметров приложения
      */
     public static final AParam A_PARAM = AParam.A_PARAM;
+
+    /**
+     * Шаблон письма
+     */
+    public static final TLetterTemplate T_LETTER_TEMPLATE = TLetterTemplate.T_LETTER_TEMPLATE;
 }

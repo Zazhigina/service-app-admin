@@ -6,9 +6,14 @@ package jooqdata;
 
 import jooqdata.tables.AParam;
 import jooqdata.tables.TLetterTemplate;
+import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
+import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
 import jooqdata.tables.records.AParamRecord;
+import jooqdata.tables.records.TLetterTemplateAcceptableDocumentFormatEnumRecord;
 import jooqdata.tables.records.TLetterTemplateRecord;
+import jooqdata.tables.records.TLetterTemplateTypeTemplateEnumRecord;
 
+import org.jooq.ForeignKey;
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
@@ -28,4 +33,15 @@ public class Keys {
 
     public static final UniqueKey<AParamRecord> A_PARAM_PK = Internal.createUniqueKey(AParam.A_PARAM, DSL.name("a_param_pk"), new TableField[] { AParam.A_PARAM.KEY }, true);
     public static final UniqueKey<TLetterTemplateRecord> T_LETTER_TEMPLATE_PK = Internal.createUniqueKey(TLetterTemplate.T_LETTER_TEMPLATE, DSL.name("t_letter_template_pk"), new TableField[] { TLetterTemplate.T_LETTER_TEMPLATE.ID }, true);
+    public static final UniqueKey<TLetterTemplateAcceptableDocumentFormatEnumRecord> T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM_PK = Internal.createUniqueKey(TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM, DSL.name("t_letter_template_acceptable_document_format_enum_pk"), new TableField[] { TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM.ID }, true);
+    public static final UniqueKey<TLetterTemplateAcceptableDocumentFormatEnumRecord> T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM_UN = Internal.createUniqueKey(TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM, DSL.name("t_letter_template_acceptable_document_format_enum_un"), new TableField[] { TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM.NAME }, true);
+    public static final UniqueKey<TLetterTemplateTypeTemplateEnumRecord> T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM_PK = Internal.createUniqueKey(TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM, DSL.name("t_letter_template_type_template_enum_pk"), new TableField[] { TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM.ID }, true);
+    public static final UniqueKey<TLetterTemplateTypeTemplateEnumRecord> T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM_UN = Internal.createUniqueKey(TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM, DSL.name("t_letter_template_type_template_enum_un"), new TableField[] { TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM.NAME }, true);
+
+    // -------------------------------------------------------------------------
+    // FOREIGN KEY definitions
+    // -------------------------------------------------------------------------
+
+    public static final ForeignKey<TLetterTemplateRecord, TLetterTemplateTypeTemplateEnumRecord> T_LETTER_TEMPLATE__T_LETTER_TEMPLATE_FK_1 = Internal.createForeignKey(TLetterTemplate.T_LETTER_TEMPLATE, DSL.name("t_letter_template_fk_1"), new TableField[] { TLetterTemplate.T_LETTER_TEMPLATE.TYPE_TEMPLATE }, Keys.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM_UN, new TableField[] { TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM.NAME }, true);
+    public static final ForeignKey<TLetterTemplateRecord, TLetterTemplateAcceptableDocumentFormatEnumRecord> T_LETTER_TEMPLATE__T_LETTER_TEMPLATE_FK_2 = Internal.createForeignKey(TLetterTemplate.T_LETTER_TEMPLATE, DSL.name("t_letter_template_fk_2"), new TableField[] { TLetterTemplate.T_LETTER_TEMPLATE.ACCEPTABLE_DOCUMENT_FORMAT }, Keys.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM_UN, new TableField[] { TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM.NAME }, true);
 }

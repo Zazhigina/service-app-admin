@@ -18,44 +18,52 @@ public class TLetterTemplate implements Serializable {
 
     private Long id;
     private String letterType;
-    private String letterTitle;
+    private String title;
     private String letterSample;
     private LocalDateTime createDate;
     private String createUser;
     private LocalDateTime lastUpdateDate;
     private String lastUpdateUser;
+    private String typeTemplate;
+    private String acceptableDocumentFormat;
 
     public TLetterTemplate() {}
 
     public TLetterTemplate(TLetterTemplate value) {
         this.id = value.id;
         this.letterType = value.letterType;
-        this.letterTitle = value.letterTitle;
+        this.title = value.title;
         this.letterSample = value.letterSample;
         this.createDate = value.createDate;
         this.createUser = value.createUser;
         this.lastUpdateDate = value.lastUpdateDate;
         this.lastUpdateUser = value.lastUpdateUser;
+        this.typeTemplate = value.typeTemplate;
+        this.acceptableDocumentFormat = value.acceptableDocumentFormat;
     }
 
     public TLetterTemplate(
         Long id,
         String letterType,
-        String letterTitle,
+        String title,
         String letterSample,
         LocalDateTime createDate,
         String createUser,
         LocalDateTime lastUpdateDate,
-        String lastUpdateUser
+        String lastUpdateUser,
+        String typeTemplate,
+        String acceptableDocumentFormat
     ) {
         this.id = id;
         this.letterType = letterType;
-        this.letterTitle = letterTitle;
+        this.title = title;
         this.letterSample = letterSample;
         this.createDate = createDate;
         this.createUser = createUser;
         this.lastUpdateDate = lastUpdateDate;
         this.lastUpdateUser = lastUpdateUser;
+        this.typeTemplate = typeTemplate;
+        this.acceptableDocumentFormat = acceptableDocumentFormat;
     }
 
     /**
@@ -87,19 +95,17 @@ public class TLetterTemplate implements Serializable {
     }
 
     /**
-     * Getter for <code>admin.t_letter_template.letter_title</code>. Заголовок
-     * письма
+     * Getter for <code>admin.t_letter_template.title</code>. Заголовок
      */
-    public String getLetterTitle() {
-        return this.letterTitle;
+    public String getTitle() {
+        return this.title;
     }
 
     /**
-     * Setter for <code>admin.t_letter_template.letter_title</code>. Заголовок
-     * письма
+     * Setter for <code>admin.t_letter_template.title</code>. Заголовок
      */
-    public void setLetterTitle(String letterTitle) {
-        this.letterTitle = letterTitle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     /**
@@ -180,6 +186,40 @@ public class TLetterTemplate implements Serializable {
         this.lastUpdateUser = lastUpdateUser;
     }
 
+    /**
+     * Getter for <code>admin.t_letter_template.type_template</code>. Вид
+     * шаблона. Enum: Документ, Шаблон
+     */
+    public String getTypeTemplate() {
+        return this.typeTemplate;
+    }
+
+    /**
+     * Setter for <code>admin.t_letter_template.type_template</code>. Вид
+     * шаблона. Enum: Документ, Шаблон
+     */
+    public void setTypeTemplate(String typeTemplate) {
+        this.typeTemplate = typeTemplate;
+    }
+
+    /**
+     * Getter for
+     * <code>admin.t_letter_template.acceptable_document_format</code>.
+     * Допустимый формат документа. Enum: doc, docx, html
+     */
+    public String getAcceptableDocumentFormat() {
+        return this.acceptableDocumentFormat;
+    }
+
+    /**
+     * Setter for
+     * <code>admin.t_letter_template.acceptable_document_format</code>.
+     * Допустимый формат документа. Enum: doc, docx, html
+     */
+    public void setAcceptableDocumentFormat(String acceptableDocumentFormat) {
+        this.acceptableDocumentFormat = acceptableDocumentFormat;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -201,11 +241,11 @@ public class TLetterTemplate implements Serializable {
         }
         else if (!this.letterType.equals(other.letterType))
             return false;
-        if (this.letterTitle == null) {
-            if (other.letterTitle != null)
+        if (this.title == null) {
+            if (other.title != null)
                 return false;
         }
-        else if (!this.letterTitle.equals(other.letterTitle))
+        else if (!this.title.equals(other.title))
             return false;
         if (this.letterSample == null) {
             if (other.letterSample != null)
@@ -237,6 +277,18 @@ public class TLetterTemplate implements Serializable {
         }
         else if (!this.lastUpdateUser.equals(other.lastUpdateUser))
             return false;
+        if (this.typeTemplate == null) {
+            if (other.typeTemplate != null)
+                return false;
+        }
+        else if (!this.typeTemplate.equals(other.typeTemplate))
+            return false;
+        if (this.acceptableDocumentFormat == null) {
+            if (other.acceptableDocumentFormat != null)
+                return false;
+        }
+        else if (!this.acceptableDocumentFormat.equals(other.acceptableDocumentFormat))
+            return false;
         return true;
     }
 
@@ -246,12 +298,14 @@ public class TLetterTemplate implements Serializable {
         int result = 1;
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result + ((this.letterType == null) ? 0 : this.letterType.hashCode());
-        result = prime * result + ((this.letterTitle == null) ? 0 : this.letterTitle.hashCode());
+        result = prime * result + ((this.title == null) ? 0 : this.title.hashCode());
         result = prime * result + ((this.letterSample == null) ? 0 : this.letterSample.hashCode());
         result = prime * result + ((this.createDate == null) ? 0 : this.createDate.hashCode());
         result = prime * result + ((this.createUser == null) ? 0 : this.createUser.hashCode());
         result = prime * result + ((this.lastUpdateDate == null) ? 0 : this.lastUpdateDate.hashCode());
         result = prime * result + ((this.lastUpdateUser == null) ? 0 : this.lastUpdateUser.hashCode());
+        result = prime * result + ((this.typeTemplate == null) ? 0 : this.typeTemplate.hashCode());
+        result = prime * result + ((this.acceptableDocumentFormat == null) ? 0 : this.acceptableDocumentFormat.hashCode());
         return result;
     }
 
@@ -261,12 +315,14 @@ public class TLetterTemplate implements Serializable {
 
         sb.append(id);
         sb.append(", ").append(letterType);
-        sb.append(", ").append(letterTitle);
+        sb.append(", ").append(title);
         sb.append(", ").append(letterSample);
         sb.append(", ").append(createDate);
         sb.append(", ").append(createUser);
         sb.append(", ").append(lastUpdateDate);
         sb.append(", ").append(lastUpdateUser);
+        sb.append(", ").append(typeTemplate);
+        sb.append(", ").append(acceptableDocumentFormat);
 
         sb.append(")");
         return sb.toString();

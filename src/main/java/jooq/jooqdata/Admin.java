@@ -9,6 +9,8 @@ import java.util.List;
 
 import jooqdata.tables.AParam;
 import jooqdata.tables.TLetterTemplate;
+import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
+import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
 
 import org.jooq.Catalog;
 import org.jooq.Sequence;
@@ -40,6 +42,16 @@ public class Admin extends SchemaImpl {
     public final TLetterTemplate T_LETTER_TEMPLATE = TLetterTemplate.T_LETTER_TEMPLATE;
 
     /**
+     * Допустимый формат документа (Enum)
+     */
+    public final TLetterTemplateAcceptableDocumentFormatEnum T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM = TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM;
+
+    /**
+     * Вид шаблона (Enum)
+     */
+    public final TLetterTemplateTypeTemplateEnum T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM = TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM;
+
+    /**
      * No further instances allowed
      */
     private Admin() {
@@ -63,7 +75,9 @@ public class Admin extends SchemaImpl {
     public final List<Table<?>> getTables() {
         return Arrays.asList(
             AParam.A_PARAM,
-            TLetterTemplate.T_LETTER_TEMPLATE
+            TLetterTemplate.T_LETTER_TEMPLATE,
+            TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM,
+            TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM
         );
     }
 }

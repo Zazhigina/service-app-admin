@@ -10,8 +10,8 @@ import jooqdata.tables.TLetterTemplate;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record8;
-import org.jooq.Row8;
+import org.jooq.Record10;
+import org.jooq.Row10;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Шаблон письма
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRecord> implements Record8<Long, String, String, String, LocalDateTime, String, LocalDateTime, String> {
+public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRecord> implements Record10<Long, String, String, String, LocalDateTime, String, LocalDateTime, String, String, String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -52,18 +52,16 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     }
 
     /**
-     * Setter for <code>admin.t_letter_template.letter_title</code>. Заголовок
-     * письма
+     * Setter for <code>admin.t_letter_template.title</code>. Заголовок
      */
-    public void setLetterTitle(String value) {
+    public void setTitle(String value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>admin.t_letter_template.letter_title</code>. Заголовок
-     * письма
+     * Getter for <code>admin.t_letter_template.title</code>. Заголовок
      */
-    public String getLetterTitle() {
+    public String getTitle() {
         return (String) get(2);
     }
 
@@ -145,6 +143,40 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
         return (String) get(7);
     }
 
+    /**
+     * Setter for <code>admin.t_letter_template.type_template</code>. Вид
+     * шаблона. Enum: Документ, Шаблон
+     */
+    public void setTypeTemplate(String value) {
+        set(8, value);
+    }
+
+    /**
+     * Getter for <code>admin.t_letter_template.type_template</code>. Вид
+     * шаблона. Enum: Документ, Шаблон
+     */
+    public String getTypeTemplate() {
+        return (String) get(8);
+    }
+
+    /**
+     * Setter for
+     * <code>admin.t_letter_template.acceptable_document_format</code>.
+     * Допустимый формат документа. Enum: doc, docx, html
+     */
+    public void setAcceptableDocumentFormat(String value) {
+        set(9, value);
+    }
+
+    /**
+     * Getter for
+     * <code>admin.t_letter_template.acceptable_document_format</code>.
+     * Допустимый формат документа. Enum: doc, docx, html
+     */
+    public String getAcceptableDocumentFormat() {
+        return (String) get(9);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -155,17 +187,17 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     }
 
     // -------------------------------------------------------------------------
-    // Record8 type implementation
+    // Record10 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<Long, String, String, String, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row10<Long, String, String, String, LocalDateTime, String, LocalDateTime, String, String, String> fieldsRow() {
+        return (Row10) super.fieldsRow();
     }
 
     @Override
-    public Row8<Long, String, String, String, LocalDateTime, String, LocalDateTime, String> valuesRow() {
-        return (Row8) super.valuesRow();
+    public Row10<Long, String, String, String, LocalDateTime, String, LocalDateTime, String, String, String> valuesRow() {
+        return (Row10) super.valuesRow();
     }
 
     @Override
@@ -180,7 +212,7 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
 
     @Override
     public Field<String> field3() {
-        return TLetterTemplate.T_LETTER_TEMPLATE.LETTER_TITLE;
+        return TLetterTemplate.T_LETTER_TEMPLATE.TITLE;
     }
 
     @Override
@@ -209,6 +241,16 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     }
 
     @Override
+    public Field<String> field9() {
+        return TLetterTemplate.T_LETTER_TEMPLATE.TYPE_TEMPLATE;
+    }
+
+    @Override
+    public Field<String> field10() {
+        return TLetterTemplate.T_LETTER_TEMPLATE.ACCEPTABLE_DOCUMENT_FORMAT;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -220,7 +262,7 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
 
     @Override
     public String component3() {
-        return getLetterTitle();
+        return getTitle();
     }
 
     @Override
@@ -249,6 +291,16 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     }
 
     @Override
+    public String component9() {
+        return getTypeTemplate();
+    }
+
+    @Override
+    public String component10() {
+        return getAcceptableDocumentFormat();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -260,7 +312,7 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
 
     @Override
     public String value3() {
-        return getLetterTitle();
+        return getTitle();
     }
 
     @Override
@@ -289,6 +341,16 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     }
 
     @Override
+    public String value9() {
+        return getTypeTemplate();
+    }
+
+    @Override
+    public String value10() {
+        return getAcceptableDocumentFormat();
+    }
+
+    @Override
     public TLetterTemplateRecord value1(Long value) {
         setId(value);
         return this;
@@ -302,7 +364,7 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
 
     @Override
     public TLetterTemplateRecord value3(String value) {
-        setLetterTitle(value);
+        setTitle(value);
         return this;
     }
 
@@ -337,7 +399,19 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     }
 
     @Override
-    public TLetterTemplateRecord values(Long value1, String value2, String value3, String value4, LocalDateTime value5, String value6, LocalDateTime value7, String value8) {
+    public TLetterTemplateRecord value9(String value) {
+        setTypeTemplate(value);
+        return this;
+    }
+
+    @Override
+    public TLetterTemplateRecord value10(String value) {
+        setAcceptableDocumentFormat(value);
+        return this;
+    }
+
+    @Override
+    public TLetterTemplateRecord values(Long value1, String value2, String value3, String value4, LocalDateTime value5, String value6, LocalDateTime value7, String value8, String value9, String value10) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -346,6 +420,8 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
         value6(value6);
         value7(value7);
         value8(value8);
+        value9(value9);
+        value10(value10);
         return this;
     }
 
@@ -363,17 +439,19 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     /**
      * Create a detached, initialised TLetterTemplateRecord
      */
-    public TLetterTemplateRecord(Long id, String letterType, String letterTitle, String letterSample, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser) {
+    public TLetterTemplateRecord(Long id, String letterType, String title, String letterSample, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, String typeTemplate, String acceptableDocumentFormat) {
         super(TLetterTemplate.T_LETTER_TEMPLATE);
 
         setId(id);
         setLetterType(letterType);
-        setLetterTitle(letterTitle);
+        setTitle(title);
         setLetterSample(letterSample);
         setCreateDate(createDate);
         setCreateUser(createUser);
         setLastUpdateDate(lastUpdateDate);
         setLastUpdateUser(lastUpdateUser);
+        setTypeTemplate(typeTemplate);
+        setAcceptableDocumentFormat(acceptableDocumentFormat);
     }
 
     /**
@@ -385,12 +463,14 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
         if (value != null) {
             setId(value.getId());
             setLetterType(value.getLetterType());
-            setLetterTitle(value.getLetterTitle());
+            setTitle(value.getTitle());
             setLetterSample(value.getLetterSample());
             setCreateDate(value.getCreateDate());
             setCreateUser(value.getCreateUser());
             setLastUpdateDate(value.getLastUpdateDate());
             setLastUpdateUser(value.getLastUpdateUser());
+            setTypeTemplate(value.getTypeTemplate());
+            setAcceptableDocumentFormat(value.getAcceptableDocumentFormat());
         }
     }
 }

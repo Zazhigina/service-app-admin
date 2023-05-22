@@ -5,6 +5,8 @@ package jooqdata.tables;
 
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 
 import jooqdata.Admin;
@@ -13,11 +15,11 @@ import jooqdata.tables.records.TLetterTemplateRecord;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function8;
+import org.jooq.Function10;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row8;
+import org.jooq.Row10;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -61,10 +63,9 @@ public class TLetterTemplate extends TableImpl<TLetterTemplateRecord> {
     public final TableField<TLetterTemplateRecord, String> LETTER_TYPE = createField(DSL.name("letter_type"), SQLDataType.VARCHAR.nullable(false), this, "Параметр имя");
 
     /**
-     * The column <code>admin.t_letter_template.letter_title</code>. Заголовок
-     * письма
+     * The column <code>admin.t_letter_template.title</code>. Заголовок
      */
-    public final TableField<TLetterTemplateRecord, String> LETTER_TITLE = createField(DSL.name("letter_title"), SQLDataType.VARCHAR.nullable(false), this, "Заголовок письма");
+    public final TableField<TLetterTemplateRecord, String> TITLE = createField(DSL.name("title"), SQLDataType.VARCHAR.nullable(false), this, "Заголовок");
 
     /**
      * The column <code>admin.t_letter_template.letter_sample</code>. Документ
@@ -94,6 +95,19 @@ public class TLetterTemplate extends TableImpl<TLetterTemplateRecord> {
      * изменения
      */
     public final TableField<TLetterTemplateRecord, String> LAST_UPDATE_USER = createField(DSL.name("last_update_user"), SQLDataType.VARCHAR(100), this, "Автор изменения");
+
+    /**
+     * The column <code>admin.t_letter_template.type_template</code>. Вид
+     * шаблона. Enum: Документ, Шаблон
+     */
+    public final TableField<TLetterTemplateRecord, String> TYPE_TEMPLATE = createField(DSL.name("type_template"), SQLDataType.VARCHAR, this, "Вид шаблона. Enum: Документ, Шаблон");
+
+    /**
+     * The column
+     * <code>admin.t_letter_template.acceptable_document_format</code>.
+     * Допустимый формат документа. Enum: doc, docx, html
+     */
+    public final TableField<TLetterTemplateRecord, String> ACCEPTABLE_DOCUMENT_FORMAT = createField(DSL.name("acceptable_document_format"), SQLDataType.VARCHAR, this, "Допустимый формат документа. Enum: doc, docx, html");
 
     private TLetterTemplate(Name alias, Table<TLetterTemplateRecord> aliased) {
         this(alias, aliased, null);
@@ -139,6 +153,37 @@ public class TLetterTemplate extends TableImpl<TLetterTemplateRecord> {
     }
 
     @Override
+    public List<ForeignKey<TLetterTemplateRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.T_LETTER_TEMPLATE__T_LETTER_TEMPLATE_FK_1, Keys.T_LETTER_TEMPLATE__T_LETTER_TEMPLATE_FK_2);
+    }
+
+    private transient TLetterTemplateTypeTemplateEnum _tLetterTemplateTypeTemplateEnum;
+    private transient TLetterTemplateAcceptableDocumentFormatEnum _tLetterTemplateAcceptableDocumentFormatEnum;
+
+    /**
+     * Get the implicit join path to the
+     * <code>admin.t_letter_template_type_template_enum</code> table.
+     */
+    public TLetterTemplateTypeTemplateEnum tLetterTemplateTypeTemplateEnum() {
+        if (_tLetterTemplateTypeTemplateEnum == null)
+            _tLetterTemplateTypeTemplateEnum = new TLetterTemplateTypeTemplateEnum(this, Keys.T_LETTER_TEMPLATE__T_LETTER_TEMPLATE_FK_1);
+
+        return _tLetterTemplateTypeTemplateEnum;
+    }
+
+    /**
+     * Get the implicit join path to the
+     * <code>admin.t_letter_template_acceptable_document_format_enum</code>
+     * table.
+     */
+    public TLetterTemplateAcceptableDocumentFormatEnum tLetterTemplateAcceptableDocumentFormatEnum() {
+        if (_tLetterTemplateAcceptableDocumentFormatEnum == null)
+            _tLetterTemplateAcceptableDocumentFormatEnum = new TLetterTemplateAcceptableDocumentFormatEnum(this, Keys.T_LETTER_TEMPLATE__T_LETTER_TEMPLATE_FK_2);
+
+        return _tLetterTemplateAcceptableDocumentFormatEnum;
+    }
+
+    @Override
     public TLetterTemplate as(String alias) {
         return new TLetterTemplate(DSL.name(alias), this);
     }
@@ -178,18 +223,18 @@ public class TLetterTemplate extends TableImpl<TLetterTemplateRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row8 type methods
+    // Row10 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<Long, String, String, String, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row10<Long, String, String, String, LocalDateTime, String, LocalDateTime, String, String, String> fieldsRow() {
+        return (Row10) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function8<? super Long, ? super String, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function10<? super Long, ? super String, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super String, ? super String, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -197,7 +242,7 @@ public class TLetterTemplate extends TableImpl<TLetterTemplateRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super Long, ? super String, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function10<? super Long, ? super String, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super String, ? super String, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

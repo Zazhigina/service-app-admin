@@ -6,6 +6,8 @@ package jooqdata;
 
 import jooqdata.tables.AParam;
 import jooqdata.tables.TLetterTemplate;
+import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
+import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
 
 
 /**
@@ -23,4 +25,14 @@ public class Tables {
      * Шаблон письма
      */
     public static final TLetterTemplate T_LETTER_TEMPLATE = TLetterTemplate.T_LETTER_TEMPLATE;
+
+    /**
+     * Допустимый формат документа (Enum)
+     */
+    public static final TLetterTemplateAcceptableDocumentFormatEnum T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM = TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM;
+
+    /**
+     * Вид шаблона (Enum)
+     */
+    public static final TLetterTemplateTypeTemplateEnum T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM = TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM;
 }

@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Шаблон письма
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRecord> implements Record10<Long, String, String, String, LocalDateTime, String, LocalDateTime, String, String, String> {
+public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRecord> implements Record10<Long, String, String, Long, LocalDateTime, String, LocalDateTime, String, String, String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -68,15 +68,15 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     /**
      * Setter for <code>admin.t_letter_template.letter_sample</code>. Документ
      */
-    public void setLetterSample(String value) {
+    public void setLetterSample(Long value) {
         set(3, value);
     }
 
     /**
      * Getter for <code>admin.t_letter_template.letter_sample</code>. Документ
      */
-    public String getLetterSample() {
-        return (String) get(3);
+    public Long getLetterSample() {
+        return (Long) get(3);
     }
 
     /**
@@ -191,12 +191,12 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<Long, String, String, String, LocalDateTime, String, LocalDateTime, String, String, String> fieldsRow() {
+    public Row10<Long, String, String, Long, LocalDateTime, String, LocalDateTime, String, String, String> fieldsRow() {
         return (Row10) super.fieldsRow();
     }
 
     @Override
-    public Row10<Long, String, String, String, LocalDateTime, String, LocalDateTime, String, String, String> valuesRow() {
+    public Row10<Long, String, String, Long, LocalDateTime, String, LocalDateTime, String, String, String> valuesRow() {
         return (Row10) super.valuesRow();
     }
 
@@ -216,7 +216,7 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     }
 
     @Override
-    public Field<String> field4() {
+    public Field<Long> field4() {
         return TLetterTemplate.T_LETTER_TEMPLATE.LETTER_SAMPLE;
     }
 
@@ -266,7 +266,7 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     }
 
     @Override
-    public String component4() {
+    public Long component4() {
         return getLetterSample();
     }
 
@@ -316,7 +316,7 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     }
 
     @Override
-    public String value4() {
+    public Long value4() {
         return getLetterSample();
     }
 
@@ -369,7 +369,7 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     }
 
     @Override
-    public TLetterTemplateRecord value4(String value) {
+    public TLetterTemplateRecord value4(Long value) {
         setLetterSample(value);
         return this;
     }
@@ -411,7 +411,7 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     }
 
     @Override
-    public TLetterTemplateRecord values(Long value1, String value2, String value3, String value4, LocalDateTime value5, String value6, LocalDateTime value7, String value8, String value9, String value10) {
+    public TLetterTemplateRecord values(Long value1, String value2, String value3, Long value4, LocalDateTime value5, String value6, LocalDateTime value7, String value8, String value9, String value10) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -439,7 +439,7 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     /**
      * Create a detached, initialised TLetterTemplateRecord
      */
-    public TLetterTemplateRecord(Long id, String letterType, String title, String letterSample, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, String typeTemplate, String acceptableDocumentFormat) {
+    public TLetterTemplateRecord(Long id, String letterType, String title, Long letterSample, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, String typeTemplate, String acceptableDocumentFormat) {
         super(TLetterTemplate.T_LETTER_TEMPLATE);
 
         setId(id);

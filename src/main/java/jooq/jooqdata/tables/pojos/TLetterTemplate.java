@@ -19,7 +19,7 @@ public class TLetterTemplate implements Serializable {
     private Long id;
     private String letterType;
     private String title;
-    private String letterSample;
+    private Long letterSample;
     private LocalDateTime createDate;
     private String createUser;
     private LocalDateTime lastUpdateDate;
@@ -46,7 +46,7 @@ public class TLetterTemplate implements Serializable {
         Long id,
         String letterType,
         String title,
-        String letterSample,
+        Long letterSample,
         LocalDateTime createDate,
         String createUser,
         LocalDateTime lastUpdateDate,
@@ -111,14 +111,14 @@ public class TLetterTemplate implements Serializable {
     /**
      * Getter for <code>admin.t_letter_template.letter_sample</code>. Документ
      */
-    public String getLetterSample() {
+    public Long getLetterSample() {
         return this.letterSample;
     }
 
     /**
      * Setter for <code>admin.t_letter_template.letter_sample</code>. Документ
      */
-    public void setLetterSample(String letterSample) {
+    public void setLetterSample(Long letterSample) {
         this.letterSample = letterSample;
     }
 

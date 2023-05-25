@@ -70,7 +70,7 @@ public class TLetterTemplate extends TableImpl<TLetterTemplateRecord> {
     /**
      * The column <code>admin.t_letter_template.letter_sample</code>. Документ
      */
-    public final TableField<TLetterTemplateRecord, String> LETTER_SAMPLE = createField(DSL.name("letter_sample"), SQLDataType.VARCHAR.nullable(false), this, "Документ");
+    public final TableField<TLetterTemplateRecord, Long> LETTER_SAMPLE = createField(DSL.name("letter_sample"), SQLDataType.BIGINT.nullable(false), this, "Документ");
 
     /**
      * The column <code>admin.t_letter_template.create_date</code>. Дата и время
@@ -227,14 +227,14 @@ public class TLetterTemplate extends TableImpl<TLetterTemplateRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<Long, String, String, String, LocalDateTime, String, LocalDateTime, String, String, String> fieldsRow() {
+    public Row10<Long, String, String, Long, LocalDateTime, String, LocalDateTime, String, String, String> fieldsRow() {
         return (Row10) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function10<? super Long, ? super String, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super String, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function10<? super Long, ? super String, ? super String, ? super Long, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super String, ? super String, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -242,7 +242,7 @@ public class TLetterTemplate extends TableImpl<TLetterTemplateRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function10<? super Long, ? super String, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super String, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function10<? super Long, ? super String, ? super String, ? super Long, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super String, ? super String, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

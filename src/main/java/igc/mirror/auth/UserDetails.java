@@ -57,4 +57,17 @@ public class UserDetails {
                 })
                 .blockOptional();
     }
+
+    /**
+     * Возвращает значение JWT access токен'а
+     *
+     * @return jwt access token
+     */
+    public String getJwtTokenValue(){
+        Jwt jwt =
+                (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return jwt.getTokenValue();
+
+    }
 }

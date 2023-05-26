@@ -40,4 +40,12 @@ public class ParamRestController {
     public ResponseEntity<ParamDto> editParam(@PathVariable String key, @RequestBody ParamEditableDto paramEditableDto){
         return ResponseEntity.ok(paramService.changeParam(key, paramEditableDto));
     }
+
+    @GetMapping("/{key}")
+    @Operation(summary = "Поиск параметра по ключу")
+    @PreAuthorize("hasAuthority('CONFIG_VALUE.READ')")
+    public ResponseEntity<ParamDto> findByKey(@PathVariable String key){
+        return ResponseEntity.ok(paramService.findByKey(key));
+    }
+
 }

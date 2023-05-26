@@ -27,6 +27,9 @@ public class WebClientConfig {
     @Value("${mirror.endpoint.integration}")
     private String integrationUrl;
 
+    @Value("${mirror.endpoint.doc}")
+    private String docBaseUrl;
+
     @Bean("rbac")
     public WebClient webClientRbac(){
         HttpClient httpClient = HttpClient.create();
@@ -59,6 +62,15 @@ public class WebClientConfig {
         HttpClient httpClient = HttpClient.create();
         return WebClient.builder()
                 .baseUrl(integrationUrl)
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
+    }
+
+    @Bean("doc")
+    public WebClient webClientDoc(){
+        HttpClient httpClient = HttpClient.create();
+        return WebClient.builder()
+                .baseUrl(docBaseUrl)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }

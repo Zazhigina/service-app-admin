@@ -11,6 +11,8 @@ application:
         value: http://service-app-rbac.tzriu:8080
       - key: MIRROR_ENDPOINT_INTEGRATION
         value: http://service-app-integration.tzriu:8080
+      - key: MIRROR_ENDPOINT_DOC
+        value: http://service-app-doc.tzriu:8080
       - key: MIRROR_KEYCLOAK_BASE_URL
         value: http://localhost
       - key: MIRROR_KEYCLOAK_REALM

@@ -43,7 +43,7 @@ public class LetterTemplateController {
         return ResponseEntity.ok(letterTemplateService.findByLetterType(letterType));
     }
 
-    @GetMapping("/doc/{id}")
+    @GetMapping("/{id}/doc")
     @Operation(summary = "Выгрузка шаблона")
     public ResponseEntity<Resource> downloadLetterTemplate(@PathVariable Long id){
         DocumentDto document = letterTemplateService.downloadLetterTemplate(id);
@@ -82,5 +82,11 @@ public class LetterTemplateController {
     public ResponseEntity<SuccessInfo> deleteLetterTemplate(@PathVariable Long id){
         letterTemplateService.deleteLetterTemplate(id);
         return ResponseEntity.ok(new SuccessInfo("Операция выполнена успешно"));
+    }
+
+    @GetMapping("/{id}/doc/info")
+    @Operation(summary = "Данные загруженного документа шаблона")
+    public ResponseEntity<DocumentDto> getLetterTemplateDocInfo(@PathVariable Long id){
+        return ResponseEntity.ok(letterTemplateService.getLetterTemplateDocInfo(id));
     }
 }

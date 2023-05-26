@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ContentDisposition;
 
+import java.time.LocalDateTime;
+
 public class DocumentDto {
     private Long id;
     private String filename;
@@ -12,6 +14,10 @@ public class DocumentDto {
     private Resource resource;
     @JsonIgnore
     private ContentDisposition contentDisposition;
+    private LocalDateTime createDate;
+    private String createUser;
+    private LocalDateTime lastUpdateDate;
+    private String lastUpdateUser;
 
     public DocumentDto() {
     }
@@ -60,5 +66,37 @@ public class DocumentDto {
 
     public void setContentDisposition(ContentDisposition contentDisposition) {
         this.contentDisposition = contentDisposition;
+    }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
+    }
+
+    public LocalDateTime getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public String getLastUpdateUser() {
+        return lastUpdateUser;
+    }
+
+    public void setLastUpdateUser(String lastUpdateUser) {
+        this.lastUpdateUser = lastUpdateUser;
     }
 }

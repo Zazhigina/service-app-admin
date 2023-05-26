@@ -168,4 +168,16 @@ public class LetterTemplateService {
 
         return docService.downloadDocument(letterTemplate.getLetterSample());
     }
+
+    /**
+     * Возвращает информацию о загруженном файле шаблона
+     *
+     * @param id ID шаблона
+     * @return информация о загруженном файле шаблона
+     */
+    public DocumentDto getLetterTemplateDocInfo(Long id){
+        LetterTemplate letterTemplate = letterTemplateRepository.find(id);
+
+        return docService.retrieveDocumentInfo(letterTemplate.getLetterSample());
+    }
 }

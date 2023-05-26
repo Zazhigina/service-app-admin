@@ -70,4 +70,13 @@ public class ParamService {
         return ParamDto.fromModel(paramRepository.save(changeParam));
     }
 
+    /**
+     * Возвращает данные параметра по ключу
+     * @param key ключ
+     * @return данные параметра
+     */
+    public ParamDto findByKey(String key){
+        return ParamDto.fromModel(paramRepository.find(key));
+    }
+
 }

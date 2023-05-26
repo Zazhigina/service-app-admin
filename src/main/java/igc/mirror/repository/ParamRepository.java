@@ -29,7 +29,13 @@ public class ParamRepository implements JooqCommonRepository<Param, String> {
 
     @Override
     public Param find(String identifier) {
-        throw new UnsupportedOperationException();
+        return
+            dsl
+            .selectFrom(AParam.A_PARAM)
+            .where(AParam.A_PARAM.KEY.eq(identifier))
+            .fetchOptional()
+            .map(r -> r.into(Param.class))
+            .orElseThrow(() -> new EntityNotFoundException(null, Param.class));
     }
 
     @Override

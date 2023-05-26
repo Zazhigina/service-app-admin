@@ -12,6 +12,40 @@
   ],
   "paths": {
     "/param/{key}": {
+      "get": {
+        "tags": [
+          "Ведение параметров"
+        ],
+        "summary": "Поиск параметра по ключу",
+        "operationId": "findByKey",
+        "parameters": [
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParamDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
       "put": {
         "tags": [
           "Ведение параметров"
@@ -45,6 +79,179 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/ParamDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/letter-template/{id}": {
+      "put": {
+        "tags": [
+          "Шаблоны"
+        ],
+        "summary": "Изменение данных шаблона",
+        "operationId": "changeLetterTemplate",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LetterTemplateDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LetterTemplateDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Шаблоны"
+        ],
+        "summary": "Удаление шаблона",
+        "operationId": "deleteLetterTemplate",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessInfo"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/letter-template/doc/{id}": {
+      "get": {
+        "tags": [
+          "Шаблоны"
+        ],
+        "summary": "Выгрузка шаблона",
+        "operationId": "downloadLetterTemplate",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Шаблоны"
+        ],
+        "summary": "Замена файла шаблона",
+        "operationId": "replaceLetterTemplateDoc",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "file"
+                ],
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessInfo"
                 }
               }
             }
@@ -127,6 +334,135 @@
           }
         ]
       }
+    },
+    "/letter-template": {
+      "post": {
+        "tags": [
+          "Шаблоны"
+        ],
+        "summary": "Сохранение нового шаблона",
+        "operationId": "saveLetterTemplate",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "file",
+                  "request"
+                ],
+                "type": "object",
+                "properties": {
+                  "request": {
+                    "$ref": "#/components/schemas/LetterTemplateDto"
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LetterTemplateDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/letter-template/filter": {
+      "post": {
+        "tags": [
+          "Шаблоны"
+        ],
+        "summary": "Поиск шаблонов с фильтром",
+        "operationId": "findLetterTemplatesByFilter",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataFilterLetterTemplateSearchCriteria"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageLetterTemplateDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/letter-template/by-letter-type": {
+      "get": {
+        "tags": [
+          "Шаблоны"
+        ],
+        "summary": "Поиск шаблона по наименованию параметра",
+        "operationId": "findLetterTemplateByLetterType",
+        "parameters": [
+          {
+            "name": "letterType",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/LetterTemplateDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -170,6 +506,63 @@
             "format": "date-time"
           },
           "lastUpdateUser": {
+            "type": "string"
+          }
+        }
+      },
+      "LetterTemplateDto": {
+        "required": [
+          "letterType",
+          "title",
+          "typeTemplate"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "letterType": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "letterSample": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "typeTemplate": {
+            "type": "string",
+            "enum": [
+              "DOCUMENT",
+              "TEMPLATE"
+            ]
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createUser": {
+            "type": "string"
+          },
+          "lastUpdateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastUpdateUser": {
+            "type": "string"
+          }
+        }
+      },
+      "SuccessInfo": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
             "type": "string"
           }
         }
@@ -269,18 +662,18 @@
           "sort": {
             "$ref": "#/components/schemas/SortObject"
           },
-          "first": {
-            "type": "boolean"
-          },
-          "last": {
-            "type": "boolean"
-          },
           "numberOfElements": {
             "type": "integer",
             "format": "int32"
           },
           "pageable": {
             "$ref": "#/components/schemas/PageableObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
           },
           "empty": {
             "type": "boolean"
@@ -297,6 +690,12 @@
           "sort": {
             "$ref": "#/components/schemas/SortObject"
           },
+          "paged": {
+            "type": "boolean"
+          },
+          "unpaged": {
+            "type": "boolean"
+          },
           "pageNumber": {
             "type": "integer",
             "format": "int32"
@@ -304,12 +703,6 @@
           "pageSize": {
             "type": "integer",
             "format": "int32"
-          },
-          "paged": {
-            "type": "boolean"
-          },
-          "unpaged": {
-            "type": "boolean"
           }
         }
       },
@@ -319,10 +712,99 @@
           "empty": {
             "type": "boolean"
           },
-          "sorted": {
+          "unsorted": {
             "type": "boolean"
           },
-          "unsorted": {
+          "sorted": {
+            "type": "boolean"
+          }
+        }
+      },
+      "DataFilterLetterTemplateSearchCriteria": {
+        "type": "object",
+        "properties": {
+          "searchCriteria": {
+            "$ref": "#/components/schemas/LetterTemplateSearchCriteria"
+          },
+          "subFilter": {
+            "$ref": "#/components/schemas/QueryFilter"
+          }
+        }
+      },
+      "LetterTemplateSearchCriteria": {
+        "type": "object",
+        "properties": {
+          "letterType": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "PageLetterTemplateDto": {
+        "type": "object",
+        "properties": {
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LetterTemplateDto"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "empty": {
             "type": "boolean"
           }
         }

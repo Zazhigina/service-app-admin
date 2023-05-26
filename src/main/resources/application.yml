@@ -62,6 +62,7 @@ mirror:
     rbac: ${MIRROR_ENDPOINT_RBAC}
     ma: ${MIRROR_ENDPOINT_MA}
     integration: ${MIRROR_ENDPOINT_INTEGRATION}
+    doc: ${MIRROR_ENDPOINT_DOC}
   application:
     user-agent: ${SPRING_APPLICATION_NAME}/${APPLICATION_VERSION}
   keycloak:

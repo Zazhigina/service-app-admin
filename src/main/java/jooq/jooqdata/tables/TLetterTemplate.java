@@ -153,6 +153,11 @@ public class TLetterTemplate extends TableImpl<TLetterTemplateRecord> {
     }
 
     @Override
+    public List<UniqueKey<TLetterTemplateRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.T_LETTER_TEMPLATE_UN);
+    }
+
+    @Override
     public List<ForeignKey<TLetterTemplateRecord, ?>> getReferences() {
         return Arrays.asList(Keys.T_LETTER_TEMPLATE__T_LETTER_TEMPLATE_FK_1, Keys.T_LETTER_TEMPLATE__T_LETTER_TEMPLATE_FK_2);
     }

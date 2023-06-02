@@ -11,6 +11,7 @@ import jooqdata.tables.AParam;
 import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
+import jooqdata.tables.TLetterTemplateVariables;
 
 import org.jooq.Catalog;
 import org.jooq.Sequence;
@@ -52,6 +53,11 @@ public class Admin extends SchemaImpl {
     public final TLetterTemplateTypeTemplateEnum T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM = TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM;
 
     /**
+     * Переменные к шаблону письма
+     */
+    public final TLetterTemplateVariables T_LETTER_TEMPLATE_VARIABLES = TLetterTemplateVariables.T_LETTER_TEMPLATE_VARIABLES;
+
+    /**
      * No further instances allowed
      */
     private Admin() {
@@ -77,7 +83,8 @@ public class Admin extends SchemaImpl {
             AParam.A_PARAM,
             TLetterTemplate.T_LETTER_TEMPLATE,
             TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM,
-            TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM
+            TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM,
+            TLetterTemplateVariables.T_LETTER_TEMPLATE_VARIABLES
         );
     }
 }

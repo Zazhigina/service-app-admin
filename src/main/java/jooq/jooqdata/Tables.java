@@ -8,7 +8,7 @@ import jooqdata.tables.AParam;
 import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
-import jooqdata.tables.TLetterTemplateVariables;
+import jooqdata.tables.TLetterTemplateVariable;
 
 
 /**
@@ -40,5 +40,5 @@ public class Tables {
     /**
      * Переменные к шаблону письма
      */
-    public static final TLetterTemplateVariables T_LETTER_TEMPLATE_VARIABLES = TLetterTemplateVariables.T_LETTER_TEMPLATE_VARIABLES;
+    public static final TLetterTemplateVariable T_LETTER_TEMPLATE_VARIABLE = TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE;
 }

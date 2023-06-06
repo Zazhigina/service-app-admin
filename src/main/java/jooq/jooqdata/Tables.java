@@ -5,10 +5,12 @@ package jooqdata;
 
 
 import jooqdata.tables.AParam;
+import jooqdata.tables.TAnswerVersion;
 import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
 import jooqdata.tables.TLetterTemplateVariable;
+import jooqdata.tables.TQuestion;
 
 
 /**
@@ -21,6 +23,11 @@ public class Tables {
      * Ведение параметров приложения
      */
     public static final AParam A_PARAM = AParam.A_PARAM;
+
+    /**
+     * Вариант ответа на вопрос
+     */
+    public static final TAnswerVersion T_ANSWER_VERSION = TAnswerVersion.T_ANSWER_VERSION;
 
     /**
      * Шаблон письма
@@ -41,4 +48,9 @@ public class Tables {
      * Переменные к шаблону письма
      */
     public static final TLetterTemplateVariable T_LETTER_TEMPLATE_VARIABLE = TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE;
+
+    /**
+     * Преднастроенный вопрос
+     */
+    public static final TQuestion T_QUESTION = TQuestion.T_QUESTION;
 }

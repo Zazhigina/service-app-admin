@@ -14,3 +14,20 @@ build:
       --destination "${IMAGE_REPOSITORY}:${APPLICATION_VERSION}"
   rules:
     - if: $CI_COMMIT_BRANCH == $DEPLOY_BRANCH
+
+build-release:
+  stage: build
+  environment:
+    name: release-v1
+    action: prepare
+  image:
+    name: nexus-registry.inlinegroup-c.ru/gcr.io/kaniko-project/executor:v1.9.2-debug
+    entrypoint: [""]
+  script:
+    - cat $NEXUS_REGISTRY_CRED > /kaniko/.docker/config.json
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/docker/Dockerfile-release"
+      --destination "${IMAGE_REPOSITORY}:${APPLICATION_VERSION}"
+  rules:
+    - if: $CI_COMMIT_BRANCH == $RELEASE_BRANCH

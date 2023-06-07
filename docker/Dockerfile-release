@@ -1,0 +1,68 @@
+## Set docker registry location
+ARG QUAYIO_IMAGE_REPOSITORY=nexus-quayio-registry.inlinegroup-c.ru
+ARG RH_IMAGE_REPOSITORY=nexus-rh-registry.inlinegroup-c.ru
+## Set maven registry
+ARG MAVEN_REPOSITORY=https://nexus-oss.inlinegroup-c.ru/repository/maven-public/
+ARG MAVEN_REPOSITORY_PLUGIN=https://nexus-oss.inlinegroup-c.ru/repository/maven2-gradle-plugin/
+## Set optional maven registry certificates
+ARG MAVEN_REPOSITORY_ROOT_CA_URL=""
+ARG MAVEN_REPOSITORY_SUB_CA_URL=""
+## Set application build path
+ARG BUILD_APP_DIR='/application'
+
+#
+FROM  $QUAYIO_IMAGE_REPOSITORY/klovercloud/gradle:7.6.0-jdk17 as build
+
+ARG BUILD_APP_DIR
+ARG MAVEN_REPOSITORY
+ARG MAVEN_REPOSITORY_PLUGIN
+ARG MAVEN_REPOSITORY_ROOT_CA_URL
+ARG MAVEN_REPOSITORY_SUB_CA_URL
+
+ENV TZ Europe/Moscow
+WORKDIR $BUILD_APP_DIR
+COPY . .
+## Add certificate
+RUN if [ -n "$MAVEN_REPOSITORY_ROOT_CA_URL" ]; then wget --no-check-certificate -q -O - $MAVEN_REPOSITORY_ROOT_CA_URL > ./root-ca-maven.crt \
+    && keytool -import -noprompt -alias root -file ./root-ca-maven.crt -keystore ./maven.jks -storepass gradle; fi
+RUN if [ -n "$MAVEN_REPOSITORY_SUB_CA_URL" ]; then wget --no-check-certificate -q -O - $MAVEN_REPOSITORY_SUB_CA_URL > ./sub-ca-maven.crt \
+    && keytool -import -noprompt -alias sub -file ./sub-ca-maven.crt -keystore ./maven.jks -storepass gradle; fi
+ENV GRADLE_USER_HOME=$BUILD_APP_DIR/gradle
+RUN gradle build --init-script init.gradle -PmavenRepository=$MAVEN_REPOSITORY \
+    -PmavenRepositoryPlugin=$MAVEN_REPOSITORY_PLUGIN
+RUN java -Djarmode=layertools -jar $BUILD_APP_DIR/build/libs/root.jar extract
+#
+FROM  $RH_IMAGE_REPOSITORY/ubi9/openjdk-17-runtime:1.14-2.1681917142
+ARG BUILD_APP_DIR
+ARG UID=1001
+
+ENV TZ Europe/Moscow
+
+# Set permissions so that the container runs without root access
+USER 0
+RUN mkdir -p ${BUILD_APP_DIR}
+RUN chown -R $UID:0 ${BUILD_APP_DIR}
+USER $UID
+
+WORKDIR $BUILD_APP_DIR
+
+COPY --chown=$UID:0 ./docker/entrypoint.sh /
+RUN chmod a+x /entrypoint.sh
+
+COPY --chown=$UID:0 --from=build $BUILD_APP_DIR/dependencies/ ./
+COPY --chown=$UID:0 --from=build $BUILD_APP_DIR/spring-boot-loader/ ./
+COPY --chown=$UID:0 --from=build $BUILD_APP_DIR/snapshot-dependencies/ ./
+COPY --chown=$UID:0 --from=build $BUILD_APP_DIR/application/ ./
+
+## Set application runtime path
+ENV RUNTIME_PATH='/tmp'
+ENV SPRING_DATASOURCE_USERNAME=""
+ENV SPRING_DATASOURCE_PASSWORD=""
+
+VOLUME ["$RUNTIME_PATH"]
+
+EXPOSE 8080
+EXPOSE 8081
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["java", "-Djavax.net.ssl.trustStore=/tmp/truststore.jks", "-Djavax.net.ssl.trustStorePassword=changeit", "org.springframework.boot.loader.JarLauncher"]

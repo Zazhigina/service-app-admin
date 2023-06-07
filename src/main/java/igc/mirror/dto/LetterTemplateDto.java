@@ -1,6 +1,7 @@
 package igc.mirror.dto;
 
 import igc.mirror.model.LetterTemplate;
+import igc.mirror.model.LetterTemplateVariable;
 import igc.mirror.ref.LetterTemplateType;
 import igc.mirror.utils.validate.group.ChangeGroup;
 import igc.mirror.utils.validate.group.CreateGroup;
@@ -8,7 +9,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 
-import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class LetterTemplateDto {
     @Null(groups = {CreateGroup.class})
@@ -20,46 +22,61 @@ public class LetterTemplateDto {
     private Long letterSample;
     @NotNull(groups = {CreateGroup.class, ChangeGroup.class})
     private LetterTemplateType typeTemplate;
-    private LocalDateTime createDate;
-    private String createUser;
-    private LocalDateTime lastUpdateDate;
-    private String lastUpdateUser;
+    @NotNull(groups = {CreateGroup.class, ChangeGroup.class})
+    private Map<String, String> variables;
+//    private LocalDateTime createDate;
+//    private String createUser;
+//    private LocalDateTime lastUpdateDate;
+//    private String lastUpdateUser;
 
     public LetterTemplateDto() {
     }
 
-    public LetterTemplateDto(Long id,
-                             String letterType,
-                             String title,
-                             Long letterSample,
-                             LetterTemplateType typeTemplate,
-                             LocalDateTime createDate,
-                             String createUser,
-                             LocalDateTime lastUpdateDate,
-                             String lastUpdateUser) {
-        this.id = id;
-        this.letterType = letterType;
-        this.title = title;
-        this.letterSample = letterSample;
-        this.typeTemplate = typeTemplate;
-        this.createDate = createDate;
-        this.createUser = createUser;
-        this.lastUpdateDate = lastUpdateDate;
-        this.lastUpdateUser = lastUpdateUser;
-    }
+//    public LetterTemplateDto(Long id,
+//                             String letterType,
+//                             String title,
+//                             Long letterSample,
+//                             LetterTemplateType typeTemplate,
+//                             Map<String, String> variables) {
+//                             LocalDateTime createDate,
+//                             String createUser,
+//                             LocalDateTime lastUpdateDate,
+//                             String lastUpdateUser) {
+//        this.id = id;
+//        this.letterType = letterType;
+//        this.title = title;
+//        this.letterSample = letterSample;
+//        this.typeTemplate = typeTemplate;
+//        this.variables = variables;
+//        this.createDate = createDate;
+//        this.createUser = createUser;
+//        this.lastUpdateDate = lastUpdateDate;
+//        this.lastUpdateUser = lastUpdateUser;
+//    }
 
-    public static LetterTemplateDto fromModel(LetterTemplate letterTemplate){
-        return new LetterTemplateDto(
-                letterTemplate.getId(),
-                letterTemplate.getLetterType(),
-                letterTemplate.getTitle(),
-                letterTemplate.getLetterSample(),
-                LetterTemplateType.getByName(letterTemplate.getTypeTemplate()),
-                letterTemplate.getCreateDate(),
-                letterTemplate.getCreateUser(),
-                letterTemplate.getLastUpdateDate(),
-                letterTemplate.getLastUpdateUser()
-        );
+//    public static LetterTemplateDto fromModel(LetterTemplate letterTemplate){
+//        return new LetterTemplateDto(
+//                letterTemplate.getId(),
+//                letterTemplate.getLetterType(),
+//                letterTemplate.getTitle(),
+//                letterTemplate.getLetterSample(),
+//                LetterTemplateType.getByName(letterTemplate.getTypeTemplate()),
+//                letterTemplate.getCreateDate(),
+//                letterTemplate.getCreateUser(),
+//                letterTemplate.getLastUpdateDate(),
+//                letterTemplate.getLastUpdateUser()
+//        );
+//    }
+
+    public LetterTemplateDto(LetterTemplate letterTemplate) {
+        this.id = letterTemplate.getId();
+        this.letterType = letterTemplate.getLetterType();
+        this.title = letterTemplate.getTitle();
+        this.letterSample = letterTemplate.getLetterSample();
+        this.typeTemplate = LetterTemplateType.getByName(letterTemplate.getTypeTemplate());
+        this.variables = letterTemplate.getVariables() != null
+                ? letterTemplate.getVariables().stream().collect(Collectors.toMap(LetterTemplateVariable::getName, LetterTemplateVariable::getVal))
+                : null;
     }
 
     public Long getId() {
@@ -94,37 +111,45 @@ public class LetterTemplateDto {
         this.letterSample = letterSample;
     }
 
-    public LocalDateTime getCreateDate() {
-        return createDate;
+    public Map<String, String> getVariables() {
+        return variables;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
+    public void setVariables(Map<String, String> variables) {
+        this.variables = variables;
     }
 
-    public String getCreateUser() {
-        return createUser;
-    }
+//    public LocalDateTime getCreateDate() {
+//        return createDate;
+//    }
 
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
-    }
+//    public void setCreateDate(LocalDateTime createDate) {
+//        this.createDate = createDate;
+//    }
 
-    public LocalDateTime getLastUpdateDate() {
-        return lastUpdateDate;
-    }
+//    public String getCreateUser() {
+//        return createUser;
+//    }
 
-    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
-        this.lastUpdateDate = lastUpdateDate;
-    }
+//    public void setCreateUser(String createUser) {
+//        this.createUser = createUser;
+//    }
 
-    public String getLastUpdateUser() {
-        return lastUpdateUser;
-    }
+//    public LocalDateTime getLastUpdateDate() {
+//        return lastUpdateDate;
+//    }
 
-    public void setLastUpdateUser(String lastUpdateUser) {
-        this.lastUpdateUser = lastUpdateUser;
-    }
+//    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
+//        this.lastUpdateDate = lastUpdateDate;
+//    }
+
+//    public String getLastUpdateUser() {
+//        return lastUpdateUser;
+//    }
+
+//    public void setLastUpdateUser(String lastUpdateUser) {
+//        this.lastUpdateUser = lastUpdateUser;
+//    }
 
     public LetterTemplateType getTypeTemplate() {
         return typeTemplate;

@@ -8,10 +8,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import jooqdata.tables.AParam;
+import jooqdata.tables.TAnswerVersion;
 import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
 import jooqdata.tables.TLetterTemplateVariable;
+import jooqdata.tables.TQuestion;
 
 import org.jooq.Catalog;
 import org.jooq.Sequence;
@@ -38,6 +40,11 @@ public class Admin extends SchemaImpl {
     public final AParam A_PARAM = AParam.A_PARAM;
 
     /**
+     * Вариант ответа на вопрос
+     */
+    public final TAnswerVersion T_ANSWER_VERSION = TAnswerVersion.T_ANSWER_VERSION;
+
+    /**
      * Шаблон письма
      */
     public final TLetterTemplate T_LETTER_TEMPLATE = TLetterTemplate.T_LETTER_TEMPLATE;
@@ -56,6 +63,11 @@ public class Admin extends SchemaImpl {
      * Переменные к шаблону письма
      */
     public final TLetterTemplateVariable T_LETTER_TEMPLATE_VARIABLE = TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE;
+
+    /**
+     * Преднастроенный вопрос
+     */
+    public final TQuestion T_QUESTION = TQuestion.T_QUESTION;
 
     /**
      * No further instances allowed
@@ -81,10 +93,12 @@ public class Admin extends SchemaImpl {
     public final List<Table<?>> getTables() {
         return Arrays.asList(
             AParam.A_PARAM,
+            TAnswerVersion.T_ANSWER_VERSION,
             TLetterTemplate.T_LETTER_TEMPLATE,
             TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM,
             TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM,
-            TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE
+            TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE,
+            TQuestion.T_QUESTION
         );
     }
 }

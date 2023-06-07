@@ -33,19 +33,19 @@ public class LetterTemplateController {
 
     @PostMapping("/filter")
     @Operation(summary = "Поиск шаблонов с фильтром")
-    public Page<LetterTemplateDto> findLetterTemplatesByFilter(@RequestBody(required = false) DataFilter<LetterTemplateSearchCriteria> filter, Pageable pageable){
-        return letterTemplateService.findLetterTemplatesByFilters(filter,pageable);
+    public Page<LetterTemplateDto> findLetterTemplatesByFilter(@RequestBody(required = false) DataFilter<LetterTemplateSearchCriteria> filter, Pageable pageable) {
+        return letterTemplateService.findLetterTemplatesByFilters(filter, pageable);
     }
 
     @GetMapping("/by-letter-type")
     @Operation(summary = "Поиск шаблона по наименованию параметра")
-    public ResponseEntity<LetterTemplateDto> findLetterTemplateByLetterType(@RequestParam("letterType") String letterType){
+    public ResponseEntity<LetterTemplateDto> findLetterTemplateByLetterType(@RequestParam("letterType") String letterType) {
         return ResponseEntity.ok(letterTemplateService.findByLetterType(letterType));
     }
 
     @GetMapping("/{id}/doc")
     @Operation(summary = "Выгрузка шаблона")
-    public ResponseEntity<Resource> downloadLetterTemplate(@PathVariable Long id){
+    public ResponseEntity<Resource> downloadLetterTemplate(@PathVariable Long id) {
         DocumentDto document = letterTemplateService.downloadLetterTemplate(id);
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -59,34 +59,34 @@ public class LetterTemplateController {
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "Сохранение нового шаблона")
-    public ResponseEntity<LetterTemplateDto> saveLetterTemplate(@RequestPart("request")LetterTemplateDto letterTemplateRequest,
-                                                                @RequestPart("file")MultipartFile file){
+    public ResponseEntity<LetterTemplateDto> saveLetterTemplate(@RequestPart("request") LetterTemplateDto letterTemplateRequest,
+                                                                @RequestPart("file") MultipartFile file) {
         return ResponseEntity.ok(letterTemplateService.saveLetterTemplate(letterTemplateRequest, file));
     }
 
     @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, value = "/doc/{id}")
     @Operation(summary = "Замена файла шаблона")
-    public ResponseEntity<SuccessInfo> replaceLetterTemplateDoc(@PathVariable Long id, @RequestPart("file")MultipartFile file){
+    public ResponseEntity<SuccessInfo> replaceLetterTemplateDoc(@PathVariable Long id, @RequestPart("file") MultipartFile file) {
         letterTemplateService.replaceLetterTemplate(id, file);
         return ResponseEntity.ok(new SuccessInfo("Операция выполнена успешно"));
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Изменение данных шаблона")
-    public ResponseEntity<LetterTemplateDto> changeLetterTemplate(@PathVariable Long id, @RequestBody LetterTemplateDto letterTemplateRequest){
+    public ResponseEntity<LetterTemplateDto> changeLetterTemplate(@PathVariable Long id, @RequestBody LetterTemplateDto letterTemplateRequest) {
         return ResponseEntity.ok(letterTemplateService.changeLetterTemplate(id, letterTemplateRequest));
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление шаблона")
-    public ResponseEntity<SuccessInfo> deleteLetterTemplate(@PathVariable Long id){
+    public ResponseEntity<SuccessInfo> deleteLetterTemplate(@PathVariable Long id) {
         letterTemplateService.deleteLetterTemplate(id);
         return ResponseEntity.ok(new SuccessInfo("Операция выполнена успешно"));
     }
 
     @GetMapping("/{id}/doc/info")
     @Operation(summary = "Данные загруженного документа шаблона")
-    public ResponseEntity<DocumentDto> getLetterTemplateDocInfo(@PathVariable Long id){
+    public ResponseEntity<DocumentDto> getLetterTemplateDocInfo(@PathVariable Long id) {
         return ResponseEntity.ok(letterTemplateService.getLetterTemplateDocInfo(id));
     }
 }

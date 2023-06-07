@@ -22,7 +22,6 @@ public class LetterTemplateDto {
     private Long letterSample;
     @NotNull(groups = {CreateGroup.class, ChangeGroup.class})
     private LetterTemplateType typeTemplate;
-
     @NotNull(groups = {CreateGroup.class, ChangeGroup.class})
     private Map<String, String> variables;
 //    private LocalDateTime createDate;
@@ -33,27 +32,27 @@ public class LetterTemplateDto {
     public LetterTemplateDto() {
     }
 
-    public LetterTemplateDto(Long id,
-                             String letterType,
-                             String title,
-                             Long letterSample,
-                             LetterTemplateType typeTemplate,
-                             Map<String, String> variables) {
-                             //LocalDateTime createDate,
-                             //String createUser,
-                             //LocalDateTime lastUpdateDate,
-                             //String lastUpdateUser) {
-        this.id = id;
-        this.letterType = letterType;
-        this.title = title;
-        this.letterSample = letterSample;
-        this.typeTemplate = typeTemplate;
-        this.variables = variables;
-        //this.createDate = createDate;
-        //this.createUser = createUser;
-        //this.lastUpdateDate = lastUpdateDate;
-        //this.lastUpdateUser = lastUpdateUser;
-    }
+//    public LetterTemplateDto(Long id,
+//                             String letterType,
+//                             String title,
+//                             Long letterSample,
+//                             LetterTemplateType typeTemplate,
+//                             Map<String, String> variables) {
+//                             LocalDateTime createDate,
+//                             String createUser,
+//                             LocalDateTime lastUpdateDate,
+//                             String lastUpdateUser) {
+//        this.id = id;
+//        this.letterType = letterType;
+//        this.title = title;
+//        this.letterSample = letterSample;
+//        this.typeTemplate = typeTemplate;
+//        this.variables = variables;
+//        this.createDate = createDate;
+//        this.createUser = createUser;
+//        this.lastUpdateDate = lastUpdateDate;
+//        this.lastUpdateUser = lastUpdateUser;
+//    }
 
 //    public static LetterTemplateDto fromModel(LetterTemplate letterTemplate){
 //        return new LetterTemplateDto(

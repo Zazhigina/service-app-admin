@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class LetterTemplate { //extends TLetterTemplate {
-    private long id;
+    private Long id;
     private String letterType;
     private String title;
     private Long letterSample;
@@ -19,11 +19,11 @@ public class LetterTemplate { //extends TLetterTemplate {
     public LetterTemplate() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

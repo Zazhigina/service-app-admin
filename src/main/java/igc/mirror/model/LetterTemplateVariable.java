@@ -3,12 +3,12 @@ package igc.mirror.model;
 import java.time.LocalDateTime;
 
 public class LetterTemplateVariable {
-    private long id;
+    private Long id;
 
     /**
      * Идентификатор шаблона письма
      */
-    private long letterTemplateId;
+    private Long letterTemplateId;
 
     /**
      * Имя переменной
@@ -48,19 +48,19 @@ public class LetterTemplateVariable {
         this.val = val;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getLetterTemplateId() {
+    public Long getLetterTemplateId() {
         return letterTemplateId;
     }
 
-    public void setLetterTemplateId(long letterTemplateId) {
+    public void setLetterTemplateId(Long letterTemplateId) {
         this.letterTemplateId = letterTemplateId;
     }
 

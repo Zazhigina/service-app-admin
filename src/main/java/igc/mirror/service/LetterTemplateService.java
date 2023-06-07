@@ -158,6 +158,7 @@ public class LetterTemplateService {
         LetterTemplate letterTemplate = letterTemplateRepository.find(id);
         letterTemplate.setTypeTemplate(letterTemplateRequest.getTypeTemplate().getName());
         letterTemplate.setTitle(letterTemplateRequest.getTitle());
+        letterTemplate.setLastUpdateUser(userDetails.getUsername());
 
         if (letterTemplateRequest.getVariables() != null) {
             List<LetterTemplateVariable> variables = letterTemplateRequest.getVariables().entrySet().stream()
@@ -165,10 +166,10 @@ public class LetterTemplateService {
             letterTemplate.setVariables(variables);
         }
 
-        LetterTemplateDto letterTemplateDto = new LetterTemplateDto(letterTemplateRepository.save(letterTemplate));
+        letterTemplateRepository.save(letterTemplate);
         letterTemplateVariableRepository.synchronizeLetterTemplateVariable(letterTemplate);
 
-        return letterTemplateDto;
+        return new LetterTemplateDto(letterTemplate);
     }
 
     /**

@@ -60,7 +60,7 @@ stop_deploy_release:
   stage: deploy
   image: nexus-docker-hub.inlinegroup-c.ru/devth/helm:v3.9.0
   environment:
-    name: release
+    name: release-v1
     action: stop
   when: manual
   script:

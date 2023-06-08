@@ -4,11 +4,13 @@ import igc.mirror.auth.UserDetails;
 import igc.mirror.doc.DocService;
 import igc.mirror.doc.dto.DocumentDto;
 import igc.mirror.dto.LetterTemplateDto;
+import igc.mirror.dto.LetterTemplateTypeDto;
 import igc.mirror.exception.common.EntityNotSavedException;
 import igc.mirror.filter.LetterTemplateSearchCriteria;
 import igc.mirror.model.LetterTemplate;
 import igc.mirror.model.LetterTemplateVariable;
 import igc.mirror.ref.LetterTemplateAcceptableDocType;
+import igc.mirror.ref.LetterTemplateType;
 import igc.mirror.repository.LetterTemplateRepository;
 import igc.mirror.repository.LetterTemplateVariableRepository;
 import igc.mirror.utils.qfilter.DataFilter;
@@ -27,6 +29,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,7 +77,12 @@ public class LetterTemplateService {
         LetterTemplate letterTemplate = letterTemplateRepository.findByLetterType(letterType);
         letterTemplate.setVariables(letterTemplateVariableRepository.getLetterTemplateVariables(letterTemplate.getId()));
 
-        return new LetterTemplateDto(letterTemplate);
+        DocumentDto documentDto = docService.retrieveDocumentInfo(letterTemplate.getLetterSample());
+        LetterTemplateDto letterTemplateDto = new LetterTemplateDto(letterTemplate);
+        letterTemplateDto.setSampleName(documentDto.getFilename());
+        letterTemplateDto.setSampleCreateDate(documentDto.getCreateDate());
+
+        return letterTemplateDto;
     }
 
     /**
@@ -127,7 +135,8 @@ public class LetterTemplateService {
      * @param id   ID шаблона
      * @param file файл для замены
      */
-    public void replaceLetterTemplate(Long id, MultipartFile file) {//todo transactional?
+    @Transactional
+    public void replaceLetterTemplate(Long id, MultipartFile file) {
         logger.info("Замена файла для шаблона с ID - {}", id);
 
         LetterTemplateAcceptableDocType acceptableDocType = LetterTemplateAcceptableDocType.getByExtension(StringUtils.getFilenameExtension(file.getOriginalFilename()));
@@ -156,7 +165,7 @@ public class LetterTemplateService {
         logger.info("Изменение шаблона с letter_type - {}, id - {}", letterTemplateRequest.getLetterType(), id);
 
         LetterTemplate letterTemplate = letterTemplateRepository.find(id);
-        letterTemplate.setTypeTemplate(letterTemplateRequest.getTypeTemplate().getName());
+        //letterTemplate.setTypeTemplate(letterTemplateRequest.getTypeTemplate().getName());
         letterTemplate.setTitle(letterTemplateRequest.getTitle());
         letterTemplate.setLastUpdateUser(userDetails.getUsername());
 
@@ -210,5 +219,14 @@ public class LetterTemplateService {
         LetterTemplate letterTemplate = letterTemplateRepository.find(id);
 
         return docService.retrieveDocumentInfo(letterTemplate.getLetterSample());
+    }
+
+    /**
+     * Возвращает информацию о типах шаблонов
+     *
+     * @return типы шаблонов
+     */
+    public List<LetterTemplateTypeDto> findLetterTemplateTypes() {//todo move or get values from table
+        return Arrays.stream(LetterTemplateType.values()).map(value -> new LetterTemplateTypeDto(value.name(),value.getName())).toList();
     }
 }

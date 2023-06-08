@@ -3,9 +3,10 @@ package igc.mirror.controller;
 import igc.mirror.doc.dto.DocumentDto;
 import igc.mirror.dto.LetterTemplateDto;
 import igc.mirror.dto.LetterTemplateTypeDto;
+import igc.mirror.dto.TemplateDto;
 import igc.mirror.exception.handler.SuccessInfo;
 import igc.mirror.filter.LetterTemplateSearchCriteria;
-import igc.mirror.service.LetterTemplateService;
+import igc.mirror.service.TemplateService;
 import igc.mirror.utils.qfilter.DataFilter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -26,30 +27,30 @@ import java.util.List;
 @RequestMapping("letter-template")
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Шаблоны")
-public class LetterTemplateController {
-    private final LetterTemplateService letterTemplateService;
+public class TemplateController {
+    private final TemplateService templateService;
 
     @Autowired
-    public LetterTemplateController(LetterTemplateService letterTemplateService) {
-        this.letterTemplateService = letterTemplateService;
+    public TemplateController(TemplateService templateService) {
+        this.templateService = templateService;
     }
 
     @PostMapping("/filter")
     @Operation(summary = "Поиск шаблонов с фильтром")
     public Page<LetterTemplateDto> findLetterTemplatesByFilter(@RequestBody(required = false) DataFilter<LetterTemplateSearchCriteria> filter, Pageable pageable) {
-        return letterTemplateService.findLetterTemplatesByFilters(filter, pageable);
+        return templateService.findLetterTemplatesByFilters(filter, pageable);
     }
 
     @GetMapping("/by-letter-type")
-    @Operation(summary = "Поиск шаблона по наименованию параметра")
+    @Operation(summary = "Поиск информации о шаблоне по наименованию параметра")
     public ResponseEntity<LetterTemplateDto> findLetterTemplateByLetterType(@RequestParam("letterType") String letterType) {
-        return ResponseEntity.ok(letterTemplateService.findByLetterType(letterType));
+        return ResponseEntity.ok(templateService.findByLetterType(letterType));
     }
 
     @GetMapping("/{id}/doc")
     @Operation(summary = "Выгрузка шаблона")
     public ResponseEntity<Resource> downloadLetterTemplate(@PathVariable Long id) {
-        DocumentDto document = letterTemplateService.downloadLetterTemplate(id);
+        DocumentDto document = templateService.downloadLetterTemplate(id);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentDisposition(document.getContentDisposition());
@@ -64,39 +65,45 @@ public class LetterTemplateController {
     @Operation(summary = "Сохранение нового шаблона")
     public ResponseEntity<LetterTemplateDto> saveLetterTemplate(@RequestPart("request") LetterTemplateDto letterTemplateRequest,
                                                                 @RequestPart("file") MultipartFile file) {
-        return ResponseEntity.ok(letterTemplateService.saveLetterTemplate(letterTemplateRequest, file));
+        return ResponseEntity.ok(templateService.saveLetterTemplate(letterTemplateRequest, file));
     }
 
     @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, value = "/doc/{id}")
     @Operation(summary = "Замена файла шаблона")
     public ResponseEntity<SuccessInfo> replaceLetterTemplateDoc(@PathVariable Long id, @RequestPart("file") MultipartFile file) {
-        letterTemplateService.replaceLetterTemplate(id, file);
+        templateService.replaceLetterTemplate(id, file);
         return ResponseEntity.ok(new SuccessInfo("Операция выполнена успешно"));
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Изменение данных шаблона")
     public ResponseEntity<LetterTemplateDto> changeLetterTemplate(@PathVariable Long id, @RequestBody LetterTemplateDto letterTemplateRequest) {
-        return ResponseEntity.ok(letterTemplateService.changeLetterTemplate(id, letterTemplateRequest));
+        return ResponseEntity.ok(templateService.changeLetterTemplate(id, letterTemplateRequest));
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление шаблона")
     public ResponseEntity<SuccessInfo> deleteLetterTemplate(@PathVariable Long id) {
-        letterTemplateService.deleteLetterTemplate(id);
+        templateService.deleteLetterTemplate(id);
         return ResponseEntity.ok(new SuccessInfo("Операция выполнена успешно"));
     }
 
     @GetMapping("/types")
     @Operation(summary = "Поиск типов шаблонов")
     public List<LetterTemplateTypeDto> findLetterTemplateTypes() {
-        return letterTemplateService.findLetterTemplateTypes();
+        return templateService.findLetterTemplateTypes();
     }
 
     @Deprecated
     @GetMapping("/{id}/doc/info")
     @Operation(summary = "Данные загруженного документа шаблона")
     public ResponseEntity<DocumentDto> getLetterTemplateDocInfo(@PathVariable Long id) {
-        return ResponseEntity.ok(letterTemplateService.getLetterTemplateDocInfo(id));
+        return ResponseEntity.ok(templateService.getLetterTemplateDocInfo(id));
+    }
+
+    @GetMapping("/by-param")
+    @Operation(summary = "Запрос шаблона по наименованию параметра")
+    public ResponseEntity<TemplateDto> retrieveTemplate(@RequestParam("param") String letterType) {
+        return ResponseEntity.ok(templateService.retrieveTemplate(letterType));
     }
 }

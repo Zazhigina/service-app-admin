@@ -2,6 +2,7 @@ package igc.mirror.controller;
 
 import igc.mirror.doc.dto.DocumentDto;
 import igc.mirror.dto.LetterTemplateDto;
+import igc.mirror.dto.LetterTemplateTypeDto;
 import igc.mirror.exception.handler.SuccessInfo;
 import igc.mirror.filter.LetterTemplateSearchCriteria;
 import igc.mirror.service.LetterTemplateService;
@@ -18,6 +19,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("letter-template")
@@ -84,6 +87,13 @@ public class LetterTemplateController {
         return ResponseEntity.ok(new SuccessInfo("Операция выполнена успешно"));
     }
 
+    @GetMapping("/types")
+    @Operation(summary = "Поиск типов шаблонов")
+    public List<LetterTemplateTypeDto> findLetterTemplateTypes() {
+        return letterTemplateService.findLetterTemplateTypes();
+    }
+
+    @Deprecated
     @GetMapping("/{id}/doc/info")
     @Operation(summary = "Данные загруженного документа шаблона")
     public ResponseEntity<DocumentDto> getLetterTemplateDocInfo(@PathVariable Long id) {

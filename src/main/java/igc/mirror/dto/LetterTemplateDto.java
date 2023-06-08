@@ -75,7 +75,7 @@ public class LetterTemplateDto {
         this.letterType = letterTemplate.getLetterType();
         this.title = letterTemplate.getTitle();
         this.letterSample = letterTemplate.getLetterSample();
-        this.typeTemplate = LetterTemplateType.getByName(letterTemplate.getTypeTemplate());
+        this.typeTemplate = LetterTemplateType.valueOf(letterTemplate.getTypeTemplate());
         this.variables = letterTemplate.getVariables() != null
                 ? letterTemplate.getVariables().stream().collect(Collectors.toMap(LetterTemplateVariable::getName, LetterTemplateVariable::getVal))
                 : null;

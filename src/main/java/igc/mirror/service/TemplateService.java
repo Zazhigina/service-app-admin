@@ -5,6 +5,7 @@ import igc.mirror.doc.DocService;
 import igc.mirror.doc.dto.DocumentDto;
 import igc.mirror.dto.LetterTemplateDto;
 import igc.mirror.dto.LetterTemplateTypeDto;
+import igc.mirror.dto.TemplateDto;
 import igc.mirror.exception.common.EntityNotSavedException;
 import igc.mirror.filter.LetterTemplateSearchCriteria;
 import igc.mirror.model.LetterTemplate;
@@ -35,18 +36,18 @@ import java.util.stream.Collectors;
 
 @Service
 @Validated
-public class LetterTemplateService {
-    static final Logger logger = LoggerFactory.getLogger(LetterTemplateService.class);
+public class TemplateService {
+    static final Logger logger = LoggerFactory.getLogger(TemplateService.class);
     private final LetterTemplateRepository letterTemplateRepository;
     private final UserDetails userDetails;
     private final DocService docService;
     private final LetterTemplateVariableRepository letterTemplateVariableRepository;
 
     @Autowired
-    public LetterTemplateService(LetterTemplateRepository letterTemplateRepository,
-                                 UserDetails userDetails,
-                                 DocService docService,
-                                 LetterTemplateVariableRepository letterTemplateVariableRepository) {
+    public TemplateService(LetterTemplateRepository letterTemplateRepository,
+                           UserDetails userDetails,
+                           DocService docService,
+                           LetterTemplateVariableRepository letterTemplateVariableRepository) {
         this.letterTemplateRepository = letterTemplateRepository;
         this.userDetails = userDetails;
         this.docService = docService;
@@ -68,7 +69,7 @@ public class LetterTemplateService {
     }
 
     /**
-     * Поиск шаблона по наименованию параметра
+     * Поиск информации о шаблоне по наименованию параметра
      *
      * @param letterType наименование параметра
      * @return шаблон
@@ -105,7 +106,7 @@ public class LetterTemplateService {
 
         LetterTemplate letterTemplate = new LetterTemplate();
         letterTemplate.setLetterType(letterTemplateRequest.getLetterType());
-        letterTemplate.setTypeTemplate(letterTemplateRequest.getTypeTemplate().getName());
+        letterTemplate.setTypeTemplate(letterTemplateRequest.getTypeTemplate().name());
         letterTemplate.setTitle(letterTemplateRequest.getTitle());
         letterTemplate.setCreateUser(userDetails.getUsername());
         letterTemplate.setAcceptableDocumentFormat(acceptableDocType.getExtension());
@@ -153,7 +154,7 @@ public class LetterTemplateService {
     }
 
     /**
-     * Изменяет данные шаблона
+     * Изменяет информацию о шаблоне
      *
      * @param id                    ID шаблона
      * @param letterTemplateRequest данные для изменения шаблона
@@ -226,7 +227,28 @@ public class LetterTemplateService {
      *
      * @return типы шаблонов
      */
-    public List<LetterTemplateTypeDto> findLetterTemplateTypes() {//todo move or get values from table
-        return Arrays.stream(LetterTemplateType.values()).map(value -> new LetterTemplateTypeDto(value.name(),value.getName())).toList();
+    public List<LetterTemplateTypeDto> findLetterTemplateTypes() {
+        return Arrays.stream(LetterTemplateType.values()).map(v -> new LetterTemplateTypeDto(v.name(),v.getName())).toList();
+    }
+
+    /**
+     * Запрашивает шаблон по указанному параметру
+     *
+     * @param letterType параметр
+     * @return шаблон
+     */
+    public TemplateDto retrieveTemplate(String letterType) {
+        LetterTemplateDto templateInfo = findByLetterType(letterType);
+
+        DocumentDto document = docService.downloadDocument(templateInfo.getLetterSample());
+
+        TemplateDto template = new TemplateDto();
+        template.setTitle(templateInfo.getTitle());
+        template.setResource(document.getResource());
+        template.setResourceName(templateInfo.getSampleName());
+        template.setResourceCreateDate(templateInfo.getSampleCreateDate());
+        template.setVariables(templateInfo.getVariables());
+
+        return template;
     }
 }

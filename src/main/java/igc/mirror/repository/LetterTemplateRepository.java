@@ -3,10 +3,13 @@ package igc.mirror.repository;
 import igc.mirror.exception.common.EntityNotFoundException;
 import igc.mirror.filter.LetterTemplateSearchCriteria;
 import igc.mirror.model.LetterTemplate;
+import igc.mirror.ref.LetterTemplateType;
 import igc.mirror.utils.jooq.JooqCommonRepository;
 import igc.mirror.utils.qfilter.DataFilter;
 import igc.mirror.utils.qfilter.QueryBuilder;
+import jakarta.annotation.PostConstruct;
 import jooqdata.tables.TLetterTemplate;
+import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -29,6 +32,16 @@ public class LetterTemplateRepository implements JooqCommonRepository<LetterTemp
     @Autowired
     public LetterTemplateRepository(DSLContext dsl) {
         this.dsl = dsl;
+    }
+
+    /**
+     * Заполняет настроечные данные для enum Тип шаблона
+     */
+    @PostConstruct
+    private void fillLetterTemplateTypes() {
+        dsl.selectFrom(TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM)
+                .fetch()
+                .forEach(r -> LetterTemplateType.fill(r.getName(), r.getDescription()));
     }
 
     @Override

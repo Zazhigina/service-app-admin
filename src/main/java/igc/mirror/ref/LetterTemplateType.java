@@ -1,17 +1,23 @@
 package igc.mirror.ref;
 
 public enum LetterTemplateType {
-    DOCUMENT("Документ"),
-    TEMPLATE("Шаблон");
+    DOCUMENT,
+    TEMPLATE;
 
-    private final String name;
+    private String name;
 
-    LetterTemplateType(String name) {
-        this.name = name;
-    }
+    LetterTemplateType() {}
+
+//    LetterTemplateType(String name) {
+//        this.name = name;
+//    }
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public static LetterTemplateType getByName(String name){
@@ -25,5 +31,12 @@ public enum LetterTemplateType {
         }
 
         return result;
+    }
+
+    public static void fill(String baseConst, String description) {
+        LetterTemplateType letterTemplateType = LetterTemplateType .valueOf(baseConst);
+        if (letterTemplateType != null && letterTemplateType.getName() == null){
+            letterTemplateType.setName(description);
+        }
     }
 }

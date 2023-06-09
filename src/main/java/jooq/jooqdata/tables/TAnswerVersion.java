@@ -72,7 +72,7 @@ public class TAnswerVersion extends TableImpl<TAnswerVersionRecord> {
      * The column <code>admin.t_answer_version.order_no</code>. Номер варианта
      * ответа
      */
-    public final TableField<TAnswerVersionRecord, String> ORDER_NO = createField(DSL.name("order_no"), SQLDataType.VARCHAR, this, "Номер варианта ответа");
+    public final TableField<TAnswerVersionRecord, Integer> ORDER_NO = createField(DSL.name("order_no"), SQLDataType.INTEGER, this, "Номер варианта ответа");
 
     /**
      * The column <code>admin.t_answer_version.create_date</code>. Дата и время
@@ -208,14 +208,14 @@ public class TAnswerVersion extends TableImpl<TAnswerVersionRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<Long, Long, String, String, LocalDateTime, String, LocalDateTime, String, Boolean> fieldsRow() {
+    public Row9<Long, Long, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean> fieldsRow() {
         return (Row9) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function9<? super Long, ? super Long, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super Boolean, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function9<? super Long, ? super Long, ? super String, ? super Integer, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super Boolean, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -223,7 +223,7 @@ public class TAnswerVersion extends TableImpl<TAnswerVersionRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function9<? super Long, ? super Long, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super Boolean, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function9<? super Long, ? super Long, ? super String, ? super Integer, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super Boolean, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

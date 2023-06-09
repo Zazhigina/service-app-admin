@@ -69,10 +69,10 @@ public class TAnswerVersion extends TableImpl<TAnswerVersionRecord> {
     public final TableField<TAnswerVersionRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR, this, "Наименование");
 
     /**
-     * The column <code>admin.t_answer_version.question_number</code>. Номер
-     * варианта ответа
+     * The column <code>admin.t_answer_version.order_no</code>. Номер варианта
+     * ответа
      */
-    public final TableField<TAnswerVersionRecord, String> QUESTION_NUMBER = createField(DSL.name("question_number"), SQLDataType.VARCHAR, this, "Номер варианта ответа");
+    public final TableField<TAnswerVersionRecord, String> ORDER_NO = createField(DSL.name("order_no"), SQLDataType.VARCHAR, this, "Номер варианта ответа");
 
     /**
      * The column <code>admin.t_answer_version.create_date</code>. Дата и время

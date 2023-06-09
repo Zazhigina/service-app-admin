@@ -68,18 +68,18 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
     }
 
     /**
-     * Setter for <code>admin.t_answer_version.question_number</code>. Номер
-     * варианта ответа
+     * Setter for <code>admin.t_answer_version.order_no</code>. Номер варианта
+     * ответа
      */
-    public void setQuestionNumber(String value) {
+    public void setOrderNo(String value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>admin.t_answer_version.question_number</code>. Номер
-     * варианта ответа
+     * Getter for <code>admin.t_answer_version.order_no</code>. Номер варианта
+     * ответа
      */
-    public String getQuestionNumber() {
+    public String getOrderNo() {
         return (String) get(3);
     }
 
@@ -203,7 +203,7 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
 
     @Override
     public Field<String> field4() {
-        return TAnswerVersion.T_ANSWER_VERSION.QUESTION_NUMBER;
+        return TAnswerVersion.T_ANSWER_VERSION.ORDER_NO;
     }
 
     @Override
@@ -248,7 +248,7 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
 
     @Override
     public String component4() {
-        return getQuestionNumber();
+        return getOrderNo();
     }
 
     @Override
@@ -293,7 +293,7 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
 
     @Override
     public String value4() {
-        return getQuestionNumber();
+        return getOrderNo();
     }
 
     @Override
@@ -341,7 +341,7 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
 
     @Override
     public TAnswerVersionRecord value4(String value) {
-        setQuestionNumber(value);
+        setOrderNo(value);
         return this;
     }
 
@@ -403,13 +403,13 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
     /**
      * Create a detached, initialised TAnswerVersionRecord
      */
-    public TAnswerVersionRecord(Long id, Long questionId, String name, String questionNumber, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, Boolean isUsed) {
+    public TAnswerVersionRecord(Long id, Long questionId, String name, String orderNo, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, Boolean isUsed) {
         super(TAnswerVersion.T_ANSWER_VERSION);
 
         setId(id);
         setQuestionId(questionId);
         setName(name);
-        setQuestionNumber(questionNumber);
+        setOrderNo(orderNo);
         setCreateDate(createDate);
         setCreateUser(createUser);
         setLastUpdateDate(lastUpdateDate);
@@ -427,7 +427,7 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
             setId(value.getId());
             setQuestionId(value.getQuestionId());
             setName(value.getName());
-            setQuestionNumber(value.getQuestionNumber());
+            setOrderNo(value.getOrderNo());
             setCreateDate(value.getCreateDate());
             setCreateUser(value.getCreateUser());
             setLastUpdateDate(value.getLastUpdateDate());

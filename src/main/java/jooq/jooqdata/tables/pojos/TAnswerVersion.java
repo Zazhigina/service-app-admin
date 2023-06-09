@@ -19,7 +19,7 @@ public class TAnswerVersion implements Serializable {
     private Long id;
     private Long questionId;
     private String name;
-    private String questionNumber;
+    private String orderNo;
     private LocalDateTime createDate;
     private String createUser;
     private LocalDateTime lastUpdateDate;
@@ -32,7 +32,7 @@ public class TAnswerVersion implements Serializable {
         this.id = value.id;
         this.questionId = value.questionId;
         this.name = value.name;
-        this.questionNumber = value.questionNumber;
+        this.orderNo = value.orderNo;
         this.createDate = value.createDate;
         this.createUser = value.createUser;
         this.lastUpdateDate = value.lastUpdateDate;
@@ -44,7 +44,7 @@ public class TAnswerVersion implements Serializable {
         Long id,
         Long questionId,
         String name,
-        String questionNumber,
+        String orderNo,
         LocalDateTime createDate,
         String createUser,
         LocalDateTime lastUpdateDate,
@@ -54,7 +54,7 @@ public class TAnswerVersion implements Serializable {
         this.id = id;
         this.questionId = questionId;
         this.name = name;
-        this.questionNumber = questionNumber;
+        this.orderNo = orderNo;
         this.createDate = createDate;
         this.createUser = createUser;
         this.lastUpdateDate = lastUpdateDate;
@@ -107,19 +107,19 @@ public class TAnswerVersion implements Serializable {
     }
 
     /**
-     * Getter for <code>admin.t_answer_version.question_number</code>. Номер
-     * варианта ответа
+     * Getter for <code>admin.t_answer_version.order_no</code>. Номер варианта
+     * ответа
      */
-    public String getQuestionNumber() {
-        return this.questionNumber;
+    public String getOrderNo() {
+        return this.orderNo;
     }
 
     /**
-     * Setter for <code>admin.t_answer_version.question_number</code>. Номер
-     * варианта ответа
+     * Setter for <code>admin.t_answer_version.order_no</code>. Номер варианта
+     * ответа
      */
-    public void setQuestionNumber(String questionNumber) {
-        this.questionNumber = questionNumber;
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
     /**
@@ -229,11 +229,11 @@ public class TAnswerVersion implements Serializable {
         }
         else if (!this.name.equals(other.name))
             return false;
-        if (this.questionNumber == null) {
-            if (other.questionNumber != null)
+        if (this.orderNo == null) {
+            if (other.orderNo != null)
                 return false;
         }
-        else if (!this.questionNumber.equals(other.questionNumber))
+        else if (!this.orderNo.equals(other.orderNo))
             return false;
         if (this.createDate == null) {
             if (other.createDate != null)
@@ -275,7 +275,7 @@ public class TAnswerVersion implements Serializable {
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result + ((this.questionId == null) ? 0 : this.questionId.hashCode());
         result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
-        result = prime * result + ((this.questionNumber == null) ? 0 : this.questionNumber.hashCode());
+        result = prime * result + ((this.orderNo == null) ? 0 : this.orderNo.hashCode());
         result = prime * result + ((this.createDate == null) ? 0 : this.createDate.hashCode());
         result = prime * result + ((this.createUser == null) ? 0 : this.createUser.hashCode());
         result = prime * result + ((this.lastUpdateDate == null) ? 0 : this.lastUpdateDate.hashCode());
@@ -291,7 +291,7 @@ public class TAnswerVersion implements Serializable {
         sb.append(id);
         sb.append(", ").append(questionId);
         sb.append(", ").append(name);
-        sb.append(", ").append(questionNumber);
+        sb.append(", ").append(orderNo);
         sb.append(", ").append(createDate);
         sb.append(", ").append(createUser);
         sb.append(", ").append(lastUpdateDate);

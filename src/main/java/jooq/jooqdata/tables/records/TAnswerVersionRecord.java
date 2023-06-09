@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Вариант ответа на вопрос
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionRecord> implements Record9<Long, Long, String, String, LocalDateTime, String, LocalDateTime, String, Boolean> {
+public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionRecord> implements Record9<Long, Long, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean> {
 
     private static final long serialVersionUID = 1L;
 
@@ -71,7 +71,7 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
      * Setter for <code>admin.t_answer_version.order_no</code>. Номер варианта
      * ответа
      */
-    public void setOrderNo(String value) {
+    public void setOrderNo(Integer value) {
         set(3, value);
     }
 
@@ -79,8 +79,8 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
      * Getter for <code>admin.t_answer_version.order_no</code>. Номер варианта
      * ответа
      */
-    public String getOrderNo() {
-        return (String) get(3);
+    public Integer getOrderNo() {
+        return (Integer) get(3);
     }
 
     /**
@@ -177,12 +177,12 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<Long, Long, String, String, LocalDateTime, String, LocalDateTime, String, Boolean> fieldsRow() {
+    public Row9<Long, Long, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean> fieldsRow() {
         return (Row9) super.fieldsRow();
     }
 
     @Override
-    public Row9<Long, Long, String, String, LocalDateTime, String, LocalDateTime, String, Boolean> valuesRow() {
+    public Row9<Long, Long, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean> valuesRow() {
         return (Row9) super.valuesRow();
     }
 
@@ -202,7 +202,7 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
     }
 
     @Override
-    public Field<String> field4() {
+    public Field<Integer> field4() {
         return TAnswerVersion.T_ANSWER_VERSION.ORDER_NO;
     }
 
@@ -247,7 +247,7 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
     }
 
     @Override
-    public String component4() {
+    public Integer component4() {
         return getOrderNo();
     }
 
@@ -292,7 +292,7 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
     }
 
     @Override
-    public String value4() {
+    public Integer value4() {
         return getOrderNo();
     }
 
@@ -340,7 +340,7 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
     }
 
     @Override
-    public TAnswerVersionRecord value4(String value) {
+    public TAnswerVersionRecord value4(Integer value) {
         setOrderNo(value);
         return this;
     }
@@ -376,7 +376,7 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
     }
 
     @Override
-    public TAnswerVersionRecord values(Long value1, Long value2, String value3, String value4, LocalDateTime value5, String value6, LocalDateTime value7, String value8, Boolean value9) {
+    public TAnswerVersionRecord values(Long value1, Long value2, String value3, Integer value4, LocalDateTime value5, String value6, LocalDateTime value7, String value8, Boolean value9) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -403,7 +403,7 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
     /**
      * Create a detached, initialised TAnswerVersionRecord
      */
-    public TAnswerVersionRecord(Long id, Long questionId, String name, String orderNo, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, Boolean isUsed) {
+    public TAnswerVersionRecord(Long id, Long questionId, String name, Integer orderNo, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, Boolean isUsed) {
         super(TAnswerVersion.T_ANSWER_VERSION);
 
         setId(id);

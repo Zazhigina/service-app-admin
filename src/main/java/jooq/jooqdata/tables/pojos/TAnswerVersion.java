@@ -19,7 +19,7 @@ public class TAnswerVersion implements Serializable {
     private Long id;
     private Long questionId;
     private String name;
-    private String orderNo;
+    private Integer orderNo;
     private LocalDateTime createDate;
     private String createUser;
     private LocalDateTime lastUpdateDate;
@@ -44,7 +44,7 @@ public class TAnswerVersion implements Serializable {
         Long id,
         Long questionId,
         String name,
-        String orderNo,
+        Integer orderNo,
         LocalDateTime createDate,
         String createUser,
         LocalDateTime lastUpdateDate,
@@ -110,7 +110,7 @@ public class TAnswerVersion implements Serializable {
      * Getter for <code>admin.t_answer_version.order_no</code>. Номер варианта
      * ответа
      */
-    public String getOrderNo() {
+    public Integer getOrderNo() {
         return this.orderNo;
     }
 
@@ -118,7 +118,7 @@ public class TAnswerVersion implements Serializable {
      * Setter for <code>admin.t_answer_version.order_no</code>. Номер варианта
      * ответа
      */
-    public void setOrderNo(String orderNo) {
+    public void setOrderNo(Integer orderNo) {
         this.orderNo = orderNo;
     }
 

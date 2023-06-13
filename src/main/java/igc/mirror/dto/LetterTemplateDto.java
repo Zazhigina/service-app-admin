@@ -22,7 +22,6 @@ public class LetterTemplateDto {
     private String title;
     @NotNull(groups = {CreateGroup.class, ChangeGroup.class})
     private LetterTemplateType typeTemplate;
-    @NotNull(groups = {CreateGroup.class, ChangeGroup.class})
     private Map<String, String> variables;
     private Long letterSample;
     private String sampleName;

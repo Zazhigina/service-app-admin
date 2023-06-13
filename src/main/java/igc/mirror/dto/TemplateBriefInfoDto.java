@@ -17,6 +17,11 @@ public class TemplateBriefInfoDto {
     private String title;
 
     /**
+     * Вид шаблона
+     */
+    private String typeTemplate;
+
+    /**
      * Наименование вида шаблона
      */
     private String typeTemplateName;
@@ -30,6 +35,7 @@ public class TemplateBriefInfoDto {
         this.id = letterTemplate.getId();
         this.letterType = letterTemplate.getLetterType();
         this.title = letterTemplate.getTitle();
+        this.typeTemplate = LetterTemplateType.valueOf(letterTemplate.getTypeTemplate()).name();
         this.typeTemplateName = LetterTemplateType.valueOf(letterTemplate.getTypeTemplate()).getName();
         this.letterSample = letterTemplate.getLetterSample();
     }
@@ -56,6 +62,14 @@ public class TemplateBriefInfoDto {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getTypeTemplate() {
+        return typeTemplate;
+    }
+
+    public void setTypeTemplate(String typeTemplate) {
+        this.typeTemplate = typeTemplate;
     }
 
     public String getTypeTemplateName() {

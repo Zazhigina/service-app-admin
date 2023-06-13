@@ -10,8 +10,9 @@ public class TemplateDto {
     private String title;
     @JsonIgnore
     private Resource resource;
-    private String resourceName;
-    private LocalDateTime resourceCreateDate;
+    private String fileName;
+    private Long fileSize;
+    private LocalDateTime fileCreateDate;
     private Map<String, String> variables;
 
     public String getTitle() {
@@ -30,20 +31,28 @@ public class TemplateDto {
         this.resource = resource;
     }
 
-    public String getResourceName() {
-        return resourceName;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setResourceName(String resourceName) {
-        this.resourceName = resourceName;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
-    public LocalDateTime getResourceCreateDate() {
-        return resourceCreateDate;
+    public Long getFileSize() {
+        return fileSize;
     }
 
-    public void setResourceCreateDate(LocalDateTime resourceCreateDate) {
-        this.resourceCreateDate = resourceCreateDate;
+    public void setFileSize(Long fileSize) {
+        this.fileSize = fileSize;
+    }
+
+    public LocalDateTime getFileCreateDate() {
+        return fileCreateDate;
+    }
+
+    public void setFileCreateDate(LocalDateTime fileCreateDate) {
+        this.fileCreateDate = fileCreateDate;
     }
 
     public Map<String, String> getVariables() {

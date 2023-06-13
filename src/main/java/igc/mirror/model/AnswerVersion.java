@@ -1,5 +1,7 @@
 package igc.mirror.model;
 
+import jakarta.validation.constraints.NotBlank;
+
 import java.time.LocalDateTime;
 
 public class AnswerVersion {
@@ -13,11 +15,13 @@ public class AnswerVersion {
    /**
     * Вариант ответа
     */
+   @NotBlank(message = "Текст варианта ответа не должен быть пустым")
    private String name;
 
    /**
     * Порядковый номер ответа
     */
+   @NotBlank(message = "Порядковый номер варианта ответа не должен быть пустым")
    private Integer orderNo;
 
    /**

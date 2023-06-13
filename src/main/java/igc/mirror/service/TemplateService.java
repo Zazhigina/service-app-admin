@@ -5,6 +5,7 @@ import igc.mirror.doc.DocService;
 import igc.mirror.doc.dto.DocumentDto;
 import igc.mirror.dto.LetterTemplateDto;
 import igc.mirror.dto.LetterTemplateTypeDto;
+import igc.mirror.dto.TemplateBriefInfoDto;
 import igc.mirror.dto.TemplateDto;
 import igc.mirror.exception.common.EntityNotSavedException;
 import igc.mirror.filter.LetterTemplateSearchCriteria;
@@ -61,10 +62,10 @@ public class TemplateService {
      * @param pageable настройки пэджинации и сортировки
      * @return список шаблонов
      */
-    public Page<LetterTemplateDto> findLetterTemplatesByFilters(DataFilter<LetterTemplateSearchCriteria> filter, Pageable pageable) {
+    public Page<TemplateBriefInfoDto> findLetterTemplatesByFilters(DataFilter<LetterTemplateSearchCriteria> filter, Pageable pageable) {
         Page<LetterTemplate> letterTemplatePage = letterTemplateRepository.findByFilters(filter, pageable);
 
-        return new PageImpl<>(letterTemplatePage.getContent().stream().map(LetterTemplateDto::new).collect(Collectors.toList()),
+        return new PageImpl<>(letterTemplatePage.getContent().stream().map(TemplateBriefInfoDto::new).collect(Collectors.toList()),
                 pageable, letterTemplatePage.getTotalElements());
     }
 
@@ -81,6 +82,7 @@ public class TemplateService {
         DocumentDto documentDto = docService.retrieveDocumentInfo(letterTemplate.getLetterSample());
         LetterTemplateDto letterTemplateDto = new LetterTemplateDto(letterTemplate);
         letterTemplateDto.setSampleName(documentDto.getFilename());
+        letterTemplateDto.setSampleSize(documentDto.getFileSize());
         letterTemplateDto.setSampleCreateDate(documentDto.getCreateDate());
 
         return letterTemplateDto;
@@ -245,8 +247,9 @@ public class TemplateService {
         TemplateDto template = new TemplateDto();
         template.setTitle(templateInfo.getTitle());
         template.setResource(document.getResource());
-        template.setResourceName(templateInfo.getSampleName());
-        template.setResourceCreateDate(templateInfo.getSampleCreateDate());
+        template.setFileName(templateInfo.getSampleName());
+        template.setFileSize(templateInfo.getSampleSize());
+        template.setFileCreateDate(templateInfo.getSampleCreateDate());
         template.setVariables(templateInfo.getVariables());
 
         return template;

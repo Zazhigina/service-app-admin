@@ -10,6 +10,7 @@ public class DocumentDto {
     private Long id;
     private String filename;
     private String fileMimeType;
+    private Long fileSize;
     @JsonIgnore
     private Resource resource;
     @JsonIgnore
@@ -22,10 +23,11 @@ public class DocumentDto {
     public DocumentDto() {
     }
 
-    public DocumentDto(Long id, String filename, String fileMimeType) {
+    public DocumentDto(Long id, String filename, String fileMimeType, Long fileSize) {
         this.id = id;
         this.filename = filename;
         this.fileMimeType = fileMimeType;
+        this.fileSize = fileSize;
     }
 
     public Long getId() {
@@ -50,6 +52,14 @@ public class DocumentDto {
 
     public void setFileMimeType(String fileMimeType) {
         this.fileMimeType = fileMimeType;
+    }
+
+    public Long getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(Long fileSize) {
+        this.fileSize = fileSize;
     }
 
     public Resource getResource() {

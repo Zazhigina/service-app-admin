@@ -25,7 +25,8 @@ public class LetterTemplateDto {
     @NotNull(groups = {CreateGroup.class, ChangeGroup.class})
     private Map<String, String> variables;
     private Long letterSample;
-    private String sampleName; //todo add property: size of sample
+    private String sampleName;
+    private Long sampleSize;
     private LocalDateTime sampleCreateDate;
 //    private String createUser;
 //    private LocalDateTime lastUpdateDate;
@@ -135,6 +136,14 @@ public class LetterTemplateDto {
 
     public void setSampleName(String sampleName) {
         this.sampleName = sampleName;
+    }
+
+    public Long getSampleSize() {
+        return sampleSize;
+    }
+
+    public void setSampleSize(Long sampleSize) {
+        this.sampleSize = sampleSize;
     }
 
     public LocalDateTime getSampleCreateDate() {

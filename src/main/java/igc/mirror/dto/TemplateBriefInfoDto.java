@@ -30,7 +30,7 @@ public class TemplateBriefInfoDto {
         this.id = letterTemplate.getId();
         this.letterType = letterTemplate.getLetterType();
         this.title = letterTemplate.getTitle();
-        this.typeTemplateName = LetterTemplateType.valueOf(letterTemplate.getTypeTemplate()).name();
+        this.typeTemplateName = LetterTemplateType.valueOf(letterTemplate.getTypeTemplate()).getName();
         this.letterSample = letterTemplate.getLetterSample();
     }
 

@@ -3,6 +3,7 @@ package igc.mirror.controller;
 import igc.mirror.doc.dto.DocumentDto;
 import igc.mirror.dto.LetterTemplateDto;
 import igc.mirror.dto.LetterTemplateTypeDto;
+import igc.mirror.dto.TemplateBriefInfoDto;
 import igc.mirror.dto.TemplateDto;
 import igc.mirror.exception.handler.SuccessInfo;
 import igc.mirror.filter.LetterTemplateSearchCriteria;
@@ -37,7 +38,7 @@ public class TemplateController {
 
     @PostMapping("/filter")
     @Operation(summary = "Поиск шаблонов с фильтром")
-    public Page<LetterTemplateDto> findLetterTemplatesByFilter(@RequestBody(required = false) DataFilter<LetterTemplateSearchCriteria> filter, Pageable pageable) {
+    public Page<TemplateBriefInfoDto> findLetterTemplatesByFilter(@RequestBody(required = false) DataFilter<LetterTemplateSearchCriteria> filter, Pageable pageable) {
         return templateService.findLetterTemplatesByFilters(filter, pageable);
     }
 

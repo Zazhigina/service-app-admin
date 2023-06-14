@@ -2,17 +2,20 @@ package igc.mirror.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import igc.mirror.model.AnswerVersion;
+import jakarta.validation.constraints.NotBlank;
 
 public class AnswerVersionDto {
 
    /**
     * Вариант ответа
     */
+   @NotBlank(message = "Текст варианта ответа не должен быть пустым")
    private String name;
 
    /**
     * Порядковый номер ответа
     */
+   @NotBlank(message = "Порядковый номер варианта ответа не должен быть пустым")
    private Integer orderNo;
 
    /**

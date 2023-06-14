@@ -3,7 +3,7 @@ package igc.mirror.dto;
 import igc.mirror.model.LetterTemplate;
 import igc.mirror.ref.LetterTemplateType;
 
-public class TemplateBriefInfoDto {
+public class LetterTemplateBriefInfoDto {
     private Long id;
 
     /**
@@ -31,7 +31,7 @@ public class TemplateBriefInfoDto {
      */
     private Long letterSample;
 
-    public TemplateBriefInfoDto(LetterTemplate letterTemplate) {
+    public LetterTemplateBriefInfoDto(LetterTemplate letterTemplate) {
         this.id = letterTemplate.getId();
         this.letterType = letterTemplate.getLetterType();
         this.title = letterTemplate.getTitle();

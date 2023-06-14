@@ -1,0 +1,29 @@
+#!groovy
+
+// import shared library
+@Library("dsoLibrary@master") _
+
+def scan_repos = [
+    ("$OCP_APP_NAME" as String): "$BRANCH"
+]
+
+pipeline {
+    parameters {
+        string(name: 'email', defaultValue: 'Stronin.IYu@omsk.gazprom-neft.ru,Zaytsev.OI@gazprom-neft.ru', description: 'Email address for reports', trim: true)
+    }
+
+    agent {
+        label "${BUILD_ENVIRONMENT}"
+    }
+
+    stages {
+        stage('Sast scan') {
+            when {
+                equals(actual: BUILD_ENVIRONMENT, expected: 'trust')
+            }
+            steps {
+                doSastCheck "manualWithParameters", [sast_lang: "Java", "repos_for_scan": scan_repos, "sast_generate_reports": true]
+            }
+        }
+    }
+}

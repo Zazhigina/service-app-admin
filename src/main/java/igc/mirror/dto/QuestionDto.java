@@ -1,6 +1,7 @@
 package igc.mirror.dto;
 
 import igc.mirror.model.Question;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,11 +11,13 @@ public class QuestionDto {
     /**
      * Содержание вопроса
      */
+    @NotBlank(message = "Содержимое вопроса не должно быть пустым")
     private String name;
 
     /**
      * Порядковый номер вопроса
      */
+    @NotBlank(message = "Порядковый номер вопроса не может быть пустым")
     private Integer orderNo;
 
     /**

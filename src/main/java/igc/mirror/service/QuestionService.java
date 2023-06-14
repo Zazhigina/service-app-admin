@@ -7,15 +7,18 @@ import igc.mirror.model.AnswerVersion;
 import igc.mirror.model.Question;
 import igc.mirror.repository.AnswerVersionRepository;
 import igc.mirror.repository.QuestionRepository;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Validated
 public class QuestionService {
 
     static final Logger logger = LoggerFactory.getLogger(QuestionService.class);
@@ -47,7 +50,7 @@ public class QuestionService {
      *
      * @param questions список измененных вопросов
      */
-    public void changeQuestions(List<QuestionDto> questions) {
+    public void changeQuestions(@Valid List<QuestionDto> questions) {
         logger.info("Изменение перечня стандартных вопросов");
         for (QuestionDto question : questions) {
             Question currentQuestion = Optional.ofNullable(questionRepository.findQuestionByOrderNo(question.getOrderNo()))

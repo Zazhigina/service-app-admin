@@ -5,7 +5,7 @@ import igc.mirror.doc.DocService;
 import igc.mirror.doc.dto.DocumentDto;
 import igc.mirror.dto.LetterTemplateDto;
 import igc.mirror.dto.LetterTemplateTypeDto;
-import igc.mirror.dto.TemplateBriefInfoDto;
+import igc.mirror.dto.LetterTemplateBriefInfoDto;
 import igc.mirror.dto.TemplateDto;
 import igc.mirror.exception.common.EntityNotSavedException;
 import igc.mirror.filter.LetterTemplateSearchCriteria;
@@ -62,10 +62,10 @@ public class TemplateService {
      * @param pageable настройки пэджинации и сортировки
      * @return список шаблонов
      */
-    public Page<TemplateBriefInfoDto> findLetterTemplatesByFilters(DataFilter<LetterTemplateSearchCriteria> filter, Pageable pageable) {
+    public Page<LetterTemplateBriefInfoDto> findLetterTemplatesByFilters(DataFilter<LetterTemplateSearchCriteria> filter, Pageable pageable) {
         Page<LetterTemplate> letterTemplatePage = letterTemplateRepository.findByFilters(filter, pageable);
 
-        return new PageImpl<>(letterTemplatePage.getContent().stream().map(TemplateBriefInfoDto::new).collect(Collectors.toList()),
+        return new PageImpl<>(letterTemplatePage.getContent().stream().map(LetterTemplateBriefInfoDto::new).collect(Collectors.toList()),
                 pageable, letterTemplatePage.getTotalElements());
     }
 

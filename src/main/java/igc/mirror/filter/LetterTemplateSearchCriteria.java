@@ -6,6 +6,7 @@ public class LetterTemplateSearchCriteria extends SearchCriteria {
     private String letterType;
     private String title;
 
+    public LetterTemplateSearchCriteria() {}
     public LetterTemplateSearchCriteria(String letterType, String title) {
         this.letterType = letterType;
         this.title = title;

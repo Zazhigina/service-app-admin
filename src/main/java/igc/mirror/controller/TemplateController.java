@@ -1,9 +1,9 @@
 package igc.mirror.controller;
 
 import igc.mirror.doc.dto.DocumentDto;
+import igc.mirror.dto.LetterTemplateBriefInfoDto;
 import igc.mirror.dto.LetterTemplateDto;
 import igc.mirror.dto.LetterTemplateTypeDto;
-import igc.mirror.dto.LetterTemplateBriefInfoDto;
 import igc.mirror.dto.TemplateDto;
 import igc.mirror.exception.handler.SuccessInfo;
 import igc.mirror.filter.LetterTemplateSearchCriteria;
@@ -15,16 +15,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -42,24 +39,7 @@ public class TemplateController {
     @PostMapping("/filter")
     @Operation(summary = "Поиск шаблонов с фильтром")
     public Page<LetterTemplateBriefInfoDto> findLetterTemplatesByFilter(@RequestBody(required = false) DataFilter<LetterTemplateSearchCriteria> filter, Pageable pageable) {
-        // подмена сортировки по типу шаблона (вместо наименования используем тип)
-        PageRequest newPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-                getReplacedSort(pageable.getSort(), "typeTemplateName", "typeTemplate"));
-        return templateService.findLetterTemplatesByFilters(filter, newPageable);
-    }
-
-    private Sort getReplacedSort(Sort sort, String replaceablePropertyName, String newPropertyName) {
-        Sort.Order ord = sort.stream().filter(r -> r.getProperty().equals(replaceablePropertyName)).findFirst().orElse(null);
-        if (ord == null)
-            return sort;
-
-        List<Sort.Order> orders = new ArrayList<>();
-        sort.forEach(s -> {
-            if (s.getProperty().equals(replaceablePropertyName)) {
-                orders.add(new Sort.Order(s.getDirection(), newPropertyName));
-            } else orders.add(s);
-        });
-        return Sort.by(orders);
+        return templateService.findLetterTemplateBriefs(filter, pageable);
     }
 
     @GetMapping("/by-letter-type")

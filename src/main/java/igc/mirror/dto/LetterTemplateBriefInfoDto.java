@@ -31,6 +31,8 @@ public class LetterTemplateBriefInfoDto {
      */
     private Long letterSample;
 
+    public LetterTemplateBriefInfoDto() {}
+
     public LetterTemplateBriefInfoDto(LetterTemplate letterTemplate) {
         this.id = letterTemplate.getId();
         this.letterType = letterTemplate.getLetterType();

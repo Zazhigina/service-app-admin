@@ -39,10 +39,8 @@ public class QuestionService {
      */
     public List<QuestionDto> findAllQuestions() {
         logger.info("Поучение перечня стандартных вопросов");
-        List<Question> questions = questionRepository.findAllQuestions();
-        questions.forEach(question -> question.setAnswerVersions(answerVersionRepository.findAnswerVersionsByQuestion(question.getId())));
 
-        return questions.stream().map(QuestionDto::new).toList();
+        return questionRepository.findAllQuestions();
     }
 
     /**
@@ -54,7 +52,7 @@ public class QuestionService {
         logger.info("Изменение перечня стандартных вопросов");
         for (QuestionDto question : questions) {
             Question currentQuestion = Optional.ofNullable(questionRepository.findQuestionByOrderNo(question.getOrderNo()))
-                    .orElseThrow(() -> new igc.mirror.exception.common.EntityNotFoundException("Вопрос с порядковым номером "+ question.getOrderNo() +" не найден", null, Question.class));
+                    .orElseThrow(() -> new igc.mirror.exception.common.EntityNotFoundException("Вопрос с порядковым номером " + question.getOrderNo() + " не найден", null, Question.class));
             currentQuestion.setName(question.getName());
             currentQuestion.setActualTo(question.getActualTo());
             currentQuestion.setLastUpdateUser(userDetails.getUsername());
@@ -62,7 +60,7 @@ public class QuestionService {
 
             for (AnswerVersionDto answerVersion : question.getAnswerVersions()) {
                 AnswerVersion currentAnswerVersion = Optional.ofNullable(answerVersionRepository.findAnswerByOrderNo(currentQuestion.getId(), answerVersion.getOrderNo()))
-                        .orElseThrow(() -> new igc.mirror.exception.common.EntityNotFoundException("Вариант ответа с порядковым номером "+ answerVersion.getOrderNo() +" не найден", null, AnswerVersion.class));
+                        .orElseThrow(() -> new igc.mirror.exception.common.EntityNotFoundException("Вариант ответа с порядковым номером " + answerVersion.getOrderNo() + " не найден", null, AnswerVersion.class));
                 currentAnswerVersion.setName(answerVersion.getName());
                 currentAnswerVersion.setUsed(answerVersion.isUsed());
                 currentAnswerVersion.setLastUpdateUser(userDetails.getUsername());

@@ -1,7 +1,7 @@
 package igc.mirror.dto;
 
-import igc.mirror.model.Question;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,7 +17,7 @@ public class QuestionDto {
     /**
      * Порядковый номер вопроса
      */
-    @NotBlank(message = "Порядковый номер вопроса не может быть пустым")
+    @NotNull(message = "Порядковый номер вопроса не может быть пустым")
     private Integer orderNo;
 
     /**
@@ -30,13 +30,7 @@ public class QuestionDto {
      */
     private List<AnswerVersionDto> answerVersions;
 
-    public QuestionDto() {}
-
-    public QuestionDto(Question question) {
-        this.name = question.getName();
-        this.orderNo = question.getOrderNo();
-        this.actualTo = question.getActualTo();
-        this.answerVersions = question.getAnswerVersions().stream().map(AnswerVersionDto::new).toList();
+    public QuestionDto() {
     }
 
     public String getName() {

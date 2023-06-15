@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,11 +63,33 @@ public class TemplateService {
      * @param pageable настройки пэджинации и сортировки
      * @return список шаблонов
      */
-    public Page<LetterTemplateBriefInfoDto> findLetterTemplatesByFilters(DataFilter<LetterTemplateSearchCriteria> filter, Pageable pageable) {
+    @Deprecated
+    public Page<LetterTemplateDto> findLetterTemplatesByFilters(DataFilter<LetterTemplateSearchCriteria> filter, Pageable pageable) {
         Page<LetterTemplate> letterTemplatePage = letterTemplateRepository.findByFilters(filter, pageable);
 
-        return new PageImpl<>(letterTemplatePage.getContent().stream().map(LetterTemplateBriefInfoDto::new).collect(Collectors.toList()),
+        return new PageImpl<>(letterTemplatePage.getContent().stream().map(LetterTemplateDto::new).collect(Collectors.toList()),
                 pageable, letterTemplatePage.getTotalElements());
+    }
+
+    /**
+     * Возвращает список найденных шаблонов по фильтру
+     *
+     * @param filter   набор критериев поиска
+     * @param pageable настройки пэджинации и сортировки
+     * @return список шаблонов
+     */
+    public Page<LetterTemplateBriefInfoDto> findLetterTemplateBriefs(DataFilter<LetterTemplateSearchCriteria> filter, Pageable pageable) {
+        DataFilter<LetterTemplateSearchCriteria> dataFilter = Optional.ofNullable(filter).orElseGet(DataFilter::new);
+        LetterTemplateSearchCriteria criteria = Optional.ofNullable(dataFilter.getSearchCriteria()).orElseGet(LetterTemplateSearchCriteria::new);
+
+        dataFilter.setSearchCriteria(criteria);
+
+        List<LetterTemplateBriefInfoDto> templates = letterTemplateRepository.findTemplates(filter, pageable);
+
+        long total = (templates.size() >= pageable.getPageSize() ?
+                letterTemplateRepository.getTemplatesCount(dataFilter) : templates.size());
+
+        return new PageImpl<>(templates, pageable, total);
     }
 
     /**

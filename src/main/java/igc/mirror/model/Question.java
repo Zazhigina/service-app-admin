@@ -1,7 +1,6 @@
 package igc.mirror.model;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class Question {
     private Long id;
@@ -20,11 +19,6 @@ public class Question {
      * Срок действия вопроса
      */
     private LocalDateTime actualTo;
-
-    /**
-     * Перечень вариантов ответов на вопрос
-     */
-    private List<AnswerVersion> answerVersions;
 
     /**
      * Дата и время создания документа
@@ -46,7 +40,8 @@ public class Question {
      */
     private String lastUpdateUser;
 
-    public Question() {}
+    public Question() {
+    }
 
     public Long getId() {
         return id;
@@ -110,13 +105,5 @@ public class Question {
 
     public void setLastUpdateUser(String lastUpdateUser) {
         this.lastUpdateUser = lastUpdateUser;
-    }
-
-    public List<AnswerVersion> getAnswerVersions() {
-        return answerVersions;
-    }
-
-    public void setAnswerVersions(List<AnswerVersion> answerVersions) {
-        this.answerVersions = answerVersions;
     }
 }

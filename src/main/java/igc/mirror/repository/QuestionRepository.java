@@ -1,12 +1,17 @@
 package igc.mirror.repository;
 
+import igc.mirror.dto.QuestionDto;
 import igc.mirror.model.Question;
+import jooqdata.tables.TAnswerVersion;
 import jooqdata.tables.TQuestion;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
+import static org.jooq.impl.DSL.multiset;
+import static org.jooq.impl.DSL.select;
 
 @Repository
 public class QuestionRepository {
@@ -18,9 +23,18 @@ public class QuestionRepository {
      *
      * @return список вопросов
      */
-    public List<Question> findAllQuestions() {
-        return dsl.selectFrom(TQuestion.T_QUESTION)
-                .fetchInto(Question.class);
+    public List<QuestionDto> findAllQuestions() {
+        return dsl.select(TQuestion.T_QUESTION.NAME,
+                        TQuestion.T_QUESTION.ORDER_NO,
+                        TQuestion.T_QUESTION.ACTUAL_TO,
+                        multiset(
+                                select(TAnswerVersion.T_ANSWER_VERSION.NAME,
+                                        TAnswerVersion.T_ANSWER_VERSION.ORDER_NO,
+                                        TAnswerVersion.T_ANSWER_VERSION.IS_USED)
+                                        .from(TAnswerVersion.T_ANSWER_VERSION)
+                                        .where(TAnswerVersion.T_ANSWER_VERSION.QUESTION_ID.eq(TQuestion.T_QUESTION.ID))).as("answerVersions"))
+                .from(TQuestion.T_QUESTION)
+                .fetchInto(QuestionDto.class);
     }
 
     /**

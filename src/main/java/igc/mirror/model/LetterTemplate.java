@@ -3,7 +3,7 @@ package igc.mirror.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class LetterTemplate { //extends TLetterTemplate {
+public class LetterTemplate {
     private Long id;
     private String letterType;
     private String title;
@@ -106,8 +106,4 @@ public class LetterTemplate { //extends TLetterTemplate {
     public void setAcceptableDocumentFormat(String acceptableDocumentFormat) {
         this.acceptableDocumentFormat = acceptableDocumentFormat;
     }
-
-//    public LetterTemplate(Long id, String letterType, String title, Long letterSample, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, String typeTemplate, String acceptableDocumentFormat) {
-//        super(id, letterType, title, letterSample, createDate, createUser, lastUpdateDate, lastUpdateUser, typeTemplate, acceptableDocumentFormat);
-//    }
 }

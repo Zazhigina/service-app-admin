@@ -3,10 +3,7 @@ package igc.mirror.service;
 import igc.mirror.auth.UserDetails;
 import igc.mirror.doc.DocService;
 import igc.mirror.doc.dto.DocumentDto;
-import igc.mirror.dto.LetterTemplateDto;
-import igc.mirror.dto.LetterTemplateTypeDto;
-import igc.mirror.dto.LetterTemplateBriefInfoDto;
-import igc.mirror.dto.TemplateDto;
+import igc.mirror.dto.*;
 import igc.mirror.exception.common.EntityNotSavedException;
 import igc.mirror.filter.LetterTemplateSearchCriteria;
 import igc.mirror.model.LetterTemplate;
@@ -102,11 +99,11 @@ public class TemplateService {
         LetterTemplate letterTemplate = letterTemplateRepository.findByLetterType(letterType);
         letterTemplate.setVariables(letterTemplateVariableRepository.getLetterTemplateVariables(letterTemplate.getId()));
 
-        DocumentDto documentDto = docService.retrieveDocumentInfo(letterTemplate.getLetterSample());
         LetterTemplateDto letterTemplateDto = new LetterTemplateDto(letterTemplate);
-        letterTemplateDto.setSampleName(documentDto.getFilename());
-        letterTemplateDto.setSampleSize(documentDto.getFileSize());
-        letterTemplateDto.setSampleCreateDate(documentDto.getCreateDate());
+
+        DocumentDto documentDto = docService.retrieveDocumentInfo(letterTemplate.getLetterSample());
+
+        letterTemplateDto.setSampleInfo(new FileDto(documentDto));
 
         return letterTemplateDto;
     }
@@ -138,7 +135,6 @@ public class TemplateService {
         letterTemplate.setLetterSample(documentUpload.getId());
 
         try {
-            //return LetterTemplateDto.fromModel(letterTemplateRepository.save(letterTemplate));
             LetterTemplate savedLetterTemplate = letterTemplateRepository.save(letterTemplate);
             if (letterTemplateRequest.getVariables() != null) {
                 List<LetterTemplateVariable> letterTemplateVariables = letterTemplateRequest.getVariables()
@@ -191,7 +187,6 @@ public class TemplateService {
         logger.info("Изменение шаблона с letter_type - {}, id - {}", letterTemplateRequest.getLetterType(), id);
 
         LetterTemplate letterTemplate = letterTemplateRepository.find(id);
-        //letterTemplate.setTypeTemplate(letterTemplateRequest.getTypeTemplate().getName());
         letterTemplate.setTitle(letterTemplateRequest.getTitle());
         letterTemplate.setLastUpdateUser(userDetails.getUsername());
 
@@ -263,17 +258,16 @@ public class TemplateService {
      * @return шаблон
      */
     public TemplateDto retrieveTemplate(String letterType) {
-        LetterTemplateDto templateInfo = findByLetterType(letterType);
-
-        DocumentDto document = docService.downloadDocument(templateInfo.getLetterSample());
+        LetterTemplateDto letterTemplateDto = findByLetterType(letterType);
 
         TemplateDto template = new TemplateDto();
-        template.setTitle(templateInfo.getTitle());
-        template.setResource(document.getResource());
-        template.setFileName(templateInfo.getSampleName());
-        template.setFileSize(templateInfo.getSampleSize());
-        template.setFileCreateDate(templateInfo.getSampleCreateDate());
-        template.setVariables(templateInfo.getVariables());
+        template.setTitle(letterTemplateDto.getTitle());
+        template.setVariables(letterTemplateDto.getVariables());
+
+        FileDto templateBody = letterTemplateDto.getSampleInfo();
+        templateBody.setResource(docService.downloadDocument(letterTemplateDto.getLetterSample()).getResource());
+
+        template.setTemplateBody(templateBody);
 
         return template;
     }

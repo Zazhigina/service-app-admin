@@ -64,6 +64,7 @@ public class LetterTemplateRepository implements JooqCommonRepository<LetterTemp
     }
 
     @Override
+    @Deprecated
     public Page<LetterTemplate> findByFilters(DataFilter<?> dataFilter, Pageable pageable) {
         LetterTemplateSearchCriteria criteria = (dataFilter != null ? (LetterTemplateSearchCriteria) dataFilter.getSearchCriteria() : null);
 

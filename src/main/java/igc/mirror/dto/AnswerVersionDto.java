@@ -1,7 +1,6 @@
 package igc.mirror.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import igc.mirror.model.AnswerVersion;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

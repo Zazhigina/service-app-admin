@@ -9,7 +9,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -24,51 +23,10 @@ public class LetterTemplateDto {
     private LetterTemplateType typeTemplate;
     private Map<String, String> variables;
     private Long letterSample;
-    private String sampleName;
-    private Long sampleSize;
-    private LocalDateTime sampleCreateDate;
-//    private String createUser;
-//    private LocalDateTime lastUpdateDate;
-//    private String lastUpdateUser;
+    private FileDto sampleInfo;
 
     public LetterTemplateDto() {
     }
-
-//    public LetterTemplateDto(Long id,
-//                             String letterType,
-//                             String title,
-//                             Long letterSample,
-//                             LetterTemplateType typeTemplate,
-//                             Map<String, String> variables) {
-//                             LocalDateTime createDate,
-//                             String createUser,
-//                             LocalDateTime lastUpdateDate,
-//                             String lastUpdateUser) {
-//        this.id = id;
-//        this.letterType = letterType;
-//        this.title = title;
-//        this.letterSample = letterSample;
-//        this.typeTemplate = typeTemplate;
-//        this.variables = variables;
-//        this.createDate = createDate;
-//        this.createUser = createUser;
-//        this.lastUpdateDate = lastUpdateDate;
-//        this.lastUpdateUser = lastUpdateUser;
-//    }
-
-//    public static LetterTemplateDto fromModel(LetterTemplate letterTemplate){
-//        return new LetterTemplateDto(
-//                letterTemplate.getId(),
-//                letterTemplate.getLetterType(),
-//                letterTemplate.getTitle(),
-//                letterTemplate.getLetterSample(),
-//                LetterTemplateType.getByName(letterTemplate.getTypeTemplate()),
-//                letterTemplate.getCreateDate(),
-//                letterTemplate.getCreateUser(),
-//                letterTemplate.getLastUpdateDate(),
-//                letterTemplate.getLastUpdateUser()
-//        );
-//    }
 
     public LetterTemplateDto(LetterTemplate letterTemplate) {
         this.id = letterTemplate.getId();
@@ -129,51 +87,11 @@ public class LetterTemplateDto {
         this.letterSample = letterSample;
     }
 
-    public String getSampleName() {
-        return sampleName;
+    public FileDto getSampleInfo() {
+        return sampleInfo;
     }
 
-    public void setSampleName(String sampleName) {
-        this.sampleName = sampleName;
+    public void setSampleInfo(FileDto sampleInfo) {
+        this.sampleInfo = sampleInfo;
     }
-
-    public Long getSampleSize() {
-        return sampleSize;
-    }
-
-    public void setSampleSize(Long sampleSize) {
-        this.sampleSize = sampleSize;
-    }
-
-    public LocalDateTime getSampleCreateDate() {
-        return sampleCreateDate;
-    }
-
-    public void setSampleCreateDate(LocalDateTime sampleCreateDate) {
-        this.sampleCreateDate = sampleCreateDate;
-    }
-
-    //    public String getCreateUser() {
-//        return createUser;
-//    }
-
-//    public void setCreateUser(String createUser) {
-//        this.createUser = createUser;
-//    }
-
-//    public LocalDateTime getLastUpdateDate() {
-//        return lastUpdateDate;
-//    }
-
-//    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
-//        this.lastUpdateDate = lastUpdateDate;
-//    }
-
-//    public String getLastUpdateUser() {
-//        return lastUpdateUser;
-//    }
-
-//    public void setLastUpdateUser(String lastUpdateUser) {
-//        this.lastUpdateUser = lastUpdateUser;
-//    }
 }

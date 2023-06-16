@@ -1,7 +1,6 @@
 package igc.mirror.dto;
 
 import igc.mirror.model.LetterTemplate;
-import igc.mirror.model.LetterTemplateVariable;
 import igc.mirror.ref.LetterTemplateType;
 import igc.mirror.utils.validate.group.ChangeGroup;
 import igc.mirror.utils.validate.group.CreateGroup;
@@ -9,8 +8,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 
+import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class LetterTemplateDto {
     @Null(groups = {CreateGroup.class})
@@ -23,7 +22,9 @@ public class LetterTemplateDto {
     private LetterTemplateType typeTemplate;
     private Map<String, String> variables;
     private Long letterSample;
-    private FileDto sampleInfo;
+    private String sampleName;
+    private Long sampleSize;
+    private LocalDateTime sampleCreateDate;
 
     public LetterTemplateDto() {
     }
@@ -34,9 +35,6 @@ public class LetterTemplateDto {
         this.title = letterTemplate.getTitle();
         this.letterSample = letterTemplate.getLetterSample();
         this.typeTemplate = LetterTemplateType.valueOf(letterTemplate.getTypeTemplate());
-        this.variables = letterTemplate.getVariables() != null
-                ? letterTemplate.getVariables().stream().collect(Collectors.toMap(LetterTemplateVariable::getName, LetterTemplateVariable::getVal))
-                : null;
     }
 
     public Long getId() {
@@ -87,11 +85,27 @@ public class LetterTemplateDto {
         this.letterSample = letterSample;
     }
 
-    public FileDto getSampleInfo() {
-        return sampleInfo;
+    public String getSampleName() {
+        return sampleName;
     }
 
-    public void setSampleInfo(FileDto sampleInfo) {
-        this.sampleInfo = sampleInfo;
+    public void setSampleName(String sampleName) {
+        this.sampleName = sampleName;
+    }
+
+    public Long getSampleSize() {
+        return sampleSize;
+    }
+
+    public void setSampleSize(Long sampleSize) {
+        this.sampleSize = sampleSize;
+    }
+
+    public LocalDateTime getSampleCreateDate() {
+        return sampleCreateDate;
+    }
+
+    public void setSampleCreateDate(LocalDateTime sampleCreateDate) {
+        this.sampleCreateDate = sampleCreateDate;
     }
 }

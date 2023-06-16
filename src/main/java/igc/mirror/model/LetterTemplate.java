@@ -1,14 +1,12 @@
 package igc.mirror.model;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class LetterTemplate {
     private Long id;
     private String letterType;
     private String title;
     private Long letterSample;
-    private List<LetterTemplateVariable> variables;
     private LocalDateTime createDate;
     private String createUser;
     private LocalDateTime lastUpdateDate;
@@ -49,14 +47,6 @@ public class LetterTemplate {
 
     public void setLetterSample(Long letterSample) {
         this.letterSample = letterSample;
-    }
-
-    public List<LetterTemplateVariable> getVariables() {
-        return variables;
-    }
-
-    public void setVariables(List<LetterTemplateVariable> variables) {
-        this.variables = variables;
     }
 
     public LocalDateTime getCreateDate() {

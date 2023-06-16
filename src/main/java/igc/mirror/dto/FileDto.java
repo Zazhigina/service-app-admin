@@ -1,37 +1,51 @@
 package igc.mirror.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import igc.mirror.doc.dto.DocumentDto;
-import org.springframework.core.io.Resource;
 
 import java.time.LocalDateTime;
 
 public class FileDto {
-    @JsonIgnore
-    private Resource resource;
+    /**
+     * Содержимое файла в Base64
+     */
+    private String content;
+
+    /**
+     * Имя файла
+     */
     private String fileName;
+
+    /**
+     * Размер файла
+     */
     private Long fileSize;
+
+    /**
+     * Дата создания файла
+     */
     private LocalDateTime fileCreateDate;
 
+    /**
+     * Тип файла
+     */
     private String fileType;
 
     public FileDto() {
     }
 
     public FileDto (DocumentDto document) {
-        resource = document.getResource();
         fileName = document.getFilename();
         fileSize = document.getFileSize();
         fileCreateDate = document.getCreateDate();
         fileType = document.getFileMimeType();
     }
 
-    public Resource getResource() {
-        return resource;
+    public String getContent() {
+        return content;
     }
 
-    public void setResource(Resource resource) {
-        this.resource = resource;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getFileName() {

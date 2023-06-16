@@ -4,18 +4,14 @@ import igc.mirror.exception.common.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -144,4 +140,10 @@ public class EntityExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(exceptionInfo, HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(ConvertFileToByteArrayException.class)
+    ResponseEntity<ExceptionInfo> handleConvertToByteArrayFile(ConvertFileToByteArrayException ex, HttpServletRequest request) {
+        ExceptionInfo exceptionInfo = new ExceptionInfo(ex.getMessage(), "");
+        exceptionInfo.setPublicErrorInfo(request, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(exceptionInfo, HttpStatus.BAD_REQUEST);
+    }
 }

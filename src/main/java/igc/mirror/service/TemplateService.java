@@ -4,6 +4,7 @@ import igc.mirror.auth.UserDetails;
 import igc.mirror.doc.DocService;
 import igc.mirror.doc.dto.DocumentDto;
 import igc.mirror.dto.*;
+import igc.mirror.exception.common.ConvertFileToByteArrayException;
 import igc.mirror.exception.common.EntityNotSavedException;
 import igc.mirror.filter.LetterTemplateSearchCriteria;
 import igc.mirror.model.LetterTemplate;
@@ -28,9 +29,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -97,13 +97,14 @@ public class TemplateService {
      */
     public LetterTemplateDto findByLetterType(String letterType) {
         LetterTemplate letterTemplate = letterTemplateRepository.findByLetterType(letterType);
-        letterTemplate.setVariables(letterTemplateVariableRepository.getLetterTemplateVariables(letterTemplate.getId()));
-
-        LetterTemplateDto letterTemplateDto = new LetterTemplateDto(letterTemplate);
 
         DocumentDto documentDto = docService.retrieveDocumentInfo(letterTemplate.getLetterSample());
 
-        letterTemplateDto.setSampleInfo(new FileDto(documentDto));
+        LetterTemplateDto letterTemplateDto = new LetterTemplateDto(letterTemplate);
+        letterTemplateDto.setVariables(letterTemplateVariableRepository.getLetterTemplateVariablesAsMap(letterTemplate.getId()));
+        letterTemplateDto.setSampleName(documentDto.getFilename());
+        letterTemplateDto.setSampleSize(documentDto.getFileSize());
+        letterTemplateDto.setSampleCreateDate(documentDto.getCreateDate());
 
         return letterTemplateDto;
     }
@@ -190,16 +191,20 @@ public class TemplateService {
         letterTemplate.setTitle(letterTemplateRequest.getTitle());
         letterTemplate.setLastUpdateUser(userDetails.getUsername());
 
+        List<LetterTemplateVariable> variables = new ArrayList<>();
+
         if (letterTemplateRequest.getVariables() != null) {
-            List<LetterTemplateVariable> variables = letterTemplateRequest.getVariables().entrySet().stream()
+            variables = letterTemplateRequest.getVariables().entrySet().stream()
                     .map(entry -> new LetterTemplateVariable(id, entry.getKey(), entry.getValue())).toList();
-            letterTemplate.setVariables(variables);
         }
 
         letterTemplateRepository.save(letterTemplate);
-        letterTemplateVariableRepository.synchronizeLetterTemplateVariable(letterTemplate);
+        letterTemplateVariableRepository.synchronizeLetterTemplateVariable(id, variables);
 
-        return new LetterTemplateDto(letterTemplate);
+        LetterTemplateDto letterTemplateDto = new LetterTemplateDto(letterTemplate);
+        letterTemplateDto.setVariables(letterTemplateRequest.getVariables());
+
+        return letterTemplateDto;
     }
 
     /**
@@ -258,14 +263,23 @@ public class TemplateService {
      * @return шаблон
      */
     public TemplateDto retrieveTemplate(String letterType) {
-        LetterTemplateDto letterTemplateDto = findByLetterType(letterType);
+        LetterTemplate letterTemplate = letterTemplateRepository.findByLetterType(letterType);
 
         TemplateDto template = new TemplateDto();
-        template.setTitle(letterTemplateDto.getTitle());
-        template.setVariables(letterTemplateDto.getVariables());
+        template.setTitle(letterTemplate.getTitle());
+        template.setVariables(letterTemplateVariableRepository.getLetterTemplateVariablesAsMap(letterTemplate.getId()));
 
-        FileDto templateBody = letterTemplateDto.getSampleInfo();
-        templateBody.setResource(docService.downloadDocument(letterTemplateDto.getLetterSample()).getResource());
+        DocumentDto document = docService.retrieveDocumentInfo(letterTemplate.getLetterSample());
+
+        FileDto templateBody = new FileDto(document);
+
+        document = docService.downloadDocument(letterTemplate.getLetterSample());
+
+        try {
+            templateBody.setContent(Base64.getEncoder().encodeToString(document.getResource().getContentAsByteArray()));
+        } catch (IOException e) {
+            throw new ConvertFileToByteArrayException(e.getMessage());
+        }
 
         template.setTemplateBody(templateBody);
 

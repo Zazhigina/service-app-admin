@@ -1,7 +1,6 @@
 package igc.mirror.repository;
 
 import igc.mirror.exception.common.EntityNotSavedException;
-import igc.mirror.model.LetterTemplate;
 import igc.mirror.model.LetterTemplateVariable;
 import jooqdata.tables.TLetterTemplateVariable;
 import jooqdata.tables.records.TLetterTemplateVariableRecord;
@@ -14,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class LetterTemplateVariableRepository {
@@ -25,9 +25,9 @@ public class LetterTemplateVariableRepository {
     DSLContext dsl;
 
     /**
-     * Сохраняет переменную шаблона письма в БД
+     * Сохраняет переменную шаблона в БД
      *
-     * @param letterTemplateVariable переменная шаблона письма
+     * @param letterTemplateVariable переменная шаблона
      * @return строка БД сохраненной переменной
      */
     private TLetterTemplateVariableRecord createLetterTemplateVariableRecord(LetterTemplateVariable letterTemplateVariable) {
@@ -40,7 +40,7 @@ public class LetterTemplateVariableRepository {
     /**
      * Сохраняет переменную шаблона письма в БД
      *
-     * @param letterTemplateVariable параметр шаблона письма
+     * @param letterTemplateVariable переменная шаблона
      * @return сохраненная переменная
      */
     public LetterTemplateVariable createLetterTemplateVariable(LetterTemplateVariable letterTemplateVariable) {
@@ -55,21 +55,22 @@ public class LetterTemplateVariableRepository {
     }
 
     /**
-     * Получает переменные шаблона письма в БД
+     * Получает переменные шаблона как карту
      *
-     * @param letterTemplateId идентифиатор шаблона письма
-     * @return список переменных
+     * @param letterTemplateId идентифиатор шаблона
+     * @return карта переменных
      */
-    public List<LetterTemplateVariable> getLetterTemplateVariables(Long letterTemplateId) {
-        return dsl.selectFrom(LETTER_TEMPLATE_VAR)
+    public Map<String, String> getLetterTemplateVariablesAsMap(Long letterTemplateId) {
+        return dsl.select(LETTER_TEMPLATE_VAR.NAME, LETTER_TEMPLATE_VAR.VAL)
+                .from(LETTER_TEMPLATE_VAR)
                 .where(LETTER_TEMPLATE_VAR.LETTER_TEMPLATE_ID.equal(letterTemplateId))
-                .fetchInto(LetterTemplateVariable.class);
+                .fetchMap(LETTER_TEMPLATE_VAR.NAME, LETTER_TEMPLATE_VAR.VAL);
     }
 
     /**
-     * Удаляет все переменные шаблона письма в БД
+     * Удаляет все переменные шаблона в БД
      *
-     * @param letterTemplateId идентификатор шаблона письма
+     * @param letterTemplateId идентификатор шаблона
      */
     public void deleteLetterTemplateVariable(Long letterTemplateId) {
         int deleted =
@@ -91,17 +92,16 @@ public class LetterTemplateVariableRepository {
     }
 
     /**
-     * Синхронизирует новые переменные шаблона письма с хранимыми в БД
+     * Синхронизирует новые переменные шаблона с хранимыми в БД
      *
-     * @param letterTemplate шаблон письма
+     * @param id ИД шаблона
+     * @param newVariables новые переменные
      */
-    public void synchronizeLetterTemplateVariable(LetterTemplate letterTemplate) {
+    public void synchronizeLetterTemplateVariable(Long id, List<LetterTemplateVariable> newVariables) {
         List<LetterTemplateVariable> existedVariables = dsl
                 .selectFrom(LETTER_TEMPLATE_VAR)
-                .where(LETTER_TEMPLATE_VAR.LETTER_TEMPLATE_ID.equal(letterTemplate.getId()))
+                .where(LETTER_TEMPLATE_VAR.LETTER_TEMPLATE_ID.equal(id))
                 .fetchInto(LetterTemplateVariable.class);
-
-        List<LetterTemplateVariable> newVariables = letterTemplate.getVariables();
 
         List<Long> deleteVariables = new ArrayList<>();
         List<LetterTemplateVariable> insertVariables = new ArrayList<>();
@@ -109,7 +109,7 @@ public class LetterTemplateVariableRepository {
         if (existedVariables.isEmpty() && !CollectionUtils.isEmpty(newVariables)) {
             insertVariables.addAll(newVariables);
         } else if (!existedVariables.isEmpty() && CollectionUtils.isEmpty(newVariables)) {
-            deleteLetterTemplateVariable(letterTemplate.getId());
+            deleteLetterTemplateVariable(id);
         } else if (!CollectionUtils.isEmpty(existedVariables) && !CollectionUtils.isEmpty(newVariables)) {
             // сортируем на новые и те, которые нужно удалить
             newVariables.forEach(p -> {

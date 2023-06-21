@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -64,6 +65,7 @@ public class TemplateController {
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "Сохранение нового шаблона")
+    @PreAuthorize("hasAuthority('APP_ADMIN.EXEC')")
     public ResponseEntity<LetterTemplateDto> saveLetterTemplate(@RequestPart("request") LetterTemplateDto letterTemplateRequest,
                                                                 @RequestPart("file") MultipartFile file) {
         return ResponseEntity.ok(templateService.saveLetterTemplate(letterTemplateRequest, file));
@@ -71,6 +73,7 @@ public class TemplateController {
 
     @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, value = "/doc/{id}")
     @Operation(summary = "Замена файла шаблона")
+    @PreAuthorize("hasAuthority('APP_ADMIN.EXEC')")
     public ResponseEntity<SuccessInfo> replaceLetterTemplateDoc(@PathVariable Long id, @RequestPart("file") MultipartFile file) {
         templateService.replaceLetterTemplate(id, file);
         return ResponseEntity.ok(new SuccessInfo("Операция выполнена успешно"));
@@ -78,12 +81,14 @@ public class TemplateController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Изменение данных шаблона")
+    @PreAuthorize("hasAuthority('APP_ADMIN.EXEC')")
     public ResponseEntity<LetterTemplateDto> changeLetterTemplate(@PathVariable Long id, @RequestBody LetterTemplateDto letterTemplateRequest) {
         return ResponseEntity.ok(templateService.changeLetterTemplate(id, letterTemplateRequest));
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление шаблона")
+    @PreAuthorize("hasAuthority('APP_ADMIN.EXEC')")
     public ResponseEntity<SuccessInfo> deleteLetterTemplate(@PathVariable Long id) {
         templateService.deleteLetterTemplate(id);
         return ResponseEntity.ok(new SuccessInfo("Операция выполнена успешно"));

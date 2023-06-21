@@ -58,7 +58,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(PUBLIC_ENDPOINT).permitAll()
-                        .anyRequest().hasAuthority("APP_ADMIN.EXEC")
+                        //.anyRequest().hasAuthority("APP_ADMIN.EXEC")
+                        .anyRequest().hasAuthority("ROLE_BASE")
                 );
 
         return http.build();

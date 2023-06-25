@@ -42,7 +42,7 @@ def scan_repos = [
 
 pipeline {
     parameters {
-        string(name: 'email', defaultValue: 'Sergeev.EO@gazprom-neft.ru,Stronin.IYu@omsk.gazprom-neft.ru', description: 'Email address for reports', trim: true)
+        string(name: 'email', defaultValue: 'Zaytsev.OI@gazprom-neft.ru,Stronin.IYu@omsk.gazprom-neft.ru', description: 'Email address for reports', trim: true)
         booleanParam(name: 'SAST', defaultValue: false, description: 'Run SAST code check [TRUST]')
         booleanParam(name: 'SCA', defaultValue: false, description: 'Run SCA/Dtrack dependency check [TRUST]')
         booleanParam(name: 'Clair', defaultValue: false, description: 'Run Clair container check [TRUST]')

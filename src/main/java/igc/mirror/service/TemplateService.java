@@ -30,6 +30,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -276,7 +277,8 @@ public class TemplateService {
         document = docService.downloadDocument(letterTemplate.getLetterSample());
 
         try {
-            templateBody.setContent(Base64.getEncoder().encodeToString(document.getResource().getContentAsByteArray()));
+            //templateBody.setContent(Base64.getEncoder().encodeToString(document.getResource().getContentAsByteArray()));
+            templateBody.setContent(new String(Base64.getEncoder().encode(document.getResource().getContentAsByteArray()), StandardCharsets.UTF_8));
         } catch (IOException e) {
             throw new ConvertFileToByteArrayException(e.getMessage());
         }

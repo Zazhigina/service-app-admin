@@ -21,8 +21,8 @@ public class AnswerVersionDto {
     /**
      * Вариант ответа выбран по умолчанию
      */
-    @JsonProperty("isUsed")
-    private boolean isUsed;
+    @JsonProperty("isDefault")
+    private boolean isDefault;
 
     public AnswerVersionDto() {
     }
@@ -43,11 +43,11 @@ public class AnswerVersionDto {
         this.orderNo = orderNo;
     }
 
-    public boolean isUsed() {
-        return isUsed;
+    public boolean isDefault() {
+        return isDefault;
     }
 
-    public void setUsed(boolean used) {
-        isUsed = used;
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
     }
 }

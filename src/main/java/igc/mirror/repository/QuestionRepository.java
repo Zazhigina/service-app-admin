@@ -30,7 +30,7 @@ public class QuestionRepository {
                         multiset(
                                 select(TAnswerVersion.T_ANSWER_VERSION.NAME,
                                         TAnswerVersion.T_ANSWER_VERSION.ORDER_NO,
-                                        TAnswerVersion.T_ANSWER_VERSION.IS_USED)
+                                        TAnswerVersion.T_ANSWER_VERSION.IS_DEFAULT)
                                         .from(TAnswerVersion.T_ANSWER_VERSION)
                                         .where(TAnswerVersion.T_ANSWER_VERSION.QUESTION_ID.eq(TQuestion.T_QUESTION.ID))).as("answerVersions"))
                 .from(TQuestion.T_QUESTION)

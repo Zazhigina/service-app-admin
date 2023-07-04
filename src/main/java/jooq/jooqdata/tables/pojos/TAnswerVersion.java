@@ -25,6 +25,7 @@ public class TAnswerVersion implements Serializable {
     private LocalDateTime lastUpdateDate;
     private String lastUpdateUser;
     private Boolean isUsed;
+    private Boolean isDefault;
 
     public TAnswerVersion() {}
 
@@ -38,6 +39,7 @@ public class TAnswerVersion implements Serializable {
         this.lastUpdateDate = value.lastUpdateDate;
         this.lastUpdateUser = value.lastUpdateUser;
         this.isUsed = value.isUsed;
+        this.isDefault = value.isDefault;
     }
 
     public TAnswerVersion(
@@ -49,7 +51,8 @@ public class TAnswerVersion implements Serializable {
         String createUser,
         LocalDateTime lastUpdateDate,
         String lastUpdateUser,
-        Boolean isUsed
+        Boolean isUsed,
+        Boolean isDefault
     ) {
         this.id = id;
         this.questionId = questionId;
@@ -60,6 +63,7 @@ public class TAnswerVersion implements Serializable {
         this.lastUpdateDate = lastUpdateDate;
         this.lastUpdateUser = lastUpdateUser;
         this.isUsed = isUsed;
+        this.isDefault = isDefault;
     }
 
     /**
@@ -188,7 +192,7 @@ public class TAnswerVersion implements Serializable {
 
     /**
      * Getter for <code>admin.t_answer_version.is_used</code>. Индикатор выбора
-     * ответа
+     * ответа. Удалить!!!
      */
     public Boolean getIsUsed() {
         return this.isUsed;
@@ -196,10 +200,26 @@ public class TAnswerVersion implements Serializable {
 
     /**
      * Setter for <code>admin.t_answer_version.is_used</code>. Индикатор выбора
-     * ответа
+     * ответа. Удалить!!!
      */
     public void setIsUsed(Boolean isUsed) {
         this.isUsed = isUsed;
+    }
+
+    /**
+     * Getter for <code>admin.t_answer_version.is_default</code>. Индикатор
+     * выбора ответа
+     */
+    public Boolean getIsDefault() {
+        return this.isDefault;
+    }
+
+    /**
+     * Setter for <code>admin.t_answer_version.is_default</code>. Индикатор
+     * выбора ответа
+     */
+    public void setIsDefault(Boolean isDefault) {
+        this.isDefault = isDefault;
     }
 
     @Override
@@ -265,6 +285,12 @@ public class TAnswerVersion implements Serializable {
         }
         else if (!this.isUsed.equals(other.isUsed))
             return false;
+        if (this.isDefault == null) {
+            if (other.isDefault != null)
+                return false;
+        }
+        else if (!this.isDefault.equals(other.isDefault))
+            return false;
         return true;
     }
 
@@ -281,6 +307,7 @@ public class TAnswerVersion implements Serializable {
         result = prime * result + ((this.lastUpdateDate == null) ? 0 : this.lastUpdateDate.hashCode());
         result = prime * result + ((this.lastUpdateUser == null) ? 0 : this.lastUpdateUser.hashCode());
         result = prime * result + ((this.isUsed == null) ? 0 : this.isUsed.hashCode());
+        result = prime * result + ((this.isDefault == null) ? 0 : this.isDefault.hashCode());
         return result;
     }
 
@@ -297,6 +324,7 @@ public class TAnswerVersion implements Serializable {
         sb.append(", ").append(lastUpdateDate);
         sb.append(", ").append(lastUpdateUser);
         sb.append(", ").append(isUsed);
+        sb.append(", ").append(isDefault);
 
         sb.append(")");
         return sb.toString();

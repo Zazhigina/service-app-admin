@@ -46,7 +46,7 @@ public class AnswerVersionRepository {
     public void updateAnswerVersion(AnswerVersion answerVersion) {
         dsl.update(TAnswerVersion.T_ANSWER_VERSION)
                 .set(TAnswerVersion.T_ANSWER_VERSION.NAME, answerVersion.getName())
-                .set(TAnswerVersion.T_ANSWER_VERSION.IS_USED, answerVersion.isUsed())
+                .set(TAnswerVersion.T_ANSWER_VERSION.IS_DEFAULT, answerVersion.isUsed())
                 .set(TAnswerVersion.T_ANSWER_VERSION.LAST_UPDATE_USER, answerVersion.getLastUpdateUser())
                 .where(TAnswerVersion.T_ANSWER_VERSION.ID.equal(answerVersion.getId()))
                 .execute();

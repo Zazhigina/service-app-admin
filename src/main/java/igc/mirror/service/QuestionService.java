@@ -62,7 +62,7 @@ public class QuestionService {
                 AnswerVersion currentAnswerVersion = Optional.ofNullable(answerVersionRepository.findAnswerByOrderNo(currentQuestion.getId(), answerVersion.getOrderNo()))
                         .orElseThrow(() -> new igc.mirror.exception.common.EntityNotFoundException("Вариант ответа с порядковым номером " + answerVersion.getOrderNo() + " не найден", null, AnswerVersion.class));
                 currentAnswerVersion.setName(answerVersion.getName());
-                currentAnswerVersion.setUsed(answerVersion.isUsed());
+                currentAnswerVersion.setUsed(answerVersion.isDefault());
                 currentAnswerVersion.setLastUpdateUser(userDetails.getUsername());
                 answerVersionRepository.updateAnswerVersion(currentAnswerVersion);
             }

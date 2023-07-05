@@ -24,7 +24,6 @@ public class TAnswerVersion implements Serializable {
     private String createUser;
     private LocalDateTime lastUpdateDate;
     private String lastUpdateUser;
-    private Boolean isUsed;
     private Boolean isDefault;
 
     public TAnswerVersion() {}
@@ -38,7 +37,6 @@ public class TAnswerVersion implements Serializable {
         this.createUser = value.createUser;
         this.lastUpdateDate = value.lastUpdateDate;
         this.lastUpdateUser = value.lastUpdateUser;
-        this.isUsed = value.isUsed;
         this.isDefault = value.isDefault;
     }
 
@@ -51,7 +49,6 @@ public class TAnswerVersion implements Serializable {
         String createUser,
         LocalDateTime lastUpdateDate,
         String lastUpdateUser,
-        Boolean isUsed,
         Boolean isDefault
     ) {
         this.id = id;
@@ -62,7 +59,6 @@ public class TAnswerVersion implements Serializable {
         this.createUser = createUser;
         this.lastUpdateDate = lastUpdateDate;
         this.lastUpdateUser = lastUpdateUser;
-        this.isUsed = isUsed;
         this.isDefault = isDefault;
     }
 
@@ -191,22 +187,6 @@ public class TAnswerVersion implements Serializable {
     }
 
     /**
-     * Getter for <code>admin.t_answer_version.is_used</code>. Индикатор выбора
-     * ответа. Удалить!!!
-     */
-    public Boolean getIsUsed() {
-        return this.isUsed;
-    }
-
-    /**
-     * Setter for <code>admin.t_answer_version.is_used</code>. Индикатор выбора
-     * ответа. Удалить!!!
-     */
-    public void setIsUsed(Boolean isUsed) {
-        this.isUsed = isUsed;
-    }
-
-    /**
      * Getter for <code>admin.t_answer_version.is_default</code>. Индикатор
      * выбора ответа
      */
@@ -279,12 +259,6 @@ public class TAnswerVersion implements Serializable {
         }
         else if (!this.lastUpdateUser.equals(other.lastUpdateUser))
             return false;
-        if (this.isUsed == null) {
-            if (other.isUsed != null)
-                return false;
-        }
-        else if (!this.isUsed.equals(other.isUsed))
-            return false;
         if (this.isDefault == null) {
             if (other.isDefault != null)
                 return false;
@@ -306,7 +280,6 @@ public class TAnswerVersion implements Serializable {
         result = prime * result + ((this.createUser == null) ? 0 : this.createUser.hashCode());
         result = prime * result + ((this.lastUpdateDate == null) ? 0 : this.lastUpdateDate.hashCode());
         result = prime * result + ((this.lastUpdateUser == null) ? 0 : this.lastUpdateUser.hashCode());
-        result = prime * result + ((this.isUsed == null) ? 0 : this.isUsed.hashCode());
         result = prime * result + ((this.isDefault == null) ? 0 : this.isDefault.hashCode());
         return result;
     }
@@ -323,7 +296,6 @@ public class TAnswerVersion implements Serializable {
         sb.append(", ").append(createUser);
         sb.append(", ").append(lastUpdateDate);
         sb.append(", ").append(lastUpdateUser);
-        sb.append(", ").append(isUsed);
         sb.append(", ").append(isDefault);
 
         sb.append(")");

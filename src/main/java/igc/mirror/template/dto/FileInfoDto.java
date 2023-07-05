@@ -4,11 +4,12 @@ import igc.mirror.doc.dto.DocumentDto;
 
 import java.time.LocalDateTime;
 
-public class FileDto {
+public class FileInfoDto {
+
     /**
-     * Содержимое файла в Base64
+     * Идентификатор файла в сервисе документации
      */
-    private String content;
+    private Long fileId;
 
     /**
      * Имя файла
@@ -30,22 +31,23 @@ public class FileDto {
      */
     private String fileType;
 
-    public FileDto() {
+    public FileInfoDto() {
     }
 
-    public FileDto (DocumentDto document) {
+    public FileInfoDto(DocumentDto document) {
+        fileId = document.getId();
         fileName = document.getFilename();
         fileSize = document.getFileSize();
         fileCreateDate = document.getCreateDate();
         fileType = document.getFileMimeType();
     }
 
-    public String getContent() {
-        return content;
+    public Long getFileId() {
+        return fileId;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setFileId(Long fileId) {
+        this.fileId = fileId;
     }
 
     public String getFileName() {

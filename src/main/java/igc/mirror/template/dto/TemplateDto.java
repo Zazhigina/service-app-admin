@@ -5,7 +5,7 @@ import java.util.Map;
 public class TemplateDto {
     private String title;
     private Map<String, String> variables;
-    private FileDto templateBody;
+    private FileInfoDto templateFileInfo;
 
     public String getTitle() {
         return title;
@@ -23,11 +23,11 @@ public class TemplateDto {
         this.variables = variables;
     }
 
-    public FileDto getTemplateBody() {
-        return templateBody;
+    public FileInfoDto getTemplateFileInfo() {
+        return templateFileInfo;
     }
 
-    public void setTemplateBody(FileDto templateBody) {
-        this.templateBody = templateBody;
+    public void setTemplateFileInfo(FileInfoDto templateFileInfo) {
+        this.templateFileInfo = templateFileInfo;
     }
 }

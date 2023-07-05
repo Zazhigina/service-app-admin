@@ -3,7 +3,6 @@ package igc.mirror.template.service;
 import igc.mirror.auth.UserDetails;
 import igc.mirror.doc.DocService;
 import igc.mirror.doc.dto.DocumentDto;
-import igc.mirror.exception.common.ConvertFileToByteArrayException;
 import igc.mirror.exception.common.EntityNotSavedException;
 import igc.mirror.template.dto.*;
 import igc.mirror.template.filter.LetterTemplateSearchCriteria;
@@ -29,9 +28,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -264,26 +264,16 @@ public class TemplateService {
      * @return шаблон
      */
     public TemplateDto retrieveTemplate(String letterType) {
+        logger.info("Запрос шаблона с letter_type - {}", letterType);
+
         LetterTemplate letterTemplate = letterTemplateRepository.findByLetterType(letterType);
 
         TemplateDto template = new TemplateDto();
         template.setTitle(letterTemplate.getTitle());
         template.setVariables(letterTemplateVariableRepository.getLetterTemplateVariablesAsMap(letterTemplate.getId()));
 
-        DocumentDto document = docService.retrieveDocumentInfo(letterTemplate.getLetterSample());
-
-        FileDto templateBody = new FileDto(document);
-
-        document = docService.downloadDocument(letterTemplate.getLetterSample());
-
-        try {
-            //templateBody.setContent(Base64.getEncoder().encodeToString(document.getResource().getContentAsByteArray()));
-            templateBody.setContent(new String(Base64.getEncoder().encode(document.getResource().getContentAsByteArray()), StandardCharsets.UTF_8));
-        } catch (IOException e) {
-            throw new ConvertFileToByteArrayException(e.getMessage());
-        }
-
-        template.setTemplateBody(templateBody);
+        DocumentDto documentInfo = docService.retrieveDocumentInfo(letterTemplate.getLetterSample());
+        template.setTemplateFileInfo(new FileInfoDto(documentInfo));
 
         return template;
     }

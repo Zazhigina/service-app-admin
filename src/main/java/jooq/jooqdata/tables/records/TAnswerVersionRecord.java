@@ -10,8 +10,8 @@ import jooqdata.tables.TAnswerVersion;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record10;
-import org.jooq.Row10;
+import org.jooq.Record9;
+import org.jooq.Row9;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Вариант ответа на вопрос
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionRecord> implements Record10<Long, Long, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean, Boolean> {
+public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionRecord> implements Record9<Long, Long, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean> {
 
     private static final long serialVersionUID = 1L;
 
@@ -148,27 +148,11 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
     }
 
     /**
-     * Setter for <code>admin.t_answer_version.is_used</code>. Индикатор выбора
-     * ответа. Удалить!!!
-     */
-    public void setIsUsed(Boolean value) {
-        set(8, value);
-    }
-
-    /**
-     * Getter for <code>admin.t_answer_version.is_used</code>. Индикатор выбора
-     * ответа. Удалить!!!
-     */
-    public Boolean getIsUsed() {
-        return (Boolean) get(8);
-    }
-
-    /**
      * Setter for <code>admin.t_answer_version.is_default</code>. Индикатор
      * выбора ответа
      */
     public void setIsDefault(Boolean value) {
-        set(9, value);
+        set(8, value);
     }
 
     /**
@@ -176,7 +160,7 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
      * выбора ответа
      */
     public Boolean getIsDefault() {
-        return (Boolean) get(9);
+        return (Boolean) get(8);
     }
 
     // -------------------------------------------------------------------------
@@ -189,17 +173,17 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
     }
 
     // -------------------------------------------------------------------------
-    // Record10 type implementation
+    // Record9 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<Long, Long, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean, Boolean> fieldsRow() {
-        return (Row10) super.fieldsRow();
+    public Row9<Long, Long, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean> fieldsRow() {
+        return (Row9) super.fieldsRow();
     }
 
     @Override
-    public Row10<Long, Long, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean, Boolean> valuesRow() {
-        return (Row10) super.valuesRow();
+    public Row9<Long, Long, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean> valuesRow() {
+        return (Row9) super.valuesRow();
     }
 
     @Override
@@ -244,11 +228,6 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
 
     @Override
     public Field<Boolean> field9() {
-        return TAnswerVersion.T_ANSWER_VERSION.IS_USED;
-    }
-
-    @Override
-    public Field<Boolean> field10() {
         return TAnswerVersion.T_ANSWER_VERSION.IS_DEFAULT;
     }
 
@@ -294,11 +273,6 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
 
     @Override
     public Boolean component9() {
-        return getIsUsed();
-    }
-
-    @Override
-    public Boolean component10() {
         return getIsDefault();
     }
 
@@ -344,11 +318,6 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
 
     @Override
     public Boolean value9() {
-        return getIsUsed();
-    }
-
-    @Override
-    public Boolean value10() {
         return getIsDefault();
     }
 
@@ -402,18 +371,12 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
 
     @Override
     public TAnswerVersionRecord value9(Boolean value) {
-        setIsUsed(value);
-        return this;
-    }
-
-    @Override
-    public TAnswerVersionRecord value10(Boolean value) {
         setIsDefault(value);
         return this;
     }
 
     @Override
-    public TAnswerVersionRecord values(Long value1, Long value2, String value3, Integer value4, LocalDateTime value5, String value6, LocalDateTime value7, String value8, Boolean value9, Boolean value10) {
+    public TAnswerVersionRecord values(Long value1, Long value2, String value3, Integer value4, LocalDateTime value5, String value6, LocalDateTime value7, String value8, Boolean value9) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -423,7 +386,6 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
         value7(value7);
         value8(value8);
         value9(value9);
-        value10(value10);
         return this;
     }
 
@@ -441,7 +403,7 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
     /**
      * Create a detached, initialised TAnswerVersionRecord
      */
-    public TAnswerVersionRecord(Long id, Long questionId, String name, Integer orderNo, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, Boolean isUsed, Boolean isDefault) {
+    public TAnswerVersionRecord(Long id, Long questionId, String name, Integer orderNo, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, Boolean isDefault) {
         super(TAnswerVersion.T_ANSWER_VERSION);
 
         setId(id);
@@ -452,7 +414,6 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
         setCreateUser(createUser);
         setLastUpdateDate(lastUpdateDate);
         setLastUpdateUser(lastUpdateUser);
-        setIsUsed(isUsed);
         setIsDefault(isDefault);
     }
 
@@ -471,7 +432,6 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
             setCreateUser(value.getCreateUser());
             setLastUpdateDate(value.getLastUpdateDate());
             setLastUpdateUser(value.getLastUpdateUser());
-            setIsUsed(value.getIsUsed());
             setIsDefault(value.getIsDefault());
         }
     }

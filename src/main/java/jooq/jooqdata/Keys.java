@@ -11,6 +11,7 @@ import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
 import jooqdata.tables.TLetterTemplateVariable;
 import jooqdata.tables.TQuestion;
+import jooqdata.tables.TVariable;
 import jooqdata.tables.records.AParamRecord;
 import jooqdata.tables.records.TAnswerVersionRecord;
 import jooqdata.tables.records.TLetterTemplateAcceptableDocumentFormatEnumRecord;
@@ -18,6 +19,7 @@ import jooqdata.tables.records.TLetterTemplateRecord;
 import jooqdata.tables.records.TLetterTemplateTypeTemplateEnumRecord;
 import jooqdata.tables.records.TLetterTemplateVariableRecord;
 import jooqdata.tables.records.TQuestionRecord;
+import jooqdata.tables.records.TVariableRecord;
 
 import org.jooq.ForeignKey;
 import org.jooq.TableField;
@@ -47,6 +49,7 @@ public class Keys {
     public static final UniqueKey<TLetterTemplateTypeTemplateEnumRecord> T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM_UN = Internal.createUniqueKey(TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM, DSL.name("t_letter_template_type_template_enum_un"), new TableField[] { TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM.NAME }, true);
     public static final UniqueKey<TLetterTemplateVariableRecord> T_LETTER_TEMPLATE_VARIABLES_PK = Internal.createUniqueKey(TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE, DSL.name("t_letter_template_variables_pk"), new TableField[] { TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE.ID }, true);
     public static final UniqueKey<TQuestionRecord> T_QUESTION_PK = Internal.createUniqueKey(TQuestion.T_QUESTION, DSL.name("t_question_pk"), new TableField[] { TQuestion.T_QUESTION.ID }, true);
+    public static final UniqueKey<TVariableRecord> T_VARIABLE_PK = Internal.createUniqueKey(TVariable.T_VARIABLE, DSL.name("t_variable_pk"), new TableField[] { TVariable.T_VARIABLE.ID }, true);
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -55,5 +58,6 @@ public class Keys {
     public static final ForeignKey<TAnswerVersionRecord, TQuestionRecord> T_ANSWER_VERSION__T_ANSWER_VERSION_FK = Internal.createForeignKey(TAnswerVersion.T_ANSWER_VERSION, DSL.name("t_answer_version_fk"), new TableField[] { TAnswerVersion.T_ANSWER_VERSION.QUESTION_ID }, Keys.T_QUESTION_PK, new TableField[] { TQuestion.T_QUESTION.ID }, true);
     public static final ForeignKey<TLetterTemplateRecord, TLetterTemplateTypeTemplateEnumRecord> T_LETTER_TEMPLATE__T_LETTER_TEMPLATE_FK_1 = Internal.createForeignKey(TLetterTemplate.T_LETTER_TEMPLATE, DSL.name("t_letter_template_fk_1"), new TableField[] { TLetterTemplate.T_LETTER_TEMPLATE.TYPE_TEMPLATE }, Keys.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM_UN, new TableField[] { TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM.NAME }, true);
     public static final ForeignKey<TLetterTemplateRecord, TLetterTemplateAcceptableDocumentFormatEnumRecord> T_LETTER_TEMPLATE__T_LETTER_TEMPLATE_FK_2 = Internal.createForeignKey(TLetterTemplate.T_LETTER_TEMPLATE, DSL.name("t_letter_template_fk_2"), new TableField[] { TLetterTemplate.T_LETTER_TEMPLATE.ACCEPTABLE_DOCUMENT_FORMAT }, Keys.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM_UN, new TableField[] { TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM.NAME }, true);
-    public static final ForeignKey<TLetterTemplateVariableRecord, TLetterTemplateRecord> T_LETTER_TEMPLATE_VARIABLE__T_LETTER_TEMPLATE_VARIABLES_FK = Internal.createForeignKey(TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE, DSL.name("t_letter_template_variables_fk"), new TableField[] { TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE.LETTER_TEMPLATE_ID }, Keys.T_LETTER_TEMPLATE_PK, new TableField[] { TLetterTemplate.T_LETTER_TEMPLATE.ID }, true);
+    public static final ForeignKey<TLetterTemplateVariableRecord, TLetterTemplateRecord> T_LETTER_TEMPLATE_VARIABLE__T_LETTER_TEMPLATE_VARIABLE_FK1 = Internal.createForeignKey(TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE, DSL.name("t_letter_template_variable_fk1"), new TableField[] { TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE.LETTER_TEMPLATE_ID }, Keys.T_LETTER_TEMPLATE_PK, new TableField[] { TLetterTemplate.T_LETTER_TEMPLATE.ID }, true);
+    public static final ForeignKey<TLetterTemplateVariableRecord, TVariableRecord> T_LETTER_TEMPLATE_VARIABLE__T_LETTER_TEMPLATE_VARIABLE_FK2 = Internal.createForeignKey(TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE, DSL.name("t_letter_template_variable_fk2"), new TableField[] { TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE.VARIABLE_ID }, Keys.T_VARIABLE_PK, new TableField[] { TVariable.T_VARIABLE.ID }, true);
 }

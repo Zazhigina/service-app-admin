@@ -11,6 +11,7 @@ import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
 import jooqdata.tables.TLetterTemplateVariable;
 import jooqdata.tables.TQuestion;
+import jooqdata.tables.TVariable;
 
 
 /**
@@ -53,4 +54,9 @@ public class Tables {
      * Преднастроенный вопрос
      */
     public static final TQuestion T_QUESTION = TQuestion.T_QUESTION;
+
+    /**
+     * Переменная
+     */
+    public static final TVariable T_VARIABLE = TVariable.T_VARIABLE;
 }

@@ -10,8 +10,8 @@ import jooqdata.tables.TLetterTemplateVariable;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record8;
-import org.jooq.Row8;
+import org.jooq.Record9;
+import org.jooq.Row9;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Переменные к шаблону письма
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class TLetterTemplateVariableRecord extends UpdatableRecordImpl<TLetterTemplateVariableRecord> implements Record8<Long, Long, String, String, LocalDateTime, String, LocalDateTime, String> {
+public class TLetterTemplateVariableRecord extends UpdatableRecordImpl<TLetterTemplateVariableRecord> implements Record9<Long, Long, String, String, LocalDateTime, String, LocalDateTime, String, Long> {
 
     private static final long serialVersionUID = 1L;
 
@@ -58,14 +58,16 @@ public class TLetterTemplateVariableRecord extends UpdatableRecordImpl<TLetterTe
     }
 
     /**
-     * Setter for <code>admin.t_letter_template_variable.name</code>. Переменная
+     * Setter for <code>admin.t_letter_template_variable.name</code>.
+     * Переменная. Удалить!!!
      */
     public void setName(String value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>admin.t_letter_template_variable.name</code>. Переменная
+     * Getter for <code>admin.t_letter_template_variable.name</code>.
+     * Переменная. Удалить!!!
      */
     public String getName() {
         return (String) get(2);
@@ -73,7 +75,7 @@ public class TLetterTemplateVariableRecord extends UpdatableRecordImpl<TLetterTe
 
     /**
      * Setter for <code>admin.t_letter_template_variable.val</code>.
-     * Наименование переменной
+     * Наименование переменной. Удалить!!!
      */
     public void setVal(String value) {
         set(3, value);
@@ -81,7 +83,7 @@ public class TLetterTemplateVariableRecord extends UpdatableRecordImpl<TLetterTe
 
     /**
      * Getter for <code>admin.t_letter_template_variable.val</code>.
-     * Наименование переменной
+     * Наименование переменной. Удалить!!!
      */
     public String getVal() {
         return (String) get(3);
@@ -155,6 +157,22 @@ public class TLetterTemplateVariableRecord extends UpdatableRecordImpl<TLetterTe
         return (String) get(7);
     }
 
+    /**
+     * Setter for <code>admin.t_letter_template_variable.variable_id</code>.
+     * Переменная
+     */
+    public void setVariableId(Long value) {
+        set(8, value);
+    }
+
+    /**
+     * Getter for <code>admin.t_letter_template_variable.variable_id</code>.
+     * Переменная
+     */
+    public Long getVariableId() {
+        return (Long) get(8);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -165,17 +183,17 @@ public class TLetterTemplateVariableRecord extends UpdatableRecordImpl<TLetterTe
     }
 
     // -------------------------------------------------------------------------
-    // Record8 type implementation
+    // Record9 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<Long, Long, String, String, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row9<Long, Long, String, String, LocalDateTime, String, LocalDateTime, String, Long> fieldsRow() {
+        return (Row9) super.fieldsRow();
     }
 
     @Override
-    public Row8<Long, Long, String, String, LocalDateTime, String, LocalDateTime, String> valuesRow() {
-        return (Row8) super.valuesRow();
+    public Row9<Long, Long, String, String, LocalDateTime, String, LocalDateTime, String, Long> valuesRow() {
+        return (Row9) super.valuesRow();
     }
 
     @Override
@@ -219,6 +237,11 @@ public class TLetterTemplateVariableRecord extends UpdatableRecordImpl<TLetterTe
     }
 
     @Override
+    public Field<Long> field9() {
+        return TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE.VARIABLE_ID;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -259,6 +282,11 @@ public class TLetterTemplateVariableRecord extends UpdatableRecordImpl<TLetterTe
     }
 
     @Override
+    public Long component9() {
+        return getVariableId();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -296,6 +324,11 @@ public class TLetterTemplateVariableRecord extends UpdatableRecordImpl<TLetterTe
     @Override
     public String value8() {
         return getLastUpdateUser();
+    }
+
+    @Override
+    public Long value9() {
+        return getVariableId();
     }
 
     @Override
@@ -347,7 +380,13 @@ public class TLetterTemplateVariableRecord extends UpdatableRecordImpl<TLetterTe
     }
 
     @Override
-    public TLetterTemplateVariableRecord values(Long value1, Long value2, String value3, String value4, LocalDateTime value5, String value6, LocalDateTime value7, String value8) {
+    public TLetterTemplateVariableRecord value9(Long value) {
+        setVariableId(value);
+        return this;
+    }
+
+    @Override
+    public TLetterTemplateVariableRecord values(Long value1, Long value2, String value3, String value4, LocalDateTime value5, String value6, LocalDateTime value7, String value8, Long value9) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -356,6 +395,7 @@ public class TLetterTemplateVariableRecord extends UpdatableRecordImpl<TLetterTe
         value6(value6);
         value7(value7);
         value8(value8);
+        value9(value9);
         return this;
     }
 
@@ -373,7 +413,7 @@ public class TLetterTemplateVariableRecord extends UpdatableRecordImpl<TLetterTe
     /**
      * Create a detached, initialised TLetterTemplateVariableRecord
      */
-    public TLetterTemplateVariableRecord(Long id, Long letterTemplateId, String name, String val, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser) {
+    public TLetterTemplateVariableRecord(Long id, Long letterTemplateId, String name, String val, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, Long variableId) {
         super(TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE);
 
         setId(id);
@@ -384,6 +424,7 @@ public class TLetterTemplateVariableRecord extends UpdatableRecordImpl<TLetterTe
         setCreateUser(createUser);
         setLastUpdateDate(lastUpdateDate);
         setLastUpdateUser(lastUpdateUser);
+        setVariableId(variableId);
     }
 
     /**
@@ -401,6 +442,7 @@ public class TLetterTemplateVariableRecord extends UpdatableRecordImpl<TLetterTe
             setCreateUser(value.getCreateUser());
             setLastUpdateDate(value.getLastUpdateDate());
             setLastUpdateUser(value.getLastUpdateUser());
+            setVariableId(value.getVariableId());
         }
     }
 }

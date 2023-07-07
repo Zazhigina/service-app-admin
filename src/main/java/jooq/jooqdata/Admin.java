@@ -14,6 +14,7 @@ import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
 import jooqdata.tables.TLetterTemplateVariable;
 import jooqdata.tables.TQuestion;
+import jooqdata.tables.TVariable;
 
 import org.jooq.Catalog;
 import org.jooq.Sequence;
@@ -70,6 +71,11 @@ public class Admin extends SchemaImpl {
     public final TQuestion T_QUESTION = TQuestion.T_QUESTION;
 
     /**
+     * Переменная
+     */
+    public final TVariable T_VARIABLE = TVariable.T_VARIABLE;
+
+    /**
      * No further instances allowed
      */
     private Admin() {
@@ -98,7 +104,8 @@ public class Admin extends SchemaImpl {
             TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM,
             TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM,
             TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE,
-            TQuestion.T_QUESTION
+            TQuestion.T_QUESTION,
+            TVariable.T_VARIABLE
         );
     }
 }

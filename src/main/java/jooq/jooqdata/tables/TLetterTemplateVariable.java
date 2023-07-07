@@ -15,11 +15,11 @@ import jooqdata.tables.records.TLetterTemplateVariableRecord;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function8;
+import org.jooq.Function9;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row8;
+import org.jooq.Row9;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -66,15 +66,16 @@ public class TLetterTemplateVariable extends TableImpl<TLetterTemplateVariableRe
     public final TableField<TLetterTemplateVariableRecord, Long> LETTER_TEMPLATE_ID = createField(DSL.name("letter_template_id"), SQLDataType.BIGINT.nullable(false), this, "Шаблон письма");
 
     /**
-     * The column <code>admin.t_letter_template_variable.name</code>. Переменная
+     * The column <code>admin.t_letter_template_variable.name</code>.
+     * Переменная. Удалить!!!
      */
-    public final TableField<TLetterTemplateVariableRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR, this, "Переменная");
+    public final TableField<TLetterTemplateVariableRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR, this, "Переменная. Удалить!!!");
 
     /**
      * The column <code>admin.t_letter_template_variable.val</code>.
-     * Наименование переменной
+     * Наименование переменной. Удалить!!!
      */
-    public final TableField<TLetterTemplateVariableRecord, String> VAL = createField(DSL.name("val"), SQLDataType.VARCHAR, this, "Наименование переменной");
+    public final TableField<TLetterTemplateVariableRecord, String> VAL = createField(DSL.name("val"), SQLDataType.VARCHAR, this, "Наименование переменной. Удалить!!!");
 
     /**
      * The column <code>admin.t_letter_template_variable.create_date</code>.
@@ -101,6 +102,12 @@ public class TLetterTemplateVariable extends TableImpl<TLetterTemplateVariableRe
      * изменения
      */
     public final TableField<TLetterTemplateVariableRecord, String> LAST_UPDATE_USER = createField(DSL.name("last_update_user"), SQLDataType.VARCHAR(100), this, "Автор изменения");
+
+    /**
+     * The column <code>admin.t_letter_template_variable.variable_id</code>.
+     * Переменная
+     */
+    public final TableField<TLetterTemplateVariableRecord, Long> VARIABLE_ID = createField(DSL.name("variable_id"), SQLDataType.BIGINT, this, "Переменная");
 
     private TLetterTemplateVariable(Name alias, Table<TLetterTemplateVariableRecord> aliased) {
         this(alias, aliased, null);
@@ -149,10 +156,11 @@ public class TLetterTemplateVariable extends TableImpl<TLetterTemplateVariableRe
 
     @Override
     public List<ForeignKey<TLetterTemplateVariableRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.T_LETTER_TEMPLATE_VARIABLE__T_LETTER_TEMPLATE_VARIABLES_FK);
+        return Arrays.asList(Keys.T_LETTER_TEMPLATE_VARIABLE__T_LETTER_TEMPLATE_VARIABLE_FK1, Keys.T_LETTER_TEMPLATE_VARIABLE__T_LETTER_TEMPLATE_VARIABLE_FK2);
     }
 
     private transient TLetterTemplate _tLetterTemplate;
+    private transient TVariable _tVariable;
 
     /**
      * Get the implicit join path to the <code>admin.t_letter_template</code>
@@ -160,9 +168,19 @@ public class TLetterTemplateVariable extends TableImpl<TLetterTemplateVariableRe
      */
     public TLetterTemplate tLetterTemplate() {
         if (_tLetterTemplate == null)
-            _tLetterTemplate = new TLetterTemplate(this, Keys.T_LETTER_TEMPLATE_VARIABLE__T_LETTER_TEMPLATE_VARIABLES_FK);
+            _tLetterTemplate = new TLetterTemplate(this, Keys.T_LETTER_TEMPLATE_VARIABLE__T_LETTER_TEMPLATE_VARIABLE_FK1);
 
         return _tLetterTemplate;
+    }
+
+    /**
+     * Get the implicit join path to the <code>admin.t_variable</code> table.
+     */
+    public TVariable tVariable() {
+        if (_tVariable == null)
+            _tVariable = new TVariable(this, Keys.T_LETTER_TEMPLATE_VARIABLE__T_LETTER_TEMPLATE_VARIABLE_FK2);
+
+        return _tVariable;
     }
 
     @Override
@@ -205,18 +223,18 @@ public class TLetterTemplateVariable extends TableImpl<TLetterTemplateVariableRe
     }
 
     // -------------------------------------------------------------------------
-    // Row8 type methods
+    // Row9 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<Long, Long, String, String, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row9<Long, Long, String, String, LocalDateTime, String, LocalDateTime, String, Long> fieldsRow() {
+        return (Row9) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function8<? super Long, ? super Long, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function9<? super Long, ? super Long, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super Long, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -224,7 +242,7 @@ public class TLetterTemplateVariable extends TableImpl<TLetterTemplateVariableRe
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super Long, ? super Long, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function9<? super Long, ? super Long, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super Long, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

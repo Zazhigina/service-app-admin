@@ -3,6 +3,7 @@ package igc.mirror.question.service;
 import igc.mirror.auth.UserDetails;
 import igc.mirror.question.dto.AnswerVersionDto;
 import igc.mirror.question.dto.QuestionDto;
+import igc.mirror.question.dto.StandardQuestionDto;
 import igc.mirror.question.model.AnswerVersion;
 import igc.mirror.question.model.Question;
 import igc.mirror.question.repository.AnswerVersionRepository;
@@ -32,23 +33,23 @@ public class QuestionService {
     private UserDetails userDetails;
 
     /**
-     * Получает полный перечень стандартных вопросов и вариантов ответов
+     * Получает перечень всех вопросов и вариантов ответов
      *
      * @return перечень вопросов
      */
     public List<QuestionDto> findAllQuestions() {
-        logger.info("Поучение перечня стандартных вопросов");
+        logger.info("Получение всех вопросов");
 
         return questionRepository.findAllQuestions();
     }
 
     /**
-     * Изменяет данные стандартных вопросов и вариантов ответов
+     * Изменяет данные вопросов и вариантов ответов
      *
      * @param questions список измененных вопросов
      */
     public void changeQuestions(@Valid List<QuestionDto> questions) {
-        logger.info("Изменение перечня стандартных вопросов");
+        logger.info("Изменение перечня вопросов");
         for (QuestionDto question : questions) {
 //            Question currentQuestion = Optional.ofNullable(questionRepository.findQuestionByOrderNo(question.getOrderNo()))
 //                    .orElseThrow(() -> new igc.mirror.exception.common.EntityNotFoundException("Вопрос с порядковым номером " + question.getOrderNo() + " не найден", null, Question.class));
@@ -72,5 +73,16 @@ public class QuestionService {
                 answerVersionRepository.updateAnswerVersion(currentAnswerVersion);
             }
         }
+    }
+
+    /**
+     * Получает перечень стандартных вопросов и вариантов ответов
+     *
+     * @return перечень стандартных вопросов
+     */
+    public List<StandardQuestionDto> findAllStandardQuestions() {
+        logger.info("Получение перечня стандартных вопросов");
+
+        return questionRepository.findAllStandardQuestions();
     }
 }

@@ -1,8 +1,6 @@
 package igc.mirror.variable.repository;
 
-import igc.mirror.exception.common.EntityNotFoundException;
 import igc.mirror.variable.dto.VariableDto;
-import igc.mirror.variable.model.Variable;
 import jooqdata.tables.TVariable;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
@@ -33,21 +31,5 @@ public class VariableRepository {
         return dsl.selectFrom(VARIABLE)
                 .where(condition)
                 .fetchInto(VariableDto.class);
-    }
-
-    /**
-     * Обновляет переменную в БД
-     *
-     * @param variable измененная переменная
-     */
-    public void updateVariable(Variable variable) {
-        int count = dsl.update(VARIABLE)
-                .set(VARIABLE.DEFAULT_VAL, variable.getDefaultVal())
-                .set(VARIABLE.LAST_UPDATE_DATE, variable.getLastUpdateDate())
-                .set(VARIABLE.LAST_UPDATE_USER, variable.getLastUpdateUser())
-                .where(VARIABLE.ID.eq(variable.getId()))
-                .execute();
-        if (count == 0)
-            throw new EntityNotFoundException(variable.getId(), Variable.class);
     }
 }

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("variable")
+@RequestMapping("")
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Переменные")
 public class VariableController {
@@ -19,7 +19,7 @@ public class VariableController {
     @Autowired
     private VariableService variableService;
 
-    @PostMapping("")
+    @PostMapping("variable")
     @Operation(summary = "Получение списка переменных по указанным идентификаторам")
     public List<VariableDto> findVariables(@RequestBody(required = false) List<Long> variableIds) {
         return variableService.findVariables(variableIds);

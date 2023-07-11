@@ -11,14 +11,19 @@ public class LetterTemplateVariable {
     private Long letterTemplateId;
 
     /**
-     * Имя переменной
+     * Идентификатор переменной
      */
-    private String name;
+    private Long variableId;
 
-    /**
-     * Значение переменной
-     */
-    private String val;
+//    /**
+//     * Имя переменной
+//     */
+//    private String name;
+//
+//    /**
+//     * Значение переменной
+//     */
+//    private String val;
 
     /**
      * Дата и время создания документа
@@ -42,10 +47,15 @@ public class LetterTemplateVariable {
 
     public LetterTemplateVariable() {}
 
-    public LetterTemplateVariable(long letterTemplateId, String name, String val) {
+//    public LetterTemplateVariable(long letterTemplateId, String name, String val) {
+//        this.letterTemplateId = letterTemplateId;
+//        this.name = name;
+//        this.val = val;
+//    }
+
+    public LetterTemplateVariable(Long letterTemplateId, Long variableId) {
         this.letterTemplateId = letterTemplateId;
-        this.name = name;
-        this.val = val;
+        this.variableId = variableId;
     }
 
     public Long getId() {
@@ -64,21 +74,29 @@ public class LetterTemplateVariable {
         this.letterTemplateId = letterTemplateId;
     }
 
-    public String getName() {
-        return name;
+    public Long getVariableId() {
+        return variableId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setVariableId(Long variableId) {
+        this.variableId = variableId;
     }
 
-    public String getVal() {
-        return val;
-    }
-
-    public void setVal(String val) {
-        this.val = val;
-    }
+    //    public String getName() {
+//        return name;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
+//
+//    public String getVal() {
+//        return val;
+//    }
+//
+//    public void setVal(String val) {
+//        this.val = val;
+//    }
 
     public LocalDateTime getCreateDate() {
         return createDate;

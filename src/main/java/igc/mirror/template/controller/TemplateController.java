@@ -94,7 +94,7 @@ public class TemplateController {
         return ResponseEntity.ok(new SuccessInfo("Операция выполнена успешно"));
     }
 
-    @GetMapping("/types")
+    @GetMapping("/type")
     @Operation(summary = "Поиск типов шаблонов")
     public List<LetterTemplateTypeDto> findLetterTemplateTypes() {
         return templateService.findLetterTemplateTypes();

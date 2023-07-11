@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 
 import java.time.LocalDateTime;
-import java.util.Map;
+import java.util.List;
 
 public class LetterTemplateDto {
     @Null(groups = {CreateGroup.class})
@@ -20,7 +20,8 @@ public class LetterTemplateDto {
     private String title;
     @NotNull(groups = {CreateGroup.class, ChangeGroup.class})
     private LetterTemplateType typeTemplate;
-    private Map<String, String> variables;
+    //private Map<String, String> variables;
+    private List<Long> variableIds;
     private Long letterSample;
     private String sampleName;
     private Long sampleSize;
@@ -69,12 +70,19 @@ public class LetterTemplateDto {
         this.typeTemplate = typeTemplate;
     }
 
-    public Map<String, String> getVariables() {
-        return variables;
+//    public Map<String, String> getVariables() {
+//        return variables;
+//    }
+//
+//    public void setVariables(Map<String, String> variables) {
+//        this.variables = variables;
+//    }
+    public List<Long> getVariableIds() {
+        return variableIds;
     }
 
-    public void setVariables(Map<String, String> variables) {
-        this.variables = variables;
+    public void setVariableIds(List<Long> variableIds) {
+        this.variableIds = variableIds;
     }
 
     public Long getLetterSample() {

@@ -26,6 +26,7 @@ public class TLetterTemplate implements Serializable {
     private String lastUpdateUser;
     private String typeTemplate;
     private String acceptableDocumentFormat;
+    private String status;
 
     public TLetterTemplate() {}
 
@@ -40,6 +41,7 @@ public class TLetterTemplate implements Serializable {
         this.lastUpdateUser = value.lastUpdateUser;
         this.typeTemplate = value.typeTemplate;
         this.acceptableDocumentFormat = value.acceptableDocumentFormat;
+        this.status = value.status;
     }
 
     public TLetterTemplate(
@@ -52,7 +54,8 @@ public class TLetterTemplate implements Serializable {
         LocalDateTime lastUpdateDate,
         String lastUpdateUser,
         String typeTemplate,
-        String acceptableDocumentFormat
+        String acceptableDocumentFormat,
+        String status
     ) {
         this.id = id;
         this.letterType = letterType;
@@ -64,6 +67,7 @@ public class TLetterTemplate implements Serializable {
         this.lastUpdateUser = lastUpdateUser;
         this.typeTemplate = typeTemplate;
         this.acceptableDocumentFormat = acceptableDocumentFormat;
+        this.status = status;
     }
 
     /**
@@ -220,6 +224,20 @@ public class TLetterTemplate implements Serializable {
         this.acceptableDocumentFormat = acceptableDocumentFormat;
     }
 
+    /**
+     * Getter for <code>admin.t_letter_template.status</code>. Статус
+     */
+    public String getStatus() {
+        return this.status;
+    }
+
+    /**
+     * Setter for <code>admin.t_letter_template.status</code>. Статус
+     */
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -289,6 +307,12 @@ public class TLetterTemplate implements Serializable {
         }
         else if (!this.acceptableDocumentFormat.equals(other.acceptableDocumentFormat))
             return false;
+        if (this.status == null) {
+            if (other.status != null)
+                return false;
+        }
+        else if (!this.status.equals(other.status))
+            return false;
         return true;
     }
 
@@ -306,6 +330,7 @@ public class TLetterTemplate implements Serializable {
         result = prime * result + ((this.lastUpdateUser == null) ? 0 : this.lastUpdateUser.hashCode());
         result = prime * result + ((this.typeTemplate == null) ? 0 : this.typeTemplate.hashCode());
         result = prime * result + ((this.acceptableDocumentFormat == null) ? 0 : this.acceptableDocumentFormat.hashCode());
+        result = prime * result + ((this.status == null) ? 0 : this.status.hashCode());
         return result;
     }
 
@@ -323,6 +348,7 @@ public class TLetterTemplate implements Serializable {
         sb.append(", ").append(lastUpdateUser);
         sb.append(", ").append(typeTemplate);
         sb.append(", ").append(acceptableDocumentFormat);
+        sb.append(", ").append(status);
 
         sb.append(")");
         return sb.toString();

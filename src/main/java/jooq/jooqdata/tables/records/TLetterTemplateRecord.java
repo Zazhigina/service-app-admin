@@ -10,8 +10,8 @@ import jooqdata.tables.TLetterTemplate;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record10;
-import org.jooq.Row10;
+import org.jooq.Record11;
+import org.jooq.Row11;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Шаблон письма
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRecord> implements Record10<Long, String, String, Long, LocalDateTime, String, LocalDateTime, String, String, String> {
+public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRecord> implements Record11<Long, String, String, Long, LocalDateTime, String, LocalDateTime, String, String, String, String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -177,6 +177,20 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
         return (String) get(9);
     }
 
+    /**
+     * Setter for <code>admin.t_letter_template.status</code>. Статус
+     */
+    public void setStatus(String value) {
+        set(10, value);
+    }
+
+    /**
+     * Getter for <code>admin.t_letter_template.status</code>. Статус
+     */
+    public String getStatus() {
+        return (String) get(10);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -187,17 +201,17 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     }
 
     // -------------------------------------------------------------------------
-    // Record10 type implementation
+    // Record11 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<Long, String, String, Long, LocalDateTime, String, LocalDateTime, String, String, String> fieldsRow() {
-        return (Row10) super.fieldsRow();
+    public Row11<Long, String, String, Long, LocalDateTime, String, LocalDateTime, String, String, String, String> fieldsRow() {
+        return (Row11) super.fieldsRow();
     }
 
     @Override
-    public Row10<Long, String, String, Long, LocalDateTime, String, LocalDateTime, String, String, String> valuesRow() {
-        return (Row10) super.valuesRow();
+    public Row11<Long, String, String, Long, LocalDateTime, String, LocalDateTime, String, String, String, String> valuesRow() {
+        return (Row11) super.valuesRow();
     }
 
     @Override
@@ -251,6 +265,11 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     }
 
     @Override
+    public Field<String> field11() {
+        return TLetterTemplate.T_LETTER_TEMPLATE.STATUS;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -301,6 +320,11 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     }
 
     @Override
+    public String component11() {
+        return getStatus();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -348,6 +372,11 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     @Override
     public String value10() {
         return getAcceptableDocumentFormat();
+    }
+
+    @Override
+    public String value11() {
+        return getStatus();
     }
 
     @Override
@@ -411,7 +440,13 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     }
 
     @Override
-    public TLetterTemplateRecord values(Long value1, String value2, String value3, Long value4, LocalDateTime value5, String value6, LocalDateTime value7, String value8, String value9, String value10) {
+    public TLetterTemplateRecord value11(String value) {
+        setStatus(value);
+        return this;
+    }
+
+    @Override
+    public TLetterTemplateRecord values(Long value1, String value2, String value3, Long value4, LocalDateTime value5, String value6, LocalDateTime value7, String value8, String value9, String value10, String value11) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -422,6 +457,7 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
         value8(value8);
         value9(value9);
         value10(value10);
+        value11(value11);
         return this;
     }
 
@@ -439,7 +475,7 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
     /**
      * Create a detached, initialised TLetterTemplateRecord
      */
-    public TLetterTemplateRecord(Long id, String letterType, String title, Long letterSample, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, String typeTemplate, String acceptableDocumentFormat) {
+    public TLetterTemplateRecord(Long id, String letterType, String title, Long letterSample, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, String typeTemplate, String acceptableDocumentFormat, String status) {
         super(TLetterTemplate.T_LETTER_TEMPLATE);
 
         setId(id);
@@ -452,6 +488,7 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
         setLastUpdateUser(lastUpdateUser);
         setTypeTemplate(typeTemplate);
         setAcceptableDocumentFormat(acceptableDocumentFormat);
+        setStatus(status);
     }
 
     /**
@@ -471,6 +508,7 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
             setLastUpdateUser(value.getLastUpdateUser());
             setTypeTemplate(value.getTypeTemplate());
             setAcceptableDocumentFormat(value.getAcceptableDocumentFormat());
+            setStatus(value.getStatus());
         }
     }
 }

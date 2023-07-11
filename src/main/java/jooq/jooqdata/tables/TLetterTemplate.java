@@ -15,11 +15,11 @@ import jooqdata.tables.records.TLetterTemplateRecord;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function10;
+import org.jooq.Function11;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row10;
+import org.jooq.Row11;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -65,12 +65,12 @@ public class TLetterTemplate extends TableImpl<TLetterTemplateRecord> {
     /**
      * The column <code>admin.t_letter_template.title</code>. Заголовок
      */
-    public final TableField<TLetterTemplateRecord, String> TITLE = createField(DSL.name("title"), SQLDataType.VARCHAR.nullable(false), this, "Заголовок");
+    public final TableField<TLetterTemplateRecord, String> TITLE = createField(DSL.name("title"), SQLDataType.VARCHAR, this, "Заголовок");
 
     /**
      * The column <code>admin.t_letter_template.letter_sample</code>. Документ
      */
-    public final TableField<TLetterTemplateRecord, Long> LETTER_SAMPLE = createField(DSL.name("letter_sample"), SQLDataType.BIGINT.nullable(false), this, "Документ");
+    public final TableField<TLetterTemplateRecord, Long> LETTER_SAMPLE = createField(DSL.name("letter_sample"), SQLDataType.BIGINT, this, "Документ");
 
     /**
      * The column <code>admin.t_letter_template.create_date</code>. Дата и время
@@ -108,6 +108,11 @@ public class TLetterTemplate extends TableImpl<TLetterTemplateRecord> {
      * Допустимый формат документа. Enum: doc, docx, html
      */
     public final TableField<TLetterTemplateRecord, String> ACCEPTABLE_DOCUMENT_FORMAT = createField(DSL.name("acceptable_document_format"), SQLDataType.VARCHAR, this, "Допустимый формат документа. Enum: doc, docx, html");
+
+    /**
+     * The column <code>admin.t_letter_template.status</code>. Статус
+     */
+    public final TableField<TLetterTemplateRecord, String> STATUS = createField(DSL.name("status"), SQLDataType.VARCHAR, this, "Статус");
 
     private TLetterTemplate(Name alias, Table<TLetterTemplateRecord> aliased) {
         this(alias, aliased, null);
@@ -228,18 +233,18 @@ public class TLetterTemplate extends TableImpl<TLetterTemplateRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row10 type methods
+    // Row11 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<Long, String, String, Long, LocalDateTime, String, LocalDateTime, String, String, String> fieldsRow() {
-        return (Row10) super.fieldsRow();
+    public Row11<Long, String, String, Long, LocalDateTime, String, LocalDateTime, String, String, String, String> fieldsRow() {
+        return (Row11) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function10<? super Long, ? super String, ? super String, ? super Long, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super String, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function11<? super Long, ? super String, ? super String, ? super Long, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -247,7 +252,7 @@ public class TLetterTemplate extends TableImpl<TLetterTemplateRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function10<? super Long, ? super String, ? super String, ? super Long, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super String, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function11<? super Long, ? super String, ? super String, ? super Long, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

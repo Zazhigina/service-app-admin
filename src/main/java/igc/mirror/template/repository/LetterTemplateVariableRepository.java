@@ -3,6 +3,7 @@ package igc.mirror.template.repository;
 import igc.mirror.exception.common.EntityNotSavedException;
 import igc.mirror.template.model.LetterTemplateVariable;
 import jooqdata.tables.TLetterTemplateVariable;
+import jooqdata.tables.TVariable;
 import jooqdata.tables.records.TLetterTemplateVariableRecord;
 import org.jooq.DSLContext;
 import org.slf4j.Logger;
@@ -18,8 +19,8 @@ import java.util.Map;
 @Repository
 public class LetterTemplateVariableRepository {
     static final Logger logger = LoggerFactory.getLogger(LetterTemplateVariableRepository.class);
-
-    public static final TLetterTemplateVariable LETTER_TEMPLATE_VAR = TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE;
+    private static final TLetterTemplateVariable LETTER_TEMPLATE_VAR = TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE;
+    private static final TVariable VARIABLE = TVariable.T_VARIABLE;
 
     @Autowired
     DSLContext dsl;
@@ -46,8 +47,10 @@ public class LetterTemplateVariableRepository {
     public LetterTemplateVariable createLetterTemplateVariable(LetterTemplateVariable letterTemplateVariable) {
         TLetterTemplateVariableRecord letterTemplateVariableRecord = createLetterTemplateVariableRecord(letterTemplateVariable);
         if (letterTemplateVariableRecord == null || letterTemplateVariableRecord.getId() == null) {
-            logger.error("Не создана переменная для шаблона письма letterTemplateId {}, имя {}, значение {}",
-                    letterTemplateVariable.getLetterTemplateId(), letterTemplateVariable.getName(), letterTemplateVariable.getVal());
+            logger.error("Не создана переменная (ID: {}) для шаблона письма letterTemplateId {}",
+                    letterTemplateVariable.getVariableId(), letterTemplateVariable.getLetterTemplateId());
+//            logger.error("Не создана переменная для шаблона письма letterTemplateId {}, имя {}, значение {}",
+//                    letterTemplateVariable.getLetterTemplateId(), letterTemplateVariable.getName(), letterTemplateVariable.getVal());
             throw new EntityNotSavedException(null, LetterTemplateVariable.class);
         }
         letterTemplateVariable.setId(letterTemplateVariableRecord.getId());
@@ -61,10 +64,23 @@ public class LetterTemplateVariableRepository {
      * @return карта переменных
      */
     public Map<String, String> getLetterTemplateVariablesAsMap(Long letterTemplateId) {
-        return dsl.select(LETTER_TEMPLATE_VAR.NAME, LETTER_TEMPLATE_VAR.VAL)
+        return dsl.select(VARIABLE.NAME, VARIABLE.DEFAULT_VAL)
+                .from(LETTER_TEMPLATE_VAR).join(VARIABLE).on(LETTER_TEMPLATE_VAR.VARIABLE_ID.eq(VARIABLE.ID))
+                .where(LETTER_TEMPLATE_VAR.LETTER_TEMPLATE_ID.equal(letterTemplateId))
+                .fetchMap(VARIABLE.NAME, VARIABLE.DEFAULT_VAL);
+    }
+
+    /**
+     * Получает список ИД переменных шаблона
+     *
+     * @param letterTemplateId идентифиатор шаблона
+     * @return список идентификаторов переменных
+     */
+    public List<Long> getLetterTemplateVariableIds(Long letterTemplateId) {
+        return dsl.select(LETTER_TEMPLATE_VAR.VARIABLE_ID)
                 .from(LETTER_TEMPLATE_VAR)
                 .where(LETTER_TEMPLATE_VAR.LETTER_TEMPLATE_ID.equal(letterTemplateId))
-                .fetchMap(LETTER_TEMPLATE_VAR.NAME, LETTER_TEMPLATE_VAR.VAL);
+                .fetchInto(Long.class);
     }
 
     /**

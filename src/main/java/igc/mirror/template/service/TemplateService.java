@@ -15,6 +15,7 @@ import igc.mirror.template.repository.LetterTemplateVariableRepository;
 import igc.mirror.utils.qfilter.DataFilter;
 import igc.mirror.utils.validate.group.ChangeGroup;
 import igc.mirror.utils.validate.group.CreateGroup;
+import igc.mirror.variable.repository.VariableRepository;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,16 +43,19 @@ public class TemplateService {
     private final UserDetails userDetails;
     private final DocService docService;
     private final LetterTemplateVariableRepository letterTemplateVariableRepository;
+    private final VariableRepository variableRepository;
 
     @Autowired
     public TemplateService(LetterTemplateRepository letterTemplateRepository,
                            UserDetails userDetails,
                            DocService docService,
-                           LetterTemplateVariableRepository letterTemplateVariableRepository) {
+                           LetterTemplateVariableRepository letterTemplateVariableRepository,
+                           VariableRepository variableRepository) {
         this.letterTemplateRepository = letterTemplateRepository;
         this.userDetails = userDetails;
         this.docService = docService;
         this.letterTemplateVariableRepository = letterTemplateVariableRepository;
+        this.variableRepository = variableRepository;
     }
 
     /**
@@ -102,7 +106,7 @@ public class TemplateService {
         DocumentDto documentDto = docService.retrieveDocumentInfo(letterTemplate.getLetterSample());
 
         LetterTemplateDto letterTemplateDto = new LetterTemplateDto(letterTemplate);
-        letterTemplateDto.setVariables(letterTemplateVariableRepository.getLetterTemplateVariablesAsMap(letterTemplate.getId()));
+        letterTemplateDto.setVariableIds(letterTemplateVariableRepository.getLetterTemplateVariableIds(letterTemplate.getId()));
         letterTemplateDto.setSampleName(documentDto.getFilename());
         letterTemplateDto.setSampleSize(documentDto.getFileSize());
         letterTemplateDto.setSampleCreateDate(documentDto.getCreateDate());
@@ -138,13 +142,14 @@ public class TemplateService {
 
         try {
             LetterTemplate savedLetterTemplate = letterTemplateRepository.save(letterTemplate);
-            if (letterTemplateRequest.getVariables() != null) {
-                List<LetterTemplateVariable> letterTemplateVariables = letterTemplateRequest.getVariables()
-                        .entrySet().stream().map(entry -> new LetterTemplateVariable(savedLetterTemplate.getId(), entry.getKey(), entry.getValue())).toList();
+            if (letterTemplateRequest.getVariableIds() != null) {
+                List<LetterTemplateVariable> letterTemplateVariables = letterTemplateRequest.getVariableIds()
+                        .stream().map(variable -> new LetterTemplateVariable(savedLetterTemplate.getId(), variable)).toList();
+                        //.entrySet().stream().map(entry -> new LetterTemplateVariable(savedLetterTemplate.getId(), entry.getKey(), entry.getValue())).toList();
                 letterTemplateVariables.forEach(letterTemplateVariableRepository::createLetterTemplateVariable);
             }
             LetterTemplateDto letterTemplateDto = new LetterTemplateDto(savedLetterTemplate);
-            letterTemplateDto.setVariables(letterTemplateRequest.getVariables());
+            letterTemplateDto.setVariableIds(letterTemplateRequest.getVariableIds());
 
             return letterTemplateDto;
         } catch (Exception e) {
@@ -194,16 +199,17 @@ public class TemplateService {
 
         List<LetterTemplateVariable> variables = new ArrayList<>();
 
-        if (letterTemplateRequest.getVariables() != null) {
-            variables = letterTemplateRequest.getVariables().entrySet().stream()
-                    .map(entry -> new LetterTemplateVariable(id, entry.getKey(), entry.getValue())).toList();
+        if (letterTemplateRequest.getVariableIds() != null) {
+            variables = letterTemplateRequest.getVariableIds()
+                    .stream().map(variable -> new LetterTemplateVariable(id, variable)).toList();
+                    //.entrySet().stream().map(entry -> new LetterTemplateVariable(id, entry.getKey(), entry.getValue())).toList();
         }
 
         letterTemplateRepository.save(letterTemplate);
         letterTemplateVariableRepository.synchronizeLetterTemplateVariable(id, variables);
 
         LetterTemplateDto letterTemplateDto = new LetterTemplateDto(letterTemplate);
-        letterTemplateDto.setVariables(letterTemplateRequest.getVariables());
+        letterTemplateDto.setVariableIds(letterTemplateRequest.getVariableIds());
 
         return letterTemplateDto;
     }

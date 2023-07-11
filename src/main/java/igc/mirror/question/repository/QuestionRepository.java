@@ -1,6 +1,7 @@
 package igc.mirror.question.repository;
 
 import igc.mirror.question.dto.QuestionDto;
+import igc.mirror.question.dto.StandardQuestionDto;
 import igc.mirror.question.model.Question;
 import jooqdata.tables.TAnswerVersion;
 import jooqdata.tables.TQuestion;
@@ -60,5 +61,25 @@ public class QuestionRepository {
                 .set(TQuestion.T_QUESTION.LAST_UPDATE_USER, question.getLastUpdateUser())
                 .where(TQuestion.T_QUESTION.ID.equal(question.getId()))
                 .execute();
+    }
+
+    /**
+     * Находит все стандартные вопросы в БД
+     *
+     * @return список стандартных вопросов
+     */
+    public List<StandardQuestionDto> findAllStandardQuestions() {
+        return dsl.select(TQuestion.T_QUESTION.ID,
+                        TQuestion.T_QUESTION.NAME,
+                        TQuestion.T_QUESTION.ORDER_NO,
+                        multiset(
+                                select(TAnswerVersion.T_ANSWER_VERSION.ID,
+                                        TAnswerVersion.T_ANSWER_VERSION.NAME,
+                                        TAnswerVersion.T_ANSWER_VERSION.ORDER_NO,
+                                        TAnswerVersion.T_ANSWER_VERSION.IS_DEFAULT)
+                                        .from(TAnswerVersion.T_ANSWER_VERSION)
+                                        .where(TAnswerVersion.T_ANSWER_VERSION.QUESTION_ID.eq(TQuestion.T_QUESTION.ID))).as("answerVersions"))
+                .from(TQuestion.T_QUESTION)
+                .fetchInto(StandardQuestionDto.class);
     }
 }

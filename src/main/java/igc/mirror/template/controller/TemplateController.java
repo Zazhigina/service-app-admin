@@ -5,7 +5,6 @@ import igc.mirror.template.dto.LetterTemplateBriefInfoDto;
 import igc.mirror.template.dto.LetterTemplateDto;
 import igc.mirror.template.dto.LetterTemplateTypeDto;
 import igc.mirror.template.dto.TemplateDto;
-import igc.mirror.exception.handler.SuccessInfo;
 import igc.mirror.template.filter.LetterTemplateSearchCriteria;
 import igc.mirror.template.service.TemplateService;
 import igc.mirror.utils.qfilter.DataFilter;
@@ -51,8 +50,8 @@ public class TemplateController {
 
     @GetMapping("/{id}/doc")
     @Operation(summary = "Выгрузка шаблона")
-    public ResponseEntity<Resource> downloadLetterTemplate(@PathVariable Long id) {
-        DocumentDto document = templateService.downloadLetterTemplate(id);
+    public ResponseEntity<Resource> downloadLetterTemplateDoc(@PathVariable Long id) {
+        DocumentDto document = templateService.downloadLetterTemplateDoc(id);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentDisposition(document.getContentDisposition());
@@ -63,35 +62,13 @@ public class TemplateController {
                 .body(document.getResource());
     }
 
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    @Operation(summary = "Сохранение нового шаблона")
-    @PreAuthorize("hasAuthority('APP_ADMIN.EXEC')")
-    public ResponseEntity<LetterTemplateDto> saveLetterTemplate(@RequestPart("request") LetterTemplateDto letterTemplateRequest,
-                                                                @RequestPart("file") MultipartFile file) {
-        return ResponseEntity.ok(templateService.saveLetterTemplate(letterTemplateRequest, file));
-    }
-
-    @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, value = "/doc/{id}")
-    @Operation(summary = "Замена файла шаблона")
-    @PreAuthorize("hasAuthority('APP_ADMIN.EXEC')")
-    public ResponseEntity<SuccessInfo> replaceLetterTemplateDoc(@PathVariable Long id, @RequestPart("file") MultipartFile file) {
-        templateService.replaceLetterTemplate(id, file);
-        return ResponseEntity.ok(new SuccessInfo("Операция выполнена успешно"));
-    }
-
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "Изменение данных шаблона")
     @PreAuthorize("hasAuthority('APP_ADMIN.EXEC')")
-    public ResponseEntity<LetterTemplateDto> changeLetterTemplate(@PathVariable Long id, @RequestBody LetterTemplateDto letterTemplateRequest) {
-        return ResponseEntity.ok(templateService.changeLetterTemplate(id, letterTemplateRequest));
-    }
-
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Удаление шаблона")
-    @PreAuthorize("hasAuthority('APP_ADMIN.EXEC')")
-    public ResponseEntity<SuccessInfo> deleteLetterTemplate(@PathVariable Long id) {
-        templateService.deleteLetterTemplate(id);
-        return ResponseEntity.ok(new SuccessInfo("Операция выполнена успешно"));
+    public ResponseEntity<LetterTemplateDto> changeLetterTemplate(@PathVariable Long id,
+                                                                  @RequestPart("request") LetterTemplateDto letterTemplateRequest,
+                                                                  @RequestPart("file") MultipartFile file) {
+        return ResponseEntity.ok(templateService.changeLetterTemplate(id, letterTemplateRequest, file));
     }
 
     @GetMapping("/type")

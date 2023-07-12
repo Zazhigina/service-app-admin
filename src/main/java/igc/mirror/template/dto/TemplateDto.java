@@ -3,8 +3,20 @@ package igc.mirror.template.dto;
 import java.util.Map;
 
 public class TemplateDto {
+
+    /**
+     * Заголовок шаблона
+     */
     private String title;
+
+    /**
+     * Карта переменных шаблона со значениями по умолчанию
+     */
     private Map<String, String> variables;
+
+    /**
+     * Информация о файле шаблона
+     */
     private FileInfoDto templateFileInfo;
 
     public String getTitle() {

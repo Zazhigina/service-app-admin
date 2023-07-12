@@ -4,18 +4,17 @@ import igc.mirror.auth.UserDetails;
 import igc.mirror.doc.DocService;
 import igc.mirror.doc.dto.DocumentDto;
 import igc.mirror.exception.common.EntityNotSavedException;
+import igc.mirror.exception.common.IllegalEntityStateException;
 import igc.mirror.template.dto.*;
 import igc.mirror.template.filter.LetterTemplateSearchCriteria;
 import igc.mirror.template.model.LetterTemplate;
 import igc.mirror.template.model.LetterTemplateVariable;
 import igc.mirror.template.ref.LetterTemplateAcceptableDocType;
 import igc.mirror.template.ref.LetterTemplateType;
+import igc.mirror.template.ref.TemplateStatus;
 import igc.mirror.template.repository.LetterTemplateRepository;
 import igc.mirror.template.repository.LetterTemplateVariableRepository;
 import igc.mirror.utils.qfilter.DataFilter;
-import igc.mirror.utils.validate.group.ChangeGroup;
-import igc.mirror.utils.validate.group.CreateGroup;
-import igc.mirror.variable.repository.VariableRepository;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Validated
@@ -43,34 +41,16 @@ public class TemplateService {
     private final UserDetails userDetails;
     private final DocService docService;
     private final LetterTemplateVariableRepository letterTemplateVariableRepository;
-    private final VariableRepository variableRepository;
 
     @Autowired
     public TemplateService(LetterTemplateRepository letterTemplateRepository,
                            UserDetails userDetails,
                            DocService docService,
-                           LetterTemplateVariableRepository letterTemplateVariableRepository,
-                           VariableRepository variableRepository) {
+                           LetterTemplateVariableRepository letterTemplateVariableRepository) {
         this.letterTemplateRepository = letterTemplateRepository;
         this.userDetails = userDetails;
         this.docService = docService;
         this.letterTemplateVariableRepository = letterTemplateVariableRepository;
-        this.variableRepository = variableRepository;
-    }
-
-    /**
-     * Возвращает список найденных шаблонов по фильтру
-     *
-     * @param filter   набор критериев поиска
-     * @param pageable настройки пэджинации и сортировки
-     * @return список шаблонов
-     */
-    @Deprecated
-    public Page<LetterTemplateDto> findLetterTemplatesByFilters(DataFilter<LetterTemplateSearchCriteria> filter, Pageable pageable) {
-        Page<LetterTemplate> letterTemplatePage = letterTemplateRepository.findByFilters(filter, pageable);
-
-        return new PageImpl<>(letterTemplatePage.getContent().stream().map(LetterTemplateDto::new).collect(Collectors.toList()),
-                pageable, letterTemplatePage.getTotalElements());
     }
 
     /**
@@ -103,131 +83,84 @@ public class TemplateService {
     public LetterTemplateDto findByLetterType(String letterType) {
         LetterTemplate letterTemplate = letterTemplateRepository.findByLetterType(letterType);
 
-        DocumentDto documentDto = docService.retrieveDocumentInfo(letterTemplate.getLetterSample());
+        LetterTemplateDto letterTemplateDto = letterTemplate.getLetterSample() == null
+                ? new LetterTemplateDto(letterTemplate)
+                : new LetterTemplateDto(letterTemplate, new FileInfoDto(docService.retrieveDocumentInfo(letterTemplate.getLetterSample())));
 
-        LetterTemplateDto letterTemplateDto = new LetterTemplateDto(letterTemplate);
         letterTemplateDto.setVariableIds(letterTemplateVariableRepository.getLetterTemplateVariableIds(letterTemplate.getId()));
-        letterTemplateDto.setSampleName(documentDto.getFilename());
-        letterTemplateDto.setSampleSize(documentDto.getFileSize());
-        letterTemplateDto.setSampleCreateDate(documentDto.getCreateDate());
 
         return letterTemplateDto;
     }
 
     /**
-     * Выполняет сохранение нового шаблона и загрузку документа в сервис doc
-     *
-     * @param letterTemplateRequest данные шаблона
-     * @param file                  файл для загрузки в сервис doc
-     * @return данные сохраненного шаблона
-     */
-    @Validated(CreateGroup.class)
-    @Transactional
-    public LetterTemplateDto saveLetterTemplate(@Valid LetterTemplateDto letterTemplateRequest, MultipartFile file) {
-        logger.info("Сохранение шаблона с letter_type - {}", letterTemplateRequest.getLetterType());
-
-        LetterTemplateAcceptableDocType acceptableDocType = LetterTemplateAcceptableDocType.getByExtension(StringUtils.getFilenameExtension(file.getOriginalFilename()));
-        if (acceptableDocType == null)
-            throw new EntityNotSavedException("Недопустимый тип файла", null, null);
-
-        DocumentDto documentUpload = docService.uploadDocument(file);
-
-        LetterTemplate letterTemplate = new LetterTemplate();
-        letterTemplate.setLetterType(letterTemplateRequest.getLetterType());
-        letterTemplate.setTypeTemplate(letterTemplateRequest.getTypeTemplate().name());
-        letterTemplate.setTitle(letterTemplateRequest.getTitle());
-        letterTemplate.setCreateUser(userDetails.getUsername());
-        letterTemplate.setAcceptableDocumentFormat(acceptableDocType.getExtension());
-        letterTemplate.setLetterSample(documentUpload.getId());
-
-        try {
-            LetterTemplate savedLetterTemplate = letterTemplateRepository.save(letterTemplate);
-            if (letterTemplateRequest.getVariableIds() != null) {
-                List<LetterTemplateVariable> letterTemplateVariables = letterTemplateRequest.getVariableIds()
-                        .stream().map(variable -> new LetterTemplateVariable(savedLetterTemplate.getId(), variable)).toList();
-                        //.entrySet().stream().map(entry -> new LetterTemplateVariable(savedLetterTemplate.getId(), entry.getKey(), entry.getValue())).toList();
-                letterTemplateVariables.forEach(letterTemplateVariableRepository::createLetterTemplateVariable);
-            }
-            LetterTemplateDto letterTemplateDto = new LetterTemplateDto(savedLetterTemplate);
-            letterTemplateDto.setVariableIds(letterTemplateRequest.getVariableIds());
-
-            return letterTemplateDto;
-        } catch (Exception e) {
-            docService.deleteUploadedDocument(documentUpload.getId());
-            throw e;
-        }
-    }
-
-    /**
-     * Заменяет загруженный файл шаблона
-     *
-     * @param id   ID шаблона
-     * @param file файл для замены
-     */
-    @Transactional
-    public void replaceLetterTemplate(Long id, MultipartFile file) {
-        logger.info("Замена файла для шаблона с ID - {}", id);
-
-        LetterTemplateAcceptableDocType acceptableDocType = LetterTemplateAcceptableDocType.getByExtension(StringUtils.getFilenameExtension(file.getOriginalFilename()));
-        if (acceptableDocType == null)
-            throw new EntityNotSavedException("Недопустимый тип файла", null, null);
-
-        LetterTemplate letterTemplate = letterTemplateRepository.find(id);
-
-        docService.changeUploadedDocument(letterTemplate.getLetterSample(), file);
-
-        letterTemplate.setAcceptableDocumentFormat(acceptableDocType.getExtension());
-        letterTemplate.setLastUpdateUser(userDetails.getUsername());
-        letterTemplateRepository.save(letterTemplate);
-    }
-
-    /**
-     * Изменяет информацию о шаблоне
+     * Изменяет шаблон
      *
      * @param id                    ID шаблона
      * @param letterTemplateRequest данные для изменения шаблона
+     * @param file                  файл шаблона
      * @return данные измененного шаблона
      */
-    @Validated(ChangeGroup.class)
     @Transactional
-    public LetterTemplateDto changeLetterTemplate(Long id, @Valid LetterTemplateDto letterTemplateRequest) {
+    public LetterTemplateDto changeLetterTemplate(Long id, @Valid LetterTemplateDto letterTemplateRequest, MultipartFile file) {
         logger.info("Изменение шаблона с letter_type - {}, id - {}", letterTemplateRequest.getLetterType(), id);
 
+        //проверка наличия необходимых данных в случае утверждения шаблона
+        if (letterTemplateRequest.getStatus() == TemplateStatus.ACTUAL) {
+            if ((letterTemplateRequest.getTitle() == null) || (letterTemplateRequest.getTitle().trim().length() == 0))
+                throw new EntityNotSavedException("Заголовок утверждаемого шаблона не заполнен", id, LetterTemplateDto.class);
+
+            if (((letterTemplateRequest.getFileInfo().getFileId() == null) && (file.isEmpty())) ||
+                    ((letterTemplateRequest.getFileInfo().getFileId() != null) && (letterTemplateRequest.getFileInfo().getFileSize() == null)))
+                throw new EntityNotSavedException("Отсутствует файл утверждаемого шаблона", id, LetterTemplateDto.class);
+        }
+
+        //проверка расширения файла
+        if (file != null) {
+            LetterTemplateAcceptableDocType acceptableDocType = Optional.ofNullable(LetterTemplateAcceptableDocType.getByExtension(StringUtils.getFilenameExtension(file.getOriginalFilename())))
+                    .orElseThrow(() -> new EntityNotSavedException("Недопустимый тип файла", null, null));
+        }
+
         LetterTemplate letterTemplate = letterTemplateRepository.find(id);
+
+        //заполнение данных шаблона
         letterTemplate.setTitle(letterTemplateRequest.getTitle());
+        letterTemplate.setStatus(letterTemplateRequest.getStatus().name());
         letterTemplate.setLastUpdateUser(userDetails.getUsername());
 
+        //добавление/изменение/удаление шаблона файла с привязкой к шаблону
+        DocumentDto document;
+
+        if ((letterTemplateRequest.getFileInfo().getFileId() == null) && (file != null)) {
+            document = docService.uploadDocument(file);
+            letterTemplate.setLetterSample(document.getId());
+
+            letterTemplateRepository.save(letterTemplate);
+        }
+
+        if ((letterTemplateRequest.getFileInfo().getFileId() != null) && (letterTemplateRequest.getFileInfo().getFileSize() != null) && (file != null))
+            document = docService.changeUploadedDocument(letterTemplateRequest.getFileInfo().getFileId(), file);
+
+        if ((letterTemplateRequest.getFileInfo().getFileId() != null) && (letterTemplateRequest.getFileInfo().getFileSize() == null)) {
+            letterTemplate.setLetterSample(null);
+            letterTemplateRepository.save(letterTemplate);
+
+            docService.deleteUploadedDocument(letterTemplateRequest.getFileInfo().getFileId());
+        }
+
+        //синхронизация переменных
         List<LetterTemplateVariable> variables = new ArrayList<>();
 
         if (letterTemplateRequest.getVariableIds() != null) {
             variables = letterTemplateRequest.getVariableIds()
                     .stream().map(variable -> new LetterTemplateVariable(id, variable)).toList();
-                    //.entrySet().stream().map(entry -> new LetterTemplateVariable(id, entry.getKey(), entry.getValue())).toList();
         }
 
-        letterTemplateRepository.save(letterTemplate);
         letterTemplateVariableRepository.synchronizeLetterTemplateVariable(id, variables);
 
-        LetterTemplateDto letterTemplateDto = new LetterTemplateDto(letterTemplate);
+        LetterTemplateDto letterTemplateDto = new LetterTemplateDto(letterTemplate, letterTemplateRequest.getFileInfo());
         letterTemplateDto.setVariableIds(letterTemplateRequest.getVariableIds());
 
         return letterTemplateDto;
-    }
-
-    /**
-     * Удаляет шаблон
-     *
-     * @param id ID шаблона
-     */
-    @Transactional
-    public void deleteLetterTemplate(Long id) {
-        logger.info("Удаление шаблона с ID - {}", id);
-
-        LetterTemplate letterTemplate = letterTemplateRepository.find(id);
-
-        letterTemplateVariableRepository.deleteLetterTemplateVariable(id);
-        letterTemplateRepository.delete(id);
-        docService.deleteUploadedDocument(letterTemplate.getLetterSample());
     }
 
     /**
@@ -236,7 +169,7 @@ public class TemplateService {
      * @param id ID шаблона
      * @return данные файла
      */
-    public DocumentDto downloadLetterTemplate(Long id) {
+    public DocumentDto downloadLetterTemplateDoc(Long id) {
         LetterTemplate letterTemplate = letterTemplateRepository.find(id);
 
         return docService.downloadDocument(letterTemplate.getLetterSample());
@@ -260,7 +193,7 @@ public class TemplateService {
      * @return типы шаблонов
      */
     public List<LetterTemplateTypeDto> findLetterTemplateTypes() {
-        return Arrays.stream(LetterTemplateType.values()).map(v -> new LetterTemplateTypeDto(v.name(),v.getName())).toList();
+        return Arrays.stream(LetterTemplateType.values()).map(v -> new LetterTemplateTypeDto(v.name(), v.getName())).toList();
     }
 
     /**
@@ -273,6 +206,9 @@ public class TemplateService {
         logger.info("Запрос шаблона с letter_type - {}", letterType);
 
         LetterTemplate letterTemplate = letterTemplateRepository.findByLetterType(letterType);
+
+        if (TemplateStatus.valueOf(letterTemplate.getStatus()) == TemplateStatus.DRAFT)
+            throw new IllegalEntityStateException("Шаблон не утвержден", letterTemplate.getId(), LetterTemplate.class);
 
         TemplateDto template = new TemplateDto();
         template.setTitle(letterTemplate.getTitle());

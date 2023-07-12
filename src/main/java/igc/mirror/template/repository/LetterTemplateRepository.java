@@ -166,6 +166,7 @@ public class LetterTemplateRepository implements JooqCommonRepository<LetterTemp
                         TLetterTemplate.T_LETTER_TEMPLATE.TITLE,
                         TLetterTemplate.T_LETTER_TEMPLATE.TYPE_TEMPLATE,
                         TLetterTemplate.T_LETTER_TEMPLATE.LETTER_SAMPLE,
+                        TLetterTemplate.T_LETTER_TEMPLATE.STATUS,
                         TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM.DESCRIPTION.as("typeTemplateName"))
                         .from(TLetterTemplate.T_LETTER_TEMPLATE)
                         .leftJoin(TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM).on(TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM.NAME.equal(TLetterTemplate.T_LETTER_TEMPLATE.TYPE_TEMPLATE))

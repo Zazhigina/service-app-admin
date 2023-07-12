@@ -1,7 +1,7 @@
 package igc.mirror.question.repository;
 
 import igc.mirror.question.dto.QuestionDto;
-import igc.mirror.question.dto.StandardQuestionDto;
+import igc.mirror.question.dto.StandardQuestion;
 import igc.mirror.question.model.Question;
 import jooqdata.tables.TAnswerVersion;
 import jooqdata.tables.TQuestion;
@@ -19,22 +19,26 @@ public class QuestionRepository {
     @Autowired
     DSLContext dsl;
 
+    private static final TQuestion QUESTION = TQuestion.T_QUESTION;
+
+    private static final TAnswerVersion ANSWER_VERSION = TAnswerVersion.T_ANSWER_VERSION;
+
     /**
      * Находит все вопросы в БД
      *
      * @return список вопросов
      */
     public List<QuestionDto> findAllQuestions() {
-        return dsl.select(TQuestion.T_QUESTION.NAME,
-                        TQuestion.T_QUESTION.ORDER_NO,
-                        TQuestion.T_QUESTION.ACTUAL_TO,
+        return dsl.select(QUESTION.NAME,
+                        QUESTION.ORDER_NO,
+                        QUESTION.ACTUAL_TO,
                         multiset(
-                                select(TAnswerVersion.T_ANSWER_VERSION.NAME,
-                                        TAnswerVersion.T_ANSWER_VERSION.ORDER_NO,
-                                        TAnswerVersion.T_ANSWER_VERSION.IS_DEFAULT)
-                                        .from(TAnswerVersion.T_ANSWER_VERSION)
-                                        .where(TAnswerVersion.T_ANSWER_VERSION.QUESTION_ID.eq(TQuestion.T_QUESTION.ID))).as("answerVersions"))
-                .from(TQuestion.T_QUESTION)
+                                select(ANSWER_VERSION.NAME,
+                                        ANSWER_VERSION.ORDER_NO,
+                                        ANSWER_VERSION.IS_DEFAULT)
+                                        .from(ANSWER_VERSION)
+                                        .where(ANSWER_VERSION.QUESTION_ID.eq(QUESTION.ID))).as("answerVersions"))
+                .from(QUESTION)
                 .fetchInto(QuestionDto.class);
     }
 
@@ -44,8 +48,8 @@ public class QuestionRepository {
      * @return вопрос
      */
     public Question findQuestionByOrderNo(Integer orderNo) {
-        return dsl.selectFrom(TQuestion.T_QUESTION)
-                .where((TQuestion.T_QUESTION.ORDER_NO.eq(orderNo)))
+        return dsl.selectFrom(QUESTION)
+                .where((QUESTION.ORDER_NO.eq(orderNo)))
                 .fetchOneInto(Question.class);
     }
 
@@ -55,11 +59,11 @@ public class QuestionRepository {
      * @param question измененный вопрос
      */
     public void updateQuestion(Question question) {
-        dsl.update(TQuestion.T_QUESTION)
-                .set(TQuestion.T_QUESTION.NAME, question.getName())
-                .set(TQuestion.T_QUESTION.ACTUAL_TO, question.getActualTo())
-                .set(TQuestion.T_QUESTION.LAST_UPDATE_USER, question.getLastUpdateUser())
-                .where(TQuestion.T_QUESTION.ID.equal(question.getId()))
+        dsl.update(QUESTION)
+                .set(QUESTION.NAME, question.getName())
+                .set(QUESTION.ACTUAL_TO, question.getActualTo())
+                .set(QUESTION.LAST_UPDATE_USER, question.getLastUpdateUser())
+                .where(QUESTION.ID.equal(question.getId()))
                 .execute();
     }
 
@@ -68,18 +72,18 @@ public class QuestionRepository {
      *
      * @return список стандартных вопросов
      */
-    public List<StandardQuestionDto> findAllStandardQuestions() {
-        return dsl.select(TQuestion.T_QUESTION.ID,
-                        TQuestion.T_QUESTION.NAME,
-                        TQuestion.T_QUESTION.ORDER_NO,
+    public List<StandardQuestion> findAllStandardQuestions() {
+        return dsl.select(QUESTION.ID,
+                        QUESTION.NAME,
+                        QUESTION.ORDER_NO,
                         multiset(
-                                select(TAnswerVersion.T_ANSWER_VERSION.ID,
-                                        TAnswerVersion.T_ANSWER_VERSION.NAME,
-                                        TAnswerVersion.T_ANSWER_VERSION.ORDER_NO,
-                                        TAnswerVersion.T_ANSWER_VERSION.IS_DEFAULT)
-                                        .from(TAnswerVersion.T_ANSWER_VERSION)
-                                        .where(TAnswerVersion.T_ANSWER_VERSION.QUESTION_ID.eq(TQuestion.T_QUESTION.ID))).as("answerVersions"))
-                .from(TQuestion.T_QUESTION)
-                .fetchInto(StandardQuestionDto.class);
+                                select(ANSWER_VERSION.ID,
+                                        ANSWER_VERSION.NAME,
+                                        ANSWER_VERSION.ORDER_NO,
+                                        ANSWER_VERSION.IS_DEFAULT)
+                                        .from(ANSWER_VERSION)
+                                        .where(ANSWER_VERSION.QUESTION_ID.eq(QUESTION.ID))).as("answerVersions"))
+                .from(QUESTION)
+                .fetchInto(StandardQuestion.class);
     }
 }

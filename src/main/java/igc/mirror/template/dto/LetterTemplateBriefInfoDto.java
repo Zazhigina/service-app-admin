@@ -1,7 +1,6 @@
 package igc.mirror.template.dto;
 
-import igc.mirror.template.model.LetterTemplate;
-import igc.mirror.template.ref.LetterTemplateType;
+import igc.mirror.template.ref.TemplateStatus;
 
 public class LetterTemplateBriefInfoDto {
     private Long id;
@@ -31,16 +30,12 @@ public class LetterTemplateBriefInfoDto {
      */
     private Long letterSample;
 
-    public LetterTemplateBriefInfoDto() {}
+    /**
+     * Статус шаблона
+     */
+    private TemplateStatus status;
 
-    public LetterTemplateBriefInfoDto(LetterTemplate letterTemplate) {
-        this.id = letterTemplate.getId();
-        this.letterType = letterTemplate.getLetterType();
-        this.title = letterTemplate.getTitle();
-        this.typeTemplate = LetterTemplateType.valueOf(letterTemplate.getTypeTemplate()).name();
-        this.typeTemplateName = LetterTemplateType.valueOf(letterTemplate.getTypeTemplate()).getName();
-        this.letterSample = letterTemplate.getLetterSample();
-    }
+    public LetterTemplateBriefInfoDto() {}
 
     public Long getId() {
         return id;
@@ -88,5 +83,13 @@ public class LetterTemplateBriefInfoDto {
 
     public void setLetterSample(Long letterSample) {
         this.letterSample = letterSample;
+    }
+
+    public TemplateStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TemplateStatus status) {
+        this.status = status;
     }
 }

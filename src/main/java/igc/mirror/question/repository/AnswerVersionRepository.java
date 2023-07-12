@@ -13,14 +13,16 @@ public class AnswerVersionRepository {
     @Autowired
     DSLContext dsl;
 
+    private static final TAnswerVersion ANSWER_VERSION = TAnswerVersion.T_ANSWER_VERSION;
+
     /**
      * Находит все варианты ответов на указанный вопрос
      *
      * @return список ответов
      */
     public List<AnswerVersion> findAnswerVersionsByQuestion(Long questionId) {
-        return dsl.selectFrom(TAnswerVersion.T_ANSWER_VERSION)
-                .where(TAnswerVersion.T_ANSWER_VERSION.QUESTION_ID.equal(questionId))
+        return dsl.selectFrom(ANSWER_VERSION)
+                .where(ANSWER_VERSION.QUESTION_ID.equal(questionId))
                 .fetchInto(AnswerVersion.class);
     }
 
@@ -32,9 +34,9 @@ public class AnswerVersionRepository {
      * @return вариант ответа
      */
     public AnswerVersion findAnswerByOrderNo(Long questionId, Integer orderNo) {
-        return dsl.selectFrom(TAnswerVersion.T_ANSWER_VERSION)
-                .where(TAnswerVersion.T_ANSWER_VERSION.QUESTION_ID.eq(questionId)
-                        .and(TAnswerVersion.T_ANSWER_VERSION.ORDER_NO.eq(orderNo)))
+        return dsl.selectFrom(ANSWER_VERSION)
+                .where(ANSWER_VERSION.QUESTION_ID.eq(questionId)
+                        .and(ANSWER_VERSION.ORDER_NO.eq(orderNo)))
                 .fetchOneInto(AnswerVersion.class);
     }
 
@@ -44,11 +46,11 @@ public class AnswerVersionRepository {
      * @param  answerVersion измененный вариант ответа
      */
     public void updateAnswerVersion(AnswerVersion answerVersion) {
-        dsl.update(TAnswerVersion.T_ANSWER_VERSION)
-                .set(TAnswerVersion.T_ANSWER_VERSION.NAME, answerVersion.getName())
-                .set(TAnswerVersion.T_ANSWER_VERSION.IS_DEFAULT, answerVersion.isDefault())
-                .set(TAnswerVersion.T_ANSWER_VERSION.LAST_UPDATE_USER, answerVersion.getLastUpdateUser())
-                .where(TAnswerVersion.T_ANSWER_VERSION.ID.equal(answerVersion.getId()))
+        dsl.update(ANSWER_VERSION)
+                .set(ANSWER_VERSION.NAME, answerVersion.getName())
+                .set(ANSWER_VERSION.IS_DEFAULT, answerVersion.isDefault())
+                .set(ANSWER_VERSION.LAST_UPDATE_USER, answerVersion.getLastUpdateUser())
+                .where(ANSWER_VERSION.ID.equal(answerVersion.getId()))
                 .execute();
     }
 }

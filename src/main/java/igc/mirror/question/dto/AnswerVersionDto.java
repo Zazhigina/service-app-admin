@@ -21,7 +21,6 @@ public class AnswerVersionDto {
     /**
      * Вариант ответа выбран по умолчанию
      */
-    @JsonProperty("isDefault")
     private boolean isDefault;
 
     public AnswerVersionDto() {
@@ -43,6 +42,7 @@ public class AnswerVersionDto {
         this.orderNo = orderNo;
     }
 
+    @JsonProperty("isDefault")
     public boolean isDefault() {
         return isDefault;
     }

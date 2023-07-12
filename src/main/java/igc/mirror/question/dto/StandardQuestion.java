@@ -2,7 +2,7 @@ package igc.mirror.question.dto;
 
 import java.util.List;
 
-public class StandardQuestionDto {
+public class StandardQuestion {
 
     /**
      * Идентификатор вопроса
@@ -22,9 +22,9 @@ public class StandardQuestionDto {
     /**
      * Перечень вариантов ответов на вопрос
      */
-    private List<StandardAnswerVersionDto> answerVersions;
+    private List<StandardAnswerVersion> answerVersions;
 
-    public StandardQuestionDto() {
+    public StandardQuestion() {
     }
 
     public Long getId() {
@@ -51,11 +51,11 @@ public class StandardQuestionDto {
         this.orderNo = orderNo;
     }
 
-    public List<StandardAnswerVersionDto> getAnswerVersions() {
+    public List<StandardAnswerVersion> getAnswerVersions() {
         return answerVersions;
     }
 
-    public void setAnswerVersions(List<StandardAnswerVersionDto> answerVersions) {
+    public void setAnswerVersions(List<StandardAnswerVersion> answerVersions) {
         this.answerVersions = answerVersions;
     }
 }

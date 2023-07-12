@@ -2,48 +2,62 @@ package igc.mirror.template.dto;
 
 import igc.mirror.template.model.LetterTemplate;
 import igc.mirror.template.ref.LetterTemplateType;
-import igc.mirror.utils.validate.group.ChangeGroup;
-import igc.mirror.utils.validate.group.CreateGroup;
+import igc.mirror.template.ref.TemplateStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class LetterTemplateDto {
-    @Null(groups = {CreateGroup.class})
-    private Long id;
-    @NotBlank(groups = {CreateGroup.class, ChangeGroup.class})
+
+    /**
+     * Имя параметра, определяющее шаблон
+     */
+    @NotBlank(message = "Имя параметра, определяющего шаблон, не может быть пустым")
     private String letterType;
-    @NotBlank(groups = {CreateGroup.class, ChangeGroup.class})
-    private String title;
-    @NotNull(groups = {CreateGroup.class, ChangeGroup.class})
+
+    /**
+     * Вид шаблона
+     */
+    @NotNull(message = "Вид шаблона не может быть пустым")
     private LetterTemplateType typeTemplate;
-    //private Map<String, String> variables;
+
+    /**
+     * Заголовок шаблона
+     */
+    private String title;
+
+    /**
+     * Идентификаторы переменных, определенных для шаблона
+     */
     private List<Long> variableIds;
-    private Long letterSample;
-    private String sampleName;
-    private Long sampleSize;
-    private LocalDateTime sampleCreateDate;
+
+    /**
+     * Информация о файле шаблона
+     */
+    private FileInfoDto fileInfo;
+
+    /**
+     * Статус шаблона
+     */
+    private TemplateStatus status;
 
     public LetterTemplateDto() {
     }
-
     public LetterTemplateDto(LetterTemplate letterTemplate) {
-        this.id = letterTemplate.getId();
         this.letterType = letterTemplate.getLetterType();
         this.title = letterTemplate.getTitle();
-        this.letterSample = letterTemplate.getLetterSample();
-        this.typeTemplate = LetterTemplateType.valueOf(letterTemplate.getTypeTemplate());
+        this.typeTemplate = letterTemplate.getTypeTemplate() != null ? LetterTemplateType.valueOf(letterTemplate.getTypeTemplate()) : null;
+        this.status = letterTemplate.getStatus() != null ? TemplateStatus.valueOf(letterTemplate.getStatus()) : null;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public LetterTemplateDto(LetterTemplate letterTemplate, FileInfoDto fileInfo) {
+        //this.id = letterTemplate.getId();
+        this.letterType = letterTemplate.getLetterType();
+        this.title = letterTemplate.getTitle();
+        this.fileInfo = fileInfo;
+        this.typeTemplate = letterTemplate.getTypeTemplate() != null ? LetterTemplateType.valueOf(letterTemplate.getTypeTemplate()) : null;
+        this.status = letterTemplate.getStatus() != null ? TemplateStatus.valueOf(letterTemplate.getStatus()) : null;
     }
 
     public String getLetterType() {
@@ -70,13 +84,6 @@ public class LetterTemplateDto {
         this.typeTemplate = typeTemplate;
     }
 
-//    public Map<String, String> getVariables() {
-//        return variables;
-//    }
-//
-//    public void setVariables(Map<String, String> variables) {
-//        this.variables = variables;
-//    }
     public List<Long> getVariableIds() {
         return variableIds;
     }
@@ -85,35 +92,19 @@ public class LetterTemplateDto {
         this.variableIds = variableIds;
     }
 
-    public Long getLetterSample() {
-        return letterSample;
+    public FileInfoDto getFileInfo() {
+        return fileInfo;
     }
 
-    public void setLetterSample(Long letterSample) {
-        this.letterSample = letterSample;
+    public void setFileInfo(FileInfoDto fileInfo) {
+        this.fileInfo = fileInfo;
     }
 
-    public String getSampleName() {
-        return sampleName;
+    public TemplateStatus getStatus() {
+        return status;
     }
 
-    public void setSampleName(String sampleName) {
-        this.sampleName = sampleName;
-    }
-
-    public Long getSampleSize() {
-        return sampleSize;
-    }
-
-    public void setSampleSize(Long sampleSize) {
-        this.sampleSize = sampleSize;
-    }
-
-    public LocalDateTime getSampleCreateDate() {
-        return sampleCreateDate;
-    }
-
-    public void setSampleCreateDate(LocalDateTime sampleCreateDate) {
-        this.sampleCreateDate = sampleCreateDate;
+    public void setStatus(TemplateStatus status) {
+        this.status = status;
     }
 }

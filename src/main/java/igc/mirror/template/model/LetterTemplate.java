@@ -4,15 +4,56 @@ import java.time.LocalDateTime;
 
 public class LetterTemplate {
     private Long id;
+
+    /**
+     * Имя параметра, определяющее шаблон
+     */
     private String letterType;
+
+    /**
+     * Заголовок шаблона
+     */
     private String title;
+
+    /**
+     * Идентификатор файла шаблона
+     */
     private Long letterSample;
+
+    /**
+     * Дата и время создания
+     */
     private LocalDateTime createDate;
+
+    /**
+     * Автор создания
+     */
     private String createUser;
+
+    /**
+     * Дата и время последнего изменения
+     */
     private LocalDateTime lastUpdateDate;
+
+    /**
+     * Автор изменения
+     */
     private String lastUpdateUser;
+
+    /**
+     * Вид шаблона
+     */
     private String typeTemplate;
+
+    /**
+     * Формат документа
+     */
     private String acceptableDocumentFormat;
+
+    /**
+     * Статус шаблона
+     */
+    private String status;
 
     public LetterTemplate() {
     }
@@ -95,5 +136,13 @@ public class LetterTemplate {
 
     public void setAcceptableDocumentFormat(String acceptableDocumentFormat) {
         this.acceptableDocumentFormat = acceptableDocumentFormat;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

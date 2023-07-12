@@ -100,7 +100,7 @@ public class TLetterTemplate extends TableImpl<TLetterTemplateRecord> {
      * The column <code>admin.t_letter_template.type_template</code>. Вид
      * шаблона. Enum: Документ, Шаблон
      */
-    public final TableField<TLetterTemplateRecord, String> TYPE_TEMPLATE = createField(DSL.name("type_template"), SQLDataType.VARCHAR, this, "Вид шаблона. Enum: Документ, Шаблон");
+    public final TableField<TLetterTemplateRecord, String> TYPE_TEMPLATE = createField(DSL.name("type_template"), SQLDataType.VARCHAR.nullable(false), this, "Вид шаблона. Enum: Документ, Шаблон");
 
     /**
      * The column

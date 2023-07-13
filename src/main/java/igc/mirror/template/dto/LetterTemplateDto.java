@@ -4,7 +4,7 @@ import igc.mirror.template.model.LetterTemplate;
 import igc.mirror.template.ref.LetterTemplateType;
 import igc.mirror.template.ref.TemplateStatus;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class LetterTemplateDto {
     /**
      * Вид шаблона
      */
-    @NotNull(message = "Вид шаблона не может быть пустым")
+    @NotEmpty(message = "Вид шаблона не может быть пустым")
     private LetterTemplateType typeTemplate;
 
     /**
@@ -40,6 +40,7 @@ public class LetterTemplateDto {
     /**
      * Статус шаблона
      */
+    @NotEmpty(message = "Статус шаблона не может быть пустым")
     private TemplateStatus status;
 
     public LetterTemplateDto() {
@@ -47,17 +48,16 @@ public class LetterTemplateDto {
     public LetterTemplateDto(LetterTemplate letterTemplate) {
         this.letterType = letterTemplate.getLetterType();
         this.title = letterTemplate.getTitle();
-        this.typeTemplate = letterTemplate.getTypeTemplate() != null ? LetterTemplateType.valueOf(letterTemplate.getTypeTemplate()) : null;
-        this.status = letterTemplate.getStatus() != null ? TemplateStatus.valueOf(letterTemplate.getStatus()) : null;
+        this.typeTemplate = LetterTemplateType.valueOf(letterTemplate.getTypeTemplate());
+        this.status = TemplateStatus.valueOf(letterTemplate.getStatus());
     }
 
     public LetterTemplateDto(LetterTemplate letterTemplate, FileInfoDto fileInfo) {
-        //this.id = letterTemplate.getId();
         this.letterType = letterTemplate.getLetterType();
         this.title = letterTemplate.getTitle();
         this.fileInfo = fileInfo;
-        this.typeTemplate = letterTemplate.getTypeTemplate() != null ? LetterTemplateType.valueOf(letterTemplate.getTypeTemplate()) : null;
-        this.status = letterTemplate.getStatus() != null ? TemplateStatus.valueOf(letterTemplate.getStatus()) : null;
+        this.typeTemplate = LetterTemplateType.valueOf(letterTemplate.getTypeTemplate());
+        this.status = TemplateStatus.valueOf(letterTemplate.getStatus());
     }
 
     public String getLetterType() {

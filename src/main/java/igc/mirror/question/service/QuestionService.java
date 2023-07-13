@@ -3,7 +3,7 @@ package igc.mirror.question.service;
 import igc.mirror.auth.UserDetails;
 import igc.mirror.question.dto.AnswerVersionDto;
 import igc.mirror.question.dto.QuestionDto;
-import igc.mirror.question.dto.StandardQuestionDto;
+import igc.mirror.question.dto.StandardQuestion;
 import igc.mirror.question.model.AnswerVersion;
 import igc.mirror.question.model.Question;
 import igc.mirror.question.repository.AnswerVersionRepository;
@@ -80,7 +80,7 @@ public class QuestionService {
      *
      * @return перечень стандартных вопросов
      */
-    public List<StandardQuestionDto> findAllStandardQuestions() {
+    public List<StandardQuestion> findAllStandardQuestions() {
         logger.info("Получение перечня стандартных вопросов");
 
         return questionRepository.findAllStandardQuestions();

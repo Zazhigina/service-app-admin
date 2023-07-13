@@ -15,16 +15,6 @@ public class LetterTemplateVariable {
      */
     private Long variableId;
 
-//    /**
-//     * Имя переменной
-//     */
-//    private String name;
-//
-//    /**
-//     * Значение переменной
-//     */
-//    private String val;
-
     /**
      * Дата и время создания документа
      */
@@ -46,12 +36,6 @@ public class LetterTemplateVariable {
     private String lastUpdateUser;
 
     public LetterTemplateVariable() {}
-
-//    public LetterTemplateVariable(long letterTemplateId, String name, String val) {
-//        this.letterTemplateId = letterTemplateId;
-//        this.name = name;
-//        this.val = val;
-//    }
 
     public LetterTemplateVariable(Long letterTemplateId, Long variableId) {
         this.letterTemplateId = letterTemplateId;
@@ -81,22 +65,6 @@ public class LetterTemplateVariable {
     public void setVariableId(Long variableId) {
         this.variableId = variableId;
     }
-
-    //    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//    public String getVal() {
-//        return val;
-//    }
-//
-//    public void setVal(String val) {
-//        this.val = val;
-//    }
 
     public LocalDateTime getCreateDate() {
         return createDate;

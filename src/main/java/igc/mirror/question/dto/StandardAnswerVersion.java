@@ -2,7 +2,7 @@ package igc.mirror.question.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class StandardAnswerVersionDto {
+public class StandardAnswerVersion {
 
     /**
      * Идентификатор ответа
@@ -22,10 +22,9 @@ public class StandardAnswerVersionDto {
     /**
      * Вариант ответа выбран по умолчанию
      */
-    @JsonProperty("isDefault")
     private boolean isDefault;
 
-    public StandardAnswerVersionDto() {
+    public StandardAnswerVersion() {
     }
 
     public Long getId() {
@@ -52,6 +51,7 @@ public class StandardAnswerVersionDto {
         this.orderNo = orderNo;
     }
 
+    @JsonProperty("isDefault")
     public boolean isDefault() {
         return isDefault;
     }

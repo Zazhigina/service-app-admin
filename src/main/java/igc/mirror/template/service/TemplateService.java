@@ -123,7 +123,7 @@ public class TemplateService {
         }
 
         letterTemplate.setTitle(letterTemplateRequest.getTitle());
-        letterTemplate.setStatus(letterTemplateRequest.getStatus() != null ? letterTemplateRequest.getStatus().name() : TemplateStatus.DRAFT.name());
+        letterTemplate.setStatus(letterTemplateRequest.getStatus().name());
         letterTemplate.setLastUpdateUser(userDetails.getUsername());
 
         //добавить/изменить/удалить файл в привязке к шаблону

@@ -5,6 +5,7 @@ import igc.mirror.template.ref.LetterTemplateType;
 import igc.mirror.template.ref.TemplateStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class LetterTemplateDto {
     /**
      * Вид шаблона
      */
-    @NotEmpty(message = "Вид шаблона не может быть пустым")
+    @NotNull(message = "Вид шаблона не может быть пустым")
     private LetterTemplateType typeTemplate;
 
     /**
@@ -40,7 +41,7 @@ public class LetterTemplateDto {
     /**
      * Статус шаблона
      */
-    @NotEmpty(message = "Статус шаблона не может быть пустым")
+    @NotNull(message = "Статус шаблона не может быть пустым")
     private TemplateStatus status;
 
     public LetterTemplateDto() {

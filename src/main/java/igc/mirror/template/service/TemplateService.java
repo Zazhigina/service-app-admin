@@ -104,7 +104,7 @@ public class TemplateService {
     public LetterTemplateDto changeLetterTemplate(Long id, @Valid LetterTemplateDto letterTemplateRequest, MultipartFile file) {
         logger.info("Изменение шаблона с letter_type - {}, id - {}", letterTemplateRequest.getLetterType(), id);
 
-        //проверка наличия необходимых данных в случае утверждения шаблона
+        //проверить наличияе необходимых данных в случае утверждения шаблона
         if (letterTemplateRequest.getStatus() == TemplateStatus.ACTUAL) {
             if ((letterTemplateRequest.getTitle() == null) || (letterTemplateRequest.getTitle().trim().length() == 0))
                 throw new EntityNotSavedException("Заголовок утверждаемого шаблона не заполнен", id, LetterTemplateDto.class);
@@ -114,20 +114,20 @@ public class TemplateService {
                 throw new EntityNotSavedException("Отсутствует файл утверждаемого шаблона", id, LetterTemplateDto.class);
         }
 
-        //проверка расширения файла
+        //найти шаблон и заполнить данные
+        LetterTemplate letterTemplate = letterTemplateRepository.find(id);
+
         if (file != null) {
             LetterTemplateAcceptableDocType acceptableDocType = Optional.ofNullable(LetterTemplateAcceptableDocType.getByExtension(StringUtils.getFilenameExtension(file.getOriginalFilename())))
                     .orElseThrow(() -> new EntityNotSavedException("Недопустимый тип файла", null, null));
+            letterTemplate.setAcceptableDocumentFormat(acceptableDocType.getExtension());
         }
 
-        LetterTemplate letterTemplate = letterTemplateRepository.find(id);
-
-        //заполнение данных шаблона
         letterTemplate.setTitle(letterTemplateRequest.getTitle());
-        letterTemplate.setStatus(letterTemplateRequest.getStatus().name());
+        letterTemplate.setStatus(letterTemplateRequest.getStatus() != null ? letterTemplateRequest.getStatus().name() : TemplateStatus.DRAFT.name());
         letterTemplate.setLastUpdateUser(userDetails.getUsername());
 
-        //добавление/изменение/удаление шаблона файла с привязкой к шаблону
+        //добавить/изменить/удалить файл в привязке к шаблону
         DocumentDto document;
 
         if ((letterTemplateRequest.getFileInfo().getFileId() == null) && (file != null)) {
@@ -137,8 +137,11 @@ public class TemplateService {
             letterTemplateRepository.save(letterTemplate);
         }
 
-        if ((letterTemplateRequest.getFileInfo().getFileId() != null) && (letterTemplateRequest.getFileInfo().getFileSize() != null) && (file != null))
-            document = docService.changeUploadedDocument(letterTemplateRequest.getFileInfo().getFileId(), file);
+        if ((letterTemplateRequest.getFileInfo().getFileId() != null) && (letterTemplateRequest.getFileInfo().getFileSize() != null) && (file != null)) {
+            docService.changeUploadedDocument(letterTemplateRequest.getFileInfo().getFileId(), file);
+
+            letterTemplateRepository.save(letterTemplate);
+        }
 
         if ((letterTemplateRequest.getFileInfo().getFileId() != null) && (letterTemplateRequest.getFileInfo().getFileSize() == null)) {
             letterTemplate.setLetterSample(null);
@@ -147,7 +150,7 @@ public class TemplateService {
             docService.deleteUploadedDocument(letterTemplateRequest.getFileInfo().getFileId());
         }
 
-        //синхронизация переменных
+        //синхронизировать переменные
         List<LetterTemplateVariable> variables = new ArrayList<>();
 
         if (letterTemplateRequest.getVariableIds() != null) {
@@ -207,7 +210,7 @@ public class TemplateService {
 
         LetterTemplate letterTemplate = letterTemplateRepository.findByLetterType(letterType);
 
-        if (TemplateStatus.valueOf(letterTemplate.getStatus()) == TemplateStatus.DRAFT)
+        if (TemplateStatus.valueOf(letterTemplate.getStatus()) != TemplateStatus.ACTUAL)
             throw new IllegalEntityStateException("Шаблон не утвержден", letterTemplate.getId(), LetterTemplate.class);
 
         TemplateDto template = new TemplateDto();

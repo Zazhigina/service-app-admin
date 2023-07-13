@@ -68,7 +68,7 @@ public class TemplateController {
     @PreAuthorize("hasAuthority('APP_ADMIN.EXEC')")
     public ResponseEntity<SuccessInfo> changeLetterTemplate(@PathVariable Long id,
                                                             @RequestPart("request") LetterTemplateDto letterTemplateRequest,
-                                                            @RequestPart("file") MultipartFile file) {
+                                                            @RequestPart(required = false, name = "file") MultipartFile file) {
         templateService.changeLetterTemplate(id, letterTemplateRequest, file);
         return ResponseEntity.ok(new SuccessInfo("Операция выполнена успешно"));
     }

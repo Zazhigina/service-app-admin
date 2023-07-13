@@ -84,7 +84,7 @@ public class TemplateService {
         LetterTemplate letterTemplate = letterTemplateRepository.findByLetterType(letterType);
 
         LetterTemplateDto letterTemplateDto = letterTemplate.getLetterSample() == null
-                ? new LetterTemplateDto(letterTemplate)
+                ? new LetterTemplateDto(letterTemplate, new FileInfoDto())
                 : new LetterTemplateDto(letterTemplate, new FileInfoDto(docService.retrieveDocumentInfo(letterTemplate.getLetterSample())));
 
         letterTemplateDto.setVariableIds(letterTemplateVariableRepository.getLetterTemplateVariableIds(letterTemplate.getId()));

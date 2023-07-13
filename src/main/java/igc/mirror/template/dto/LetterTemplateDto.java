@@ -45,12 +45,6 @@ public class LetterTemplateDto {
 
     public LetterTemplateDto() {
     }
-    public LetterTemplateDto(LetterTemplate letterTemplate) {
-        this.letterType = letterTemplate.getLetterType();
-        this.title = letterTemplate.getTitle();
-        this.typeTemplate = LetterTemplateType.valueOf(letterTemplate.getTypeTemplate());
-        this.status = TemplateStatus.valueOf(letterTemplate.getStatus());
-    }
 
     public LetterTemplateDto(LetterTemplate letterTemplate, FileInfoDto fileInfo) {
         this.letterType = letterTemplate.getLetterType();

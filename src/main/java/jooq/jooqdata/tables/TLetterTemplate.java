@@ -112,7 +112,7 @@ public class TLetterTemplate extends TableImpl<TLetterTemplateRecord> {
     /**
      * The column <code>admin.t_letter_template.status</code>. Статус
      */
-    public final TableField<TLetterTemplateRecord, String> STATUS = createField(DSL.name("status"), SQLDataType.VARCHAR, this, "Статус");
+    public final TableField<TLetterTemplateRecord, String> STATUS = createField(DSL.name("status"), SQLDataType.VARCHAR.nullable(false).defaultValue(DSL.field("'DRAFT'::character varying", SQLDataType.VARCHAR)), this, "Статус");
 
     private TLetterTemplate(Name alias, Table<TLetterTemplateRecord> aliased) {
         this(alias, aliased, null);

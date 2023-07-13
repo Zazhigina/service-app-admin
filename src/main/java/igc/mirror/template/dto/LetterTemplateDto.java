@@ -4,7 +4,6 @@ import igc.mirror.template.model.LetterTemplate;
 import igc.mirror.template.ref.LetterTemplateType;
 import igc.mirror.template.ref.TemplateStatus;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;

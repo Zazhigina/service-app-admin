@@ -63,7 +63,7 @@ public class TemplateController {
                 .body(document.getResource());
     }
 
-    @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "Изменение данных шаблона")
     @PreAuthorize("hasAuthority('APP_ADMIN.EXEC')")
     public ResponseEntity<SuccessInfo> changeLetterTemplate(@PathVariable Long id,

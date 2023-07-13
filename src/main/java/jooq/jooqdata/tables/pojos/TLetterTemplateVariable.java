@@ -18,8 +18,6 @@ public class TLetterTemplateVariable implements Serializable {
 
     private Long id;
     private Long letterTemplateId;
-    private String name;
-    private String val;
     private LocalDateTime createDate;
     private String createUser;
     private LocalDateTime lastUpdateDate;
@@ -31,8 +29,6 @@ public class TLetterTemplateVariable implements Serializable {
     public TLetterTemplateVariable(TLetterTemplateVariable value) {
         this.id = value.id;
         this.letterTemplateId = value.letterTemplateId;
-        this.name = value.name;
-        this.val = value.val;
         this.createDate = value.createDate;
         this.createUser = value.createUser;
         this.lastUpdateDate = value.lastUpdateDate;
@@ -43,8 +39,6 @@ public class TLetterTemplateVariable implements Serializable {
     public TLetterTemplateVariable(
         Long id,
         Long letterTemplateId,
-        String name,
-        String val,
         LocalDateTime createDate,
         String createUser,
         LocalDateTime lastUpdateDate,
@@ -53,8 +47,6 @@ public class TLetterTemplateVariable implements Serializable {
     ) {
         this.id = id;
         this.letterTemplateId = letterTemplateId;
-        this.name = name;
-        this.val = val;
         this.createDate = createDate;
         this.createUser = createUser;
         this.lastUpdateDate = lastUpdateDate;
@@ -94,38 +86,6 @@ public class TLetterTemplateVariable implements Serializable {
      */
     public void setLetterTemplateId(Long letterTemplateId) {
         this.letterTemplateId = letterTemplateId;
-    }
-
-    /**
-     * Getter for <code>admin.t_letter_template_variable.name</code>.
-     * Переменная. Удалить!!!
-     */
-    public String getName() {
-        return this.name;
-    }
-
-    /**
-     * Setter for <code>admin.t_letter_template_variable.name</code>.
-     * Переменная. Удалить!!!
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Getter for <code>admin.t_letter_template_variable.val</code>.
-     * Наименование переменной. Удалить!!!
-     */
-    public String getVal() {
-        return this.val;
-    }
-
-    /**
-     * Setter for <code>admin.t_letter_template_variable.val</code>.
-     * Наименование переменной. Удалить!!!
-     */
-    public void setVal(String val) {
-        this.val = val;
     }
 
     /**
@@ -233,18 +193,6 @@ public class TLetterTemplateVariable implements Serializable {
         }
         else if (!this.letterTemplateId.equals(other.letterTemplateId))
             return false;
-        if (this.name == null) {
-            if (other.name != null)
-                return false;
-        }
-        else if (!this.name.equals(other.name))
-            return false;
-        if (this.val == null) {
-            if (other.val != null)
-                return false;
-        }
-        else if (!this.val.equals(other.val))
-            return false;
         if (this.createDate == null) {
             if (other.createDate != null)
                 return false;
@@ -284,8 +232,6 @@ public class TLetterTemplateVariable implements Serializable {
         int result = 1;
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result + ((this.letterTemplateId == null) ? 0 : this.letterTemplateId.hashCode());
-        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
-        result = prime * result + ((this.val == null) ? 0 : this.val.hashCode());
         result = prime * result + ((this.createDate == null) ? 0 : this.createDate.hashCode());
         result = prime * result + ((this.createUser == null) ? 0 : this.createUser.hashCode());
         result = prime * result + ((this.lastUpdateDate == null) ? 0 : this.lastUpdateDate.hashCode());
@@ -300,8 +246,6 @@ public class TLetterTemplateVariable implements Serializable {
 
         sb.append(id);
         sb.append(", ").append(letterTemplateId);
-        sb.append(", ").append(name);
-        sb.append(", ").append(val);
         sb.append(", ").append(createDate);
         sb.append(", ").append(createUser);
         sb.append(", ").append(lastUpdateDate);

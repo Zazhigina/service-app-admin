@@ -15,11 +15,11 @@ import jooqdata.tables.records.TLetterTemplateVariableRecord;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function9;
+import org.jooq.Function7;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row9;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -64,18 +64,6 @@ public class TLetterTemplateVariable extends TableImpl<TLetterTemplateVariableRe
      * письма
      */
     public final TableField<TLetterTemplateVariableRecord, Long> LETTER_TEMPLATE_ID = createField(DSL.name("letter_template_id"), SQLDataType.BIGINT.nullable(false), this, "Шаблон письма");
-
-    /**
-     * The column <code>admin.t_letter_template_variable.name</code>.
-     * Переменная. Удалить!!!
-     */
-    public final TableField<TLetterTemplateVariableRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR, this, "Переменная. Удалить!!!");
-
-    /**
-     * The column <code>admin.t_letter_template_variable.val</code>.
-     * Наименование переменной. Удалить!!!
-     */
-    public final TableField<TLetterTemplateVariableRecord, String> VAL = createField(DSL.name("val"), SQLDataType.VARCHAR, this, "Наименование переменной. Удалить!!!");
 
     /**
      * The column <code>admin.t_letter_template_variable.create_date</code>.
@@ -223,18 +211,18 @@ public class TLetterTemplateVariable extends TableImpl<TLetterTemplateVariableRe
     }
 
     // -------------------------------------------------------------------------
-    // Row9 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<Long, Long, String, String, LocalDateTime, String, LocalDateTime, String, Long> fieldsRow() {
-        return (Row9) super.fieldsRow();
+    public Row7<Long, Long, LocalDateTime, String, LocalDateTime, String, Long> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function9<? super Long, ? super Long, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super Long, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function7<? super Long, ? super Long, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super Long, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -242,7 +230,7 @@ public class TLetterTemplateVariable extends TableImpl<TLetterTemplateVariableRe
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function9<? super Long, ? super Long, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super Long, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function7<? super Long, ? super Long, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super Long, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

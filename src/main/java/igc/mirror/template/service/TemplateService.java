@@ -93,15 +93,14 @@ public class TemplateService {
     }
 
     /**
-     * Изменяет шаблон
+     * Изменяет шаблон и связанный файл
      *
      * @param id                    ID шаблона
      * @param letterTemplateRequest данные для изменения шаблона
      * @param file                  файл шаблона
-     * @return данные измененного шаблона
      */
     @Transactional
-    public LetterTemplateDto changeLetterTemplate(Long id, @Valid LetterTemplateDto letterTemplateRequest, MultipartFile file) {
+    public void changeLetterTemplate(Long id, @Valid LetterTemplateDto letterTemplateRequest, MultipartFile file) {
         logger.info("Изменение шаблона с letter_type - {}, id - {}", letterTemplateRequest.getLetterType(), id);
 
         //проверить наличияе необходимых данных в случае утверждения шаблона
@@ -159,11 +158,6 @@ public class TemplateService {
         }
 
         letterTemplateVariableRepository.synchronizeLetterTemplateVariable(id, variables);
-
-        LetterTemplateDto letterTemplateDto = new LetterTemplateDto(letterTemplate, letterTemplateRequest.getFileInfo());
-        letterTemplateDto.setVariableIds(letterTemplateRequest.getVariableIds());
-
-        return letterTemplateDto;
     }
 
     /**

@@ -1,6 +1,7 @@
 package igc.mirror.template.controller;
 
 import igc.mirror.doc.dto.DocumentDto;
+import igc.mirror.exception.handler.SuccessInfo;
 import igc.mirror.template.dto.LetterTemplateBriefInfoDto;
 import igc.mirror.template.dto.LetterTemplateDto;
 import igc.mirror.template.dto.LetterTemplateTypeDto;
@@ -65,10 +66,11 @@ public class TemplateController {
     @PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "Изменение данных шаблона")
     @PreAuthorize("hasAuthority('APP_ADMIN.EXEC')")
-    public ResponseEntity<LetterTemplateDto> changeLetterTemplate(@PathVariable Long id,
-                                                                  @RequestPart("request") LetterTemplateDto letterTemplateRequest,
-                                                                  @RequestPart("file") MultipartFile file) {
-        return ResponseEntity.ok(templateService.changeLetterTemplate(id, letterTemplateRequest, file));
+    public ResponseEntity<SuccessInfo> changeLetterTemplate(@PathVariable Long id,
+                                                            @RequestPart("request") LetterTemplateDto letterTemplateRequest,
+                                                            @RequestPart("file") MultipartFile file) {
+        templateService.changeLetterTemplate(id, letterTemplateRequest, file);
+        return ResponseEntity.ok(new SuccessInfo("Операция выполнена успешно"));
     }
 
     @GetMapping("/type")

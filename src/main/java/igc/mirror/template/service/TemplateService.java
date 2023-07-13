@@ -134,20 +134,20 @@ public class TemplateService {
             letterTemplate.setLetterSample(document.getId());
 
             letterTemplateRepository.save(letterTemplate);
-        }
 
-        if ((letterTemplateRequest.getFileInfo().getFileId() != null) && (letterTemplateRequest.getFileInfo().getFileSize() != null) && (file != null)) {
+        } else if ((letterTemplateRequest.getFileInfo().getFileId() != null) && (letterTemplateRequest.getFileInfo().getFileSize() != null) && (file != null)) {
             docService.changeUploadedDocument(letterTemplateRequest.getFileInfo().getFileId(), file);
 
             letterTemplateRepository.save(letterTemplate);
-        }
 
-        if ((letterTemplateRequest.getFileInfo().getFileId() != null) && (letterTemplateRequest.getFileInfo().getFileSize() == null)) {
+        } else if ((letterTemplateRequest.getFileInfo().getFileId() != null) && (letterTemplateRequest.getFileInfo().getFileSize() == null)) {
             letterTemplate.setLetterSample(null);
             letterTemplateRepository.save(letterTemplate);
 
             docService.deleteUploadedDocument(letterTemplateRequest.getFileInfo().getFileId());
-        }
+
+        } else
+            letterTemplateRepository.save(letterTemplate);
 
         //синхронизировать переменные
         List<LetterTemplateVariable> variables = new ArrayList<>();

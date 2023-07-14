@@ -53,17 +53,17 @@ public class AParam extends TableImpl<AParamRecord> {
     /**
      * The column <code>admin.a_param.key</code>. Первичный ключ
      */
-    public final TableField<AParamRecord, String> KEY = createField(DSL.name("key"), SQLDataType.VARCHAR(50).nullable(false), this, "Первичный ключ");
+    public final TableField<AParamRecord, String> KEY = createField(DSL.name("key"), SQLDataType.VARCHAR.nullable(false), this, "Первичный ключ");
 
     /**
      * The column <code>admin.a_param.name</code>. Наименование
      */
-    public final TableField<AParamRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(1000).nullable(false), this, "Наименование");
+    public final TableField<AParamRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR.nullable(false), this, "Наименование");
 
     /**
      * The column <code>admin.a_param.val</code>. Значение
      */
-    public final TableField<AParamRecord, String> VAL = createField(DSL.name("val"), SQLDataType.VARCHAR(50), this, "Значение");
+    public final TableField<AParamRecord, String> VAL = createField(DSL.name("val"), SQLDataType.VARCHAR, this, "Значение");
 
     /**
      * The column <code>admin.a_param.create_date</code>. Дата и время создания
@@ -89,7 +89,7 @@ public class AParam extends TableImpl<AParamRecord> {
     /**
      * The column <code>admin.a_param.default_val</code>. Значение по умолчанию
      */
-    public final TableField<AParamRecord, String> DEFAULT_VAL = createField(DSL.name("default_val"), SQLDataType.VARCHAR(50), this, "Значение по умолчанию");
+    public final TableField<AParamRecord, String> DEFAULT_VAL = createField(DSL.name("default_val"), SQLDataType.VARCHAR, this, "Значение по умолчанию");
 
     private AParam(Name alias, Table<AParamRecord> aliased) {
         this(alias, aliased, null);

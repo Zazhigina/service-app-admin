@@ -1,10 +1,10 @@
 package igc.mirror.param.service;
 
-import igc.mirror.exception.common.EntityNotFoundException;
 import igc.mirror.auth.UserDetails;
-import igc.mirror.param.model.Param;
+import igc.mirror.exception.common.EntityNotFoundException;
 import igc.mirror.param.dto.ParamDto;
 import igc.mirror.param.dto.ParamEditableDto;
+import igc.mirror.param.model.Param;
 import igc.mirror.param.repository.ParamRepository;
 import igc.mirror.utils.qfilter.DataFilter;
 import jakarta.validation.Valid;
@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -77,6 +79,16 @@ public class ParamService {
      */
     public ParamDto findByKey(String key){
         return ParamDto.fromModel(paramRepository.find(key));
+    }
+
+    /**
+     * Возвращает карту соответствия параметров указанным ключам
+     *
+     * @param keys список ключей
+     * @return карта
+     */
+    public Map<String, ParamDto> getParamKeysAsMap(List<String> keys) {
+        return paramRepository.getParamKeysAsMap(keys);
     }
 
 }

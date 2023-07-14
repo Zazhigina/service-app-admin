@@ -1,6 +1,7 @@
 package igc.mirror.param.repository;
 
 import igc.mirror.exception.common.EntityNotFoundException;
+import igc.mirror.param.dto.ParamDto;
 import igc.mirror.param.model.Param;
 import igc.mirror.utils.jooq.JooqCommonRepository;
 import igc.mirror.utils.qfilter.DataFilter;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.jooq.impl.DSL.select;
@@ -122,5 +124,17 @@ public class ParamRepository implements JooqCommonRepository<Param, String> {
         dsl.deleteFrom(AParam.A_PARAM)
                 .where(AParam.A_PARAM.KEY.in(identifierList))
                 .execute();
+    }
+
+    /**
+     * Возвращает карту соответствия параметров указанным ключам
+     *
+     * @param keys список ключам
+     * @return карта
+     */
+    public Map<String, ParamDto> getParamKeysAsMap(List<String> keys) {
+        return dsl.selectFrom(AParam.A_PARAM)
+                .where(AParam.A_PARAM.KEY.in(keys))
+                .fetchMap(AParam.A_PARAM.KEY, ParamDto.class);
     }
 }

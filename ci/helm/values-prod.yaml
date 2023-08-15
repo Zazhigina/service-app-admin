@@ -1,0 +1,65 @@
+application:
+  env:
+    configmap:
+      - key: DB_SCHEMA
+        value: admin
+      - key: SPRING_PROFILES_ACTIVE
+        value: trust
+      - key: MIRROR_ENDPOINT_MA
+        value: http://service-app-ma.tzriu:8080
+      - key: MIRROR_ENDPOINT_RBAC
+        value: http://service-app-rbac.tzriu:8080
+      - key: MIRROR_ENDPOINT_INTEGRATION
+        value: http://service-app-integration.tzriu:8080
+      - key: MIRROR_ENDPOINT_DOC
+        value: http://service-app-doc.tzriu:8080
+      - key: MIRROR_KEYCLOAK_BASE_URL
+        value: https://app-sso.apps.gazprom-neft.local/auth
+      - key: MIRROR_KEYCLOAK_REALM
+        value: U200004740-tzriu
+      - key: MIRROR_KEYCLOAK_CLIENT_ID
+        value: tzriu-mrp
+      - key: KEYCLOAK_ROOT_CA_URL
+        value: https://nexus.gazprom-neft.local/repository/local-repo/CA/root-ca-gazprom-neft.pem
+      - key: KEYCLOAK_SUB_CA_URL
+        value: https://nexus.gazprom-neft.local/repository/local-repo/CA/sub-ca.pem
+      - key: MIRROR_SCHEDULE_TASKS_CRON_REPLICATE_PROCEDURE_RECORDS
+        value: 0 0 1 4 * ?
+      - key: MIRROR_SCHEDULE_TASKS_CRON_SAVE_SEARCH_HISTORY
+        value: 0 30 23 * * *
+    secret:
+      - key: MIRROR_DATASOURCE_URL
+        secretName: mirror-pg-cred
+        secretKey: url
+      - key: SPRING_DATASOURCE_USERNAME
+        secretName: mirror-pg-cred
+        secretKey: username
+      - key: SPRING_DATASOURCE_PASSWORD
+        secretName: mirror-pg-cred
+        secretKey: password
+      - key: MIRROR_KEYCLOAK_CLIENT_SECRET
+        secretName: mirror-sso-confid-cred
+        secretKey: secret
+      - key: MIRROR_SCHEDULE_TASKS_USERNAME
+        secretName: mirror-sched-tasks-cred
+        secretKey: username
+      - key: MIRROR_SCHEDULE_TASKS_PASSWORD
+        secretName: mirror-sched-tasks-cred
+        secretKey: password
+
+fullnameOverride: "service-app-admin"
+
+service:
+  managementPort: 8081
+
+resources:
+  limits:
+    cpu: 400m
+    memory: 2048Mi
+  requests:
+    cpu: 200m
+    memory: 512Mi
+
+prometheus:
+  monitoring:
+    enabled: true

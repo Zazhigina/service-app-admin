@@ -22,17 +22,20 @@ ARG MAVEN_REPOSITORY_SUB_CA_URL
 ENV TZ Europe/Moscow
 WORKDIR $BUILD_APP_DIR
 COPY . .
-## Add certificate
-RUN if [ -n "$MAVEN_REPOSITORY_ROOT_CA_URL" ]; then wget --no-check-certificate -q -O - $MAVEN_REPOSITORY_ROOT_CA_URL > ./root-ca-maven.crt \
-    && keytool -import -noprompt -alias root -file ./root-ca-maven.crt -keystore ./maven.jks -storepass gradle; fi
-RUN if [ -n "$MAVEN_REPOSITORY_SUB_CA_URL" ]; then wget --no-check-certificate -q -O - $MAVEN_REPOSITORY_SUB_CA_URL > ./sub-ca-maven.crt \
-    && keytool -import -noprompt -alias sub -file ./sub-ca-maven.crt -keystore ./maven.jks -storepass gradle; fi
+
 ENV GRADLE_USER_HOME=$BUILD_APP_DIR/gradle
-RUN gradle build --init-script init.gradle -PmavenRepository=$MAVEN_REPOSITORY \
-    -PmavenRepositoryPlugin=$MAVEN_REPOSITORY_PLUGIN
+
+## Add certificate
+RUN JKS_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) \
+    && if [ -n "$MAVEN_REPOSITORY_ROOT_CA_URL" ]; then wget --no-check-certificate -q -O - $MAVEN_REPOSITORY_ROOT_CA_URL > ./root-ca-maven.crt \
+    && keytool -import -noprompt -alias root -file ./root-ca-maven.crt -keystore ./maven.jks -storepass $JKS_KEY; fi \
+    && if [ -n "$MAVEN_REPOSITORY_SUB_CA_URL" ]; then wget --no-check-certificate -q -O - $MAVEN_REPOSITORY_SUB_CA_URL > ./sub-ca-maven.crt \
+    && keytool -import -noprompt -alias sub -file ./sub-ca-maven.crt -keystore ./maven.jks -storepass $JKS_KEY; fi \
+    && gradle build --init-script init.gradle -PmavenRepository=$MAVEN_REPOSITORY -PmavenRepositoryPlugin=$MAVEN_REPOSITORY_PLUGIN
+
 RUN java -Djarmode=layertools -jar $BUILD_APP_DIR/build/libs/root.jar extract
 #
-FROM  $RH_IMAGE_REPOSITORY/ubi9/openjdk-17-runtime:1.14-2.1681917142
+FROM  $RH_IMAGE_REPOSITORY/ubi9/openjdk-17-runtime:1.15-2
 ARG BUILD_APP_DIR
 ARG UID=1001
 
@@ -56,8 +59,6 @@ COPY --chown=$UID:0 --from=build $BUILD_APP_DIR/application/ ./
 
 ## Set application runtime path
 ENV RUNTIME_PATH='/tmp'
-ENV SPRING_DATASOURCE_USERNAME=""
-ENV SPRING_DATASOURCE_PASSWORD=""
 
 VOLUME ["$RUNTIME_PATH"]
 
@@ -65,4 +66,4 @@ EXPOSE 8080
 EXPOSE 8081
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["java", "-Djavax.net.ssl.trustStore=/tmp/truststore.jks", "-Djavax.net.ssl.trustStorePassword=changeit", "org.springframework.boot.loader.JarLauncher"]
+CMD ["org.springframework.boot.loader.JarLauncher"]

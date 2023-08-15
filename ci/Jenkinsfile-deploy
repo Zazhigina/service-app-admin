@@ -11,23 +11,34 @@ withFolderProperties{
     OCP_APP_NAME = "${env.OCP_APP_NAME}"
     OCP_CRED_ID = "${env.OCP_CRED_ID}"
     VAULT_URL = "${env.VAULT_URL}"
+    LANDSCAPE_ID = "${env.LANDSCAPE_ID}"
     REGISTRY_TRUST = "${env.REGISTRY_TRUST}"
     REGISTRY_TRUST_CRED_ID = "${env.REGISTRY_TRUST_CRED_ID}"
     REGISTRY_DEV = "${env.REGISTRY_DEV}"
     REGISTRY_DEV_CRED_ID = "${env.REGISTRY_DEV_CRED_ID}"
+    PROD_REGISTRY_TRUST = "${env.PROD_REGISTRY_TRUST}"
+    PROD_REGISTRY_TRUST_CRED_ID = "${env.PROD_REGISTRY_TRUST_CRED_ID}"
     PROJECT_ID = "${env.PROJECT_ID}"
 }
 
-if (DEPLOY_ENVIRONMENT == 'trust') {
+if (DEPLOY_ENVIRONMENT == 'trust' && (LANDSCAPE_ID == 'prod' || LANDSCAPE_ID == 'preprod' || LANDSCAPE_ID == 'prod-cdmz' || LANDSCAPE_ID == 'preprod-cdmz')) {
+    REGISTRY = PROD_REGISTRY_TRUST
+    REGISTRY_CRED_ID = PROD_REGISTRY_TRUST_CRED_ID
+    // CHART_VERSION = '0.1.1'
+    CHART_VERSION = '1.0.0'
+    HELM_VALUES_NAME = 'prod'
+} else if (DEPLOY_ENVIRONMENT == 'trust' && LANDSCAPE_ID == 'uat') {
     REGISTRY = REGISTRY_TRUST
     REGISTRY_CRED_ID = REGISTRY_TRUST_CRED_ID
-    CHART_VERSION = '0.1.6'
-}
-
-if (DEPLOY_ENVIRONMENT == 'dev') {
+    // CHART_VERSION = '0.1.8'
+    CHART_VERSION = '1.0.0'
+    HELM_VALUES_NAME = 'trust'
+} else if (DEPLOY_ENVIRONMENT == 'dev') {
     REGISTRY = REGISTRY_DEV
     REGISTRY_CRED_ID = REGISTRY_DEV_CRED_ID
-    CHART_VERSION = '0.1.4'
+    // CHART_VERSION = '0.1.14'
+    CHART_VERSION = '1.0.0'
+    HELM_VALUES_NAME = 'dev'
 }
 
 pipeline {
@@ -66,7 +77,7 @@ pipeline {
                             --reset-values \
                             --set image.repository=${REGISTRY}/${OCP_NAMESPACE}/${OCP_APP_NAME} \
                             --set image.tag=${GIT_COMMIT_SHORT} \
-                            -f ./ci/helm/values-${DEPLOY_ENVIRONMENT}.yaml"
+                            -f ./ci/helm/values-${HELM_VALUES_NAME}.yaml"
                     ]
                 }
             }

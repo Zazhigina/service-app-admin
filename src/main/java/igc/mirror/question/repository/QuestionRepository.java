@@ -32,10 +32,12 @@ public class QuestionRepository {
         return dsl.select(QUESTION.NAME,
                         QUESTION.ORDER_NO,
                         QUESTION.ACTUAL_TO,
+                        QUESTION.CODE,
                         multiset(
                                 select(ANSWER_VERSION.NAME,
                                         ANSWER_VERSION.ORDER_NO,
-                                        ANSWER_VERSION.IS_DEFAULT)
+                                        ANSWER_VERSION.IS_DEFAULT,
+                                        ANSWER_VERSION.TYPE)
                                         .from(ANSWER_VERSION)
                                         .where(ANSWER_VERSION.QUESTION_ID.eq(QUESTION.ID))).as("answerVersions"))
                 .from(QUESTION)
@@ -76,11 +78,13 @@ public class QuestionRepository {
         return dsl.select(QUESTION.ID,
                         QUESTION.NAME,
                         QUESTION.ORDER_NO,
+                        QUESTION.CODE,
                         multiset(
                                 select(ANSWER_VERSION.ID,
                                         ANSWER_VERSION.NAME,
                                         ANSWER_VERSION.ORDER_NO,
-                                        ANSWER_VERSION.IS_DEFAULT)
+                                        ANSWER_VERSION.IS_DEFAULT,
+                                        ANSWER_VERSION.TYPE)
                                         .from(ANSWER_VERSION)
                                         .where(ANSWER_VERSION.QUESTION_ID.eq(QUESTION.ID))).as("answerVersions"))
                 .from(QUESTION)

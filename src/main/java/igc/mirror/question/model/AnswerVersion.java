@@ -1,5 +1,7 @@
 package igc.mirror.question.model;
 
+import igc.mirror.question.ref.AnswerType;
+
 import java.time.LocalDateTime;
 
 public class AnswerVersion {
@@ -45,7 +47,42 @@ public class AnswerVersion {
     */
    private String lastUpdateUser;
 
+   /**
+    * Тип ответа
+    */
+   private AnswerType answerType;
+
    public AnswerVersion() {}
+
+   public AnswerVersion(Long id, Long questionId, String name, Integer orderNo, boolean isDefault,
+                        LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate,
+                        String lastUpdateUser, AnswerType answerType) {
+      this.id = id;
+      this.questionId = questionId;
+      this.name = name;
+      this.orderNo = orderNo;
+      this.isDefault = isDefault;
+      this.createDate = createDate;
+      this.createUser = createUser;
+      this.lastUpdateDate = lastUpdateDate;
+      this.lastUpdateUser = lastUpdateUser;
+      this.answerType = answerType;
+   }
+
+   public AnswerVersion(Long id, Long questionId, String name, Integer orderNo, boolean isDefault,
+                        LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate,
+                        String lastUpdateUser, String answerType) {
+      this.id = id;
+      this.questionId = questionId;
+      this.name = name;
+      this.orderNo = orderNo;
+      this.isDefault = isDefault;
+      this.createDate = createDate;
+      this.createUser = createUser;
+      this.lastUpdateDate = lastUpdateDate;
+      this.lastUpdateUser = lastUpdateUser;
+      this.answerType = AnswerType.valueOf(answerType);
+   }
 
    public Long getId() {
       return id;
@@ -117,5 +154,13 @@ public class AnswerVersion {
 
    public void setLastUpdateUser(String lastUpdateUser) {
       this.lastUpdateUser = lastUpdateUser;
+   }
+
+   public AnswerType getAnswerType() {
+      return answerType;
+   }
+
+   public void setAnswerType(AnswerType answerType) {
+      this.answerType = answerType;
    }
 }

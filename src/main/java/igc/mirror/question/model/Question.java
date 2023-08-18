@@ -40,6 +40,11 @@ public class Question {
      */
     private String lastUpdateUser;
 
+    /**
+     * Код стандартного вопроса
+     */
+    private String code;
+
     public Question() {
     }
 
@@ -105,5 +110,13 @@ public class Question {
 
     public void setLastUpdateUser(String lastUpdateUser) {
         this.lastUpdateUser = lastUpdateUser;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

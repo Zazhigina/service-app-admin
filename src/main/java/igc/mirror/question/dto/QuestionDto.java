@@ -26,6 +26,11 @@ public class QuestionDto {
     private LocalDateTime actualTo;
 
     /**
+     * Код стандартного вопроса
+     */
+    private String code;
+
+    /**
      * Перечень вариантов ответов на вопрос
      */
     private List<AnswerVersionDto> answerVersions;
@@ -63,5 +68,13 @@ public class QuestionDto {
 
     public void setAnswerVersions(List<AnswerVersionDto> answerVersions) {
         this.answerVersions = answerVersions;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

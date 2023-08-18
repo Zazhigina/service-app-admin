@@ -1,6 +1,7 @@
 package igc.mirror.question.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import igc.mirror.question.ref.AnswerType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -23,7 +24,26 @@ public class AnswerVersionDto {
      */
     private boolean isDefault;
 
+    /**
+     * Тип ответа
+     */
+    private AnswerType answerType;
+
     public AnswerVersionDto() {
+    }
+
+    public AnswerVersionDto(String name, Integer orderNo, boolean isDefault, AnswerType answerType) {
+        this.name = name;
+        this.orderNo = orderNo;
+        this.isDefault = isDefault;
+        this.answerType = answerType;
+    }
+
+    public AnswerVersionDto(String name, Integer orderNo, boolean isDefault, String answerType) {
+        this.name = name;
+        this.orderNo = orderNo;
+        this.isDefault = isDefault;
+        this.answerType = AnswerType.valueOf(answerType);
     }
 
     public String getName() {
@@ -49,5 +69,13 @@ public class AnswerVersionDto {
 
     public void setDefault(boolean isDefault) {
         this.isDefault = isDefault;
+    }
+
+    public AnswerType getAnswerType() {
+        return answerType;
+    }
+
+    public void setAnswerType(AnswerType answerType) {
+        this.answerType = answerType;
     }
 }

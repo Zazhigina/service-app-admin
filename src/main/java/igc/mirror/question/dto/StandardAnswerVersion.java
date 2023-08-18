@@ -1,6 +1,7 @@
 package igc.mirror.question.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import igc.mirror.question.ref.AnswerType;
 
 public class StandardAnswerVersion {
 
@@ -24,7 +25,28 @@ public class StandardAnswerVersion {
      */
     private boolean isDefault;
 
+    /**
+     * Тип ответа
+     */
+    private AnswerType answerType;
+
     public StandardAnswerVersion() {
+    }
+
+    public StandardAnswerVersion(Long id, String name, Integer orderNo, boolean isDefault, AnswerType answerType) {
+        this.id = id;
+        this.name = name;
+        this.orderNo = orderNo;
+        this.isDefault = isDefault;
+        this.answerType = answerType;
+    }
+
+    public StandardAnswerVersion(Long id, String name, Integer orderNo, boolean isDefault, String answerType) {
+        this.id = id;
+        this.name = name;
+        this.orderNo = orderNo;
+        this.isDefault = isDefault;
+        this.answerType = AnswerType.valueOf(answerType);
     }
 
     public Long getId() {
@@ -58,5 +80,13 @@ public class StandardAnswerVersion {
 
     public void setDefault(boolean isDefault) {
         this.isDefault = isDefault;
+    }
+
+    public AnswerType getAnswerType() {
+        return answerType;
+    }
+
+    public void setAnswerType(AnswerType answerType) {
+        this.answerType = answerType;
     }
 }

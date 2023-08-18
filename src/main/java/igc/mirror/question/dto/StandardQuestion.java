@@ -20,6 +20,11 @@ public class StandardQuestion {
     private Integer orderNo;
 
     /**
+     * Код стандартного вопроса
+     */
+    private String code;
+
+    /**
      * Перечень вариантов ответов на вопрос
      */
     private List<StandardAnswerVersion> answerVersions;
@@ -57,5 +62,13 @@ public class StandardQuestion {
 
     public void setAnswerVersions(List<StandardAnswerVersion> answerVersions) {
         this.answerVersions = answerVersions;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

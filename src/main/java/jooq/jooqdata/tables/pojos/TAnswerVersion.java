@@ -25,6 +25,7 @@ public class TAnswerVersion implements Serializable {
     private LocalDateTime lastUpdateDate;
     private String lastUpdateUser;
     private Boolean isDefault;
+    private String type;
 
     public TAnswerVersion() {}
 
@@ -38,6 +39,7 @@ public class TAnswerVersion implements Serializable {
         this.lastUpdateDate = value.lastUpdateDate;
         this.lastUpdateUser = value.lastUpdateUser;
         this.isDefault = value.isDefault;
+        this.type = value.type;
     }
 
     public TAnswerVersion(
@@ -49,7 +51,8 @@ public class TAnswerVersion implements Serializable {
         String createUser,
         LocalDateTime lastUpdateDate,
         String lastUpdateUser,
-        Boolean isDefault
+        Boolean isDefault,
+        String type
     ) {
         this.id = id;
         this.questionId = questionId;
@@ -60,6 +63,7 @@ public class TAnswerVersion implements Serializable {
         this.lastUpdateDate = lastUpdateDate;
         this.lastUpdateUser = lastUpdateUser;
         this.isDefault = isDefault;
+        this.type = type;
     }
 
     /**
@@ -202,6 +206,20 @@ public class TAnswerVersion implements Serializable {
         this.isDefault = isDefault;
     }
 
+    /**
+     * Getter for <code>admin.t_answer_version.type</code>. Тип ответа
+     */
+    public String getType() {
+        return this.type;
+    }
+
+    /**
+     * Setter for <code>admin.t_answer_version.type</code>. Тип ответа
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -265,6 +283,12 @@ public class TAnswerVersion implements Serializable {
         }
         else if (!this.isDefault.equals(other.isDefault))
             return false;
+        if (this.type == null) {
+            if (other.type != null)
+                return false;
+        }
+        else if (!this.type.equals(other.type))
+            return false;
         return true;
     }
 
@@ -281,6 +305,7 @@ public class TAnswerVersion implements Serializable {
         result = prime * result + ((this.lastUpdateDate == null) ? 0 : this.lastUpdateDate.hashCode());
         result = prime * result + ((this.lastUpdateUser == null) ? 0 : this.lastUpdateUser.hashCode());
         result = prime * result + ((this.isDefault == null) ? 0 : this.isDefault.hashCode());
+        result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
         return result;
     }
 
@@ -297,6 +322,7 @@ public class TAnswerVersion implements Serializable {
         sb.append(", ").append(lastUpdateDate);
         sb.append(", ").append(lastUpdateUser);
         sb.append(", ").append(isDefault);
+        sb.append(", ").append(type);
 
         sb.append(")");
         return sb.toString();

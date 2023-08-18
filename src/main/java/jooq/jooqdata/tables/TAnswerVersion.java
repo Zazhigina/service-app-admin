@@ -15,11 +15,11 @@ import jooqdata.tables.records.TAnswerVersionRecord;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function9;
+import org.jooq.Function10;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row9;
+import org.jooq.Row10;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -103,6 +103,11 @@ public class TAnswerVersion extends TableImpl<TAnswerVersionRecord> {
      * выбора ответа
      */
     public final TableField<TAnswerVersionRecord, Boolean> IS_DEFAULT = createField(DSL.name("is_default"), SQLDataType.BOOLEAN, this, "Индикатор выбора ответа");
+
+    /**
+     * The column <code>admin.t_answer_version.type</code>. Тип ответа
+     */
+    public final TableField<TAnswerVersionRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.VARCHAR.nullable(false), this, "Тип ответа");
 
     private TAnswerVersion(Name alias, Table<TAnswerVersionRecord> aliased) {
         this(alias, aliased, null);
@@ -204,18 +209,18 @@ public class TAnswerVersion extends TableImpl<TAnswerVersionRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row9 type methods
+    // Row10 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<Long, Long, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean> fieldsRow() {
-        return (Row9) super.fieldsRow();
+    public Row10<Long, Long, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean, String> fieldsRow() {
+        return (Row10) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function9<? super Long, ? super Long, ? super String, ? super Integer, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super Boolean, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function10<? super Long, ? super Long, ? super String, ? super Integer, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super Boolean, ? super String, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -223,7 +228,7 @@ public class TAnswerVersion extends TableImpl<TAnswerVersionRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function9<? super Long, ? super Long, ? super String, ? super Integer, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super Boolean, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function10<? super Long, ? super Long, ? super String, ? super Integer, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super Boolean, ? super String, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

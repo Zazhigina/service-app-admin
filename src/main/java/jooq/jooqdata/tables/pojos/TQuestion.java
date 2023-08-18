@@ -24,6 +24,7 @@ public class TQuestion implements Serializable {
     private String createUser;
     private LocalDateTime lastUpdateDate;
     private String lastUpdateUser;
+    private String code;
 
     public TQuestion() {}
 
@@ -36,6 +37,7 @@ public class TQuestion implements Serializable {
         this.createUser = value.createUser;
         this.lastUpdateDate = value.lastUpdateDate;
         this.lastUpdateUser = value.lastUpdateUser;
+        this.code = value.code;
     }
 
     public TQuestion(
@@ -46,7 +48,8 @@ public class TQuestion implements Serializable {
         LocalDateTime createDate,
         String createUser,
         LocalDateTime lastUpdateDate,
-        String lastUpdateUser
+        String lastUpdateUser,
+        String code
     ) {
         this.id = id;
         this.name = name;
@@ -56,6 +59,7 @@ public class TQuestion implements Serializable {
         this.createUser = createUser;
         this.lastUpdateDate = lastUpdateDate;
         this.lastUpdateUser = lastUpdateUser;
+        this.code = code;
     }
 
     /**
@@ -176,6 +180,20 @@ public class TQuestion implements Serializable {
         this.lastUpdateUser = lastUpdateUser;
     }
 
+    /**
+     * Getter for <code>admin.t_question.code</code>. Уникальный код запроса
+     */
+    public String getCode() {
+        return this.code;
+    }
+
+    /**
+     * Setter for <code>admin.t_question.code</code>. Уникальный код запроса
+     */
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -233,6 +251,12 @@ public class TQuestion implements Serializable {
         }
         else if (!this.lastUpdateUser.equals(other.lastUpdateUser))
             return false;
+        if (this.code == null) {
+            if (other.code != null)
+                return false;
+        }
+        else if (!this.code.equals(other.code))
+            return false;
         return true;
     }
 
@@ -248,6 +272,7 @@ public class TQuestion implements Serializable {
         result = prime * result + ((this.createUser == null) ? 0 : this.createUser.hashCode());
         result = prime * result + ((this.lastUpdateDate == null) ? 0 : this.lastUpdateDate.hashCode());
         result = prime * result + ((this.lastUpdateUser == null) ? 0 : this.lastUpdateUser.hashCode());
+        result = prime * result + ((this.code == null) ? 0 : this.code.hashCode());
         return result;
     }
 
@@ -263,6 +288,7 @@ public class TQuestion implements Serializable {
         sb.append(", ").append(createUser);
         sb.append(", ").append(lastUpdateDate);
         sb.append(", ").append(lastUpdateUser);
+        sb.append(", ").append(code);
 
         sb.append(")");
         return sb.toString();

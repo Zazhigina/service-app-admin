@@ -5,6 +5,8 @@ package jooqdata.tables;
 
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 
 import jooqdata.Admin;
@@ -13,11 +15,11 @@ import jooqdata.tables.records.TQuestionRecord;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function8;
+import org.jooq.Function9;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row8;
+import org.jooq.Row9;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -93,6 +95,11 @@ public class TQuestion extends TableImpl<TQuestionRecord> {
      */
     public final TableField<TQuestionRecord, String> LAST_UPDATE_USER = createField(DSL.name("last_update_user"), SQLDataType.VARCHAR(100), this, "Автор изменения");
 
+    /**
+     * The column <code>admin.t_question.code</code>. Уникальный код запроса
+     */
+    public final TableField<TQuestionRecord, String> CODE = createField(DSL.name("code"), SQLDataType.VARCHAR.nullable(false), this, "Уникальный код запроса");
+
     private TQuestion(Name alias, Table<TQuestionRecord> aliased) {
         this(alias, aliased, null);
     }
@@ -137,6 +144,11 @@ public class TQuestion extends TableImpl<TQuestionRecord> {
     }
 
     @Override
+    public List<UniqueKey<TQuestionRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.T_QUESTION_UN);
+    }
+
+    @Override
     public TQuestion as(String alias) {
         return new TQuestion(DSL.name(alias), this);
     }
@@ -176,18 +188,18 @@ public class TQuestion extends TableImpl<TQuestionRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row8 type methods
+    // Row9 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<Long, String, Integer, LocalDateTime, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row9<Long, String, Integer, LocalDateTime, LocalDateTime, String, LocalDateTime, String, String> fieldsRow() {
+        return (Row9) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function8<? super Long, ? super String, ? super Integer, ? super LocalDateTime, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function9<? super Long, ? super String, ? super Integer, ? super LocalDateTime, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super String, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -195,7 +207,7 @@ public class TQuestion extends TableImpl<TQuestionRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super Long, ? super String, ? super Integer, ? super LocalDateTime, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function9<? super Long, ? super String, ? super Integer, ? super LocalDateTime, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super String, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

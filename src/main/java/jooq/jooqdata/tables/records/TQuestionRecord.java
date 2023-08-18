@@ -10,8 +10,8 @@ import jooqdata.tables.TQuestion;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record8;
-import org.jooq.Row8;
+import org.jooq.Record9;
+import org.jooq.Row9;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Преднастроенный вопрос
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implements Record8<Long, String, Integer, LocalDateTime, LocalDateTime, String, LocalDateTime, String> {
+public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implements Record9<Long, String, Integer, LocalDateTime, LocalDateTime, String, LocalDateTime, String, String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -141,6 +141,20 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
         return (String) get(7);
     }
 
+    /**
+     * Setter for <code>admin.t_question.code</code>. Уникальный код запроса
+     */
+    public void setCode(String value) {
+        set(8, value);
+    }
+
+    /**
+     * Getter for <code>admin.t_question.code</code>. Уникальный код запроса
+     */
+    public String getCode() {
+        return (String) get(8);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -151,17 +165,17 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
     }
 
     // -------------------------------------------------------------------------
-    // Record8 type implementation
+    // Record9 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<Long, String, Integer, LocalDateTime, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row9<Long, String, Integer, LocalDateTime, LocalDateTime, String, LocalDateTime, String, String> fieldsRow() {
+        return (Row9) super.fieldsRow();
     }
 
     @Override
-    public Row8<Long, String, Integer, LocalDateTime, LocalDateTime, String, LocalDateTime, String> valuesRow() {
-        return (Row8) super.valuesRow();
+    public Row9<Long, String, Integer, LocalDateTime, LocalDateTime, String, LocalDateTime, String, String> valuesRow() {
+        return (Row9) super.valuesRow();
     }
 
     @Override
@@ -205,6 +219,11 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
     }
 
     @Override
+    public Field<String> field9() {
+        return TQuestion.T_QUESTION.CODE;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -245,6 +264,11 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
     }
 
     @Override
+    public String component9() {
+        return getCode();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -282,6 +306,11 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
     @Override
     public String value8() {
         return getLastUpdateUser();
+    }
+
+    @Override
+    public String value9() {
+        return getCode();
     }
 
     @Override
@@ -333,7 +362,13 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
     }
 
     @Override
-    public TQuestionRecord values(Long value1, String value2, Integer value3, LocalDateTime value4, LocalDateTime value5, String value6, LocalDateTime value7, String value8) {
+    public TQuestionRecord value9(String value) {
+        setCode(value);
+        return this;
+    }
+
+    @Override
+    public TQuestionRecord values(Long value1, String value2, Integer value3, LocalDateTime value4, LocalDateTime value5, String value6, LocalDateTime value7, String value8, String value9) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -342,6 +377,7 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
         value6(value6);
         value7(value7);
         value8(value8);
+        value9(value9);
         return this;
     }
 
@@ -359,7 +395,7 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
     /**
      * Create a detached, initialised TQuestionRecord
      */
-    public TQuestionRecord(Long id, String name, Integer orderNo, LocalDateTime actualTo, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser) {
+    public TQuestionRecord(Long id, String name, Integer orderNo, LocalDateTime actualTo, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, String code) {
         super(TQuestion.T_QUESTION);
 
         setId(id);
@@ -370,6 +406,7 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
         setCreateUser(createUser);
         setLastUpdateDate(lastUpdateDate);
         setLastUpdateUser(lastUpdateUser);
+        setCode(code);
     }
 
     /**
@@ -387,6 +424,7 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
             setCreateUser(value.getCreateUser());
             setLastUpdateDate(value.getLastUpdateDate());
             setLastUpdateUser(value.getLastUpdateUser());
+            setCode(value.getCode());
         }
     }
 }

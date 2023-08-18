@@ -49,6 +49,7 @@ public class Keys {
     public static final UniqueKey<TLetterTemplateTypeTemplateEnumRecord> T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM_UN = Internal.createUniqueKey(TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM, DSL.name("t_letter_template_type_template_enum_un"), new TableField[] { TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM.NAME }, true);
     public static final UniqueKey<TLetterTemplateVariableRecord> T_LETTER_TEMPLATE_VARIABLES_PK = Internal.createUniqueKey(TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE, DSL.name("t_letter_template_variables_pk"), new TableField[] { TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE.ID }, true);
     public static final UniqueKey<TQuestionRecord> T_QUESTION_PK = Internal.createUniqueKey(TQuestion.T_QUESTION, DSL.name("t_question_pk"), new TableField[] { TQuestion.T_QUESTION.ID }, true);
+    public static final UniqueKey<TQuestionRecord> T_QUESTION_UN = Internal.createUniqueKey(TQuestion.T_QUESTION, DSL.name("t_question_un"), new TableField[] { TQuestion.T_QUESTION.CODE }, true);
     public static final UniqueKey<TVariableRecord> T_VARIABLE_PK = Internal.createUniqueKey(TVariable.T_VARIABLE, DSL.name("t_variable_pk"), new TableField[] { TVariable.T_VARIABLE.ID }, true);
 
     // -------------------------------------------------------------------------

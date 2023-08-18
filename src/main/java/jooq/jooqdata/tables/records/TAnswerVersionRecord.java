@@ -10,8 +10,8 @@ import jooqdata.tables.TAnswerVersion;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record9;
-import org.jooq.Row9;
+import org.jooq.Record10;
+import org.jooq.Row10;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Вариант ответа на вопрос
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionRecord> implements Record9<Long, Long, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean> {
+public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionRecord> implements Record10<Long, Long, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean, String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -163,6 +163,20 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
         return (Boolean) get(8);
     }
 
+    /**
+     * Setter for <code>admin.t_answer_version.type</code>. Тип ответа
+     */
+    public void setType(String value) {
+        set(9, value);
+    }
+
+    /**
+     * Getter for <code>admin.t_answer_version.type</code>. Тип ответа
+     */
+    public String getType() {
+        return (String) get(9);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -173,17 +187,17 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
     }
 
     // -------------------------------------------------------------------------
-    // Record9 type implementation
+    // Record10 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<Long, Long, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean> fieldsRow() {
-        return (Row9) super.fieldsRow();
+    public Row10<Long, Long, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean, String> fieldsRow() {
+        return (Row10) super.fieldsRow();
     }
 
     @Override
-    public Row9<Long, Long, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean> valuesRow() {
-        return (Row9) super.valuesRow();
+    public Row10<Long, Long, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean, String> valuesRow() {
+        return (Row10) super.valuesRow();
     }
 
     @Override
@@ -232,6 +246,11 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
     }
 
     @Override
+    public Field<String> field10() {
+        return TAnswerVersion.T_ANSWER_VERSION.TYPE;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -277,6 +296,11 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
     }
 
     @Override
+    public String component10() {
+        return getType();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -319,6 +343,11 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
     @Override
     public Boolean value9() {
         return getIsDefault();
+    }
+
+    @Override
+    public String value10() {
+        return getType();
     }
 
     @Override
@@ -376,7 +405,13 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
     }
 
     @Override
-    public TAnswerVersionRecord values(Long value1, Long value2, String value3, Integer value4, LocalDateTime value5, String value6, LocalDateTime value7, String value8, Boolean value9) {
+    public TAnswerVersionRecord value10(String value) {
+        setType(value);
+        return this;
+    }
+
+    @Override
+    public TAnswerVersionRecord values(Long value1, Long value2, String value3, Integer value4, LocalDateTime value5, String value6, LocalDateTime value7, String value8, Boolean value9, String value10) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -386,6 +421,7 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
         value7(value7);
         value8(value8);
         value9(value9);
+        value10(value10);
         return this;
     }
 
@@ -403,7 +439,7 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
     /**
      * Create a detached, initialised TAnswerVersionRecord
      */
-    public TAnswerVersionRecord(Long id, Long questionId, String name, Integer orderNo, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, Boolean isDefault) {
+    public TAnswerVersionRecord(Long id, Long questionId, String name, Integer orderNo, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, Boolean isDefault, String type) {
         super(TAnswerVersion.T_ANSWER_VERSION);
 
         setId(id);
@@ -415,6 +451,7 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
         setLastUpdateDate(lastUpdateDate);
         setLastUpdateUser(lastUpdateUser);
         setIsDefault(isDefault);
+        setType(type);
     }
 
     /**
@@ -433,6 +470,7 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
             setLastUpdateDate(value.getLastUpdateDate());
             setLastUpdateUser(value.getLastUpdateUser());
             setIsDefault(value.getIsDefault());
+            setType(value.getType());
         }
     }
 }

@@ -43,7 +43,7 @@ INSERT
     OR
 UPDATE
     ON
-    admin.t_letter_template_variables FOR EACH ROW EXECUTE FUNCTION ep.fn_before_row();
+    admin.t_letter_template_variables FOR EACH ROW EXECUTE FUNCTION "admin".fn_before_row();
 
 
 -- "admin".t_letter_template_variables foreign keys

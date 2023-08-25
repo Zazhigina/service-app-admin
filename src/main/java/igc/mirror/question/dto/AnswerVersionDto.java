@@ -78,4 +78,8 @@ public class AnswerVersionDto {
     public void setAnswerType(AnswerType answerType) {
         this.answerType = answerType;
     }
+
+    public void setAnswerType(String answerType) {
+        this.answerType = AnswerType.valueOf(answerType);
+    }
 }

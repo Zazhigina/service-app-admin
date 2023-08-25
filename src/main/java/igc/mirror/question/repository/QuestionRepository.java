@@ -37,7 +37,7 @@ public class QuestionRepository {
                                 select(ANSWER_VERSION.NAME,
                                         ANSWER_VERSION.ORDER_NO,
                                         ANSWER_VERSION.IS_DEFAULT,
-                                        ANSWER_VERSION.TYPE)
+                                        ANSWER_VERSION.TYPE.as("answerType"))
                                         .from(ANSWER_VERSION)
                                         .where(ANSWER_VERSION.QUESTION_ID.eq(QUESTION.ID))).as("answerVersions"))
                 .from(QUESTION)
@@ -84,7 +84,7 @@ public class QuestionRepository {
                                         ANSWER_VERSION.NAME,
                                         ANSWER_VERSION.ORDER_NO,
                                         ANSWER_VERSION.IS_DEFAULT,
-                                        ANSWER_VERSION.TYPE)
+                                        ANSWER_VERSION.TYPE.as("answerType"))
                                         .from(ANSWER_VERSION)
                                         .where(ANSWER_VERSION.QUESTION_ID.eq(QUESTION.ID))).as("answerVersions"))
                 .from(QUESTION)

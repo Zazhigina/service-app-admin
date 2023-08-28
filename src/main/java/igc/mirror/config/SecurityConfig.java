@@ -49,7 +49,8 @@ public class SecurityConfig {
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .and()
                 .httpBasic().disable()
-                .csrf().disable()
+                .csrf()
+                .and()
                 .oauth2ResourceServer(resourceServerConfigurer -> resourceServerConfigurer
                         .jwt(jwtConfigurer -> jwtConfigurer
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter()))
@@ -60,7 +61,10 @@ public class SecurityConfig {
                         .requestMatchers(PUBLIC_ENDPOINT).permitAll()
                         //.anyRequest().hasAuthority("APP_ADMIN.EXEC")
                         .anyRequest().hasAuthority("ROLE_BASE")
-                );
+                )
+                .headers()
+                .frameOptions()
+                .disable();;
 
         return http.build();
     }

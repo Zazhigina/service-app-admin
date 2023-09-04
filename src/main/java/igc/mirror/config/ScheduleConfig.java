@@ -34,4 +34,15 @@ public class ScheduleConfig implements SchedulingConfigurer {
     public EisContractsTask eisContractsTask() {
         return new EisContractsTask();
     }
+
+    //todo убрать комментирование перед переносом в продуктив
+//    @Bean
+//    public CommercialOfferNotificationTask commercialOfferNotificationTaskTask() {
+//        return new CommercialOfferNotificationTask();
+//    }
+
+//    @Bean
+//    public CommercialOfferStatusTask commercialOfferStatusTask() {
+//        return new CommercialOfferStatusTask();
+//    }
 }

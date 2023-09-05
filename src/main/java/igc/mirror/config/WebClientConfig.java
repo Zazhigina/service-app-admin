@@ -10,8 +10,6 @@ import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
-import javax.net.ssl.SSLException;
-
 @Configuration
 public class WebClientConfig {
     static final Logger logger = LoggerFactory.getLogger(WebClientConfig.class);
@@ -30,6 +28,9 @@ public class WebClientConfig {
 
     @Value("${mirror.endpoint.doc}")
     private String docBaseUrl;
+
+    @Value("${mirror.endpoint.ep}")
+    private String ePriceUrl;
 
     @Bean("rbac")
     public WebClient webClientRbac(){
@@ -50,7 +51,7 @@ public class WebClientConfig {
     }
 
     @Bean("keycloak")
-    public WebClient webClientKeycloak() throws SSLException {
+    public WebClient webClientKeycloak() {
         HttpClient httpClient = HttpClient.create();
         return WebClient.builder()
                 .baseUrl(keycloakBaseUrl)
@@ -59,7 +60,7 @@ public class WebClientConfig {
     }
 
     @Bean("integration")
-    public WebClient webClientIntegration() throws SSLException {
+    public WebClient webClientIntegration() {
         HttpClient httpClient = HttpClient.create();
         return WebClient.builder()
                 .baseUrl(integrationUrl)
@@ -68,7 +69,7 @@ public class WebClientConfig {
     }
 
     @Bean("doc")
-    public WebClient webClientDoc(){
+    public WebClient webClientDoc() {
         HttpClient httpClient = HttpClient.create();
         return WebClient.builder()
                 .baseUrl(docBaseUrl)
@@ -78,6 +79,15 @@ public class WebClientConfig {
                                         .maxInMemorySize(1024 * 1024)
                         )
                         .build())
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
+    }
+
+    @Bean("ep")
+    public WebClient webClientEPrice() {
+        HttpClient httpClient = HttpClient.create();
+        return WebClient.builder()
+                .baseUrl(ePriceUrl)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }

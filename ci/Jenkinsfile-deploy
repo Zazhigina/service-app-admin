@@ -42,10 +42,6 @@ if (DEPLOY_ENVIRONMENT == 'trust' && (LANDSCAPE_ID == 'prod' || LANDSCAPE_ID == 
 }
 
 pipeline {
-//    parameters {
-//        choice(name: 'STAND', choices: ['release', 'test'], description: 'Stand name')
-//    }
-
     agent {
         label "$DEPLOY_ENVIRONMENT"
     }
@@ -57,8 +53,8 @@ pipeline {
 
     environment {
         GIT_COMMIT_SHORT = sh(
-            script: "printf \$(git rev-parse --short ${GIT_COMMIT})",
-            returnStdout: true
+                script: "printf \$(git rev-parse --short ${GIT_COMMIT})",
+                returnStdout: true
         )
     }
 
@@ -71,23 +67,36 @@ pipeline {
             }
         }
 
+        stage("Change SUFFIX") {
+            steps {
+                script {
+                    def current_branch = "${GIT_BRANCH}"
+//                    echo 'DEV: Pulling...' + current_branch
+
+                    if (current_branch.contains('release')) {
+                        echo 'DEV: Is RELEASE Branch'
+                        SUFFIX = ""
+                        echo 'DEV: Suffix: ' + "${SUFFIX}"
+                    } else {
+                        echo 'DEV: Is NOT RELEASE Branch'
+                        SUFFIX = "-test"
+                        echo 'DEV: Suffix: ' + "${SUFFIX}"
+                    }
+                }
+            }
+        }
+
         stage("Helm deploy") {
             steps {
-//                echo "Deploy stand  ${params.STAND}"
-//                if(${params.STAND} == 'test') {
-//                    HELM_VALUES_NAME = HELM_VALUES_NAME
-//                }
-                echo 'Pulling...' + env.BRANCH_NAME
-
                 withKubeConfig([login_type: "ocp", auth_provider: "vault"]) {
                     doHelm "install", [
-                        helm_chart: "tzriu-be-spring",
-                        from_repo: true,
-                        helm_commands: "--version ${CHART_VERSION} \
+                            helm_chart: "tzriu-be-spring",
+                            from_repo: true,
+                            helm_commands: "--version ${CHART_VERSION} \
                             --reset-values \
                             --set image.repository=${REGISTRY}/${OCP_NAMESPACE}/${OCP_APP_NAME} \
                             --set image.tag=${GIT_COMMIT_SHORT} \
-                            -f ./ci/helm/values-${HELM_VALUES_NAME}.yaml"
+                            -f ./ci/helm/values-${HELM_VALUES_NAME}${SUFFIX}.yaml"
                     ]
                 }
             }

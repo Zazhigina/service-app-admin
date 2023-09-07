@@ -6,7 +6,7 @@ application:
       - key: SPRING_PROFILES_ACTIVE
         value: trust
       - key: MIRROR_DATASOURCE_URL
-        value: " jdbc:postgresql://10.50.54.219:5432/mirror_test"
+        value: "jdbc:postgresql://10.50.54.219:5432/mirror_test"
       - key: MIRROR_ENDPOINT_MA
         value: http://service-app-ma.tzriu:8080
       - key: MIRROR_ENDPOINT_RBAC

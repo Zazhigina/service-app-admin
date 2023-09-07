@@ -5,6 +5,8 @@ application:
         value: admin
       - key: SPRING_PROFILES_ACTIVE
         value: trust
+      - key: MIRROR_DATASOURCE_URL
+        value: " jdbc:postgresql://10.50.54.219:5432/mirror"
       - key: MIRROR_ENDPOINT_MA
         value: http://service-app-ma.tzriu:8080
       - key: MIRROR_ENDPOINT_RBAC
@@ -34,9 +36,6 @@ application:
       - key: MIRROR_SCHEDULE_TASKS_CRON_CHANGE_STATUS_OFFER_END
         value: 0 1 0 * * *
     secret:
-      - key: MIRROR_DATASOURCE_URL
-        secretName: mirror-pg-cred
-        secretKey: url
       - key: SPRING_DATASOURCE_USERNAME
         secretName: mirror-pg-cred
         secretKey: username

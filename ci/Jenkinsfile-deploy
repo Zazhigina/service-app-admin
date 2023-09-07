@@ -42,6 +42,10 @@ if (DEPLOY_ENVIRONMENT == 'trust' && (LANDSCAPE_ID == 'prod' || LANDSCAPE_ID == 
 }
 
 pipeline {
+//    parameters {
+//        choice(name: 'STAND', choices: ['release', 'test'], description: 'Stand name')
+//    }
+
     agent {
         label "$DEPLOY_ENVIRONMENT"
     }
@@ -69,6 +73,12 @@ pipeline {
 
         stage("Helm deploy") {
             steps {
+//                echo "Deploy stand  ${params.STAND}"
+//                if(${params.STAND} == 'test') {
+//                    HELM_VALUES_NAME = HELM_VALUES_NAME
+//                }
+                echo 'Pulling...' + env.BRANCH_NAME
+
                 withKubeConfig([login_type: "ocp", auth_provider: "vault"]) {
                     doHelm "install", [
                         helm_chart: "tzriu-be-spring",

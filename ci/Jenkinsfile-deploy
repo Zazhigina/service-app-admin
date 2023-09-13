@@ -24,20 +24,17 @@ withFolderProperties{
 if (DEPLOY_ENVIRONMENT == 'trust' && (LANDSCAPE_ID == 'prod' || LANDSCAPE_ID == 'preprod' || LANDSCAPE_ID == 'prod-cdmz' || LANDSCAPE_ID == 'preprod-cdmz')) {
     REGISTRY = PROD_REGISTRY_TRUST
     REGISTRY_CRED_ID = PROD_REGISTRY_TRUST_CRED_ID
-    // CHART_VERSION = '0.1.1'
-    CHART_VERSION = '1.0.0'
+    CHART_VERSION = '1.0.1'
     HELM_VALUES_NAME = 'prod'
 } else if (DEPLOY_ENVIRONMENT == 'trust' && LANDSCAPE_ID == 'uat') {
     REGISTRY = REGISTRY_TRUST
     REGISTRY_CRED_ID = REGISTRY_TRUST_CRED_ID
-    // CHART_VERSION = '0.1.8'
-    CHART_VERSION = '1.0.0'
+    CHART_VERSION = '1.0.1'
     HELM_VALUES_NAME = 'trust'
 } else if (DEPLOY_ENVIRONMENT == 'dev') {
     REGISTRY = REGISTRY_DEV
     REGISTRY_CRED_ID = REGISTRY_DEV_CRED_ID
-    // CHART_VERSION = '0.1.14'
-    CHART_VERSION = '1.0.0'
+    CHART_VERSION = '1.0.1'
     HELM_VALUES_NAME = 'dev'
 }
 
@@ -71,16 +68,17 @@ pipeline {
             steps {
                 script {
                     def current_branch = "${GIT_BRANCH}"
-//                    echo 'DEV: Pulling...' + current_branch
 
-                    if (current_branch.contains('release')) {
-                        echo 'DEV: Is RELEASE Branch'
-                        SUFFIX = ""
-                        echo 'DEV: Suffix: ' + "${SUFFIX}"
+                    if ("${DEPLOY_ENVIRONMENT}" == 'trust' && "${LANDSCAPE_ID}" == 'uat') {
+                        if (current_branch.contains('develop')) {
+                            SUFFIX = "-test"
+                            echo 'Current suffix: ' + "${SUFFIX}"
+                        } else {
+                            SUFFIX = ""
+                            echo 'Current suffix: ' + "${SUFFIX}"
+                        }
                     } else {
-                        echo 'DEV: Is NOT RELEASE Branch'
-                        SUFFIX = "-test"
-                        echo 'DEV: Suffix: ' + "${SUFFIX}"
+                        SUFFIX = ""
                     }
                 }
             }

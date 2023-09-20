@@ -23,7 +23,7 @@ INSERT INTO "admin".t_letter_template (id,letter_type,title,letter_sample,create
 
 	 (22005,'EP_CHANGE_ACCEPTING_DEADLINE_REQUEST_TS_TP','Effect. Анализ рынка - изменение срока приема коммерческого и технического предложений',NULL,'2023-09-20 17:44:17.823',NULL,NULL,NULL,'TEMPLATE',NULL,'DRAFT'),
 
-	 (23005,'EP_COMMERCIAL_OFFER_RECEIVED','Effect. Анализ рынка - поступило {Обновленное_коммерческое_предложение} предложение от Участника',NULL,'2023-09-20 17:44:17.823',NULL,NULL,NULL,'TEMPLATE',NULL,'DRAFT'),
+	 (33005,'EP_COMMERCIAL_OFFER_RECEIVED','Effect. Анализ рынка - поступило {Обновленное_коммерческое_предложение} предложение от Участника',NULL,'2023-09-20 17:44:17.823',NULL,NULL,NULL,'TEMPLATE',NULL,'DRAFT'),
 
 	 (24005,'EP_COMMERCIAL_OFFER_REQUEST_NON_ACTUAL','Effect. Анализ рынка - неактуальность запроса коммерческого предложения',NULL,'2023-09-20 17:44:17.823',NULL,NULL,NULL,'TEMPLATE',NULL,'DRAFT'),
 
@@ -41,7 +41,7 @@ INSERT INTO "admin".t_letter_template (id,letter_type,title,letter_sample,create
 
 	 (30005,'EP_CHANGE_ACCEPTING_DEADLINE_REQUEST_TS','Effect. Анализ рынка - изменение срока приема коммерческого предложения',NULL,'2023-09-20 17:44:17.823',NULL,NULL,NULL,'TEMPLATE',NULL,'DRAFT'),
 
-	 (31005,'EP_COMMERCIAL_OFFER_ACCEPTING_COMPLETED_INITIATOR','Effect. Анализ рынка - завершен срок приема КП',NULL,'2023-09-20 17:44:17.823',NULL,NULL,NULL,'TEMPLATE',NULL,'DRAFT'),
+	 (34005,'EP_COMMERCIAL_OFFER_ACCEPTING_COMPLETED_INITIATOR','Effect. Анализ рынка - завершен срок приема КП',NULL,'2023-09-20 17:44:17.823',NULL,NULL,NULL,'TEMPLATE',NULL,'DRAFT'),
 
 	 (32005,'EP_COMMERCIAL_OFFER_ACCEPTING_COMING_END_INITIATOR','Effect. Анализ рынка - завершается срок приема КП',NULL,'2023-09-20 17:44:17.823',NULL,NULL,NULL,'TEMPLATE',NULL,'DRAFT');
 

@@ -4,10 +4,11 @@ https://gitlab.inlinegroup-c.ru/mirror/backend/service-app-admin/-/issues/36
 
 */
 
---1 "admin".t_letter_template
-DELETE FROM admin.t_letter_template;
 
 DELETE FROM admin.t_letter_template_variable;
+
+--1 "admin".t_letter_template
+DELETE FROM admin.t_letter_template;
 
 INSERT INTO "admin".t_letter_template (id,letter_type,title,letter_sample,create_date,create_user,last_update_date,last_update_user,type_template,acceptable_document_format,status) VALUES
 	 (17005,'TECHNICAL_TASK_TEMPLATE','Шаблон технического задания',NULL,'2023-09-20 17:44:17.823',NULL,NULL,NULL,'DOCUMENT',NULL,'DRAFT'),

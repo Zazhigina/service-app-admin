@@ -1,5 +1,6 @@
 package igc.mirror.config;
 
+import igc.mirror.task.CommercialOfferStatusTask;
 import igc.mirror.task.EisContractsTask;
 import igc.mirror.task.RequestSearchHistoryTask;
 import org.springframework.context.annotation.Bean;
@@ -41,8 +42,8 @@ public class ScheduleConfig implements SchedulingConfigurer {
 //        return new CommercialOfferNotificationTask();
 //    }
 
-//    @Bean
-//    public CommercialOfferStatusTask commercialOfferStatusTask() {
-//        return new CommercialOfferStatusTask();
-//    }
+    @Bean
+    public CommercialOfferStatusTask commercialOfferStatusTask() {
+        return new CommercialOfferStatusTask();
+    }
 }

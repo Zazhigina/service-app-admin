@@ -11,6 +11,7 @@ import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
 import jooqdata.tables.TLetterTemplateVariable;
 import jooqdata.tables.TQuestion;
+import jooqdata.tables.TServiceOfferType;
 import jooqdata.tables.TVariable;
 
 
@@ -54,6 +55,11 @@ public class Tables {
      * Преднастроенный вопрос
      */
     public static final TQuestion T_QUESTION = TQuestion.T_QUESTION;
+
+    /**
+     * Вид шаблона КП для услуги
+     */
+    public static final TServiceOfferType T_SERVICE_OFFER_TYPE = TServiceOfferType.T_SERVICE_OFFER_TYPE;
 
     /**
      * Переменная

@@ -14,6 +14,7 @@ import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
 import jooqdata.tables.TLetterTemplateVariable;
 import jooqdata.tables.TQuestion;
+import jooqdata.tables.TServiceOfferType;
 import jooqdata.tables.TVariable;
 
 import org.jooq.Catalog;
@@ -71,6 +72,11 @@ public class Admin extends SchemaImpl {
     public final TQuestion T_QUESTION = TQuestion.T_QUESTION;
 
     /**
+     * Вид шаблона КП для услуги
+     */
+    public final TServiceOfferType T_SERVICE_OFFER_TYPE = TServiceOfferType.T_SERVICE_OFFER_TYPE;
+
+    /**
      * Переменная
      */
     public final TVariable T_VARIABLE = TVariable.T_VARIABLE;
@@ -105,6 +111,7 @@ public class Admin extends SchemaImpl {
             TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM,
             TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE,
             TQuestion.T_QUESTION,
+            TServiceOfferType.T_SERVICE_OFFER_TYPE,
             TVariable.T_VARIABLE
         );
     }

@@ -17,7 +17,7 @@ public class TServiceOfferType implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-    private Long serviceCode;
+    private String serviceCode;
     private String offerType;
     private LocalDateTime createDate;
     private String createUser;
@@ -38,7 +38,7 @@ public class TServiceOfferType implements Serializable {
 
     public TServiceOfferType(
         Long id,
-        Long serviceCode,
+        String serviceCode,
         String offerType,
         LocalDateTime createDate,
         String createUser,
@@ -72,7 +72,7 @@ public class TServiceOfferType implements Serializable {
      * Getter for <code>admin.t_service_offer_type.service_code</code>. Код
      * услуги
      */
-    public Long getServiceCode() {
+    public String getServiceCode() {
         return this.serviceCode;
     }
 
@@ -80,7 +80,7 @@ public class TServiceOfferType implements Serializable {
      * Setter for <code>admin.t_service_offer_type.service_code</code>. Код
      * услуги
      */
-    public void setServiceCode(Long serviceCode) {
+    public void setServiceCode(String serviceCode) {
         this.serviceCode = serviceCode;
     }
 

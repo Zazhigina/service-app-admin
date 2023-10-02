@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Вид шаблона КП для услуги
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTypeRecord> implements Record7<Long, Long, String, LocalDateTime, String, LocalDateTime, String> {
+public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTypeRecord> implements Record7<Long, String, String, LocalDateTime, String, LocalDateTime, String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -41,7 +41,7 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
      * Setter for <code>admin.t_service_offer_type.service_code</code>. Код
      * услуги
      */
-    public void setServiceCode(Long value) {
+    public void setServiceCode(String value) {
         set(1, value);
     }
 
@@ -49,8 +49,8 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
      * Getter for <code>admin.t_service_offer_type.service_code</code>. Код
      * услуги
      */
-    public Long getServiceCode() {
-        return (Long) get(1);
+    public String getServiceCode() {
+        return (String) get(1);
     }
 
     /**
@@ -147,12 +147,12 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<Long, Long, String, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
+    public Row7<Long, String, String, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
         return (Row7) super.fieldsRow();
     }
 
     @Override
-    public Row7<Long, Long, String, LocalDateTime, String, LocalDateTime, String> valuesRow() {
+    public Row7<Long, String, String, LocalDateTime, String, LocalDateTime, String> valuesRow() {
         return (Row7) super.valuesRow();
     }
 
@@ -162,7 +162,7 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
     }
 
     @Override
-    public Field<Long> field2() {
+    public Field<String> field2() {
         return TServiceOfferType.T_SERVICE_OFFER_TYPE.SERVICE_CODE;
     }
 
@@ -197,7 +197,7 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
     }
 
     @Override
-    public Long component2() {
+    public String component2() {
         return getServiceCode();
     }
 
@@ -232,7 +232,7 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
     }
 
     @Override
-    public Long value2() {
+    public String value2() {
         return getServiceCode();
     }
 
@@ -268,7 +268,7 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
     }
 
     @Override
-    public TServiceOfferTypeRecord value2(Long value) {
+    public TServiceOfferTypeRecord value2(String value) {
         setServiceCode(value);
         return this;
     }
@@ -304,7 +304,7 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
     }
 
     @Override
-    public TServiceOfferTypeRecord values(Long value1, Long value2, String value3, LocalDateTime value4, String value5, LocalDateTime value6, String value7) {
+    public TServiceOfferTypeRecord values(Long value1, String value2, String value3, LocalDateTime value4, String value5, LocalDateTime value6, String value7) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -329,7 +329,7 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
     /**
      * Create a detached, initialised TServiceOfferTypeRecord
      */
-    public TServiceOfferTypeRecord(Long id, Long serviceCode, String offerType, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser) {
+    public TServiceOfferTypeRecord(Long id, String serviceCode, String offerType, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser) {
         super(TServiceOfferType.T_SERVICE_OFFER_TYPE);
 
         setId(id);

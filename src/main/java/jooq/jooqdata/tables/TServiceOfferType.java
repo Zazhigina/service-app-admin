@@ -63,7 +63,7 @@ public class TServiceOfferType extends TableImpl<TServiceOfferTypeRecord> {
      * The column <code>admin.t_service_offer_type.service_code</code>. Код
      * услуги
      */
-    public final TableField<TServiceOfferTypeRecord, Long> SERVICE_CODE = createField(DSL.name("service_code"), SQLDataType.BIGINT.nullable(false), this, "Код услуги");
+    public final TableField<TServiceOfferTypeRecord, String> SERVICE_CODE = createField(DSL.name("service_code"), SQLDataType.VARCHAR.nullable(false), this, "Код услуги");
 
     /**
      * The column <code>admin.t_service_offer_type.offer_type</code>. Вид
@@ -187,14 +187,14 @@ public class TServiceOfferType extends TableImpl<TServiceOfferTypeRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<Long, Long, String, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
+    public Row7<Long, String, String, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
         return (Row7) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function7<? super Long, ? super Long, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function7<? super Long, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -202,7 +202,7 @@ public class TServiceOfferType extends TableImpl<TServiceOfferTypeRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function7<? super Long, ? super Long, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function7<? super Long, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

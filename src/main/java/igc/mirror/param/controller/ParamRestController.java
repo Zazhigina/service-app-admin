@@ -3,6 +3,7 @@ package igc.mirror.param.controller;
 import igc.mirror.param.dto.ParamDto;
 import igc.mirror.param.dto.ParamEditableDto;
 import igc.mirror.param.service.ParamService;
+import igc.mirror.param.service.RemoteParamService;
 import igc.mirror.utils.qfilter.DataFilter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -25,9 +26,12 @@ import java.util.Map;
 public class ParamRestController {
     private ParamService paramService;
 
+    private RemoteParamService remoteParamService;
+
     @Autowired
-    public ParamRestController(ParamService paramService){
+    public ParamRestController(ParamService paramService, RemoteParamService remoteParamService){
         this.paramService = paramService;
+        this.remoteParamService = remoteParamService;
     }
 
     @PostMapping("find")
@@ -55,5 +59,14 @@ public class ParamRestController {
     @Operation(summary = "Карта соответствия параметров по ключам")
     public Map<String, ParamDto> getParamKeysAsMap(@RequestBody List<String> keys) {
         return paramService.getParamKeysAsMap(keys);
+    }
+
+    @DeleteMapping("/cache-remote")
+    @Operation(summary = "Очистка кеша параметров удаленных сервисов")
+    @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
+    public ResponseEntity<String> clearRemoteServiceParamCache(){
+        remoteParamService.clearMaParameterCache();
+        // todo ep
+        return ResponseEntity.ok("Задание на очистку кеша параметров передано в приложение ma ");
     }
 }

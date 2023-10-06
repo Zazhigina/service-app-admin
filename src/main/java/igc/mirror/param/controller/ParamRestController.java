@@ -66,7 +66,9 @@ public class ParamRestController {
     @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
     public ResponseEntity<String> clearRemoteServiceParamCache(){
         remoteParamService.clearMaParameterCache();
-        // todo ep
-        return ResponseEntity.ok("Задание на очистку кеша параметров передано в приложение ma ");
+        String message = "Задание на очистку кеша параметров передано в приложение ma";
+        remoteParamService.clearEpParameterCache();
+        message = message + ", ep";
+        return ResponseEntity.ok(message);
     }
 }

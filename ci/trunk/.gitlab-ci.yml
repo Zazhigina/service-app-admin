@@ -5,9 +5,11 @@ variables:
   APPLICATION_NAME: service-app-admin
   DEPLOY_BRANCH: develop-local
   RELEASE_BRANCH: release-v1
+  DEMO_BRANCH: develop-local
   CHART_NAME: tzriu-be-spring
   KUBERNETES_NAMESPACE_OVERWRITE: mirror
   KUBERNETES_NAMESPACE_OVERWRITE_RELEASE: mirror-release
+  KUBERNETES_NAMESPACE_OVERWRITE_DEMO: mirror-demo
   IMAGE_REPOSITORY: nexus-registry.inlinegroup-c.ru/tzriu/$APPLICATION_NAME
   ENVIRONMENT_NAME: $ACTIVE_PROFILE
 

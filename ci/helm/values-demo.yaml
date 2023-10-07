@@ -1,0 +1,89 @@
+image:
+  repository: nexus-registry.inlinegroup-c.ru/tzriu/service-app-admin
+
+application:
+  env:
+    configmap:
+      - key: DB_SCHEMA
+        value: admin
+      - key: SPRING_PROFILES_ACTIVE
+        value: trunk
+      - key: MIRROR_DATASOURCE_URL
+        value: "jdbc:postgresql://igcs0009.inlinegroup-c.ru:5432/mirror_demo"
+      - key: MIRROR_ENDPOINT_MA
+        value: http://service-app-ma.mirror-demo:8080
+      - key: MIRROR_ENDPOINT_RBAC
+        value: http://service-app-rbac.mirror-demo:8080
+      - key: MIRROR_ENDPOINT_INTEGRATION
+        value: http://service-app-integration.mirror-demo:8080
+      - key: MIRROR_ENDPOINT_DOC
+        value: http://service-app-doc.mirror-demo:8080
+      - key: MIRROR_ENDPOINT_EP
+        value: http://service-app-ep.mirror-demo:8080
+      - key: MIRROR_KEYCLOAK_BASE_URL
+        value: https://effect-authn.inlinegroup-c.ru
+      - key: MIRROR_KEYCLOAK_REALM
+        value: mirror-demo
+      - key: MIRROR_KEYCLOAK_CLIENT_ID
+        value: mirror-integration-app
+      - key: KEYCLOAK_ROOT_CA_URL
+        value: https://nexus-oss.inlinegroup-c.ru/repository/local-repo/CA/root.ca.pem
+#      - key: KEYCLOAK_SUB_CA_URL
+#        value: ""
+      - key: MIRROR_SCHEDULE_TASKS_CRON_REPLICATE_PROCEDURE_RECORDS
+        value: 0 0 1 4 * ?
+      - key: MIRROR_SCHEDULE_TASKS_CRON_SAVE_SEARCH_HISTORY
+        value: 0 30 23 * * *
+      - key: MIRROR_SCHEDULE_TASKS_CRON_NOTIFY_OFFER_END
+        value: 0 0 9 * * *
+      - key: MIRROR_SCHEDULE_TASKS_CRON_CHANGE_STATUS_OFFER_END
+        value: 0 1 0 * * *
+    secret:
+      - key: SPRING_DATASOURCE_USERNAME
+        secretName: mirror-pg-cred
+        secretKey: username
+      - key: SPRING_DATASOURCE_PASSWORD
+        secretName: mirror-pg-cred
+        secretKey: password
+      - key: MIRROR_KEYCLOAK_CLIENT_SECRET
+        secretName: mirror-sso-confid-cred
+        secretKey: secret
+      - key: MIRROR_SCHEDULE_TASKS_USERNAME
+        secretName: mirror-sched-tasks-cred
+        secretKey: username
+      - key: MIRROR_SCHEDULE_TASKS_PASSWORD
+        secretName: mirror-sched-tasks-cred
+        secretKey: password
+
+fullnameOverride: "service-app-admin"
+
+service:
+  managementPort: 8081
+
+ingress:
+  enabled: false
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    cert-manager.io/cluster-issuer: intersigned
+  hosts:
+    - host: swagger-effect.inlinegroup-c.ru
+      paths:
+        - path: /api/admin/?(.*)
+          pathType: Prefix
+  tls:
+    - secretName: swagger-effect-tls
+      hosts:
+        - swagger-effect.inlinegroup-c.ru
+
+resources:
+  limits:
+    cpu: 400m
+    memory: 2048Mi
+  requests:
+    cpu: 200m
+    memory: 512Mi
+
+prometheus:
+  monitoring:
+    enabled: true

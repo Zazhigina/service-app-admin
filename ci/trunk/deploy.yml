@@ -29,7 +29,7 @@ stop_deploy:
     action: stop
   when: manual
   script:
-    - 'helm delete ${APPLICATION_NAME} --namespace ${KUBERNETES_NAMESPACE_OVERWRITE}'
+    - "helm delete ${APPLICATION_NAME} --namespace ${KUBERNETES_NAMESPACE_OVERWRITE}"
   rules:
     - if: $CI_COMMIT_BRANCH == $DEPLOY_BRANCH
 
@@ -64,6 +64,45 @@ stop_deploy_release:
     action: stop
   when: manual
   script:
-    - 'helm delete ${APPLICATION_NAME} --namespace ${KUBERNETES_NAMESPACE_OVERWRITE_RELEASE}'
+    - "helm delete ${APPLICATION_NAME} --namespace ${KUBERNETES_NAMESPACE_OVERWRITE_RELEASE}"
   rules:
     - if: $CI_COMMIT_BRANCH == $RELEASE_BRANCH
+
+deploy-demo:
+  stage: deploy
+  image: nexus-docker-hub.inlinegroup-c.ru/devth/helm:v3.9.0
+  environment:
+    name: demo
+    action: start
+    on_stop: stop_deploy_demo
+  when: manual
+  tags:
+    - dh
+  script:
+    - helm upgrade
+      --reset-values
+      --repo ${NEXUS_HELM_REPO}
+      --username ${NEXUS_USER}
+      --password ${NEXUS_USER_PASSWORD}
+      --install ${APPLICATION_NAME}
+      --namespace ${KUBERNETES_NAMESPACE_OVERWRITE_DEMO}
+      --set image.tag=$APPLICATION_VERSION
+      --set ingress.enabled=true
+      -f ./ci/helm/values-demo.yaml
+      ${CHART_NAME}
+  rules:
+    - if: $CI_COMMIT_BRANCH == $DEMO_BRANCH
+
+stop_deploy_demo:
+  stage: deploy
+  image: nexus-docker-hub.inlinegroup-c.ru/devth/helm:v3.9.0
+  environment:
+    name: demo
+    action: stop
+  when: manual
+  tags:
+    - dh
+  script:
+    - "helm delete ${APPLICATION_NAME} --namespace ${KUBERNETES_NAMESPACE_OVERWRITE_DEMO}"
+  rules:
+    - if: $CI_COMMIT_BRANCH == $DEMO_BRANCH

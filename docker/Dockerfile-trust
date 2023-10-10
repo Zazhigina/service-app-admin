@@ -57,7 +57,7 @@ RUN if [ -n "$UBI9_REPO_URL" ]; then \
         rm -rf /etc/yum.repos.d/ubi.repo; \
         curl -k $UBI9_REPO_URL --output /etc/yum.repos.d/ubi.repo; \
     fi; \
-    microdnf update -y && microdnf --setopt=tsflags=nodocs install  -y glibc-2.34-60.el9_2.7 python3-3.9.16-1.el9_2.2 nodejs-16.20.2-1.el9_2 && \
+    microdnf --setopt=tsflags=nodocs install  -y glibc-2.34-60.el9_2.7 python3-3.9.16-1.el9_2.2 nodejs-16.20.2-1.el9_2 libcap-2.48-9.el9_2 && \
     microdnf clean all && \
     rm -rf /var/cache/yum
 

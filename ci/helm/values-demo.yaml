@@ -20,6 +20,8 @@ application:
         value: http://service-app-doc.mirror-demo:8080
       - key: MIRROR_ENDPOINT_EP
         value: http://service-app-ep.mirror-demo:8080
+      - key: MIRROR_ENDPOINT_NSI
+        value: http://service-app-nsi.mirror-demo:8080
       - key: MIRROR_KEYCLOAK_BASE_URL
         value: https://effect-authn.inlinegroup-c.ru
       - key: MIRROR_KEYCLOAK_REALM

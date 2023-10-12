@@ -32,6 +32,9 @@ public class WebClientConfig {
     @Value("${mirror.endpoint.ep}")
     private String ePriceUrl;
 
+    @Value("${mirror.endpoint.nsi}")
+    private String nsiUrl;
+
     @Bean("rbac")
     public WebClient webClientRbac(){
         HttpClient httpClient = HttpClient.create();
@@ -88,6 +91,14 @@ public class WebClientConfig {
         HttpClient httpClient = HttpClient.create();
         return WebClient.builder()
                 .baseUrl(ePriceUrl)
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
+    }
+    @Bean("nsi")
+    public WebClient webClientNSI() {
+        HttpClient httpClient = HttpClient.create();
+        return WebClient.builder()
+                .baseUrl(nsiUrl)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }

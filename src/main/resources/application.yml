@@ -70,6 +70,7 @@ mirror:
     integration: ${MIRROR_ENDPOINT_INTEGRATION}
     doc: ${MIRROR_ENDPOINT_DOC}
     ep: ${MIRROR_ENDPOINT_EP}
+    nsi: ${MIRROR_ENDPOINT_NSI}
   application:
     user-agent: ${SPRING_APPLICATION_NAME}/${APPLICATION_VERSION}
   keycloak:

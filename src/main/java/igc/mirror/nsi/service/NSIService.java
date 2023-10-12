@@ -1,0 +1,76 @@
+package igc.mirror.nsi.service;
+
+import igc.mirror.auth.UserDetails;
+import igc.mirror.config.LoggingConstants;
+import igc.mirror.exception.common.RemoteServiceCallException;
+import igc.mirror.nsi.model.ServiceProduct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyExtractors;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+
+@Service
+public class NSIService {
+    static final Logger logger = LoggerFactory.getLogger(NSIService.class);
+    static final String REFERENCE_SERVICE = "/reference";
+    @Value("${mirror.application.user-agent}")
+    private String userAgent;
+
+    @Autowired
+    UserDetails userDetails;
+
+    @Autowired
+    @Qualifier("nsi")
+    private WebClient webClient;
+
+    /**
+     * Получение записей работ-услуг по кодам
+     * {@linkplain //mirror.inlinegroup-c.ru/api/nsi}
+     *
+     * @param codes коды работ-услуг
+     * @return Данные работ-услуг
+     */
+    public Map<String, ServiceProduct> getServicesProductsByCodes(List<String> codes) {
+        logger.info("Получение данных справочника услуг. Вызов сервиса НСИ параметрами {}", codes);
+
+        String uri = String.join("/", REFERENCE_SERVICE, "service-product/map");
+
+        return webClient
+                .post()
+                .uri(uri)
+                .header(HttpHeaders.USER_AGENT, userAgent)
+                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", userDetails.getJwtTokenValue()))
+                .body(Mono.just(codes), List.class)
+                .retrieve()
+                .onStatus(
+                        HttpStatusCode::is4xxClientError,
+                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не найден", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
+                .onStatus(
+                        HttpStatusCode::is5xxServerError,
+                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не доступен", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
+                .bodyToMono(new ParameterizedTypeReference<Map<String, ServiceProduct>>() {
+                })
+                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
+                .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance),
+                        throwable -> new RemoteServiceCallException("Ошибка обработки данных при получении ответа", HttpStatus.BAD_REQUEST, uri, throwable.getMessage()))
+                .doOnError(err -> logger.error("Ошибка получения данных удаленного сервиса - {}", err.getMessage()))
+                .log()
+                .block();
+    }
+}

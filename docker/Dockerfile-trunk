@@ -2,6 +2,8 @@
 ARG QUAYIO_IMAGE_REPOSITORY=nexus-quayio-registry.inlinegroup-c.ru
 ARG RH_IMAGE_REPOSITORY=nexus-rh-registry.inlinegroup-c.ru
 ARG UBI9_REPO_URL=""
+ARG UBI9_REPO_URL_CA=""
+ARG UBI9_REPO_URL_SUB_CA=""
 ## Set maven registry
 ARG MAVEN_REPOSITORY=https://nexus-oss.inlinegroup-c.ru/repository/maven-public/
 ARG MAVEN_REPOSITORY_PLUGIN=https://nexus-oss.inlinegroup-c.ru/repository/maven2-gradle-plugin/

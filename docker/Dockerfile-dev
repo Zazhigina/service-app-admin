@@ -2,6 +2,8 @@
 ARG QUAYIO_IMAGE_REPOSITORY=quay-registry.dso.techpark.local
 ARG RH_IMAGE_REPOSITORY=rh-registry.dso.techpark.local
 ARG UBI9_REPO_URL=""
+ARG UBI9_REPO_URL_CA=""
+ARG UBI9_REPO_URL_SUB_CA=""
 ## Set maven registry
 ARG MAVEN_REPOSITORY=https://nexus.dso.techpark.local/repository/maven2-gradle-external-dso
 ARG MAVEN_REPOSITORY_PLUGIN=https://nexus.dso.techpark.local/repository/maven2-gradle-external-dso

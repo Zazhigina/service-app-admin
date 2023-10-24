@@ -4,7 +4,7 @@ variables:
   APPLICATION_VERSION: "0.1.$CI_PIPELINE_IID"
   APPLICATION_NAME: service-app-admin
   DEPLOY_BRANCH: develop-local
-  RELEASE_BRANCH: release-v1
+  RELEASE_BRANCH: release-v2
   DEMO_BRANCH: develop-local
   CHART_NAME: tzriu-be-spring
   KUBERNETES_NAMESPACE_OVERWRITE: mirror

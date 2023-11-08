@@ -2,7 +2,9 @@ package igc.mirror.service.controller;
 
 import igc.mirror.service.dto.OfferTypeDto;
 import igc.mirror.service.dto.ServiceOfferTypeDto;
+import igc.mirror.service.dto.ServiceProductDto;
 import igc.mirror.service.filter.ServiceOfferTypeSearchCriteria;
+import igc.mirror.service.filter.ServiceProductSearchCriteria;
 import igc.mirror.service.service.ServiceOfferTypeService;
 import igc.mirror.utils.qfilter.DataFilter;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,5 +48,13 @@ public class ServiceOfferTypeController {
     @GetMapping(path = "service-offer-type/offer-types")
     public List<OfferTypeDto> getOfferTypes() {
         return serviceOfferTypeService.getOfferTypes();
+    }
+
+    @Operation(summary = "Справочник услуг")
+    @PostMapping(path = "service-offer-type/service-product/filter")
+    public Page<ServiceProductDto> findServiceProduct(@RequestBody(required = false) DataFilter<ServiceProductSearchCriteria> filter,
+                                                      @RequestParam MultiValueMap<String, String> params, Pageable pageable) {
+
+        return serviceOfferTypeService.findServiceProduct(filter, params, pageable);
     }
 }

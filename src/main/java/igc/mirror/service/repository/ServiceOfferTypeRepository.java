@@ -83,14 +83,14 @@ public class ServiceOfferTypeRepository {
     /**
      * Возвращает вид КП по коду услуги
      *
-     * @param service код услуги
+     * @param services код услуги
      * @return вид КП
      */
-    public String getOfferTypeByServiceCode(String service) {
-        return dsl.select(TServiceOfferType.T_SERVICE_OFFER_TYPE.OFFER_TYPE)
+    public List<ServiceOfferType> getOfferTypeByServiceCodes(List<String> services) {
+        return dsl.select(TServiceOfferType.T_SERVICE_OFFER_TYPE.fields())
                 .from(TServiceOfferType.T_SERVICE_OFFER_TYPE)
-                .where(TServiceOfferType.T_SERVICE_OFFER_TYPE.SERVICE_CODE.equal(service))
-                .fetchOne(TServiceOfferType.T_SERVICE_OFFER_TYPE.OFFER_TYPE);
+                .where(TServiceOfferType.T_SERVICE_OFFER_TYPE.SERVICE_CODE.in(services))
+                .fetchInto(ServiceOfferType.class);
     }
 
     /**

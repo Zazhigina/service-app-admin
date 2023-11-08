@@ -4,6 +4,9 @@ import igc.mirror.auth.UserDetails;
 import igc.mirror.config.LoggingConstants;
 import igc.mirror.exception.common.RemoteServiceCallException;
 import igc.mirror.nsi.model.ServiceProduct;
+import igc.mirror.service.dto.RestPage;
+import igc.mirror.service.filter.ServiceProductSearchCriteria;
+import igc.mirror.utils.qfilter.DataFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -11,13 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyExtractors;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -72,5 +78,61 @@ public class NSIService {
                 .doOnError(err -> logger.error("Ошибка получения данных удаленного сервиса - {}", err.getMessage()))
                 .log()
                 .block();
+    }
+
+    /**
+     * Получение записей работ-услуг по фильтру
+     * {@linkplain //mirror.inlinegroup-c.ru/api/nsi}
+     *
+     * @param filter фильтр
+     * @param params педжинация
+     * @return Данные работ-услуг
+     */
+    public Page<ServiceProduct> getServicesProductsByFilter(DataFilter<ServiceProductSearchCriteria> filter, MultiValueMap<String, String> params) {
+        logger.info("Получение данных справочника услуг. Вызов сервиса НСИ с фильтром");
+
+        String uri = String.join("/", REFERENCE_SERVICE, "service-product/filter");
+        String urlTemplate = UriComponentsBuilder.fromUriString(uri)
+                .queryParams(params)
+                .encode()
+                .toUriString();
+
+
+        return webClient
+                .post()
+//                .uri(uriBuilder -> uriBuilder
+//                        .path(uri)
+//                        .queryParams(params)
+//                        .build())
+                .uri(urlTemplate)
+                .header(HttpHeaders.USER_AGENT, userAgent)
+                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", userDetails.getJwtTokenValue()))
+                .body(Mono.just(filter), DataFilter.class)
+                .retrieve()
+
+//                .toEntity(new ParameterizedTypeReference<PageImpl<ServiceProduct>>() {})
+//                .flatMap(responseEntity -> {
+//                    Page<ServiceProduct> services = new PageImpl<ServiceProduct>(responseEntity.getBody());
+//                    return services;
+//                })
+                // .exchangeToMono(clientResponse -> clientResponse.toEntity(Resource.class))
+                // .exchangeToMono(clientResponse -> clientResponse.toEntity(new ParameterizedTypeReference<PageImpl<ServiceProduct>>()))
+                .onStatus(
+                        HttpStatusCode::is4xxClientError,
+                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не найден", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
+                .onStatus(
+                        HttpStatusCode::is5xxServerError,
+                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не доступен", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
+                .bodyToMono(new ParameterizedTypeReference<RestPage<ServiceProduct>>() {
+                })
+                // .bodyToMono(new PageImpl<ServiceProduct>(){})
+//                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
+//                .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance),
+//                        throwable -> new RemoteServiceCallException("Ошибка обработки данных при получении ответа", HttpStatus.BAD_REQUEST, uri, throwable.getMessage()))
+//                .doOnError(err -> logger.error("Ошибка получения данных удаленного сервиса - {}", err.getMessage()))
+                .log()
+                .block();
+
     }
 }

@@ -6,7 +6,9 @@ import igc.mirror.nsi.model.ServiceProduct;
 import igc.mirror.nsi.service.NSIService;
 import igc.mirror.service.dto.OfferTypeDto;
 import igc.mirror.service.dto.ServiceOfferTypeDto;
+import igc.mirror.service.dto.ServiceProductDto;
 import igc.mirror.service.filter.ServiceOfferTypeSearchCriteria;
+import igc.mirror.service.filter.ServiceProductSearchCriteria;
 import igc.mirror.service.model.ServiceOfferType;
 import igc.mirror.service.ref.OfferType;
 import igc.mirror.service.repository.ServiceOfferTypeRepository;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -74,7 +77,14 @@ public class ServiceOfferTypeService {
      * @return вид КП
      */
     public String getOfferTypeByServiceCode(String service) {
-        return serviceOfferTypeRepository.getOfferTypeByServiceCode(service);
+        List<String> codes = new ArrayList<>();
+        codes.add(service);
+        String offerType = null;
+        List<ServiceOfferType> records = serviceOfferTypeRepository.getOfferTypeByServiceCodes(codes);
+        if (!records.isEmpty()) {
+            offerType = String.valueOf(records.get(0).getOfferType());
+        }
+        return offerType;
     }
 
     /**
@@ -135,5 +145,23 @@ public class ServiceOfferTypeService {
         if (!notExistingServices.isEmpty())
             throw new IllegalEntityStateException("Найдены несуществующие услуги " + notExistingServices, null, ServiceOfferType.class);
 
+    }
+
+    public Page<ServiceProductDto> findServiceProduct(DataFilter<ServiceProductSearchCriteria> filter, MultiValueMap<String, String> params, Pageable pageable) {
+        Page<ServiceProduct> services = nsiService.getServicesProductsByFilter(filter, params);
+        List<ServiceProductDto> servicesDto = new ArrayList<>();
+        if (!services.isEmpty()) {
+            List<ServiceOfferType> records = serviceOfferTypeRepository.getOfferTypeByServiceCodes(services.stream().map(ServiceProduct::getCode).toList());
+            for (ServiceProduct service :
+                    services.getContent()) {
+                ServiceProductDto serviceDto = new ServiceProductDto(service);
+                if (records.stream().anyMatch(r -> r.getServiceCode().equals(service.getCode())))
+                    serviceDto.setOfferTypeExists(Boolean.TRUE);
+                else
+                    serviceDto.setOfferTypeExists(Boolean.FALSE);
+                servicesDto.add(serviceDto);
+            }
+        }
+        return new PageImpl<>(servicesDto, pageable, services.getTotalElements());
     }
 }

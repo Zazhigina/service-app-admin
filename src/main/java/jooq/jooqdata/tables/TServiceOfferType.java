@@ -10,14 +10,12 @@ import java.util.List;
 import java.util.function.Function;
 
 import jooqdata.Admin;
-import jooqdata.Indexes;
 import jooqdata.Keys;
 import jooqdata.tables.records.TServiceOfferTypeRecord;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Function7;
-import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
@@ -134,13 +132,13 @@ public class TServiceOfferType extends TableImpl<TServiceOfferTypeRecord> {
     }
 
     @Override
-    public List<Index> getIndexes() {
-        return Arrays.asList(Indexes.T_SERVICE_OFFER_TYPE_SERVICE_CODE_IDX);
+    public UniqueKey<TServiceOfferTypeRecord> getPrimaryKey() {
+        return Keys.T_SERVICE_OFFER_TYPE_PK;
     }
 
     @Override
-    public UniqueKey<TServiceOfferTypeRecord> getPrimaryKey() {
-        return Keys.T_SERVICE_OFFER_TYPE_PK;
+    public List<UniqueKey<TServiceOfferTypeRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.T_SERVICE_OFFER_TYPE_UN);
     }
 
     @Override

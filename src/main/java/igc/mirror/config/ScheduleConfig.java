@@ -1,5 +1,6 @@
 package igc.mirror.config;
 
+import igc.mirror.task.CommercialOfferNotificationTask;
 import igc.mirror.task.CommercialOfferStatusTask;
 import igc.mirror.task.EisContractsTask;
 import igc.mirror.task.RequestSearchHistoryTask;
@@ -36,11 +37,10 @@ public class ScheduleConfig implements SchedulingConfigurer {
         return new EisContractsTask();
     }
 
-    //todo убрать комментирование перед переносом в продуктив
-//    @Bean
-//    public CommercialOfferNotificationTask commercialOfferNotificationTaskTask() {
-//        return new CommercialOfferNotificationTask();
-//    }
+    @Bean
+    public CommercialOfferNotificationTask commercialOfferNotificationTask() {
+        return new CommercialOfferNotificationTask();
+    }
 
     @Bean
     public CommercialOfferStatusTask commercialOfferStatusTask() {

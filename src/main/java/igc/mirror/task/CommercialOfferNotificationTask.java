@@ -56,7 +56,7 @@ public class CommercialOfferNotificationTask {
         logger.info("Запуск задания по отправке уведомлений об окончании приема коммерческих предложений.");
 
         if (paramService.findByKey(SHEDULLER_MAILING_ALLOWED_PARAM).getVal().equals(MAILING_NOT_ALLOWED))
-            logger.info("Возможность рассылки отключена. Для отправки уведомлений измените настройки.");
+            logger.info("Возможность рассылки отключена. Для отправки уведомлений измените значение параметра 'Разрешить рассылку'");
         else {
             AuthResponseDto authResponseDto = keycloakAuthClient.authenticate(scheduleTasksUserName, scheduleTasksPassword);
 

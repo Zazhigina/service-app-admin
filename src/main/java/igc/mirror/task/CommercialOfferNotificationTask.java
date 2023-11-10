@@ -4,6 +4,7 @@ import igc.mirror.auth.client.KeycloakAuthClient;
 import igc.mirror.auth.dto.AuthResponseDto;
 import igc.mirror.config.LoggingConstants;
 import igc.mirror.exception.common.RemoteServiceCallException;
+import igc.mirror.param.service.ParamService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -25,6 +26,8 @@ public class CommercialOfferNotificationTask {
     static final Logger logger = LoggerFactory.getLogger(CommercialOfferNotificationTask.class);
 
     private static final String EP_COMMERCIAL_OFFER_SERVICE = "commercial-offer-message";
+    private static final String SHEDULLER_MAILING_ALLOWED_PARAM = "SHEDULLER.MAILING_ALLOWED"; //todo create ApplicationParameter enum?
+    private static final String MAILING_NOT_ALLOWED = "0";
 
     @Autowired
     @Qualifier("ep")
@@ -32,6 +35,9 @@ public class CommercialOfferNotificationTask {
 
     @Autowired
     private KeycloakAuthClient keycloakAuthClient;
+
+    @Autowired
+    ParamService paramService;
 
     @Value("${mirror.schedule.tasks.username}")
     private String scheduleTasksUserName;
@@ -49,12 +55,16 @@ public class CommercialOfferNotificationTask {
 
         logger.info("Запуск задания по отправке уведомлений об окончании приема коммерческих предложений.");
 
-        AuthResponseDto authResponseDto = keycloakAuthClient.authenticate(scheduleTasksUserName, scheduleTasksPassword);
+        if (paramService.findByKey(SHEDULLER_MAILING_ALLOWED_PARAM).getVal().equals(MAILING_NOT_ALLOWED))
+            logger.info("Возможность рассылки отключена. Для отправки уведомлений измените настройки.");
+        else {
+            AuthResponseDto authResponseDto = keycloakAuthClient.authenticate(scheduleTasksUserName, scheduleTasksPassword);
 
-        sendOfferComingEndContractorMessage(authResponseDto);
-        sendOfferComingEndInitiatorMessage(authResponseDto);
-        sendOfferCompletedContractorMessage(authResponseDto);
-        sendOfferCompletedInitiatorMessage(authResponseDto);
+            sendOfferComingEndContractorMessage(authResponseDto);
+            sendOfferComingEndInitiatorMessage(authResponseDto);
+            sendOfferCompletedContractorMessage(authResponseDto);
+            sendOfferCompletedInitiatorMessage(authResponseDto);
+        }
 
         MDC.remove(USER_AGENT_KEY);
         MDC.remove(X_REQUEST_ID_KEY);

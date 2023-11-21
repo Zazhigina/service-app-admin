@@ -9,6 +9,7 @@ import java.util.List;
 
 import jooqdata.tables.AParam;
 import jooqdata.tables.TAnswerVersion;
+import jooqdata.tables.TCalendarProduction;
 import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
@@ -45,6 +46,11 @@ public class Admin extends SchemaImpl {
      * Вариант ответа на вопрос
      */
     public final TAnswerVersion T_ANSWER_VERSION = TAnswerVersion.T_ANSWER_VERSION;
+
+    /**
+     * Производственный календарь
+     */
+    public final TCalendarProduction T_CALENDAR_PRODUCTION = TCalendarProduction.T_CALENDAR_PRODUCTION;
 
     /**
      * Шаблон письма
@@ -106,6 +112,7 @@ public class Admin extends SchemaImpl {
         return Arrays.asList(
             AParam.A_PARAM,
             TAnswerVersion.T_ANSWER_VERSION,
+            TCalendarProduction.T_CALENDAR_PRODUCTION,
             TLetterTemplate.T_LETTER_TEMPLATE,
             TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM,
             TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM,

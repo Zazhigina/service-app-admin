@@ -6,6 +6,7 @@ package jooqdata;
 
 import jooqdata.tables.AParam;
 import jooqdata.tables.TAnswerVersion;
+import jooqdata.tables.TCalendarProduction;
 import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
@@ -30,6 +31,11 @@ public class Tables {
      * Вариант ответа на вопрос
      */
     public static final TAnswerVersion T_ANSWER_VERSION = TAnswerVersion.T_ANSWER_VERSION;
+
+    /**
+     * Производственный календарь
+     */
+    public static final TCalendarProduction T_CALENDAR_PRODUCTION = TCalendarProduction.T_CALENDAR_PRODUCTION;
 
     /**
      * Шаблон письма

@@ -6,6 +6,7 @@ package jooqdata;
 
 import jooqdata.tables.AParam;
 import jooqdata.tables.TAnswerVersion;
+import jooqdata.tables.TCalendarProduction;
 import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
@@ -15,6 +16,7 @@ import jooqdata.tables.TServiceOfferType;
 import jooqdata.tables.TVariable;
 import jooqdata.tables.records.AParamRecord;
 import jooqdata.tables.records.TAnswerVersionRecord;
+import jooqdata.tables.records.TCalendarProductionRecord;
 import jooqdata.tables.records.TLetterTemplateAcceptableDocumentFormatEnumRecord;
 import jooqdata.tables.records.TLetterTemplateRecord;
 import jooqdata.tables.records.TLetterTemplateTypeTemplateEnumRecord;
@@ -43,6 +45,8 @@ public class Keys {
 
     public static final UniqueKey<AParamRecord> A_PARAM_PK = Internal.createUniqueKey(AParam.A_PARAM, DSL.name("a_param_pk"), new TableField[] { AParam.A_PARAM.KEY }, true);
     public static final UniqueKey<TAnswerVersionRecord> T_ANSWER_VERSION_PK = Internal.createUniqueKey(TAnswerVersion.T_ANSWER_VERSION, DSL.name("t_answer_version_pk"), new TableField[] { TAnswerVersion.T_ANSWER_VERSION.ID }, true);
+    public static final UniqueKey<TCalendarProductionRecord> T_CALENDAR_PRODUCTION_PK = Internal.createUniqueKey(TCalendarProduction.T_CALENDAR_PRODUCTION, DSL.name("t_calendar_production_pk"), new TableField[] { TCalendarProduction.T_CALENDAR_PRODUCTION.ID }, true);
+    public static final UniqueKey<TCalendarProductionRecord> T_CALENDAR_PRODUCTION_UN = Internal.createUniqueKey(TCalendarProduction.T_CALENDAR_PRODUCTION, DSL.name("t_calendar_production_un"), new TableField[] { TCalendarProduction.T_CALENDAR_PRODUCTION.YEAR }, true);
     public static final UniqueKey<TLetterTemplateRecord> T_LETTER_TEMPLATE_PK = Internal.createUniqueKey(TLetterTemplate.T_LETTER_TEMPLATE, DSL.name("t_letter_template_pk"), new TableField[] { TLetterTemplate.T_LETTER_TEMPLATE.ID }, true);
     public static final UniqueKey<TLetterTemplateRecord> T_LETTER_TEMPLATE_UN = Internal.createUniqueKey(TLetterTemplate.T_LETTER_TEMPLATE, DSL.name("t_letter_template_un"), new TableField[] { TLetterTemplate.T_LETTER_TEMPLATE.LETTER_TYPE }, true);
     public static final UniqueKey<TLetterTemplateAcceptableDocumentFormatEnumRecord> T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM_PK = Internal.createUniqueKey(TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM, DSL.name("t_letter_template_acceptable_document_format_enum_pk"), new TableField[] { TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM.ID }, true);

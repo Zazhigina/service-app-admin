@@ -5,9 +5,9 @@ import java.util.List;
 public class GroupProcessInfo {
     private String processName;
     private int successfulResults;
-    private List<ExceptionInfo> exceptions;
+    private List<EntityExceptionInfo> exceptions;
 
-    public GroupProcessInfo(String processName, int successfulResults, List<ExceptionInfo> exceptions) {
+    public GroupProcessInfo(String processName, int successfulResults, List<EntityExceptionInfo> exceptions) {
         this.processName = processName;
         this.successfulResults = successfulResults;
         this.exceptions = exceptions;
@@ -29,11 +29,11 @@ public class GroupProcessInfo {
         this.successfulResults = successfulResults;
     }
 
-    public List<ExceptionInfo> getExceptions() {
+    public List<EntityExceptionInfo> getExceptions() {
         return exceptions;
     }
 
-    public void setExceptions(List<ExceptionInfo> exceptions) {
+    public void setExceptions(List<EntityExceptionInfo> exceptions) {
         this.exceptions = exceptions;
     }
 }

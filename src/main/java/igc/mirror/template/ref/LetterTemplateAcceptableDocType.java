@@ -3,7 +3,8 @@ package igc.mirror.template.ref;
 public enum LetterTemplateAcceptableDocType {
     DOC("doc", "application/msword"),
     DOCX("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
-    HTML("html", "text/html");
+    HTML("html", "text/html"),
+    PDF("pdf", "application/pdf");
 
     private final String extension;
     private final String contentType;

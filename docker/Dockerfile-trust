@@ -39,7 +39,7 @@ RUN JKS_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) \
 
 RUN java -Djarmode=layertools -jar $BUILD_APP_DIR/build/libs/root.jar extract
 #
-FROM  $RH_IMAGE_REPOSITORY/ubi9/openjdk-17-runtime:1.16-3
+FROM  $RH_IMAGE_REPOSITORY/ubi9/openjdk-17-runtime:1.17-1
 ARG BUILD_APP_DIR
 ARG UID=1001
 ARG UBI9_REPO_URL

@@ -34,4 +34,17 @@ public enum LetterTemplateAcceptableDocType {
 
         return result;
     }
+
+    public static LetterTemplateAcceptableDocType getByContentType(String contentType){
+        LetterTemplateAcceptableDocType result = null;
+
+        for (LetterTemplateAcceptableDocType letterTemplateAcceptableDocType: LetterTemplateAcceptableDocType.values()) {
+            if(letterTemplateAcceptableDocType.getExtension().equalsIgnoreCase(contentType)) {
+                result = letterTemplateAcceptableDocType;
+                break;
+            }
+        }
+
+        return result;
+    }
 }

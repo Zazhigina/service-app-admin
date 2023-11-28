@@ -119,9 +119,6 @@ public class TemplateService {
             LetterTemplateAcceptableDocType acceptableDocType = Optional.ofNullable(LetterTemplateAcceptableDocType.getByContentType(file.getContentType()))
                     .orElseThrow(() -> new EntityNotSavedException("Недопустимый тип файла", null, null));
             letterTemplate.setAcceptableDocumentFormat(acceptableDocType.getExtension());
-//            LetterTemplateAcceptableDocType acceptableDocType = Optional.ofNullable(LetterTemplateAcceptableDocType.getByExtension(StringUtils.getFilenameExtension(file.getOriginalFilename())))
-//                    .orElseThrow(() -> new EntityNotSavedException("Недопустимый тип файла", null, null));
-//            letterTemplate.setAcceptableDocumentFormat(acceptableDocType.getExtension());
         }
 
         letterTemplate.setTitle(letterTemplateRequest.getTitle());

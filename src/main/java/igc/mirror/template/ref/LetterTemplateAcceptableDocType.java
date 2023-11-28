@@ -39,7 +39,7 @@ public enum LetterTemplateAcceptableDocType {
         LetterTemplateAcceptableDocType result = null;
 
         for (LetterTemplateAcceptableDocType letterTemplateAcceptableDocType: LetterTemplateAcceptableDocType.values()) {
-            if(letterTemplateAcceptableDocType.getExtension().equalsIgnoreCase(contentType)) {
+            if(letterTemplateAcceptableDocType.getContentType().equalsIgnoreCase(contentType)) {
                 result = letterTemplateAcceptableDocType;
                 break;
             }

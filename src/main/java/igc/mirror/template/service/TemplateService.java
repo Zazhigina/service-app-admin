@@ -24,7 +24,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -117,7 +116,7 @@ public class TemplateService {
         LetterTemplate letterTemplate = letterTemplateRepository.find(id);
 
         if (file != null) {
-            LetterTemplateAcceptableDocType acceptableDocType = Optional.ofNullable(LetterTemplateAcceptableDocType.getByExtension(StringUtils.getFilenameExtension(file.getOriginalFilename())))
+            LetterTemplateAcceptableDocType acceptableDocType = Optional.ofNullable(LetterTemplateAcceptableDocType.getByContentType(file.getContentType()))
                     .orElseThrow(() -> new EntityNotSavedException("Недопустимый тип файла", null, null));
             letterTemplate.setAcceptableDocumentFormat(acceptableDocType.getExtension());
         }

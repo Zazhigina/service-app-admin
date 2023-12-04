@@ -13,6 +13,8 @@ springdoc:
 server:
   forward-headers-strategy: framework
   shutdown: "graceful"
+  connection-timeout: 60000
+  max-http-header-size: 8192
 
 management:
   server:

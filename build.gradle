@@ -45,6 +45,16 @@ dependencyLocking {
     lockMode = LockMode.STRICT
 }
 
+//fix vulnerability version logback-classic,logback-core
+dependencyManagement {
+     dependencies {
+          dependencySet(group:'ch.qos.logback', version: '1.4.12') {
+               entry 'logback-classic'
+               entry 'logback-core'
+          }
+     }
+}
+
 dependencies {
     // logging
     implementation "ch.qos.logback.contrib:logback-json-classic:${loogbackContribJSONVersion}"

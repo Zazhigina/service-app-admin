@@ -4,8 +4,8 @@
 ch.qos.logback.contrib:logback-jackson:0.1.5=compileClasspath,runtimeClasspath
 ch.qos.logback.contrib:logback-json-classic:0.1.5=compileClasspath,runtimeClasspath
 ch.qos.logback.contrib:logback-json-core:0.1.5=compileClasspath,runtimeClasspath
-ch.qos.logback:logback-classic:1.4.11=compileClasspath,runtimeClasspath
-ch.qos.logback:logback-core:1.4.11=compileClasspath,runtimeClasspath
+ch.qos.logback:logback-classic:1.4.12=compileClasspath,runtimeClasspath
+ch.qos.logback:logback-core:1.4.12=compileClasspath,runtimeClasspath
 com.fasterxml.jackson.core:jackson-annotations:2.14.3=compileClasspath,runtimeClasspath
 com.fasterxml.jackson.core:jackson-core:2.14.3=compileClasspath,runtimeClasspath
 com.fasterxml.jackson.core:jackson-databind:2.14.3=compileClasspath,runtimeClasspath

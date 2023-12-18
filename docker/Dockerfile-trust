@@ -48,18 +48,18 @@ ARG UBI9_REPO_URL_SUB_CA
 
 ENV TZ Europe/Moscow
 
-# USER root
-# # update Important packeges
-# RUN if [ -n "$UBI9_REPO_URL" ]; then \
-#         curl -k -s $UBI9_REPO_URL_CA --output /etc/pki/ca-trust/source/anchors/root-ca-gazprom-neft.pem; \
-#         curl -k -s $UBI9_REPO_URL_SUB_CA --output /etc/pki/ca-trust/source/anchors/sub-ca-gazprom-neft.pem; \
-#         update-ca-trust; \
-#         rm -rf /etc/yum.repos.d/ubi.repo; \
-#         curl -k $UBI9_REPO_URL --output /etc/yum.repos.d/ubi.repo; \
-#     fi; \
-#     microdnf --setopt=tsflags=nodocs install -y glibc-2.34-60.el9_2.7 python3-3.9.16-1.el9_2.2 nodejs-16.20.2-1.el9_2 libcap-2.48-9.el9_2 && \
-#     microdnf clean all && \
-#     rm -rf /var/cache/yum
+USER root
+# update Important packeges
+RUN if [ -n "$UBI9_REPO_URL" ]; then \
+       curl -k -s $UBI9_REPO_URL_CA --output /etc/pki/ca-trust/source/anchors/root-ca-gazprom-neft.pem; \
+       curl -k -s $UBI9_REPO_URL_SUB_CA --output /etc/pki/ca-trust/source/anchors/sub-ca-gazprom-neft.pem; \
+       update-ca-trust; \
+       rm -rf /etc/yum.repos.d/ubi.repo; \
+       curl -k $UBI9_REPO_URL --output /etc/yum.repos.d/ubi.repo; \
+   fi; \
+   microdnf --setopt=tsflags=nodocs install -y libxml2-2.9.13-5.el9_3 && \
+   microdnf clean all && \
+   rm -rf /var/cache/yum
 
 # Set permissions so that the container runs without root access
 USER 0

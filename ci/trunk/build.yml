@@ -18,7 +18,7 @@ build:
 build-release:
   stage: build
   environment:
-    name: release-v3.1
+    name: release-v3.2
     action: prepare
   image:
     name: nexus-registry.inlinegroup-c.ru/gcr.io/kaniko-project/executor:v1.9.2-debug

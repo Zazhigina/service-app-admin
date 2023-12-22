@@ -37,7 +37,7 @@ deploy-release:
   stage: deploy
   image: nexus-docker-hub.inlinegroup-c.ru/devth/helm:v3.9.0
   environment:
-    name: release-v3.1
+    name: release-v3.2
 #    url: $APP_URL
     action: start
     on_stop: stop_deploy_release
@@ -60,7 +60,7 @@ stop_deploy_release:
   stage: deploy
   image: nexus-docker-hub.inlinegroup-c.ru/devth/helm:v3.9.0
   environment:
-    name: release-v3.1
+    name: release-v3.2
     action: stop
   when: manual
   script:

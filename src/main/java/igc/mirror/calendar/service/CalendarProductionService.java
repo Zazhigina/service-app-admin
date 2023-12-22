@@ -2,15 +2,20 @@ package igc.mirror.calendar.service;
 
 import igc.mirror.auth.UserDetails;
 import igc.mirror.calendar.dto.CalendarProductionDto;
+import igc.mirror.calendar.filter.CalendarProductionSearchCriteria;
 import igc.mirror.calendar.model.CalendarProduction;
 import igc.mirror.calendar.repository.CalendarProductionRepository;
 import igc.mirror.exception.handler.EntityExceptionInfo;
 import igc.mirror.exception.handler.GroupProcessInfo;
+import igc.mirror.utils.qfilter.DataFilter;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -111,5 +116,22 @@ public class CalendarProductionService {
         logger.info("Удаление записи производственного календаря с ИД - {}", id);
 
         calendarProductionRepository.deleteCalendarProduction(id);
+    }
+
+    /**
+     * Возвращает список данных производственного календаря по указанными критериями поиска
+     * в соответствии с настройками пагинации
+     *
+     * @param filter   критерий поиска
+     * @param pageable настройки пагинации
+     * @return данные производственного календаря
+     */
+    public Page<CalendarProductionDto> findCalendarProductionByFilter(DataFilter<CalendarProductionSearchCriteria> filter, Pageable pageable) {
+        List<CalendarProductionDto> calendarProduction = calendarProductionRepository.findCalendarProductionByFilter(filter, pageable);
+
+        long total = (calendarProduction.size() >= pageable.getPageSize() ?
+                calendarProductionRepository.getCalendarProductionItemsCount(filter) : calendarProduction.size());
+
+        return new PageImpl<>(calendarProduction, pageable, total);
     }
 }

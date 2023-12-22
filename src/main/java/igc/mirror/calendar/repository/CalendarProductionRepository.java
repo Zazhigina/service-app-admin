@@ -1,17 +1,23 @@
 package igc.mirror.calendar.repository;
 
 import igc.mirror.calendar.dto.CalendarProductionDto;
+import igc.mirror.calendar.filter.CalendarProductionSearchCriteria;
 import igc.mirror.calendar.model.CalendarProduction;
 import igc.mirror.exception.common.EntityNotFoundException;
 import igc.mirror.exception.common.EntityNotSavedException;
+import igc.mirror.utils.JooqRepositoryUtil;
+import igc.mirror.utils.qfilter.DataFilter;
+import igc.mirror.utils.qfilter.QueryBuilder;
+import igc.mirror.utils.qfilter.QueryFilter;
 import jooqdata.tables.TCalendarProduction;
 import jooqdata.tables.records.TCalendarProductionRecord;
-import org.jooq.DSLContext;
-import org.jooq.Record4;
-import org.jooq.UpdateConditionStep;
+import org.jooq.Record;
+import org.jooq.*;
+import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -19,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static jooqdata.Keys.T_CALENDAR_PRODUCTION_UN;
+import static org.jooq.impl.DSL.select;
 
 @Repository
 public class CalendarProductionRepository {
@@ -28,6 +35,8 @@ public class CalendarProductionRepository {
 
     @Autowired
     private DSLContext dsl;
+    @Autowired
+    private JooqRepositoryUtil jooqRepositoryUtil;
 
     /**
      * Находит все данные производственного календаря
@@ -148,6 +157,57 @@ public class CalendarProductionRepository {
                 .fetchOptional()
                 .map(r -> r.into(CalendarProduction.class))
                 .orElseThrow(() -> new EntityNotFoundException(calendarProduction.getId(), CalendarProduction.class));
+    }
+
+
+    /**
+     * Возвращает запрос для получения данных производственного календаря по укказанным критериям
+     *
+     * @param criteria критерий поиска
+     * @return запрос
+     */
+    private Select<? extends Record> buildCalendarProductionQuery(CalendarProductionSearchCriteria criteria) {
+        Condition condition = DSL.noCondition();
+
+        if (criteria != null && criteria.getYear() != null) {
+            condition = condition.and(CALENDAR.YEAR.equal(criteria.getYear()));
+        }
+
+        return select(CALENDAR.ID,
+                CALENDAR.YEAR,
+                CALENDAR.HOUR_WORK_COUNT,
+                CALENDAR.MONTH_WORK_HOUR_COUNT)
+                .from(CALENDAR)
+                .where(condition);
+    }
+
+    /**
+     * Получает список данных производственного календаря
+     *
+     * @param dataFilter критерий поиска
+     * @param pageable   настройки пагинации
+     * @return список данных производственного календаря
+     */
+    public List<CalendarProductionDto> findCalendarProductionByFilter(DataFilter<CalendarProductionSearchCriteria> dataFilter,
+                                                                      Pageable pageable) {
+        CalendarProductionSearchCriteria criteria = (dataFilter != null ? dataFilter.getSearchCriteria() : null);
+        QueryFilter subFilter = (dataFilter != null ? dataFilter.getSubFilter() : null);
+        return dsl.fetch(QueryBuilder
+                        .buildQuery(buildCalendarProductionQuery(criteria), subFilter, pageable))
+                .into(CalendarProductionDto.class);
+    }
+
+    /**
+     * Возвращает количество записей, удовлетворяющих переданным критриям без сортировки и пагиинации
+     *
+     * @param dataFilter основные критерии поиска и дополнительный фильтр
+     * @return количество записей, удовлетворяющих переданному фильтру
+     */
+    public Long getCalendarProductionItemsCount(DataFilter<CalendarProductionSearchCriteria> dataFilter) {
+        CalendarProductionSearchCriteria criteria = (dataFilter != null ? dataFilter.getSearchCriteria() : null);
+        QueryFilter subFilter = (dataFilter != null ? dataFilter.getSubFilter() : null);
+
+        return jooqRepositoryUtil.findRecordTotal(QueryBuilder.buildQuery(buildCalendarProductionQuery(criteria), subFilter));
     }
 }
 

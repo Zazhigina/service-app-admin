@@ -1,12 +1,16 @@
 package igc.mirror.calendar.controller;
 
 import igc.mirror.calendar.dto.CalendarProductionDto;
+import igc.mirror.calendar.filter.CalendarProductionSearchCriteria;
 import igc.mirror.calendar.service.CalendarProductionService;
 import igc.mirror.exception.handler.GroupProcessInfo;
 import igc.mirror.exception.handler.SuccessInfo;
+import igc.mirror.utils.qfilter.DataFilter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,5 +46,11 @@ public class CalendarProductionController {
     public ResponseEntity<SuccessInfo> deleteCalendarProduction(@PathVariable Long id) {
         calendarProductionService.deleteCalendarProduction(id);
         return ResponseEntity.ok(new SuccessInfo("Удалена запись производстенного календаря, ИД: " + id));
+    }
+
+    @Operation(summary = "Получение всех данных производственного календаря c по указанному фильтру")
+    @PostMapping(path = "/filter")
+    public Page<CalendarProductionDto> findCalendarProduction(@RequestBody(required = false) DataFilter<CalendarProductionSearchCriteria> filter, Pageable pageable) {
+        return calendarProductionService.findCalendarProductionByFilter(filter, pageable);
     }
 }

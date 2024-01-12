@@ -23,6 +23,7 @@ public class TServiceOfferType implements Serializable {
     private String createUser;
     private LocalDateTime lastUpdateDate;
     private String lastUpdateUser;
+    private Boolean withCostingDefault;
 
     public TServiceOfferType() {}
 
@@ -34,6 +35,7 @@ public class TServiceOfferType implements Serializable {
         this.createUser = value.createUser;
         this.lastUpdateDate = value.lastUpdateDate;
         this.lastUpdateUser = value.lastUpdateUser;
+        this.withCostingDefault = value.withCostingDefault;
     }
 
     public TServiceOfferType(
@@ -43,7 +45,8 @@ public class TServiceOfferType implements Serializable {
         LocalDateTime createDate,
         String createUser,
         LocalDateTime lastUpdateDate,
-        String lastUpdateUser
+        String lastUpdateUser,
+        Boolean withCostingDefault
     ) {
         this.id = id;
         this.serviceCode = serviceCode;
@@ -52,6 +55,7 @@ public class TServiceOfferType implements Serializable {
         this.createUser = createUser;
         this.lastUpdateDate = lastUpdateDate;
         this.lastUpdateUser = lastUpdateUser;
+        this.withCostingDefault = withCostingDefault;
     }
 
     /**
@@ -164,6 +168,22 @@ public class TServiceOfferType implements Serializable {
         this.lastUpdateUser = lastUpdateUser;
     }
 
+    /**
+     * Getter for <code>admin.t_service_offer_type.with_costing_default</code>.
+     * Запросить расшифровку (по умолчанию)
+     */
+    public Boolean getWithCostingDefault() {
+        return this.withCostingDefault;
+    }
+
+    /**
+     * Setter for <code>admin.t_service_offer_type.with_costing_default</code>.
+     * Запросить расшифровку (по умолчанию)
+     */
+    public void setWithCostingDefault(Boolean withCostingDefault) {
+        this.withCostingDefault = withCostingDefault;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -215,6 +235,12 @@ public class TServiceOfferType implements Serializable {
         }
         else if (!this.lastUpdateUser.equals(other.lastUpdateUser))
             return false;
+        if (this.withCostingDefault == null) {
+            if (other.withCostingDefault != null)
+                return false;
+        }
+        else if (!this.withCostingDefault.equals(other.withCostingDefault))
+            return false;
         return true;
     }
 
@@ -229,6 +255,7 @@ public class TServiceOfferType implements Serializable {
         result = prime * result + ((this.createUser == null) ? 0 : this.createUser.hashCode());
         result = prime * result + ((this.lastUpdateDate == null) ? 0 : this.lastUpdateDate.hashCode());
         result = prime * result + ((this.lastUpdateUser == null) ? 0 : this.lastUpdateUser.hashCode());
+        result = prime * result + ((this.withCostingDefault == null) ? 0 : this.withCostingDefault.hashCode());
         return result;
     }
 
@@ -243,6 +270,7 @@ public class TServiceOfferType implements Serializable {
         sb.append(", ").append(createUser);
         sb.append(", ").append(lastUpdateDate);
         sb.append(", ").append(lastUpdateUser);
+        sb.append(", ").append(withCostingDefault);
 
         sb.append(")");
         return sb.toString();

@@ -15,11 +15,11 @@ import jooqdata.tables.records.TServiceOfferTypeRecord;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function7;
+import org.jooq.Function8;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row7;
+import org.jooq.Row8;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -92,6 +92,12 @@ public class TServiceOfferType extends TableImpl<TServiceOfferTypeRecord> {
      * Автор изменения
      */
     public final TableField<TServiceOfferTypeRecord, String> LAST_UPDATE_USER = createField(DSL.name("last_update_user"), SQLDataType.VARCHAR(100), this, "Автор изменения");
+
+    /**
+     * The column <code>admin.t_service_offer_type.with_costing_default</code>.
+     * Запросить расшифровку (по умолчанию)
+     */
+    public final TableField<TServiceOfferTypeRecord, Boolean> WITH_COSTING_DEFAULT = createField(DSL.name("with_costing_default"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "Запросить расшифровку (по умолчанию)");
 
     private TServiceOfferType(Name alias, Table<TServiceOfferTypeRecord> aliased) {
         this(alias, aliased, null);
@@ -181,18 +187,18 @@ public class TServiceOfferType extends TableImpl<TServiceOfferTypeRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row7 type methods
+    // Row8 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<Long, String, String, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row8<Long, String, String, LocalDateTime, String, LocalDateTime, String, Boolean> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function7<? super Long, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function8<? super Long, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super Boolean, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -200,7 +206,7 @@ public class TServiceOfferType extends TableImpl<TServiceOfferTypeRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function7<? super Long, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super Long, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super Boolean, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

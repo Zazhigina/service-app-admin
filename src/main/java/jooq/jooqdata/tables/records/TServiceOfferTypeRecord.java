@@ -10,8 +10,8 @@ import jooqdata.tables.TServiceOfferType;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record7;
-import org.jooq.Row7;
+import org.jooq.Record8;
+import org.jooq.Row8;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Вид шаблона КП для услуги
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTypeRecord> implements Record7<Long, String, String, LocalDateTime, String, LocalDateTime, String> {
+public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTypeRecord> implements Record8<Long, String, String, LocalDateTime, String, LocalDateTime, String, Boolean> {
 
     private static final long serialVersionUID = 1L;
 
@@ -133,6 +133,22 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
         return (String) get(6);
     }
 
+    /**
+     * Setter for <code>admin.t_service_offer_type.with_costing_default</code>.
+     * Запросить расшифровку (по умолчанию)
+     */
+    public void setWithCostingDefault(Boolean value) {
+        set(7, value);
+    }
+
+    /**
+     * Getter for <code>admin.t_service_offer_type.with_costing_default</code>.
+     * Запросить расшифровку (по умолчанию)
+     */
+    public Boolean getWithCostingDefault() {
+        return (Boolean) get(7);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -143,17 +159,17 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
     }
 
     // -------------------------------------------------------------------------
-    // Record7 type implementation
+    // Record8 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<Long, String, String, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row8<Long, String, String, LocalDateTime, String, LocalDateTime, String, Boolean> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 
     @Override
-    public Row7<Long, String, String, LocalDateTime, String, LocalDateTime, String> valuesRow() {
-        return (Row7) super.valuesRow();
+    public Row8<Long, String, String, LocalDateTime, String, LocalDateTime, String, Boolean> valuesRow() {
+        return (Row8) super.valuesRow();
     }
 
     @Override
@@ -192,6 +208,11 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
     }
 
     @Override
+    public Field<Boolean> field8() {
+        return TServiceOfferType.T_SERVICE_OFFER_TYPE.WITH_COSTING_DEFAULT;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -227,6 +248,11 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
     }
 
     @Override
+    public Boolean component8() {
+        return getWithCostingDefault();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -259,6 +285,11 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
     @Override
     public String value7() {
         return getLastUpdateUser();
+    }
+
+    @Override
+    public Boolean value8() {
+        return getWithCostingDefault();
     }
 
     @Override
@@ -304,7 +335,13 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
     }
 
     @Override
-    public TServiceOfferTypeRecord values(Long value1, String value2, String value3, LocalDateTime value4, String value5, LocalDateTime value6, String value7) {
+    public TServiceOfferTypeRecord value8(Boolean value) {
+        setWithCostingDefault(value);
+        return this;
+    }
+
+    @Override
+    public TServiceOfferTypeRecord values(Long value1, String value2, String value3, LocalDateTime value4, String value5, LocalDateTime value6, String value7, Boolean value8) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -312,6 +349,7 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
         value5(value5);
         value6(value6);
         value7(value7);
+        value8(value8);
         return this;
     }
 
@@ -329,7 +367,7 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
     /**
      * Create a detached, initialised TServiceOfferTypeRecord
      */
-    public TServiceOfferTypeRecord(Long id, String serviceCode, String offerType, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser) {
+    public TServiceOfferTypeRecord(Long id, String serviceCode, String offerType, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, Boolean withCostingDefault) {
         super(TServiceOfferType.T_SERVICE_OFFER_TYPE);
 
         setId(id);
@@ -339,6 +377,7 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
         setCreateUser(createUser);
         setLastUpdateDate(lastUpdateDate);
         setLastUpdateUser(lastUpdateUser);
+        setWithCostingDefault(withCostingDefault);
     }
 
     /**
@@ -355,6 +394,7 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
             setCreateUser(value.getCreateUser());
             setLastUpdateDate(value.getLastUpdateDate());
             setLastUpdateUser(value.getLastUpdateUser());
+            setWithCostingDefault(value.getWithCostingDefault());
         }
     }
 }

@@ -4,7 +4,7 @@ build:
     name: $ENVIRONMENT_NAME
     action: prepare
   image:
-    name: nexus-registry.inlinegroup-c.ru/gcr.io/kaniko-project/executor:v1.9.2-debug
+    name: nexus-registry.inlinegroup-c.ru/gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
   script:
     - cat $NEXUS_REGISTRY_CRED > /kaniko/.docker/config.json
@@ -21,7 +21,7 @@ build-release:
     name: release-v3.2
     action: prepare
   image:
-    name: nexus-registry.inlinegroup-c.ru/gcr.io/kaniko-project/executor:v1.9.2-debug
+    name: nexus-registry.inlinegroup-c.ru/gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
   script:
     - cat $NEXUS_REGISTRY_CRED > /kaniko/.docker/config.json

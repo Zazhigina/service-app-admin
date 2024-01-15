@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.LinkedHashMap;
@@ -19,6 +18,7 @@ import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class EntityExceptionHandler extends ResponseEntityExceptionHandler {
+
 
     @ExceptionHandler(IllegalEntityStateException.class)
     ResponseEntity<Object> handleIllegalEntityState(IllegalEntityStateException ex, HttpServletRequest request) {
@@ -60,14 +60,15 @@ public class EntityExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(exceptionInfo, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ResponseEntity<ExceptionInfo> handleMaxUploadSizeExceed(MaxUploadSizeExceededException ex, HttpServletRequest request) {
-        ExceptionInfo exceptionInfo =
-                new ExceptionInfo("Размер файла превышает " + ex.getMaxUploadSize() + "."
-                        , "Загрузите файл меньшего размера.");
-        exceptionInfo.setPublicErrorInfo(request, HttpStatus.BAD_REQUEST, ex.getCause());
-        return new ResponseEntity<>(exceptionInfo, HttpStatus.BAD_REQUEST);
-    }
+    // TODO: need implementation for spring 3.2
+//    @ExceptionHandler({MaxUploadSizeExceededException.class})
+//    public ResponseEntity<ExceptionInfo> handleMaxUploadSizeExceed(MaxUploadSizeExceededException ex, HttpServletRequest request) {
+//        ExceptionInfo exceptionInfo =
+//                new ExceptionInfo("Размер файла превышает " + ex.getMaxUploadSize() + "."
+//                        , "Загрузите файл меньшего размера.");
+//        exceptionInfo.setPublicErrorInfo(request, HttpStatus.BAD_REQUEST, ex.getCause());
+//        return new ResponseEntity<>(exceptionInfo, HttpStatus.BAD_REQUEST);
+//    }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     ResponseEntity<ExceptionInfo> handleDataIntegrityViolation(DataIntegrityViolationException e, HttpServletRequest request) {
@@ -83,31 +84,11 @@ public class EntityExceptionHandler extends ResponseEntityExceptionHandler {
         List<DetailExceptionInfo> detailExceptions = e.getConstraintViolations()
                 .stream()
                 .map(violation -> new DetailExceptionInfo(violation.getMessage(), violation.getPropertyPath().toString()))
-                .collect(Collectors.toList());
+                .toList();
         exceptionInfo.setDetails(detailExceptions);
 
         return new ResponseEntity<>(exceptionInfo, HttpStatus.BAD_REQUEST);
     }
-
-//    /**
-//     * @param e       the exception
-//     * @param headers the headers to be written to the response
-//     * @param status  the selected response status
-//     * @param request the current request
-//     * @return TODO: проверить возможно стандартный метод из класса ResponseEntityExceptionHandler подойдет
-//     * или убрать, если не будем использовать валидацию параметров методов контролллера
-//     */
-//    @Override
-//    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
-//                                                                  HttpHeaders headers, HttpStatus status, WebRequest request) {
-//        List<ExceptionInfo> exceptions = e.getBindingResult().getFieldErrors()
-//                .stream()
-//                .map(error -> new EntityExceptionInfo(error.getDefaultMessage(), null, null, null,
-//                        error.getField()))
-//                .peek(ex -> ex.setPublicErrorInfo(null, HttpStatus.BAD_REQUEST))
-//                .collect(Collectors.toList());
-//        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
-//    }
 
     @ExceptionHandler(EntityDuplicatedException.class)
     ResponseEntity<ExceptionInfo> handleEntityNotFound(EntityDuplicatedException ex, HttpServletRequest request) {

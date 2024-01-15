@@ -7,17 +7,25 @@ plugins {
     id("org.springdoc.openapi-gradle-plugin") version "${springDocOpenApiGradlePluginVersion}"
     id 'java'
 }
-if (!hasProperty('buildProfile')) ext.buildProfile = "${defaultBuildProfile}"
+
+if (!project.hasProperty('buildProfile')) {
+    ext.setProperty("buildProfile", "${defaultBuildProfile}")
+}
 
 if (project.file("profile-${buildProfile}.gradle").exists()) {
     if (buildProfile == "${defaultBuildProfile}") apply from: "profile-${buildProfile}.gradle"
 }
 
 group 'igc.mirror'
-archivesBaseName = 'root'
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+base {
+    archivesName = "root"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
 
 repositories {
 //    mavenCentral()
@@ -45,16 +53,6 @@ dependencyLocking {
     lockMode = LockMode.STRICT
 }
 
-//fix vulnerability version logback-classic,logback-core
-dependencyManagement {
-     dependencies {
-          dependencySet(group:'ch.qos.logback', version: '1.4.12') {
-               entry 'logback-classic'
-               entry 'logback-core'
-          }
-     }
-}
-
 dependencies {
     // logging
     implementation "ch.qos.logback.contrib:logback-json-classic:${loogbackContribJSONVersion}"
@@ -70,7 +68,7 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
 
     //CORE
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.data:spring-data-commons'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.security:spring-security-config'
@@ -102,7 +100,6 @@ test {
 //sourceSets.main.java.srcDirs += "${jooqSrcDirs}"
 
 jooq {
-//    version = dependencyManagement.importedProperties['jooq.version']
     version = "${jooqVersion}"
     edition = JooqEdition.OSS
 

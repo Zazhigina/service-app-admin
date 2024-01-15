@@ -5,6 +5,7 @@ import igc.mirror.service.dto.ServiceOfferTypeDto;
 import igc.mirror.service.dto.ServiceProductDto;
 import igc.mirror.service.filter.ServiceOfferTypeSearchCriteria;
 import igc.mirror.service.filter.ServiceProductSearchCriteria;
+import igc.mirror.service.model.ServiceOfferType;
 import igc.mirror.service.service.ServiceOfferTypeService;
 import igc.mirror.utils.qfilter.DataFilter;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,7 +41,7 @@ public class ServiceOfferTypeController {
 
     @Operation(summary = "Тип КП по коду услуги")
     @GetMapping(path = "service-offer-type/{service}")
-    public String getOfferTypeByServiceCode(@PathVariable String service) {
+    public ServiceOfferType getOfferTypeByServiceCode(@PathVariable String service) {
         return serviceOfferTypeService.getOfferTypeByServiceCode(service);
     }
 

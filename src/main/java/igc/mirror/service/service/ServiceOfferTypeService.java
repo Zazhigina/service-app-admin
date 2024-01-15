@@ -76,15 +76,12 @@ public class ServiceOfferTypeService {
      * @param service код услуги
      * @return вид КП
      */
-    public String getOfferTypeByServiceCode(String service) {
-        List<String> codes = new ArrayList<>();
-        codes.add(service);
-        String offerType = null;
-        List<ServiceOfferType> records = serviceOfferTypeRepository.getOfferTypeByServiceCodes(codes);
+    public ServiceOfferType getOfferTypeByServiceCode(String service) {
+        List<ServiceOfferType> records = serviceOfferTypeRepository.getOfferTypeByServiceCodes(List.of(service));
         if (!records.isEmpty()) {
-            offerType = String.valueOf(records.get(0).getOfferType());
+           return records.get(0);
         }
-        return offerType;
+        return null;
     }
 
     /**

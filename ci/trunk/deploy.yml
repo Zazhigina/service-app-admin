@@ -1,6 +1,6 @@
 deploy:
   stage: deploy
-  image: nexus-docker-hub.inlinegroup-c.ru/devth/helm:v3.9.0
+  image: nexus-docker-hub.inlinegroup-c.ru/alpine/helm:3.12.3
   environment:
     name: $ENVIRONMENT_NAME
     url: $APP_URL
@@ -23,7 +23,7 @@ deploy:
 
 stop_deploy:
   stage: deploy
-  image: nexus-docker-hub.inlinegroup-c.ru/devth/helm:v3.9.0
+  image: nexus-docker-hub.inlinegroup-c.ru/alpine/helm:3.12.3
   environment:
     name: $ENVIRONMENT_NAME
     action: stop
@@ -35,7 +35,7 @@ stop_deploy:
 
 deploy-release:
   stage: deploy
-  image: nexus-docker-hub.inlinegroup-c.ru/devth/helm:v3.9.0
+  image: nexus-docker-hub.inlinegroup-c.ru/alpine/helm:3.12.3
   environment:
     name: release-v3.2
 #    url: $APP_URL
@@ -58,7 +58,7 @@ deploy-release:
 
 stop_deploy_release:
   stage: deploy
-  image: nexus-docker-hub.inlinegroup-c.ru/devth/helm:v3.9.0
+  image: nexus-docker-hub.inlinegroup-c.ru/alpine/helm:3.12.3
   environment:
     name: release-v3.2
     action: stop
@@ -70,7 +70,7 @@ stop_deploy_release:
 
 deploy-demo:
   stage: deploy
-  image: nexus-docker-hub.inlinegroup-c.ru/devth/helm:v3.9.0
+  image: nexus-docker-hub.inlinegroup-c.ru/alpine/helm:3.12.3
   environment:
     name: demo
     action: start
@@ -95,7 +95,7 @@ deploy-demo:
 
 stop_deploy_demo:
   stage: deploy
-  image: nexus-docker-hub.inlinegroup-c.ru/devth/helm:v3.9.0
+  image: nexus-docker-hub.inlinegroup-c.ru/alpine/helm:3.12.3
   environment:
     name: demo
     action: stop

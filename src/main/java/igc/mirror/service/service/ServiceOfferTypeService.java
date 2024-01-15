@@ -6,6 +6,7 @@ import igc.mirror.nsi.model.ServiceProduct;
 import igc.mirror.nsi.service.NSIService;
 import igc.mirror.service.dto.OfferTypeDto;
 import igc.mirror.service.dto.ServiceOfferTypeDto;
+import igc.mirror.service.dto.ServiceOfferTypeForEPDto;
 import igc.mirror.service.dto.ServiceProductDto;
 import igc.mirror.service.filter.ServiceOfferTypeSearchCriteria;
 import igc.mirror.service.filter.ServiceProductSearchCriteria;
@@ -76,10 +77,10 @@ public class ServiceOfferTypeService {
      * @param service код услуги
      * @return вид КП
      */
-    public ServiceOfferType getOfferTypeByServiceCode(String service) {
+    public ServiceOfferTypeForEPDto getOfferTypeByServiceCode(String service) {
         List<ServiceOfferType> records = serviceOfferTypeRepository.getOfferTypeByServiceCodes(List.of(service));
         if (!records.isEmpty()) {
-           return records.get(0);
+           return ServiceOfferTypeForEPDto.fromModel(records.get(0));
         }
         return null;
     }

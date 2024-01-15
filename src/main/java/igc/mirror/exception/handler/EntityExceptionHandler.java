@@ -3,13 +3,14 @@ package igc.mirror.exception.handler;
 import igc.mirror.exception.common.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17,8 +18,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
-public class EntityExceptionHandler extends ResponseEntityExceptionHandler {
+public class EntityExceptionHandler {
 
+    @Value("${spring.servlet.multipart.max-file-size}")
+    private String maxFileSizeLimit;
 
     @ExceptionHandler(IllegalEntityStateException.class)
     ResponseEntity<Object> handleIllegalEntityState(IllegalEntityStateException ex, HttpServletRequest request) {
@@ -37,7 +40,6 @@ public class EntityExceptionHandler extends ResponseEntityExceptionHandler {
             return new ResponseEntity<>(exceptionInfo, HttpStatus.BAD_REQUEST);
         }
     }
-
 
     @ExceptionHandler(EntityNotFoundException.class)
     ResponseEntity<ExceptionInfo> handleEntityNotFound(EntityNotFoundException ex, HttpServletRequest request) {
@@ -60,15 +62,14 @@ public class EntityExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(exceptionInfo, HttpStatus.BAD_REQUEST);
     }
 
-    // TODO: need implementation for spring 3.2
-//    @ExceptionHandler({MaxUploadSizeExceededException.class})
-//    public ResponseEntity<ExceptionInfo> handleMaxUploadSizeExceed(MaxUploadSizeExceededException ex, HttpServletRequest request) {
-//        ExceptionInfo exceptionInfo =
-//                new ExceptionInfo("Размер файла превышает " + ex.getMaxUploadSize() + "."
-//                        , "Загрузите файл меньшего размера.");
-//        exceptionInfo.setPublicErrorInfo(request, HttpStatus.BAD_REQUEST, ex.getCause());
-//        return new ResponseEntity<>(exceptionInfo, HttpStatus.BAD_REQUEST);
-//    }
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ExceptionInfo> handleMaxUploadSizeExceed(MaxUploadSizeExceededException ex, HttpServletRequest request) {
+        ExceptionInfo exceptionInfo =
+                new ExceptionInfo("Размер файла превышает " + maxFileSizeLimit + "."
+                        , "Загрузите файл меньшего размера.");
+        exceptionInfo.setPublicErrorInfo(request, HttpStatus.BAD_REQUEST, ex.getCause());
+        return new ResponseEntity<>(exceptionInfo, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     ResponseEntity<ExceptionInfo> handleDataIntegrityViolation(DataIntegrityViolationException e, HttpServletRequest request) {

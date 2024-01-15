@@ -34,13 +34,31 @@ public class ServiceOfferType {
      * Дата и время изменения
      */
     private LocalDateTime lastUpdateDate;
+    /**
+     * Запросить расшифровку (по умолчанию)
+     */
+    private Boolean withCostingDefault;
 
-    public ServiceOfferType(){}
-    public ServiceOfferType(ServiceOfferTypeDto serviceOfferTypeDto, String user){
+    public ServiceOfferType() {
+    }
+
+    public ServiceOfferType(ServiceOfferTypeDto serviceOfferTypeDto, String user) {
         this.id = serviceOfferTypeDto.getId();
         this.serviceCode = serviceOfferTypeDto.getServiceCode();
         this.offerType = serviceOfferTypeDto.getOfferType();
+        this.withCostingDefault = serviceOfferTypeDto.getWithCostingDefault();
         fillAuthInfo(user);
+    }
+
+    public void fillAuthInfo(String userName) {
+        this.lastUpdateUser = userName;
+        if (this.id == null) {
+            this.createUser = userName;
+            this.createDate = LocalDateTime.now();
+            this.lastUpdateDate = LocalDateTime.now();
+        } else {
+            this.lastUpdateDate = LocalDateTime.now();
+        }
     }
 
     public Long getId() {
@@ -99,14 +117,13 @@ public class ServiceOfferType {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    public void fillAuthInfo(String userName){
-        this.lastUpdateUser = userName;
-        if (this.id == null) {
-            this.createUser = userName;
-            this.createDate = LocalDateTime.now();
-            this.lastUpdateDate = LocalDateTime.now();
-        } else {
-            this.lastUpdateDate = LocalDateTime.now();
-        }
+    public Boolean getWithCostingDefault() {
+        return withCostingDefault;
     }
+
+    public void setWithCostingDefault(Boolean withCostingDefault) {
+        this.withCostingDefault = withCostingDefault;
+    }
+
+
 }

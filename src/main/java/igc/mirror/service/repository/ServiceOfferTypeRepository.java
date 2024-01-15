@@ -45,7 +45,8 @@ public class ServiceOfferTypeRepository {
         Select<? extends Record> initQuery =
                 select(TServiceOfferType.T_SERVICE_OFFER_TYPE.ID,
                         TServiceOfferType.T_SERVICE_OFFER_TYPE.SERVICE_CODE,
-                        TServiceOfferType.T_SERVICE_OFFER_TYPE.OFFER_TYPE)
+                        TServiceOfferType.T_SERVICE_OFFER_TYPE.OFFER_TYPE,
+                        TServiceOfferType.T_SERVICE_OFFER_TYPE.WITH_COSTING_DEFAULT)
                         .from(TServiceOfferType.T_SERVICE_OFFER_TYPE)
                         .where(condition);
         return initQuery;
@@ -129,13 +130,15 @@ public class ServiceOfferTypeRepository {
                             TServiceOfferType.T_SERVICE_OFFER_TYPE.CREATE_DATE,
                             TServiceOfferType.T_SERVICE_OFFER_TYPE.CREATE_USER,
                             TServiceOfferType.T_SERVICE_OFFER_TYPE.LAST_UPDATE_DATE,
-                            TServiceOfferType.T_SERVICE_OFFER_TYPE.LAST_UPDATE_USER)
+                            TServiceOfferType.T_SERVICE_OFFER_TYPE.LAST_UPDATE_USER,
+                            TServiceOfferType.T_SERVICE_OFFER_TYPE.WITH_COSTING_DEFAULT)
                     .values(record.getServiceCode(),
                             record.getOfferType().toString(),
                             record.getCreateDate(),
                             record.getCreateUser(),
                             record.getLastUpdateDate(),
-                            record.getLastUpdateUser())
+                            record.getLastUpdateUser(),
+                            record.getWithCostingDefault())
                     .onConflict()
                     .doUpdate()
                     .set(TServiceOfferType.T_SERVICE_OFFER_TYPE.OFFER_TYPE, record.getOfferType().toString())
@@ -152,6 +155,7 @@ public class ServiceOfferTypeRepository {
                     .set(TServiceOfferType.T_SERVICE_OFFER_TYPE.OFFER_TYPE, record.getOfferType().toString())
                     .set(TServiceOfferType.T_SERVICE_OFFER_TYPE.LAST_UPDATE_DATE, record.getLastUpdateDate())
                     .set(TServiceOfferType.T_SERVICE_OFFER_TYPE.LAST_UPDATE_USER, record.getLastUpdateUser())
+                    .set(TServiceOfferType.T_SERVICE_OFFER_TYPE.WITH_COSTING_DEFAULT,record.getWithCostingDefault())
                     .where(TServiceOfferType.T_SERVICE_OFFER_TYPE.ID.equal(record.getId()))
                     .execute();
         }

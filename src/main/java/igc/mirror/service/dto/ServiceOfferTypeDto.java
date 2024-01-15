@@ -23,6 +23,10 @@ public class ServiceOfferTypeDto {
      * Наименование вида КП
      */
     private String offerTypeName;
+    /**
+     * Запросить расшифровку (по умолчанию)
+     */
+    private Boolean withCostingDefault;
 
     public String getServiceCode() {
         return serviceCode;
@@ -62,5 +66,13 @@ public class ServiceOfferTypeDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Boolean getWithCostingDefault() {
+        return withCostingDefault;
+    }
+
+    public void setWithCostingDefault(Boolean withCostingDefault) {
+        this.withCostingDefault = withCostingDefault;
     }
 }

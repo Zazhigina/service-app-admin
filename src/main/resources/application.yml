@@ -51,6 +51,7 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
+    open-in-view: false
   servlet:
     multipart:
       max-file-size: 10MB

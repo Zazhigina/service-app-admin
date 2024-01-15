@@ -12,6 +12,8 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,40 +33,42 @@ import java.util.stream.Collectors;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
     private static final String[] PUBLIC_ENDPOINT = {
             "/public/**", "/v3/api-docs/**", "/actuator/**"
     };
-    private static final String[] API_ENDPOINT = {
-        "/param/**"
-    };
+
+    private static final String ALL_REQUEST_ROLE_NEEDED = "ROLE_BASE";
+
+    private final UserDetails userDetails;
 
     @Autowired
-    private UserDetails userDetails;
+    public SecurityConfig(UserDetails userDetails) {
+        this.userDetails = userDetails;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .exceptionHandling()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                .and()
-                .httpBasic().disable()
-                // Disable CSRF because of state-less session-management
-                .csrf().disable()
-                .oauth2ResourceServer(resourceServerConfigurer -> resourceServerConfigurer
-                        .jwt(jwtConfigurer -> jwtConfigurer
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                .and())
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(PUBLIC_ENDPOINT).permitAll()
-                        //.anyRequest().hasAuthority("APP_ADMIN.EXEC")
-                        .anyRequest().hasAuthority("ROLE_BASE")
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
+                .oauth2ResourceServer(oauth2ResourceServer ->
+                        oauth2ResourceServer.jwt(jwt ->
+                                jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())
+                        )
                 )
-                .headers()
-                .frameOptions()
-                .disable();
+                .sessionManagement(httpSecuritySessionManagementConfigurer ->
+                        httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(PUBLIC_ENDPOINT).permitAll()
+                        .anyRequest().hasAuthority(ALL_REQUEST_ROLE_NEEDED)
+                )
+                .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
+                        httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                )
+                .headers(headers ->
+                        headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
+                );
 
         return http.build();
     }
@@ -76,24 +80,17 @@ public class SecurityConfig {
         return jwtAuthenticationConverter;
     }
 
-    @Bean
     public Converter<Jwt, Collection<GrantedAuthority>> jwtGrantedAuthoritiesConverter() {
-        JwtGrantedAuthoritiesConverter delegate = new JwtGrantedAuthoritiesConverter();
-        return new Converter<>() {
-            @Override
-            public Collection<GrantedAuthority> convert(Jwt jwt) {
-                Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        return jwt -> {
+            Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
-                Optional<List<String>> userRoles = userDetails.getUserRoles(jwt);
-                userRoles.ifPresent(roles -> {
-                    final List<SimpleGrantedAuthority> keycloakAuthorities = roles.stream()
-                            .map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
-                    grantedAuthorities.addAll(keycloakAuthorities);
-                });
+            Optional<List<String>> userRoles = userDetails.getUserRoles(jwt);
+            userRoles.ifPresent(roles -> {
+                final List<SimpleGrantedAuthority> keycloakAuthorities = roles.stream().map(SimpleGrantedAuthority::new).toList();
+                grantedAuthorities.addAll(keycloakAuthorities);
+            });
 
-                return grantedAuthorities;
-            }
+            return grantedAuthorities;
         };
     }
-
 }

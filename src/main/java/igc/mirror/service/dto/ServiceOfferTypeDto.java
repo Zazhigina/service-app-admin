@@ -1,6 +1,9 @@
 package igc.mirror.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import igc.mirror.service.ref.OfferType;
+
 
 public class ServiceOfferTypeDto {
     /**
@@ -26,7 +29,8 @@ public class ServiceOfferTypeDto {
     /**
      * Запросить расшифровку (по умолчанию)
      */
-    private Boolean withCostingDefault;
+    @JsonSetter(nulls = Nulls.SKIP)
+    private Boolean withCostingDefault = false;
 
     public String getServiceCode() {
         return serviceCode;

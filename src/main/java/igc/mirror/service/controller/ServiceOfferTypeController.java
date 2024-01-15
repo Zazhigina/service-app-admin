@@ -40,11 +40,16 @@ public class ServiceOfferTypeController {
         serviceOfferTypeService.saveServicesOfferTypes(servicesOfferTypes);
     }
 
-   @Operation(summary = "Тип КП по коду услуги")
-   @GetMapping(path = "service-offer-type/{service}")
-   public ServiceOfferTypeForEPDto getOfferTypeByServiceCode(@PathVariable String service) {
-       return serviceOfferTypeService.getOfferTypeByServiceCode(service);
-   }
+    /*  @Operation(summary = "Тип КП по коду услуги")
+      @GetMapping(path = "service-offer-type/{service}")
+      public ServiceOfferTypeForEPDto getOfferTypeByServiceCode(@PathVariable String service) {
+          return serviceOfferTypeService.getOfferTypeByServiceCode(service);
+      }*/
+    @Operation(summary = "Тип КП по коду услуги")
+    @GetMapping(path = "service-offer-type/{service}")
+    public String getOfferTypeByServiceCode(@PathVariable String service) {
+        return serviceOfferTypeService.getOfferTypeByServiceCode(service);
+    }
 
     @Operation(summary = "Перечень типов КП")
     @GetMapping(path = "service-offer-type/offer-types")

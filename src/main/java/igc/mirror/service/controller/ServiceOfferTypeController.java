@@ -2,6 +2,7 @@ package igc.mirror.service.controller;
 
 import igc.mirror.service.dto.OfferTypeDto;
 import igc.mirror.service.dto.ServiceOfferTypeDto;
+import igc.mirror.service.dto.ServiceOfferTypeForEPDto;
 import igc.mirror.service.dto.ServiceProductDto;
 import igc.mirror.service.filter.ServiceOfferTypeSearchCriteria;
 import igc.mirror.service.filter.ServiceProductSearchCriteria;
@@ -39,11 +40,11 @@ public class ServiceOfferTypeController {
         serviceOfferTypeService.saveServicesOfferTypes(servicesOfferTypes);
     }
 
-    @Operation(summary = "Тип КП по коду услуги")
-    @GetMapping(path = "service-offer-type/{service}")
-    public ServiceOfferType getOfferTypeByServiceCode(@PathVariable String service) {
-        return serviceOfferTypeService.getOfferTypeByServiceCode(service);
-    }
+   @Operation(summary = "Тип КП по коду услуги")
+   @GetMapping(path = "service-offer-type/{service}")
+   public ServiceOfferTypeForEPDto getOfferTypeByServiceCode(@PathVariable String service) {
+       return serviceOfferTypeService.getOfferTypeByServiceCode(service);
+   }
 
     @Operation(summary = "Перечень типов КП")
     @GetMapping(path = "service-offer-type/offer-types")

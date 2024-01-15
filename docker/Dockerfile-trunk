@@ -85,4 +85,4 @@ EXPOSE 8080
 EXPOSE 8081
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["org.springframework.boot.loader.JarLauncher"]
+CMD ["org.springframework.boot.loader.launch.JarLauncher"]

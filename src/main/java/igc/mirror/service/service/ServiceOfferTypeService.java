@@ -77,23 +77,12 @@ public class ServiceOfferTypeService {
      * @param service код услуги
      * @return вид КП
      */
-    public ServiceOfferTypeForEPDto getOfferTypeByServiceCode1(String service) {
+    public ServiceOfferTypeForEPDto getOfferTypeByServiceCode(String service) {
         List<ServiceOfferType> records = serviceOfferTypeRepository.getOfferTypeByServiceCodes(List.of(service));
         if (!records.isEmpty()) {
            return ServiceOfferTypeForEPDto.fromModel(records.get(0));
         }
         return null;
-    }
-
-    public String getOfferTypeByServiceCode(String service) {
-        List<String> codes = new ArrayList<>();
-        codes.add(service);
-        String offerType = null;
-        List<ServiceOfferType> records = serviceOfferTypeRepository.getOfferTypeByServiceCodes(codes);
-        if (!records.isEmpty()) {
-            offerType = String.valueOf(records.get(0).getOfferType());
-        }
-        return offerType;
     }
 
     /**

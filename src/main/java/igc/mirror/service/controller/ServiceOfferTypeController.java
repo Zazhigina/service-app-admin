@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,8 +43,8 @@ public class ServiceOfferTypeController {
 
     @Operation(summary = "Тип КП по коду услуги")
     @GetMapping(path = "service-offer-type/{service}")
-    public ServiceOfferTypeForEPDto getOfferTypeByServiceCode(@PathVariable String service) {
-        return serviceOfferTypeService.getOfferTypeByServiceCode1(service);
+    public ResponseEntity<ServiceOfferTypeForEPDto> getOfferTypeByServiceCode(@PathVariable String service) {
+        return ResponseEntity.ok(serviceOfferTypeService.getOfferTypeByServiceCode1(service));
     }
 
    /* @Operation(summary = "Тип КП по коду услуги")

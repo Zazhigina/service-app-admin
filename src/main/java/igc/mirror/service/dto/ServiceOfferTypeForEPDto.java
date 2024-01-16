@@ -1,14 +1,11 @@
 package igc.mirror.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.Nulls;
 import igc.mirror.service.model.ServiceOfferType;
-import igc.mirror.service.ref.OfferType;
 
 public class ServiceOfferTypeForEPDto {
     private String serviceCode;
     private String offerType;
-    private Boolean withCostingDefault = false;
+    private Boolean withCostingDefault;
 
     public ServiceOfferTypeForEPDto(String serviceCode, String offerType, Boolean withCostingDefault) {
         this.serviceCode = serviceCode;

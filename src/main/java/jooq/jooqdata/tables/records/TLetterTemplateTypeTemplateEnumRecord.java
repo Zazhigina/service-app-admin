@@ -184,17 +184,4 @@ public class TLetterTemplateTypeTemplateEnumRecord extends UpdatableRecordImpl<T
         setName(name);
         setDescription(description);
     }
-
-    /**
-     * Create a detached, initialised TLetterTemplateTypeTemplateEnumRecord
-     */
-    public TLetterTemplateTypeTemplateEnumRecord(jooqdata.tables.pojos.TLetterTemplateTypeTemplateEnum value) {
-        super(TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM);
-
-        if (value != null) {
-            setId(value.getId());
-            setName(value.getName());
-            setDescription(value.getDescription());
-        }
-    }
 }

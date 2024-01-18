@@ -348,21 +348,4 @@ public class TLetterTemplateVariableRecord extends UpdatableRecordImpl<TLetterTe
         setLastUpdateUser(lastUpdateUser);
         setVariableId(variableId);
     }
-
-    /**
-     * Create a detached, initialised TLetterTemplateVariableRecord
-     */
-    public TLetterTemplateVariableRecord(jooqdata.tables.pojos.TLetterTemplateVariable value) {
-        super(TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE);
-
-        if (value != null) {
-            setId(value.getId());
-            setLetterTemplateId(value.getLetterTemplateId());
-            setCreateDate(value.getCreateDate());
-            setCreateUser(value.getCreateUser());
-            setLastUpdateDate(value.getLastUpdateDate());
-            setLastUpdateUser(value.getLastUpdateUser());
-            setVariableId(value.getVariableId());
-        }
-    }
 }

@@ -445,24 +445,4 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
         setCode(code);
         setOwner(owner);
     }
-
-    /**
-     * Create a detached, initialised TQuestionRecord
-     */
-    public TQuestionRecord(jooqdata.tables.pojos.TQuestion value) {
-        super(TQuestion.T_QUESTION);
-
-        if (value != null) {
-            setId(value.getId());
-            setName(value.getName());
-            setOrderNo(value.getOrderNo());
-            setActualTo(value.getActualTo());
-            setCreateDate(value.getCreateDate());
-            setCreateUser(value.getCreateUser());
-            setLastUpdateDate(value.getLastUpdateDate());
-            setLastUpdateUser(value.getLastUpdateUser());
-            setCode(value.getCode());
-            setOwner(value.getOwner());
-        }
-    }
 }

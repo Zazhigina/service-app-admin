@@ -134,7 +134,7 @@ jooq {
                         javaTimeTypes = true
                         records = true
                         relations = true
-                        pojos = true
+                        pojos = false
                         daos = false
                         deprecated = false
                         instanceFields = true

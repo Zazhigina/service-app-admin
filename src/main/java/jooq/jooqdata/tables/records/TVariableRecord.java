@@ -373,22 +373,4 @@ public class TVariableRecord extends UpdatableRecordImpl<TVariableRecord> implem
         setLastUpdateDate(lastUpdateDate);
         setLastUpdateUser(lastUpdateUser);
     }
-
-    /**
-     * Create a detached, initialised TVariableRecord
-     */
-    public TVariableRecord(jooqdata.tables.pojos.TVariable value) {
-        super(TVariable.T_VARIABLE);
-
-        if (value != null) {
-            setId(value.getId());
-            setName(value.getName());
-            setDescription(value.getDescription());
-            setDefaultVal(value.getDefaultVal());
-            setCreateDate(value.getCreateDate());
-            setCreateUser(value.getCreateUser());
-            setLastUpdateDate(value.getLastUpdateDate());
-            setLastUpdateUser(value.getLastUpdateUser());
-        }
-    }
 }

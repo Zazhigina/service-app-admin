@@ -6,6 +6,7 @@ import igc.mirror.question.dto.QuestionDto;
 import igc.mirror.question.dto.StandardQuestion;
 import igc.mirror.question.model.AnswerVersion;
 import igc.mirror.question.model.Question;
+import igc.mirror.question.ref.QuestionOwner;
 import igc.mirror.question.repository.AnswerVersionRepository;
 import igc.mirror.question.repository.QuestionRepository;
 import jakarta.validation.Valid;
@@ -80,9 +81,9 @@ public class QuestionService {
      *
      * @return перечень стандартных вопросов
      */
-    public List<StandardQuestion> findAllStandardQuestions() {
+    public List<StandardQuestion> findAllStandardQuestions(QuestionOwner owner) {
         logger.info("Получение перечня стандартных вопросов");
 
-        return questionRepository.findAllStandardQuestions();
+        return questionRepository.findAllStandardQuestions(owner);
     }
 }

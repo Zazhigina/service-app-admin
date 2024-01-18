@@ -3,6 +3,7 @@ package igc.mirror.question.controller;
 import igc.mirror.exception.handler.SuccessInfo;
 import igc.mirror.question.dto.QuestionDto;
 import igc.mirror.question.dto.StandardQuestion;
+import igc.mirror.question.ref.QuestionOwner;
 import igc.mirror.question.service.QuestionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -40,6 +41,12 @@ public class QuestionController {
     @GetMapping("/standard-question")
     @Operation(summary = "Получить перечень стандартных вопросов")
     public List<StandardQuestion> findAllStandardQuestions() {
-        return questionService.findAllStandardQuestions();
+        return questionService.findAllStandardQuestions(null);
+    }
+
+    @GetMapping("/standard-question/{owner}")
+    @Operation(summary = "Получить перечень стандартных вопросов для указанного родителя")
+    public List<StandardQuestion> findAllStandardQuestions(@PathVariable QuestionOwner owner) {
+        return questionService.findAllStandardQuestions(owner);
     }
 }

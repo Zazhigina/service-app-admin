@@ -1,5 +1,6 @@
 package igc.mirror.question.dto;
 
+import igc.mirror.question.ref.QuestionOwner;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -34,6 +35,8 @@ public class QuestionDto {
      * Перечень вариантов ответов на вопрос
      */
     private List<AnswerVersionDto> answerVersions;
+
+    private QuestionOwner owner;
 
     public QuestionDto() {
     }
@@ -76,5 +79,13 @@ public class QuestionDto {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public QuestionOwner getOwner() {
+        return owner;
+    }
+
+    public void setOwner(QuestionOwner owner) {
+        this.owner = owner;
     }
 }

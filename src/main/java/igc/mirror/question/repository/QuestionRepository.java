@@ -3,12 +3,15 @@ package igc.mirror.question.repository;
 import igc.mirror.question.dto.QuestionDto;
 import igc.mirror.question.dto.StandardQuestion;
 import igc.mirror.question.model.Question;
+import igc.mirror.question.ref.QuestionOwner;
 import jooqdata.tables.TAnswerVersion;
 import jooqdata.tables.TQuestion;
-import org.jooq.DSLContext;
+import org.jooq.*;
+import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.jooq.impl.DSL.multiset;
@@ -23,25 +26,56 @@ public class QuestionRepository {
 
     private static final TAnswerVersion ANSWER_VERSION = TAnswerVersion.T_ANSWER_VERSION;
 
-    /**
-     * Находит все вопросы в БД
-     *
-     * @return список вопросов
-     */
-    public List<QuestionDto> findAllQuestions() {
-        return dsl.select(QUESTION.NAME,
+    private Condition getConditionStandardQuestion(QuestionOwner owner) {
+        Condition wherePhrase = DSL.noCondition();
+        if (owner != null)
+            wherePhrase = wherePhrase.and(QUESTION.OWNER.eq(owner.getCode()));
+        return wherePhrase;
+    }
+
+    private Result<Record7<Long, String, Integer, String, LocalDateTime, String, Result<Record5<Long, String, Integer, Boolean, String>>>> findAllStandardQuestionsByOwner(QuestionOwner owner) {
+        return dsl.select(QUESTION.ID,
+                        QUESTION.NAME,
                         QUESTION.ORDER_NO,
-                        QUESTION.ACTUAL_TO,
                         QUESTION.CODE,
+                        QUESTION.ACTUAL_TO,
+                        QUESTION.OWNER,
                         multiset(
-                                select(ANSWER_VERSION.NAME,
+                                select(ANSWER_VERSION.ID,
+                                        ANSWER_VERSION.NAME,
                                         ANSWER_VERSION.ORDER_NO,
                                         ANSWER_VERSION.IS_DEFAULT,
                                         ANSWER_VERSION.TYPE.as("answerType"))
                                         .from(ANSWER_VERSION)
                                         .where(ANSWER_VERSION.QUESTION_ID.eq(QUESTION.ID))).as("answerVersions"))
                 .from(QUESTION)
-                .fetchInto(QuestionDto.class);
+                .where(getConditionStandardQuestion(owner))
+                .fetch();
+    }
+
+    /**
+     * Находит все вопросы в БД
+     *
+     * @return список вопросов
+     */
+    public List<QuestionDto> findAllQuestions() {
+//        return dsl.select(QUESTION.NAME,
+//                        QUESTION.ORDER_NO,
+//                        QUESTION.ACTUAL_TO,
+//                        QUESTION.CODE,
+//                        QUESTION.OWNER,
+//                        multiset(
+//                                select(ANSWER_VERSION.NAME,
+//                                        ANSWER_VERSION.ORDER_NO,
+//                                        ANSWER_VERSION.IS_DEFAULT,
+//                                        ANSWER_VERSION.TYPE.as("answerType"))
+//                                        .from(ANSWER_VERSION)
+//                                        .where(ANSWER_VERSION.QUESTION_ID.eq(QUESTION.ID))).as("answerVersions"))
+//                .from(QUESTION)
+//                .fetchInto(QuestionDto.class);
+        return findAllStandardQuestionsByOwner(null)
+                .into(QuestionDto.class);
+
     }
 
     /**
@@ -74,20 +108,8 @@ public class QuestionRepository {
      *
      * @return список стандартных вопросов
      */
-    public List<StandardQuestion> findAllStandardQuestions() {
-        return dsl.select(QUESTION.ID,
-                        QUESTION.NAME,
-                        QUESTION.ORDER_NO,
-                        QUESTION.CODE,
-                        multiset(
-                                select(ANSWER_VERSION.ID,
-                                        ANSWER_VERSION.NAME,
-                                        ANSWER_VERSION.ORDER_NO,
-                                        ANSWER_VERSION.IS_DEFAULT,
-                                        ANSWER_VERSION.TYPE.as("answerType"))
-                                        .from(ANSWER_VERSION)
-                                        .where(ANSWER_VERSION.QUESTION_ID.eq(QUESTION.ID))).as("answerVersions"))
-                .from(QUESTION)
-                .fetchInto(StandardQuestion.class);
+    public List<StandardQuestion> findAllStandardQuestions(QuestionOwner owner) {
+        return findAllStandardQuestionsByOwner(owner)
+                .into(StandardQuestion.class);
     }
 }

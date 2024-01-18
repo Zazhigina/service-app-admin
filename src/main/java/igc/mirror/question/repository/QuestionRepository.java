@@ -1,7 +1,5 @@
 package igc.mirror.question.repository;
 
-import igc.mirror.question.dto.QuestionDto;
-import igc.mirror.question.dto.StandardQuestion;
 import igc.mirror.question.model.Question;
 import igc.mirror.question.ref.QuestionOwner;
 import jooqdata.tables.TAnswerVersion;
@@ -12,19 +10,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Optional;
 
 import static org.jooq.impl.DSL.multiset;
 import static org.jooq.impl.DSL.select;
 
 @Repository
 public class QuestionRepository {
-    @Autowired
+    private static final TQuestion QUESTION = TQuestion.T_QUESTION;
+    private static final TAnswerVersion ANSWER_VERSION = TAnswerVersion.T_ANSWER_VERSION;
+
     DSLContext dsl;
 
-    private static final TQuestion QUESTION = TQuestion.T_QUESTION;
-
-    private static final TAnswerVersion ANSWER_VERSION = TAnswerVersion.T_ANSWER_VERSION;
+    @Autowired
+    public QuestionRepository(DSLContext dsl) {
+        this.dsl = dsl;
+    }
 
     private Condition getConditionStandardQuestion(QuestionOwner owner) {
         Condition wherePhrase = DSL.noCondition();
@@ -33,7 +34,12 @@ public class QuestionRepository {
         return wherePhrase;
     }
 
-    private Result<Record7<Long, String, Integer, String, LocalDateTime, String, Result<Record5<Long, String, Integer, Boolean, String>>>> findAllStandardQuestionsByOwner(QuestionOwner owner) {
+    /**
+     * Находит все вопросы в БД
+     *
+     * @return список вопросов
+     */
+    public Result<Record7<Long, String, Integer, String, LocalDateTime, String, Result<Record5<Long, String, Integer, Boolean, String>>>> findAllStandardQuestionsByOwner(QuestionOwner owner) {
         return dsl.select(QUESTION.ID,
                         QUESTION.NAME,
                         QUESTION.ORDER_NO,
@@ -54,28 +60,12 @@ public class QuestionRepository {
     }
 
     /**
-     * Находит все вопросы в БД
-     *
-     * @return список вопросов
+     * Поиск вопроса по его id
+     * @param id Идентификатор вопроса
+     * @return Вопрос
      */
-    public List<QuestionDto> findAllQuestions() {
-//        return dsl.select(QUESTION.NAME,
-//                        QUESTION.ORDER_NO,
-//                        QUESTION.ACTUAL_TO,
-//                        QUESTION.CODE,
-//                        QUESTION.OWNER,
-//                        multiset(
-//                                select(ANSWER_VERSION.NAME,
-//                                        ANSWER_VERSION.ORDER_NO,
-//                                        ANSWER_VERSION.IS_DEFAULT,
-//                                        ANSWER_VERSION.TYPE.as("answerType"))
-//                                        .from(ANSWER_VERSION)
-//                                        .where(ANSWER_VERSION.QUESTION_ID.eq(QUESTION.ID))).as("answerVersions"))
-//                .from(QUESTION)
-//                .fetchInto(QuestionDto.class);
-        return findAllStandardQuestionsByOwner(null)
-                .into(QuestionDto.class);
-
+    public Optional<Question> findQuestionById(Long id) {
+        return dsl.fetchOptional(QUESTION, QUESTION.ID.eq(id)).map(r -> r.into(Question.class));
     }
 
     /**
@@ -84,9 +74,7 @@ public class QuestionRepository {
      * @return вопрос
      */
     public Question findQuestionByOrderNo(Integer orderNo) {
-        return dsl.selectFrom(QUESTION)
-                .where((QUESTION.ORDER_NO.eq(orderNo)))
-                .fetchOneInto(Question.class);
+        return dsl.fetchOptional(QUESTION, QUESTION.ORDER_NO.eq(orderNo)).map(r -> r.into(Question.class)).orElse(null);
     }
 
     /**
@@ -101,15 +89,5 @@ public class QuestionRepository {
                 .set(QUESTION.LAST_UPDATE_USER, question.getLastUpdateUser())
                 .where(QUESTION.ID.equal(question.getId()))
                 .execute();
-    }
-
-    /**
-     * Находит все стандартные вопросы в БД
-     *
-     * @return список стандартных вопросов
-     */
-    public List<StandardQuestion> findAllStandardQuestions(QuestionOwner owner) {
-        return findAllStandardQuestionsByOwner(owner)
-                .into(StandardQuestion.class);
     }
 }

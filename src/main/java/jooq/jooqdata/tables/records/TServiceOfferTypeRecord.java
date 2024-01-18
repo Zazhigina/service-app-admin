@@ -379,22 +379,4 @@ public class TServiceOfferTypeRecord extends UpdatableRecordImpl<TServiceOfferTy
         setLastUpdateUser(lastUpdateUser);
         setWithCostingDefault(withCostingDefault);
     }
-
-    /**
-     * Create a detached, initialised TServiceOfferTypeRecord
-     */
-    public TServiceOfferTypeRecord(jooqdata.tables.pojos.TServiceOfferType value) {
-        super(TServiceOfferType.T_SERVICE_OFFER_TYPE);
-
-        if (value != null) {
-            setId(value.getId());
-            setServiceCode(value.getServiceCode());
-            setOfferType(value.getOfferType());
-            setCreateDate(value.getCreateDate());
-            setCreateUser(value.getCreateUser());
-            setLastUpdateDate(value.getLastUpdateDate());
-            setLastUpdateUser(value.getLastUpdateUser());
-            setWithCostingDefault(value.getWithCostingDefault());
-        }
-    }
 }

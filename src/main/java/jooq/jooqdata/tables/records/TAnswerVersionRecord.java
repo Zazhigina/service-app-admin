@@ -453,24 +453,4 @@ public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionReco
         setIsDefault(isDefault);
         setType(type);
     }
-
-    /**
-     * Create a detached, initialised TAnswerVersionRecord
-     */
-    public TAnswerVersionRecord(jooqdata.tables.pojos.TAnswerVersion value) {
-        super(TAnswerVersion.T_ANSWER_VERSION);
-
-        if (value != null) {
-            setId(value.getId());
-            setQuestionId(value.getQuestionId());
-            setName(value.getName());
-            setOrderNo(value.getOrderNo());
-            setCreateDate(value.getCreateDate());
-            setCreateUser(value.getCreateUser());
-            setLastUpdateDate(value.getLastUpdateDate());
-            setLastUpdateUser(value.getLastUpdateUser());
-            setIsDefault(value.getIsDefault());
-            setType(value.getType());
-        }
-    }
 }

@@ -490,25 +490,4 @@ public class TLetterTemplateRecord extends UpdatableRecordImpl<TLetterTemplateRe
         setAcceptableDocumentFormat(acceptableDocumentFormat);
         setStatus(status);
     }
-
-    /**
-     * Create a detached, initialised TLetterTemplateRecord
-     */
-    public TLetterTemplateRecord(jooqdata.tables.pojos.TLetterTemplate value) {
-        super(TLetterTemplate.T_LETTER_TEMPLATE);
-
-        if (value != null) {
-            setId(value.getId());
-            setLetterType(value.getLetterType());
-            setTitle(value.getTitle());
-            setLetterSample(value.getLetterSample());
-            setCreateDate(value.getCreateDate());
-            setCreateUser(value.getCreateUser());
-            setLastUpdateDate(value.getLastUpdateDate());
-            setLastUpdateUser(value.getLastUpdateUser());
-            setTypeTemplate(value.getTypeTemplate());
-            setAcceptableDocumentFormat(value.getAcceptableDocumentFormat());
-            setStatus(value.getStatus());
-        }
-    }
 }

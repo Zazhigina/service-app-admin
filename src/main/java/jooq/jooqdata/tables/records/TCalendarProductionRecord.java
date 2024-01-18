@@ -380,22 +380,4 @@ public class TCalendarProductionRecord extends UpdatableRecordImpl<TCalendarProd
         setLastUpdateDate(lastUpdateDate);
         setLastUpdateUser(lastUpdateUser);
     }
-
-    /**
-     * Create a detached, initialised TCalendarProductionRecord
-     */
-    public TCalendarProductionRecord(jooqdata.tables.pojos.TCalendarProduction value) {
-        super(TCalendarProduction.T_CALENDAR_PRODUCTION);
-
-        if (value != null) {
-            setId(value.getId());
-            setYear(value.getYear());
-            setHourWorkCount(value.getHourWorkCount());
-            setMonthWorkHourCount(value.getMonthWorkHourCount());
-            setCreateDate(value.getCreateDate());
-            setCreateUser(value.getCreateUser());
-            setLastUpdateDate(value.getLastUpdateDate());
-            setLastUpdateUser(value.getLastUpdateUser());
-        }
-    }
 }

@@ -191,18 +191,4 @@ public class TLetterTemplateAcceptableDocumentFormatEnumRecord extends Updatable
         setName(name);
         setDescription(description);
     }
-
-    /**
-     * Create a detached, initialised
-     * TLetterTemplateAcceptableDocumentFormatEnumRecord
-     */
-    public TLetterTemplateAcceptableDocumentFormatEnumRecord(jooqdata.tables.pojos.TLetterTemplateAcceptableDocumentFormatEnum value) {
-        super(TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM);
-
-        if (value != null) {
-            setId(value.getId());
-            setName(value.getName());
-            setDescription(value.getDescription());
-        }
-    }
 }

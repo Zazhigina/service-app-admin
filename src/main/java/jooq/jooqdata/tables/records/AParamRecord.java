@@ -367,22 +367,4 @@ public class AParamRecord extends UpdatableRecordImpl<AParamRecord> implements R
         setLastUpdateUser(lastUpdateUser);
         setDefaultVal(defaultVal);
     }
-
-    /**
-     * Create a detached, initialised AParamRecord
-     */
-    public AParamRecord(jooqdata.tables.pojos.AParam value) {
-        super(AParam.A_PARAM);
-
-        if (value != null) {
-            setKey(value.getKey());
-            setName(value.getName());
-            setVal(value.getVal());
-            setCreateDate(value.getCreateDate());
-            setCreateUser(value.getCreateUser());
-            setLastUpdateDate(value.getLastUpdateDate());
-            setLastUpdateUser(value.getLastUpdateUser());
-            setDefaultVal(value.getDefaultVal());
-        }
-    }
 }

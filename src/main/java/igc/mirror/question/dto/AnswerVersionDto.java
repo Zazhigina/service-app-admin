@@ -6,6 +6,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class AnswerVersionDto {
+    /**
+     * Идентификатор ответа
+     */
+    private Long id;
 
     /**
      * Вариант ответа
@@ -44,6 +48,10 @@ public class AnswerVersionDto {
         this.orderNo = orderNo;
         this.isDefault = isDefault;
         this.answerType = AnswerType.valueOf(answerType);
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {

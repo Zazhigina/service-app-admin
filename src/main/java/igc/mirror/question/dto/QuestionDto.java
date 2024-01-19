@@ -1,5 +1,6 @@
 package igc.mirror.question.dto;
 
+import igc.mirror.question.ref.QuestionOwner;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -7,6 +8,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class QuestionDto {
+    /**
+     * Идентификатор вопроса
+     */
+    private Long id;
 
     /**
      * Содержание вопроса
@@ -35,7 +40,23 @@ public class QuestionDto {
      */
     private List<AnswerVersionDto> answerVersions;
 
+    private QuestionOwner owner;
+
     public QuestionDto() {
+    }
+
+    public QuestionDto(Long id, String name, Integer orderNo, LocalDateTime actualTo, String code, QuestionOwner owner, List<AnswerVersionDto> answerVersions) {
+        this.id = id;
+        this.name = name;
+        this.orderNo = orderNo;
+        this.actualTo = actualTo;
+        this.code = code;
+        this.answerVersions = answerVersions;
+        this.owner = owner;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
@@ -76,5 +97,13 @@ public class QuestionDto {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public QuestionOwner getOwner() {
+        return owner;
+    }
+
+    public void setOwner(QuestionOwner owner) {
+        this.owner = owner;
     }
 }

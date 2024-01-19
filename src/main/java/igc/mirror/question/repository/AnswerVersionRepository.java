@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class AnswerVersionRepository {
@@ -38,6 +39,15 @@ public class AnswerVersionRepository {
                 .where(ANSWER_VERSION.QUESTION_ID.eq(questionId)
                         .and(ANSWER_VERSION.ORDER_NO.eq(orderNo)))
                 .fetchOneInto(AnswerVersion.class);
+    }
+
+    /**
+     * Получить вариант ответа по его id
+     * @param id Варианта ответа
+     * @return Ответ
+     */
+    public Optional<AnswerVersion> findAnswerById(Long id) {
+        return dsl.fetchOptional(ANSWER_VERSION, ANSWER_VERSION.ID.eq(id)).map(r -> r.into(AnswerVersion.class));
     }
 
     /**

@@ -18,7 +18,7 @@ build:
 build-release:
   stage: build
   environment:
-    name: release-v3.2
+    name: $ENVIRONMENT_RELEASE_NAME
     action: prepare
   image:
     name: nexus-registry.inlinegroup-c.ru/gcr.io/kaniko-project/executor:debug
@@ -28,6 +28,6 @@ build-release:
     - /kaniko/executor
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/docker/Dockerfile-release"
-      --destination "${IMAGE_REPOSITORY}:${APPLICATION_VERSION}"
+      --destination "${IMAGE_REPOSITORY}:${APPLICATION_VERSION_RELEASE}"
   rules:
     - if: $CI_COMMIT_BRANCH == $RELEASE_BRANCH

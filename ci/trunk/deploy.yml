@@ -37,8 +37,7 @@ deploy-release:
   stage: deploy
   image: nexus-docker-hub.inlinegroup-c.ru/alpine/helm:3.12.3
   environment:
-    name: release-v3.2
-#    url: $APP_URL
+    name: $ENVIRONMENT_RELEASE_NAME
     action: start
     on_stop: stop_deploy_release
   script:
@@ -49,7 +48,7 @@ deploy-release:
       --password ${NEXUS_USER_PASSWORD}
       --install ${APPLICATION_NAME}
       --namespace ${KUBERNETES_NAMESPACE_OVERWRITE_RELEASE}
-      --set image.tag=$APPLICATION_VERSION
+      --set image.tag=$APPLICATION_VERSION_RELEASE
       --set ingress.enabled=true
       -f ./ci/helm/values-release.yaml
       ${CHART_NAME}
@@ -60,7 +59,7 @@ stop_deploy_release:
   stage: deploy
   image: nexus-docker-hub.inlinegroup-c.ru/alpine/helm:3.12.3
   environment:
-    name: release-v3.2
+    name: $ENVIRONMENT_RELEASE_NAME
     action: stop
   when: manual
   script:
@@ -72,7 +71,7 @@ deploy-demo:
   stage: deploy
   image: nexus-docker-hub.inlinegroup-c.ru/alpine/helm:3.12.3
   environment:
-    name: demo
+    name: $ENVIRONMENT_DEMO_NAME
     action: start
     on_stop: stop_deploy_demo
   when: manual
@@ -97,7 +96,7 @@ stop_deploy_demo:
   stage: deploy
   image: nexus-docker-hub.inlinegroup-c.ru/alpine/helm:3.12.3
   environment:
-    name: demo
+    name: $ENVIRONMENT_DEMO_NAME
     action: stop
   when: manual
   tags:

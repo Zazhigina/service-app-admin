@@ -1,11 +1,10 @@
 package igc.mirror.service.controller;
 
-import igc.mirror.service.dto.OfferTypeDto;
-import igc.mirror.service.dto.ServiceOfferTypeDto;
-import igc.mirror.service.dto.ServiceOfferTypeForEPDto;
-import igc.mirror.service.dto.ServiceProductDto;
+import igc.mirror.service.dto.*;
+import igc.mirror.service.exchange.ReferenceSavingResult;
 import igc.mirror.service.filter.ServiceOfferTypeSearchCriteria;
 import igc.mirror.service.filter.ServiceProductSearchCriteria;
+import igc.mirror.service.filter.ServiceVersionSearchCriteria;
 import igc.mirror.service.service.ServiceOfferTypeService;
 import igc.mirror.utils.qfilter.DataFilter;
 import io.swagger.v3.oas.annotations.Operation;
@@ -57,5 +56,30 @@ public class ServiceOfferTypeController {
                                                       @RequestParam MultiValueMap<String, String> params, Pageable pageable) {
 
         return serviceOfferTypeService.findServiceProduct(filter, params, pageable);
+    }
+
+    @PostMapping("service-version/filter")
+    @Operation(summary = "Mэппинг услуг справочника КТ-777")
+    public Page<ServiceVersionDTO> findServiceVersionByFilters(@RequestBody(required = false) DataFilter<ServiceVersionSearchCriteria> filter,
+                                                               Pageable pageable){
+        return serviceOfferTypeService.findServiceVersionByFilters(filter, pageable);
+    }
+
+    @PostMapping("/service-version/updating")
+    @Operation(summary = "Схранение/изменение мэппинга услуг справочника КТ-777")
+    public ServiceVersionDTO updateServiceVersion(@RequestBody ServiceVersionDTO serviceVersion){
+        return serviceOfferTypeService.updateServiceVersion(serviceVersion);
+    }
+
+    @PostMapping("/service-version/{id}/deleting")
+    @Operation(summary = "Удаление мэппинга услуг справочника КТ-777")
+    public Long deleteServiceVersion(@PathVariable Long id){
+        return serviceOfferTypeService.deleteServiceVersion(id);
+    }
+
+    @PostMapping("/service-version/uploading")
+    @Operation(summary = "Загрузка мэппинга услуг справочника КТ-777")
+    public ReferenceSavingResult updateServiceVersion(@RequestBody List<ServiceVersionDTO> listServiceVersion){
+        return serviceOfferTypeService.uploadServiceVersion(listServiceVersion);
     }
 }

@@ -4,12 +4,11 @@ import igc.mirror.auth.UserDetails;
 import igc.mirror.exception.common.IllegalEntityStateException;
 import igc.mirror.nsi.model.ServiceProduct;
 import igc.mirror.nsi.service.NSIService;
-import igc.mirror.service.dto.OfferTypeDto;
-import igc.mirror.service.dto.ServiceOfferTypeDto;
-import igc.mirror.service.dto.ServiceOfferTypeForEPDto;
-import igc.mirror.service.dto.ServiceProductDto;
+import igc.mirror.service.dto.*;
+import igc.mirror.service.exchange.ReferenceSavingResult;
 import igc.mirror.service.filter.ServiceOfferTypeSearchCriteria;
 import igc.mirror.service.filter.ServiceProductSearchCriteria;
+import igc.mirror.service.filter.ServiceVersionSearchCriteria;
 import igc.mirror.service.model.ServiceOfferType;
 import igc.mirror.service.ref.OfferType;
 import igc.mirror.service.repository.ServiceOfferTypeRepository;
@@ -161,5 +160,21 @@ public class ServiceOfferTypeService {
             }
         }
         return new PageImpl<>(servicesDto, pageable, services.getTotalElements());
+    }
+
+    public Page<ServiceVersionDTO> findServiceVersionByFilters(DataFilter<ServiceVersionSearchCriteria> filter, Pageable pageable) {
+        return nsiService.findServiceVersionByFilters(filter, pageable);
+    }
+
+    public ServiceVersionDTO updateServiceVersion(ServiceVersionDTO serviceVersion) {
+        return nsiService.updateServiceVersion(serviceVersion);
+    }
+
+    public Long deleteServiceVersion(Long id) {
+        return nsiService.deleteServiceVersion(id);
+    }
+
+    public ReferenceSavingResult uploadServiceVersion(List<ServiceVersionDTO> listServiceVersion) {
+        return nsiService.uploadServiceVersion(listServiceVersion);
     }
 }

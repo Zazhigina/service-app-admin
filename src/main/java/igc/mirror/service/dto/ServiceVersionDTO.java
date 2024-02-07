@@ -9,14 +9,16 @@ public class ServiceVersionDTO {
     private Long id;
 
     /**
-     * Новый код услуги
+     * Новый код услуги и наименование
      */
     private String newServiceCode;
+    private String newServiceName;
 
     /**
-     * Старый код услуги
+     * Старый код услуги и наименование
      */
     private String oldServiceCode;
+    private String oldServiceName;
 
     /**
      * Версия КТ-777
@@ -122,5 +124,21 @@ public class ServiceVersionDTO {
 
     public void setLastUpdateUser(String lastUpdateUser) {
         this.lastUpdateUser = lastUpdateUser;
+    }
+
+    public String getNewServiceName() {
+        return newServiceName;
+    }
+
+    public void setNewServiceName(String newServiceName) {
+        this.newServiceName = newServiceName;
+    }
+
+    public String getOldServiceName() {
+        return oldServiceName;
+    }
+
+    public void setOldServiceName(String oldServiceName) {
+        this.oldServiceName = oldServiceName;
     }
 }

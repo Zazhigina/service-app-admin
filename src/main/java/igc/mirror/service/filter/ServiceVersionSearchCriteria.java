@@ -10,9 +10,18 @@ public class ServiceVersionSearchCriteria extends SearchCriteria {
 
     private String version;
 
-    public ServiceVersionSearchCriteria (List<String> serviceCodes, String  version){
-        this.serviceCodes = serviceCodes;
-        this.version      = version;
+    private String newServiceName;
+
+    private String oldServiceName;
+
+    public ServiceVersionSearchCriteria (List<String> serviceCodes,
+                                         String       version,
+                                         String       newServiceName,
+                                         String       oldServiceName){
+        this.serviceCodes   = serviceCodes;
+        this.version        = version;
+        this.newServiceName = newServiceName;
+        this.oldServiceName = oldServiceName;
     }
 
     public List<String> getServiceCodes() {
@@ -29,5 +38,21 @@ public class ServiceVersionSearchCriteria extends SearchCriteria {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getNewServiceName() {
+        return newServiceName;
+    }
+
+    public void setNewServiceName(String newServiceName) {
+        this.newServiceName = newServiceName;
+    }
+
+    public String getOldServiceName() {
+        return oldServiceName;
+    }
+
+    public void setOldServiceName(String oldServiceName) {
+        this.oldServiceName = oldServiceName;
     }
 }

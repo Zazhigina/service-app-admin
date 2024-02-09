@@ -14,9 +14,11 @@ import igc.mirror.service.ref.OfferType;
 import igc.mirror.service.repository.ServiceOfferTypeRepository;
 import igc.mirror.utils.qfilter.DataFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
@@ -166,7 +168,7 @@ public class ServiceOfferTypeService {
         return nsiService.findServiceVersionByFilters(filter, pageable);
     }
 
-    public ServiceVersionDTO updateServiceVersion(ServiceVersionDTO serviceVersion) {
+    public ResponseEntity<Resource> updateServiceVersion(ServiceVersionDTO serviceVersion) { //ServiceVersionDTO
         return nsiService.updateServiceVersion(serviceVersion);
     }
 

@@ -17,11 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyExtractors;
@@ -170,7 +172,7 @@ public class NSIService {
                 .block();
     }
 
-    public ServiceVersionDTO updateServiceVersion(ServiceVersionDTO serviceVersion) {
+    public ResponseEntity<Resource>  updateServiceVersion(ServiceVersionDTO serviceVersion) { //ServiceVersionDTO
 
         logger.info("Схранение/изменение мэппинга услуг справочника КТ-777. Вызов сервиса НСИ с параметрами {}", serviceVersion);
 
@@ -183,18 +185,7 @@ public class NSIService {
                 .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", userDetails.getJwtTokenValue()))
                 .body(Mono.just(serviceVersion), ServiceVersionDTO.class)
-                .retrieve()
-                .onStatus(
-                        HttpStatusCode::is4xxClientError,
-                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не найден", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
-                .onStatus(
-                        HttpStatusCode::is5xxServerError,
-                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не доступен", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
-                .bodyToMono(ServiceVersionDTO.class)
-                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
-                .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance),
-                        throwable -> new RemoteServiceCallException("Ошибка обработки данных при получении ответа", HttpStatus.BAD_REQUEST, uri, throwable.getMessage()))
-                .doOnError(err -> logger.error("Ошибка получения данных удаленного сервиса - {}", err.getMessage()))
+                .exchangeToMono(clientResponse -> clientResponse.toEntity(Resource.class))//bodyToMono(ServiceVersionDTO.class)
                 .log()
                 .block();
     }

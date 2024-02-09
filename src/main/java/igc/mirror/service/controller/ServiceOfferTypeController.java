@@ -11,8 +11,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,13 +70,25 @@ public class ServiceOfferTypeController {
 
     @PostMapping("/service-version/updating")
     @Operation(summary = "Схранение/изменение мэппинга услуг справочника КТ-777")
-    public ServiceVersionDTO updateServiceVersion(@RequestBody ServiceVersionDTO serviceVersion){
-        return serviceOfferTypeService.updateServiceVersion(serviceVersion);
+    public ResponseEntity<Resource> updateServiceVersion(@RequestBody ServiceVersionDTO serviceVersion){ //ServiceVersionDTO
+
+        ResponseEntity<Resource> responseEntity = serviceOfferTypeService.updateServiceVersion(serviceVersion);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        if (responseEntity.getHeaders().getContentDisposition() != null)
+            httpHeaders.setContentDisposition(responseEntity.getHeaders().getContentDisposition());
+
+        return ResponseEntity
+                .status(responseEntity.getStatusCode())
+                .contentType(responseEntity.getHeaders().getContentType())
+                .headers(httpHeaders)
+                .body(responseEntity.getBody());
     }
 
     @PostMapping("/service-version/{id}/deleting")
     @Operation(summary = "Удаление мэппинга услуг справочника КТ-777")
     public Long deleteServiceVersion(@PathVariable Long id){
+
         return serviceOfferTypeService.deleteServiceVersion(id);
     }
 

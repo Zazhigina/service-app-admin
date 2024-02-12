@@ -2,6 +2,8 @@ package igc.mirror.service.dto;
 
 import igc.mirror.nsi.model.ServiceProduct;
 
+import java.time.LocalDateTime;
+
 public class ServiceProductDto {
 
     /**
@@ -19,12 +21,20 @@ public class ServiceProductDto {
      */
     private Boolean offerTypeExists;
 
+    /**
+     * Код устарел
+     */
+    private Boolean outdated;
+
     public ServiceProductDto() {
     }
 
     public ServiceProductDto(ServiceProduct serviceProduct) {
         this.code = serviceProduct.getCode();
         this.name = serviceProduct.getName();
+
+        if (serviceProduct.getEndDate() != null && LocalDateTime.now().isAfter(serviceProduct.getEndDate()))
+            outdated = true;
     }
 
     public String getCode() {
@@ -49,5 +59,9 @@ public class ServiceProductDto {
 
     public void setOfferTypeExists(Boolean offerTypeExists) {
         this.offerTypeExists = offerTypeExists;
+    }
+
+    public Boolean getOutdated() {
+        return outdated;
     }
 }

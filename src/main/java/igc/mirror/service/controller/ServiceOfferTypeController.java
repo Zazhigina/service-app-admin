@@ -68,11 +68,11 @@ public class ServiceOfferTypeController {
         return serviceOfferTypeService.findServiceVersionByFilters(filter, pageable);
     }
 
-    @PostMapping("/service-version/updating")
+    @PutMapping("/service-version")
     @Operation(summary = "Схранение/изменение мэппинга услуг справочника КТ-777")
     public ResponseEntity<Resource> updateServiceVersion(@RequestBody ServiceVersionDTO serviceVersion){ //ServiceVersionDTO
 
-        ResponseEntity<Resource> responseEntity = serviceOfferTypeService.updateServiceVersion(serviceVersion);
+        ResponseEntity<Resource> responseEntity = serviceOfferTypeService.changeServiceVersion(serviceVersion);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         if (responseEntity.getHeaders().getContentDisposition() != null)
@@ -85,14 +85,14 @@ public class ServiceOfferTypeController {
                 .body(responseEntity.getBody());
     }
 
-    @PostMapping("/service-version/{id}/deleting")
+    @DeleteMapping("/service-version/{id}")
     @Operation(summary = "Удаление мэппинга услуг справочника КТ-777")
     public Long deleteServiceVersion(@PathVariable Long id){
 
         return serviceOfferTypeService.deleteServiceVersion(id);
     }
 
-    @PostMapping("/service-version/uploading")
+    @PostMapping("/service-version")
     @Operation(summary = "Загрузка мэппинга услуг справочника КТ-777")
     public ReferenceSavingResult updateServiceVersion(@RequestBody List<ServiceVersionDTO> listServiceVersion){
         return serviceOfferTypeService.uploadServiceVersion(listServiceVersion);

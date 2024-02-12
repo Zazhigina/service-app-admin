@@ -168,8 +168,8 @@ public class ServiceOfferTypeService {
         return nsiService.findServiceVersionByFilters(filter, pageable);
     }
 
-    public ResponseEntity<Resource> updateServiceVersion(ServiceVersionDTO serviceVersion) { //ServiceVersionDTO
-        return nsiService.updateServiceVersion(serviceVersion);
+    public ResponseEntity<Resource> changeServiceVersion(ServiceVersionDTO serviceVersion) { //ServiceVersionDTO
+        return nsiService.changeServiceVersion(serviceVersion);
     }
 
     public Long deleteServiceVersion(Long id) {

@@ -172,14 +172,14 @@ public class NSIService {
                 .block();
     }
 
-    public ResponseEntity<Resource>  updateServiceVersion(ServiceVersionDTO serviceVersion) { //ServiceVersionDTO
+    public ResponseEntity<Resource>  changeServiceVersion(ServiceVersionDTO serviceVersion) { //ServiceVersionDTO
 
         logger.info("Схранение/изменение мэппинга услуг справочника КТ-777. Вызов сервиса НСИ с параметрами {}", serviceVersion);
 
-        String uri = String.join("/", REFERENCE_SERVICE, "service-version/updating");
+        String uri = String.join("/", REFERENCE_SERVICE, "service-version");
 
         return webClient
-                .post()
+                .put()
                 .uri(uri)
                 .header(HttpHeaders.USER_AGENT, userAgent)
                 .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
@@ -194,10 +194,10 @@ public class NSIService {
 
         logger.info("Удаление мэппинга услуг справочника КТ-777. Вызов сервиса НСИ с параметрами {}", id);
 
-        String uri = String.join("/", REFERENCE_SERVICE, "service-version", id.toString(), "deleting");
+        String uri = String.join("/", REFERENCE_SERVICE, "service-version", id.toString());
 
         return webClient
-                .post()
+                .delete()
                 .uri(uri)
                 .header(HttpHeaders.USER_AGENT, userAgent)
                 .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
@@ -223,7 +223,7 @@ public class NSIService {
 
         logger.info("Загрузка мэппинга услуг справочника КТ-777. Вызов сервиса НСИ с параметрами {}", listServiceVersion);
 
-        String uri = String.join("/", REFERENCE_SERVICE, "service-version/uploading");
+        String uri = String.join("/", REFERENCE_SERVICE, "service-version");
 
         return webClient
                 .post()

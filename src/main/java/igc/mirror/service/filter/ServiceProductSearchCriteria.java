@@ -10,13 +10,15 @@ public class ServiceProductSearchCriteria extends SearchCriteria {
     private LocalDateTime toDate;
     private String searchKey;
     private Boolean withHistData;
+    private Boolean allData = false;
     private List<String> catalogs;
 
-    public ServiceProductSearchCriteria(LocalDateTime fromDate, LocalDateTime toDate, String searchKey) {
+    public ServiceProductSearchCriteria(LocalDateTime fromDate, LocalDateTime toDate, String searchKey, Boolean allData) {
         this.fromDate = fromDate;
         this.toDate = toDate;
         this.searchKey = searchKey;
         this.withHistData = Boolean.FALSE;
+        this.allData = allData;
     }
 
     public LocalDateTime getFromDate() {
@@ -57,5 +59,13 @@ public class ServiceProductSearchCriteria extends SearchCriteria {
 
     public void setCatalogs(List<String> catalogs) {
         this.catalogs = catalogs;
+    }
+
+    public Boolean getAllData() {
+        return allData;
+    }
+
+    public void setAllData(Boolean allData) {
+        this.allData = allData;
     }
 }

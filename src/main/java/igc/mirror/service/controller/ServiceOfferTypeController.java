@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,6 +64,7 @@ public class ServiceOfferTypeController {
 
     @PostMapping("service-version/filter")
     @Operation(summary = "Mэппинг услуг справочника КТ-777")
+    @PreAuthorize("hasAuthority('CONFIG_VALUE.READ')")
     public Page<ServiceVersionDTO> findServiceVersionByFilters(@RequestBody(required = false) DataFilter<ServiceVersionSearchCriteria> filter,
                                                                Pageable pageable){
         return serviceOfferTypeService.findServiceVersionByFilters(filter, pageable);
@@ -70,6 +72,7 @@ public class ServiceOfferTypeController {
 
     @PutMapping("/service-version")
     @Operation(summary = "Схранение/изменение мэппинга услуг справочника КТ-777")
+    @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
     public ResponseEntity<Resource> updateServiceVersion(@RequestBody ServiceVersionDTO serviceVersion){ //ServiceVersionDTO
 
         ResponseEntity<Resource> responseEntity = serviceOfferTypeService.changeServiceVersion(serviceVersion);
@@ -87,6 +90,7 @@ public class ServiceOfferTypeController {
 
     @DeleteMapping("/service-version/{id}")
     @Operation(summary = "Удаление мэппинга услуг справочника КТ-777")
+    @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
     public Long deleteServiceVersion(@PathVariable Long id){
 
         return serviceOfferTypeService.deleteServiceVersion(id);
@@ -94,6 +98,7 @@ public class ServiceOfferTypeController {
 
     @PostMapping("/service-version")
     @Operation(summary = "Загрузка мэппинга услуг справочника КТ-777")
+    @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
     public ReferenceSavingResult updateServiceVersion(@RequestBody List<ServiceVersionDTO> listServiceVersion){
         return serviceOfferTypeService.uploadServiceVersion(listServiceVersion);
     }

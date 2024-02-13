@@ -34,7 +34,7 @@ public class ServiceProductDto {
         this.name = serviceProduct.getName();
 
         if (serviceProduct.getEndDate() != null && LocalDateTime.now().isAfter(serviceProduct.getEndDate()))
-            outdated = true;
+            this.outdated = true;
     }
 
     public String getCode() {

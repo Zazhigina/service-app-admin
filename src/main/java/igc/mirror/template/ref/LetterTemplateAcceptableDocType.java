@@ -4,7 +4,9 @@ public enum LetterTemplateAcceptableDocType {
     DOC("doc", "application/msword"),
     DOCX("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
     HTML("html", "text/html"),
-    PDF("pdf", "application/pdf");
+    PDF("pdf", "application/pdf"),
+    XLS("xls", "application/vnd.ms-excel"),
+    XLSX("xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
     private final String extension;
     private final String contentType;

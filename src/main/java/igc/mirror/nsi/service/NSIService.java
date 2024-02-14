@@ -172,7 +172,7 @@ public class NSIService {
                 .block();
     }
 
-    public ResponseEntity<Resource>  changeServiceVersion(ServiceVersionDTO serviceVersion) { //ServiceVersionDTO
+    public ServiceVersionDTO changeServiceVersion(ServiceVersionDTO serviceVersion) {
 
         logger.info("Схранение/изменение мэппинга услуг справочника КТ-777. Вызов сервиса НСИ с параметрами {}", serviceVersion);
 
@@ -185,7 +185,10 @@ public class NSIService {
                 .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", userDetails.getJwtTokenValue()))
                 .body(Mono.just(serviceVersion), ServiceVersionDTO.class)
-                .exchangeToMono(clientResponse -> clientResponse.toEntity(Resource.class))//bodyToMono(ServiceVersionDTO.class)
+                //.exchangeToMono(clientResponse -> clientResponse.toEntity(Resource.class))
+                .exchangeToMono(clientResponse -> clientResponse.statusCode().equals(HttpStatus.OK) ?
+                                                  clientResponse.bodyToMono(ServiceVersionDTO.class) :
+                                                  clientResponse.createError())
                 .log()
                 .block();
     }

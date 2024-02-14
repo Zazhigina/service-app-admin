@@ -11,11 +11,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
@@ -73,19 +70,9 @@ public class ServiceOfferTypeController {
     @PutMapping("/service-version")
     @Operation(summary = "Схранение/изменение мэппинга услуг справочника КТ-777")
     @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
-    public ResponseEntity<Resource> updateServiceVersion(@RequestBody ServiceVersionDTO serviceVersion){ //ServiceVersionDTO
+    public ServiceVersionDTO updateServiceVersion(@RequestBody ServiceVersionDTO serviceVersion){
 
-        ResponseEntity<Resource> responseEntity = serviceOfferTypeService.changeServiceVersion(serviceVersion);
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        if (responseEntity.getHeaders().getContentDisposition() != null)
-            httpHeaders.setContentDisposition(responseEntity.getHeaders().getContentDisposition());
-
-        return ResponseEntity
-                .status(responseEntity.getStatusCode())
-                .contentType(responseEntity.getHeaders().getContentType())
-                .headers(httpHeaders)
-                .body(responseEntity.getBody());
+        return serviceOfferTypeService.changeServiceVersion(serviceVersion);
     }
 
     @DeleteMapping("/service-version/{id}")

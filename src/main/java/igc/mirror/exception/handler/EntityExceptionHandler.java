@@ -11,6 +11,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -127,5 +128,12 @@ public class EntityExceptionHandler {
         ExceptionInfo exceptionInfo = new ExceptionInfo(ex.getMessage(), "");
         exceptionInfo.setPublicErrorInfo(request, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(exceptionInfo, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(WebClientResponseException.class)
+    ResponseEntity<ExceptionInfo> handleWebClientException(WebClientResponseException ex, HttpServletRequest request) {
+        ExceptionInfo exceptionInfo = new ExceptionInfo(ex.getResponseBodyAsString(), "");
+        exceptionInfo.setPublicErrorInfo(request, ex.getStatusCode());
+        return new ResponseEntity<>(exceptionInfo, ex.getStatusCode());
     }
 }

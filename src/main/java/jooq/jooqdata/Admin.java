@@ -10,6 +10,8 @@ import java.util.List;
 import jooqdata.tables.AParam;
 import jooqdata.tables.TAnswerVersion;
 import jooqdata.tables.TCalendarProduction;
+import jooqdata.tables.TFaqAnswer;
+import jooqdata.tables.TFaqQuestion;
 import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
@@ -51,6 +53,16 @@ public class Admin extends SchemaImpl {
      * Производственный календарь
      */
     public final TCalendarProduction T_CALENDAR_PRODUCTION = TCalendarProduction.T_CALENDAR_PRODUCTION;
+
+    /**
+     * FAQ: ответ на вопрос
+     */
+    public final TFaqAnswer T_FAQ_ANSWER = TFaqAnswer.T_FAQ_ANSWER;
+
+    /**
+     * FAQ: вопросы
+     */
+    public final TFaqQuestion T_FAQ_QUESTION = TFaqQuestion.T_FAQ_QUESTION;
 
     /**
      * Шаблон письма
@@ -113,6 +125,8 @@ public class Admin extends SchemaImpl {
             AParam.A_PARAM,
             TAnswerVersion.T_ANSWER_VERSION,
             TCalendarProduction.T_CALENDAR_PRODUCTION,
+            TFaqAnswer.T_FAQ_ANSWER,
+            TFaqQuestion.T_FAQ_QUESTION,
             TLetterTemplate.T_LETTER_TEMPLATE,
             TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM,
             TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM,

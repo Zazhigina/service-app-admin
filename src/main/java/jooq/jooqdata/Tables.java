@@ -7,6 +7,8 @@ package jooqdata;
 import jooqdata.tables.AParam;
 import jooqdata.tables.TAnswerVersion;
 import jooqdata.tables.TCalendarProduction;
+import jooqdata.tables.TFaqAnswer;
+import jooqdata.tables.TFaqQuestion;
 import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
@@ -36,6 +38,16 @@ public class Tables {
      * Производственный календарь
      */
     public static final TCalendarProduction T_CALENDAR_PRODUCTION = TCalendarProduction.T_CALENDAR_PRODUCTION;
+
+    /**
+     * FAQ: ответ на вопрос
+     */
+    public static final TFaqAnswer T_FAQ_ANSWER = TFaqAnswer.T_FAQ_ANSWER;
+
+    /**
+     * FAQ: вопросы
+     */
+    public static final TFaqQuestion T_FAQ_QUESTION = TFaqQuestion.T_FAQ_QUESTION;
 
     /**
      * Шаблон письма

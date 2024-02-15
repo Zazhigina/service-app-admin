@@ -1,25 +1,11 @@
 variables:
-  FF_GITLAB_REGISTRY_HELPER_IMAGE: 1
-  ACTIVE_PROFILE: "trunk"
-  APPLICATION_VERSION: "4.1.0-beta.$CI_PIPELINE_IID"
-  APPLICATION_VERSION_RELEASE: "4.1.0.$CI_PIPELINE_IID"
+  # Наименование приложения.
   APPLICATION_NAME: service-app-admin
-  DEPLOY_BRANCH: develop-local
+  # Текущая версия приложения.
+  APPLICATION_VERSION: "4.1.0"
   RELEASE_BRANCH: release-v4.1
-  DEMO_BRANCH: develop-local
-  CHART_NAME: tzriu-be-spring
-  KUBERNETES_NAMESPACE_OVERWRITE: mirror
-  KUBERNETES_NAMESPACE_OVERWRITE_RELEASE: mirror-release
-  KUBERNETES_NAMESPACE_OVERWRITE_DEMO: mirror-demo
-  IMAGE_REPOSITORY: nexus-registry.inlinegroup-c.ru/tzriu/$APPLICATION_NAME
-  ENVIRONMENT_NAME: $ACTIVE_PROFILE
-  ENVIRONMENT_DEMO_NAME: demo
-  ENVIRONMENT_RELEASE_NAME: $RELEASE_BRANCH
-
-stages:
-  - build
-  - deploy
 
 include:
-  - local: ci/trunk/build.yml
-  - local: ci/trunk/deploy.yml
+  - project: 'settings/ci-snippets'
+    ref: main
+    file: 'effect/spring-stage.yml'

@@ -3,7 +3,10 @@ package igc.mirror.nsi.service;
 import igc.mirror.auth.UserDetails;
 import igc.mirror.config.LoggingConstants;
 import igc.mirror.exception.common.RemoteServiceCallException;
+import igc.mirror.segment.ref.SegmentRecordType;
+import igc.mirror.segment.view.SegmentDto;
 import igc.mirror.nsi.model.ServiceProduct;
+import igc.mirror.segment.view.ServiceSegmentSubsegmentDto;
 import igc.mirror.service.dto.RestPage;
 import igc.mirror.service.dto.ServiceVersionDTO;
 import igc.mirror.service.exchange.ReferenceSavingResult;
@@ -17,13 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyExtractors;
@@ -187,8 +188,8 @@ public class NSIService {
                 .body(Mono.just(serviceVersion), ServiceVersionDTO.class)
                 //.exchangeToMono(clientResponse -> clientResponse.toEntity(Resource.class))
                 .exchangeToMono(clientResponse -> clientResponse.statusCode().equals(HttpStatus.OK) ?
-                                                  clientResponse.bodyToMono(ServiceVersionDTO.class) :
-                                                  clientResponse.createError())
+                        clientResponse.bodyToMono(ServiceVersionDTO.class) :
+                        clientResponse.createError())
                 .log()
                 .block();
     }
@@ -243,12 +244,70 @@ public class NSIService {
                         HttpStatusCode::is5xxServerError,
                         response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не доступен", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
                 .bodyToMono(new ParameterizedTypeReference<ReferenceSavingResult>() {
-                            })
+                })
                 .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
                 .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance),
                         throwable -> new RemoteServiceCallException("Ошибка обработки данных при получении ответа", HttpStatus.BAD_REQUEST, uri, throwable.getMessage()))
                 .doOnError(err -> logger.error("Ошибка получения данных удаленного сервиса - {}", err.getMessage()))
                 .log()
                 .block();
+    }
+
+
+    public List<SegmentDto> getSegmentsByType(SegmentRecordType segmentRecordType) {
+        logger.info("Получение данных справочника сегментов. Вызов сервиса НСИ ");
+
+        String uri = String.join("/", REFERENCE_SERVICE, String.valueOf(segmentRecordType));
+
+        return webClient
+                .get()
+                .uri(uri)
+                .header(HttpHeaders.USER_AGENT, userAgent)
+                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", userDetails.getJwtTokenValue()))
+                .retrieve()
+                .onStatus(
+                        HttpStatusCode::is4xxClientError,
+                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не найден", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
+                .onStatus(
+                        HttpStatusCode::is5xxServerError,
+                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не доступен", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
+                .bodyToMono(new ParameterizedTypeReference<List<SegmentDto>>() {
+                })
+                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
+                .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance),
+                        throwable -> new RemoteServiceCallException("Ошибка обработки данных при получении ответа", HttpStatus.BAD_REQUEST, uri, throwable.getMessage()))
+                .doOnError(err -> logger.error("Ошибка получения данных удаленного сервиса - {}", err.getMessage()))
+                .log()
+                .block();
+    }
+
+    public List<ServiceSegmentSubsegmentDto> findServiceSegmentSubsegmentsByServiceCode(String serviceCode, SegmentRecordType segmentRecordType) {
+        logger.info("Получение данных справочника сегментов. Вызов сервиса НСИ ");
+
+        String uri = String.join("/", REFERENCE_SERVICE, "service", serviceCode, String.valueOf(segmentRecordType));
+
+        return webClient
+                .get()
+                .uri(uri)
+                .header(HttpHeaders.USER_AGENT, userAgent)
+                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", userDetails.getJwtTokenValue()))
+                .retrieve()
+                .onStatus(
+                        HttpStatusCode::is4xxClientError,
+                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не найден", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
+                .onStatus(
+                        HttpStatusCode::is5xxServerError,
+                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не доступен", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
+                .bodyToMono(new ParameterizedTypeReference<List<ServiceSegmentSubsegmentDto>>() {
+                })
+                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
+                .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance),
+                        throwable -> new RemoteServiceCallException("Ошибка обработки данных при получении ответа", HttpStatus.BAD_REQUEST, uri, throwable.getMessage()))
+                .doOnError(err -> logger.error("Ошибка получения данных удаленного сервиса - {}", err.getMessage()))
+                .log()
+                .block();
+
     }
 }

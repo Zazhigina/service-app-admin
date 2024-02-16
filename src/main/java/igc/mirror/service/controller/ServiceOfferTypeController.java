@@ -68,7 +68,7 @@ public class ServiceOfferTypeController {
     }
 
     @PutMapping("/service-version")
-    @Operation(summary = "Схранение/изменение мэппинга услуг справочника КТ-777")
+    @Operation(summary = "Сохранение/изменение мэппинга услуг справочника КТ-777")
     @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
     public ServiceVersionDTO updateServiceVersion(@RequestBody ServiceVersionDTO serviceVersion){
 

@@ -21,6 +21,26 @@ public class ServiceVersionDTO {
     private String oldServiceName;
 
     /**
+     * Старый код сегмента
+     */
+    private Long oldSegmentCode;
+
+    /**
+     * Старый код подсегмента
+     */
+    private Long oldSubsegmentCode;
+
+    /**
+     * Новый код сегмента
+     */
+    private Long newSegmentCode;
+
+    /**
+     * Новый код подсегмента
+     */
+    private Long newSubsegmentCode;
+
+    /**
      * Версия КТ-777
      */
     private String changeVersion;
@@ -140,5 +160,37 @@ public class ServiceVersionDTO {
 
     public void setOldServiceName(String oldServiceName) {
         this.oldServiceName = oldServiceName;
+    }
+
+    public Long getOldSegmentCode() {
+        return oldSegmentCode;
+    }
+
+    public void setOldSegmentCode(Long oldSegmentCode) {
+        this.oldSegmentCode = oldSegmentCode;
+    }
+
+    public Long getOldSubsegmentCode() {
+        return oldSubsegmentCode;
+    }
+
+    public void setOldSubsegmentCode(Long oldSubsegmentCode) {
+        this.oldSubsegmentCode = oldSubsegmentCode;
+    }
+
+    public Long getNewSegmentCode() {
+        return newSegmentCode;
+    }
+
+    public void setNewSegmentCode(Long newSegmentCode) {
+        this.newSegmentCode = newSegmentCode;
+    }
+
+    public Long getNewSubsegmentCode() {
+        return newSubsegmentCode;
+    }
+
+    public void setNewSubsegmentCode(Long newSubsegmentCode) {
+        this.newSubsegmentCode = newSubsegmentCode;
     }
 }

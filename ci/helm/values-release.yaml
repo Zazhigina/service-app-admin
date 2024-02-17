@@ -26,15 +26,15 @@ application:
       - key: MIRROR_ENDPOINT_NSI
         value: http://service-app-nsi.mirror-release:8080
       - key: MIRROR_KEYCLOAK_BASE_URL
-        value: https://keycloak.inlinegroup-c.ru
+        value: https://keycloak-dev.inlinegroup-c.ru
       - key: MIRROR_KEYCLOAK_REALM
         value: mirror_test
       - key: MIRROR_KEYCLOAK_CLIENT_ID
         value: mirror-integration-app
       - key: KEYCLOAK_ROOT_CA_URL
-        value: https://nexus-oss.inlinegroup-c.ru/repository/local-repo/CA/root.ca.pem
-#      - key: KEYCLOAK_SUB_CA_URL
-#        value: ""
+        value: https://nexus-oss.inlinegroup-c.ru/repository/local-repo/CA/root.x1.pem
+      - key: KEYCLOAK_SUB_CA_URL
+        value: https://nexus-oss.inlinegroup-c.ru/repository/local-repo/CA/r3.pem
       - key: MIRROR_SCHEDULE_TASKS_CRON_REPLICATE_PROCEDURE_RECORDS
         value: 0 0 1 4 * ?
       - key: MIRROR_SCHEDULE_TASKS_CRON_SAVE_SEARCH_HISTORY
@@ -73,11 +73,16 @@ ingress:
   className: "nginx"
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
+    cert-manager.io/cluster-issuer: intersigned
   hosts:
     - host: mirror-release.inlinegroup-c.ru
       paths:
         - path: /api/admin/?(.*)
           pathType: Prefix
+  tls:
+    - secretName: mirror-tls
+      hosts:
+        - mirror.inlinegroup-c.ru
 
 resources:
   limits:

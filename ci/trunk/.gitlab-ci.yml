@@ -1,10 +1,3 @@
-variables:
-  # Наименование приложения.
-  APPLICATION_NAME: service-app-admin
-  # Текущая версия приложения.
-  APPLICATION_VERSION: "4.1.0"
-  RELEASE_BRANCH: release-v4.1
-
 include:
   - project: 'settings/ci-snippets'
     ref: main

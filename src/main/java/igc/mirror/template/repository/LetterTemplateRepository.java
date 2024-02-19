@@ -90,7 +90,12 @@ public class LetterTemplateRepository implements JooqCommonRepository<LetterTemp
 
     @Override
     public List<LetterTemplate> findByFilters(DataFilter<?> dataFilter) {
-        throw new UnsupportedOperationException();
+        LetterTemplateSearchCriteria criteria = (dataFilter != null ? (LetterTemplateSearchCriteria) dataFilter.getSearchCriteria() : null);
+
+        List<LetterTemplate> letterTemplateList = dsl.fetch(QueryBuilder.buildQuery(initLetterTemplateQuery(criteria), dataFilter.getSubFilter()))
+                .into(LetterTemplate.class);
+
+        return letterTemplateList;
     }
 
     @Override
@@ -158,6 +163,12 @@ public class LetterTemplateRepository implements JooqCommonRepository<LetterTemp
             if (criteria.getTitle() != null) {
                 condition = condition.and(TLetterTemplate.T_LETTER_TEMPLATE.TITLE.likeIgnoreCase(criteria.getLikePattern(criteria.getTitle())));
             }
+
+            if(criteria.getLetterTemplateType() != null)
+                condition = condition.and(TLetterTemplate.T_LETTER_TEMPLATE.TYPE_TEMPLATE.eq(criteria.getLetterTemplateType().name()));
+
+            if(criteria.getStatus() != null)
+                condition = condition.and(TLetterTemplate.T_LETTER_TEMPLATE.STATUS.eq(criteria.getStatus().name()));
         }
 
         return

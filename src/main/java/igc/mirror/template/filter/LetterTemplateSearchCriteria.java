@@ -1,10 +1,17 @@
 package igc.mirror.template.filter;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import igc.mirror.template.ref.LetterTemplateType;
+import igc.mirror.template.ref.TemplateStatus;
 import igc.mirror.utils.qfilter.SearchCriteria;
 
 public class LetterTemplateSearchCriteria extends SearchCriteria {
     private String letterType;
     private String title;
+    @JsonIgnore
+    private LetterTemplateType letterTemplateType;
+    @JsonIgnore
+    private TemplateStatus status;
 
     public LetterTemplateSearchCriteria() {}
     public LetterTemplateSearchCriteria(String letterType, String title) {
@@ -26,5 +33,21 @@ public class LetterTemplateSearchCriteria extends SearchCriteria {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public LetterTemplateType getLetterTemplateType() {
+        return letterTemplateType;
+    }
+
+    public void setLetterTemplateType(LetterTemplateType letterTemplateType) {
+        this.letterTemplateType = letterTemplateType;
+    }
+
+    public TemplateStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TemplateStatus status) {
+        this.status = status;
     }
 }

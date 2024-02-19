@@ -3,9 +3,9 @@ package igc.mirror.nsi.service;
 import igc.mirror.auth.UserDetails;
 import igc.mirror.config.LoggingConstants;
 import igc.mirror.exception.common.RemoteServiceCallException;
+import igc.mirror.nsi.model.ServiceProduct;
 import igc.mirror.segment.ref.SegmentRecordType;
 import igc.mirror.segment.view.SegmentDto;
-import igc.mirror.nsi.model.ServiceProduct;
 import igc.mirror.segment.view.ServiceSegmentSubsegmentDto;
 import igc.mirror.service.dto.RestPage;
 import igc.mirror.service.dto.ServiceVersionDTO;
@@ -27,6 +27,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyExtractors;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -255,14 +256,18 @@ public class NSIService {
     }
 
 
-    public Page<SegmentDto> getSegmentsByFilter(DataFilter<SegmentSearchCriteria> filter) {
+    public Page<SegmentDto> getSegmentsByFilter(DataFilter<SegmentSearchCriteria> filter,Pageable pageable) {
         logger.info("Получение данных справочника сегментов. Вызов сервиса НСИ ");
 
         String uri = String.join("/", REFERENCE_SERVICE, "segment/filter");
+        String urlTemplate = UriComponentsBuilder.fromUriString(uri)
+                .queryParams(setPageableParams(pageable))
+                .encode()
+                .toUriString();
 
         return webClient
                 .post()
-                .uri(uri)
+                .uri(urlTemplate)
                 .header(HttpHeaders.USER_AGENT, userAgent)
                 .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", userDetails.getJwtTokenValue()))
@@ -311,5 +316,14 @@ public class NSIService {
                 .log()
                 .block();
 
+    }
+    private  MultiValueMap<String, String> setPageableParams(Pageable pageable){
+        MultiValueMap<String, String> result = new LinkedMultiValueMap<>();
+        result.add("size",String.valueOf(pageable.getPageSize()));
+        if (!pageable.getSort().isEmpty()){
+            result.add("sort",pageable.getSort().toString().replace(": ",","));
+        }
+        result.add("offset",String.valueOf(pageable.getOffset()));
+        return result;
     }
 }

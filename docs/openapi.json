@@ -11,6 +11,177 @@
     }
   ],
   "paths": {
+    "/service-version": {
+      "put": {
+        "tags": [
+          "Ведение маппинга услуг и шаблонов КП"
+        ],
+        "summary": "Сохранение/изменение мэппинга услуг справочника КТ-777",
+        "operationId": "updateServiceVersion",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServiceVersionDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceVersionDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Ведение маппинга услуг и шаблонов КП"
+        ],
+        "summary": "Загрузка мэппинга услуг справочника КТ-777",
+        "operationId": "updateServiceVersion_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ServiceVersionDTO"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReferenceSavingResult"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/service-offer-type": {
+      "put": {
+        "tags": [
+          "Ведение маппинга услуг и шаблонов КП"
+        ],
+        "summary": "Сохранение записей таблицы маппинга услуг и типов КП",
+        "operationId": "saveServicesOfferTypes",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ServiceOfferTypeDto"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/question": {
+      "get": {
+        "tags": [
+          "Стандартные вопросы"
+        ],
+        "summary": "Получить полный перечень вопросов",
+        "operationId": "findAllQuestions",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QuestionDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Стандартные вопросы"
+        ],
+        "summary": "Изменение данных вопросов",
+        "operationId": "changeQuestions",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QuestionDto"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessInfo"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/param/{key}": {
       "get": {
         "tags": [
@@ -91,13 +262,43 @@
         ]
       }
     },
-    "/letter-template/{id}": {
+    "/faq/questions/{id}": {
+      "get": {
+        "tags": [
+          "FAQ"
+        ],
+        "summary": "Данные FAQ вопроса",
+        "operationId": "getQuestion",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/FaqQuestionDto"
+                }
+              }
+            }
+          }
+        }
+      },
       "put": {
         "tags": [
-          "Шаблоны"
+          "FAQ"
         ],
-        "summary": "Изменение данных шаблона",
-        "operationId": "changeLetterTemplate",
+        "summary": "Изменение FAQ вопроса",
+        "operationId": "changeQuestion",
         "parameters": [
           {
             "name": "id",
@@ -113,7 +314,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LetterTemplateDto"
+                "$ref": "#/components/schemas/FaqQuestionSaveDto"
               }
             }
           },
@@ -125,24 +326,19 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/LetterTemplateDto"
+                  "$ref": "#/components/schemas/FaqQuestionDto"
                 }
               }
             }
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       },
       "delete": {
         "tags": [
-          "Шаблоны"
+          "FAQ"
         ],
-        "summary": "Удаление шаблона",
-        "operationId": "deleteLetterTemplate",
+        "summary": "Удаление FAQ вопроса",
+        "operationId": "removeQuestion",
         "parameters": [
           {
             "name": "id",
@@ -161,6 +357,99 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/SuccessInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/calendar-production": {
+      "get": {
+        "tags": [
+          "Производственный календарь"
+        ],
+        "summary": "Получение всех данных производственного календаря",
+        "operationId": "findAllCalendarProduction",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CalendarProductionDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Производственный календарь"
+        ],
+        "summary": "Сохранение данных производственного календаря",
+        "operationId": "saveCalendarProduction",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CalendarProductionDto"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroupProcessInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/variable": {
+      "post": {
+        "tags": [
+          "Переменные"
+        ],
+        "summary": "Получение списка переменных по указанным идентификаторам",
+        "operationId": "findVariables",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VariableDto"
+                  }
                 }
               }
             }
@@ -173,38 +462,28 @@
         ]
       }
     },
-    "/letter-template/doc/{id}": {
-      "put": {
+    "/service-version/filter": {
+      "post": {
         "tags": [
-          "Шаблоны"
+          "Ведение маппинга услуг и шаблонов КП"
         ],
-        "summary": "Замена файла шаблона",
-        "operationId": "replaceLetterTemplateDoc",
+        "summary": "Mэппинг услуг справочника КТ-777",
+        "operationId": "findServiceVersionByFilters",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
+            "name": "pageable",
+            "in": "query",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "$ref": "#/components/schemas/Pageable"
             }
           }
         ],
         "requestBody": {
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
-                "required": [
-                  "file"
-                ],
-                "type": "object",
-                "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
+                "$ref": "#/components/schemas/DataFilterServiceVersionSearchCriteria"
               }
             }
           }
@@ -215,7 +494,187 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/SuccessInfo"
+                  "$ref": "#/components/schemas/PageServiceVersionDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/service-offer-type/service-product/filter": {
+      "post": {
+        "tags": [
+          "Ведение маппинга услуг и шаблонов КП"
+        ],
+        "summary": "Справочник услуг",
+        "operationId": "findServiceProduct",
+        "parameters": [
+          {
+            "name": "params",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/MultiValueMapStringString"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataFilterServiceProductSearchCriteria"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageServiceProductDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/service-offer-type/filter": {
+      "post": {
+        "tags": [
+          "Ведение маппинга услуг и шаблонов КП"
+        ],
+        "summary": "Перечень записей таблицы маппинга услуг и типов КП",
+        "operationId": "findServiceOfferTypes",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataFilterServiceOfferTypeSearchCriteria"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageServiceOfferTypeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/segment/filter": {
+      "post": {
+        "tags": [
+          "segment-controller"
+        ],
+        "summary": "Справочник сегментов/подсегментов",
+        "operationId": "getSegmentsByType",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataFilterSegmentSearchCriteria"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageSegmentDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/param/map": {
+      "post": {
+        "tags": [
+          "Ведение параметров"
+        ],
+        "summary": "Карта соответствия параметров по ключам",
+        "operationId": "getParamKeysAsMap",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/components/schemas/ParamDto"
+                  }
                 }
               }
             }
@@ -299,19 +758,29 @@
         ]
       }
     },
-    "/letter-template": {
+    "/letter-template/{id}": {
       "post": {
         "tags": [
           "Шаблоны"
         ],
-        "summary": "Сохранение нового шаблона",
-        "operationId": "saveLetterTemplate",
+        "summary": "Изменение данных шаблона",
+        "operationId": "changeLetterTemplate",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
               "schema": {
                 "required": [
-                  "file",
                   "request"
                 ],
                 "type": "object",
@@ -334,7 +803,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/LetterTemplateDto"
+                  "$ref": "#/components/schemas/SuccessInfo"
                 }
               }
             }
@@ -379,7 +848,302 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/PageLetterTemplateDto"
+                  "$ref": "#/components/schemas/PageLetterTemplateBriefInfoDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/faq/questions/filter": {
+      "post": {
+        "tags": [
+          "FAQ"
+        ],
+        "summary": "Список FAQ вопросов",
+        "operationId": "getQuestionsByFilters",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataFilterFaqQuestionSearchCriteria"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageFaqQuestionDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/faq/question": {
+      "post": {
+        "tags": [
+          "FAQ"
+        ],
+        "summary": "Создание FAQ вопроса",
+        "operationId": "createQuestion",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FaqQuestionSaveDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/FaqQuestionDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/calendar-production/filter": {
+      "post": {
+        "tags": [
+          "Производственный календарь"
+        ],
+        "summary": "Получение всех данных производственного календаря c по указанному фильтру",
+        "operationId": "findCalendarProduction",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DataFilterCalendarProductionSearchCriteria"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageCalendarProductionDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/standard-question": {
+      "get": {
+        "tags": [
+          "Стандартные вопросы"
+        ],
+        "summary": "Получить перечень стандартных вопросов",
+        "operationId": "findAllStandardQuestions",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StandardQuestion"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/standard-question/{owner}": {
+      "get": {
+        "tags": [
+          "Стандартные вопросы"
+        ],
+        "summary": "Получить перечень стандартных вопросов для указанного родителя",
+        "operationId": "findAllStandardQuestions_1",
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "SERVICE_PRODUCT",
+                "MATERIAL"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StandardQuestion"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/service/{serviceCode}/{segmentRecordType}": {
+      "get": {
+        "tags": [
+          "segment-controller"
+        ],
+        "summary": "Актуальные сочетания услуга-сегмент-подсегмент",
+        "operationId": "getServiceSegmentSubsegmentsByServiceCode",
+        "parameters": [
+          {
+            "name": "serviceCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "segmentRecordType",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "SEGMENT",
+                "SUBSEGMENT"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ServiceSegmentSubsegmentDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/service-offer-type/{service}": {
+      "get": {
+        "tags": [
+          "Ведение маппинга услуг и шаблонов КП"
+        ],
+        "summary": "Тип КП по коду услуги",
+        "operationId": "getOfferTypeByServiceCode",
+        "parameters": [
+          {
+            "name": "service",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceOfferTypeForEPDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/service-offer-type/offer-types": {
+      "get": {
+        "tags": [
+          "Ведение маппинга услуг и шаблонов КП"
+        ],
+        "summary": "Перечень типов КП",
+        "operationId": "getOfferTypes",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OfferTypeDto"
+                  }
                 }
               }
             }
@@ -398,7 +1162,7 @@
           "Шаблоны"
         ],
         "summary": "Выгрузка шаблона",
-        "operationId": "downloadLetterTemplate",
+        "operationId": "downloadLetterTemplateDoc",
         "parameters": [
           {
             "name": "id",
@@ -460,6 +1224,72 @@
             }
           }
         },
+        "deprecated": true,
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/letter-template/type": {
+      "get": {
+        "tags": [
+          "Шаблоны"
+        ],
+        "summary": "Поиск типов шаблонов",
+        "operationId": "findLetterTemplateTypes",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LetterTemplateTypeDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/letter-template/by-param": {
+      "get": {
+        "tags": [
+          "Шаблоны"
+        ],
+        "summary": "Запрос шаблона по наименованию параметра",
+        "operationId": "retrieveTemplate",
+        "parameters": [
+          {
+            "name": "param",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateDto"
+                }
+              }
+            }
+          }
+        },
         "security": [
           {
             "bearerAuth": []
@@ -472,7 +1302,7 @@
         "tags": [
           "Шаблоны"
         ],
-        "summary": "Поиск шаблона по наименованию параметра",
+        "summary": "Поиск информации о шаблоне по наименованию параметра",
         "operationId": "findLetterTemplateByLetterType",
         "parameters": [
           {
@@ -502,10 +1332,395 @@
           }
         ]
       }
+    },
+    "/faq/user-guides": {
+      "get": {
+        "tags": [
+          "FAQ"
+        ],
+        "summary": "Информация об инструкциях пользователя, соответствующих сервису Effect.Mirror",
+        "operationId": "getUserGuides",
+        "parameters": [
+          {
+            "name": "mirrorService",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "MA",
+                "BP",
+                "EP"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserGuideDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/faq/reference/question-types": {
+      "get": {
+        "tags": [
+          "Справочники FAQ"
+        ],
+        "summary": "Список типов FAQ вопросов",
+        "operationId": "getFaqQuestionTypes",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReferenceDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/faq/reference/mirror-services": {
+      "get": {
+        "tags": [
+          "Справочники FAQ"
+        ],
+        "summary": "Список сервисов Effect.Mirror",
+        "operationId": "getMirrorServices",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReferenceDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/calendar-production/by-year/{year}": {
+      "get": {
+        "tags": [
+          "Производственный календарь"
+        ],
+        "summary": "Получение данных производственного календаря по году",
+        "operationId": "findCalendarProductionByYear",
+        "parameters": [
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CalendarProductionDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/service-version/{id}": {
+      "delete": {
+        "tags": [
+          "Ведение маппинга услуг и шаблонов КП"
+        ],
+        "summary": "Удаление мэппинга услуг справочника КТ-777",
+        "operationId": "deleteServiceVersion",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/param/cache-remote": {
+      "delete": {
+        "tags": [
+          "Ведение параметров"
+        ],
+        "summary": "Очистка кеша параметров удаленных сервисов",
+        "operationId": "clearRemoteServiceParamCache",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/calendar-production/{id}": {
+      "delete": {
+        "tags": [
+          "Производственный календарь"
+        ],
+        "summary": "Удаление данных производственного календаря по идентификатору записи",
+        "operationId": "deleteCalendarProduction",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessInfo"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "ServiceVersionDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "newServiceCode": {
+            "type": "string"
+          },
+          "newServiceName": {
+            "type": "string"
+          },
+          "oldServiceCode": {
+            "type": "string"
+          },
+          "oldServiceName": {
+            "type": "string"
+          },
+          "oldSegmentCode": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "oldSubsegmentCode": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "newSegmentCode": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "newSubsegmentCode": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "changeVersion": {
+            "type": "string"
+          },
+          "versionDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createUser": {
+            "type": "string"
+          },
+          "lastUpdateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastUpdateUser": {
+            "type": "string"
+          }
+        }
+      },
+      "ServiceOfferTypeDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "serviceCode": {
+            "type": "string"
+          },
+          "serviceName": {
+            "type": "string"
+          },
+          "offerType": {
+            "type": "string",
+            "enum": [
+              "COMMON",
+              "AUTO_TRANSPORT",
+              "IT_LICENSE"
+            ]
+          },
+          "offerTypeName": {
+            "type": "string"
+          },
+          "withCostingDefault": {
+            "type": "boolean"
+          }
+        }
+      },
+      "AnswerVersionDto": {
+        "required": [
+          "name",
+          "orderNo"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "orderNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "answerType": {
+            "type": "string",
+            "enum": [
+              "POSITIVE",
+              "NEGATIVE",
+              "ANY"
+            ]
+          },
+          "isDefault": {
+            "type": "boolean"
+          }
+        }
+      },
+      "QuestionDto": {
+        "required": [
+          "name",
+          "orderNo"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "orderNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "actualTo": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "code": {
+            "type": "string"
+          },
+          "answerVersions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AnswerVersionDto"
+            }
+          },
+          "owner": {
+            "type": "string",
+            "enum": [
+              "SERVICE_PRODUCT",
+              "MATERIAL"
+            ]
+          }
+        }
+      },
+      "SuccessInfo": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
       "ParamEditableDto": {
         "required": [
           "name",
@@ -549,11 +1764,100 @@
           }
         }
       },
-      "LetterTemplateDto": {
+      "FaqAnswerSaveDto": {
         "required": [
-          "letterType",
-          "title",
-          "typeTemplate"
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "FaqQuestionSaveDto": {
+        "required": [
+          "answer",
+          "name",
+          "questionType",
+          "serviceName"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "questionType": {
+            "type": "string",
+            "enum": [
+              "GENERAL_QUESTIONS",
+              "ADDITIONAL_AGREEMENTS"
+            ]
+          },
+          "serviceName": {
+            "type": "string",
+            "enum": [
+              "MA",
+              "BP",
+              "EP"
+            ]
+          },
+          "answer": {
+            "$ref": "#/components/schemas/FaqAnswerSaveDto"
+          }
+        }
+      },
+      "FaqAnswerDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "FaqQuestionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "questionType": {
+            "type": "string",
+            "enum": [
+              "GENERAL_QUESTIONS",
+              "ADDITIONAL_AGREEMENTS"
+            ]
+          },
+          "questionTypeName": {
+            "type": "string"
+          },
+          "serviceName": {
+            "type": "string",
+            "enum": [
+              "MA",
+              "BP",
+              "EP"
+            ]
+          },
+          "serviceFullName": {
+            "type": "string"
+          },
+          "answer": {
+            "$ref": "#/components/schemas/FaqAnswerDto"
+          }
+        }
+      },
+      "CalendarProductionDto": {
+        "required": [
+          "year"
         ],
         "type": "object",
         "properties": {
@@ -561,56 +1865,151 @@
             "type": "integer",
             "format": "int64"
           },
-          "letterType": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "letterSample": {
+          "year": {
+            "maximum": 2999,
+            "minimum": 1900,
             "type": "integer",
-            "format": "int64"
+            "format": "int32"
           },
-          "typeTemplate": {
-            "type": "string",
-            "enum": [
-              "DOCUMENT",
-              "TEMPLATE"
-            ]
+          "hourWorkCount": {
+            "type": "number"
           },
-          "createDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "createUser": {
+          "monthWorkHourCount": {
+            "type": "number"
+          }
+        }
+      },
+      "DetailExceptionInfo": {
+        "type": "object",
+        "properties": {
+          "message": {
             "type": "string"
           },
-          "lastUpdateDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "lastUpdateUser": {
+          "field": {
             "type": "string"
           }
         }
       },
-      "SuccessInfo": {
+      "EntityExceptionInfo": {
         "type": "object",
         "properties": {
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
           "status": {
             "type": "integer",
             "format": "int32"
           },
-          "message": {
+          "error": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "cause": {
+            "type": "string"
+          },
+          "advice": {
+            "type": "string"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DetailExceptionInfo"
+            }
+          },
+          "objectId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "errorField": {
             "type": "string"
           }
         }
       },
-      "DataFilterObject": {
+      "GroupProcessInfo": {
+        "type": "object",
+        "properties": {
+          "processName": {
+            "type": "string"
+          },
+          "successfulResults": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "exceptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntityExceptionInfo"
+            }
+          }
+        }
+      },
+      "VariableDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "defaultVal": {
+            "type": "string"
+          }
+        }
+      },
+      "Log": {
+        "type": "object",
+        "properties": {
+          "logType": {
+            "type": "string",
+            "enum": [
+              "SUCCESS",
+              "WARNING",
+              "ERROR",
+              "INFO"
+            ]
+          },
+          "logText": {
+            "type": "string"
+          }
+        }
+      },
+      "ReferenceSavingResult": {
+        "type": "object",
+        "properties": {
+          "exchangeId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "result": {
+            "type": "string",
+            "enum": [
+              "SUCCESS",
+              "WARNING",
+              "ERROR",
+              "INFO"
+            ]
+          },
+          "logs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Log"
+            }
+          }
+        }
+      },
+      "DataFilterServiceVersionSearchCriteria": {
         "type": "object",
         "properties": {
           "searchCriteria": {
-            "type": "object"
+            "$ref": "#/components/schemas/ServiceVersionSearchCriteria"
           },
           "subFilter": {
             "$ref": "#/components/schemas/QueryFilter"
@@ -673,6 +2072,419 @@
           }
         }
       },
+      "ServiceVersionSearchCriteria": {
+        "type": "object",
+        "properties": {
+          "serviceCodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "version": {
+            "type": "string"
+          },
+          "newServiceName": {
+            "type": "string"
+          },
+          "oldServiceName": {
+            "type": "string"
+          }
+        }
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "PageServiceVersionDTO": {
+        "type": "object",
+        "properties": {
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ServiceVersionDTO"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageableObject": {
+        "type": "object",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "paged": {
+            "type": "boolean"
+          },
+          "unpaged": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SortObject": {
+        "type": "object",
+        "properties": {
+          "empty": {
+            "type": "boolean"
+          },
+          "sorted": {
+            "type": "boolean"
+          },
+          "unsorted": {
+            "type": "boolean"
+          }
+        }
+      },
+      "DataFilterServiceProductSearchCriteria": {
+        "type": "object",
+        "properties": {
+          "searchCriteria": {
+            "$ref": "#/components/schemas/ServiceProductSearchCriteria"
+          },
+          "subFilter": {
+            "$ref": "#/components/schemas/QueryFilter"
+          }
+        }
+      },
+      "ServiceProductSearchCriteria": {
+        "type": "object",
+        "properties": {
+          "fromDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "toDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "searchKey": {
+            "type": "string"
+          },
+          "withHistData": {
+            "type": "boolean"
+          },
+          "allData": {
+            "type": "boolean"
+          },
+          "catalogs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "MultiValueMapStringString": {
+        "type": "object",
+        "properties": {
+          "all": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "writeOnly": true
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "PageServiceProductDto": {
+        "type": "object",
+        "properties": {
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ServiceProductDto"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ServiceProductDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "offerTypeExists": {
+            "type": "boolean"
+          },
+          "outdated": {
+            "type": "boolean"
+          }
+        }
+      },
+      "DataFilterServiceOfferTypeSearchCriteria": {
+        "type": "object",
+        "properties": {
+          "searchCriteria": {
+            "$ref": "#/components/schemas/ServiceOfferTypeSearchCriteria"
+          },
+          "subFilter": {
+            "$ref": "#/components/schemas/QueryFilter"
+          }
+        }
+      },
+      "ServiceOfferTypeSearchCriteria": {
+        "type": "object",
+        "properties": {
+          "serviceCode": {
+            "type": "string"
+          }
+        }
+      },
+      "PageServiceOfferTypeDto": {
+        "type": "object",
+        "properties": {
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ServiceOfferTypeDto"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "DataFilterSegmentSearchCriteria": {
+        "type": "object",
+        "properties": {
+          "searchCriteria": {
+            "$ref": "#/components/schemas/SegmentSearchCriteria"
+          },
+          "subFilter": {
+            "$ref": "#/components/schemas/QueryFilter"
+          }
+        }
+      },
+      "SegmentSearchCriteria": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "SEGMENT",
+              "SUBSEGMENT"
+            ]
+          }
+        }
+      },
+      "PageSegmentDto": {
+        "type": "object",
+        "properties": {
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SegmentDto"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SegmentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "DataFilterObject": {
+        "type": "object",
+        "properties": {
+          "searchCriteria": {
+            "type": "object"
+          },
+          "subFilter": {
+            "$ref": "#/components/schemas/QueryFilter"
+          }
+        }
+      },
       "PageParamDto": {
         "type": "object",
         "properties": {
@@ -719,43 +2531,66 @@
           }
         }
       },
-      "PageableObject": {
+      "FileInfoDto": {
         "type": "object",
         "properties": {
-          "offset": {
+          "fileId": {
             "type": "integer",
             "format": "int64"
           },
-          "sort": {
-            "$ref": "#/components/schemas/SortObject"
+          "fileName": {
+            "type": "string"
           },
-          "paged": {
-            "type": "boolean"
-          },
-          "unpaged": {
-            "type": "boolean"
-          },
-          "pageSize": {
+          "fileSize": {
             "type": "integer",
-            "format": "int32"
+            "format": "int64"
           },
-          "pageNumber": {
-            "type": "integer",
-            "format": "int32"
+          "fileCreateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fileType": {
+            "type": "string"
           }
         }
       },
-      "SortObject": {
+      "LetterTemplateDto": {
+        "required": [
+          "letterType",
+          "status",
+          "typeTemplate"
+        ],
         "type": "object",
         "properties": {
-          "empty": {
-            "type": "boolean"
+          "letterType": {
+            "type": "string"
           },
-          "sorted": {
-            "type": "boolean"
+          "typeTemplate": {
+            "type": "string",
+            "enum": [
+              "DOCUMENT",
+              "TEMPLATE"
+            ]
           },
-          "unsorted": {
-            "type": "boolean"
+          "title": {
+            "type": "string"
+          },
+          "variableIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "fileInfo": {
+            "$ref": "#/components/schemas/FileInfoDto"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "ACTUAL"
+            ]
           }
         }
       },
@@ -781,28 +2616,39 @@
           }
         }
       },
-      "Pageable": {
+      "LetterTemplateBriefInfoDto": {
         "type": "object",
         "properties": {
-          "page": {
-            "minimum": 0,
+          "id": {
             "type": "integer",
-            "format": "int32"
+            "format": "int64"
           },
-          "size": {
-            "minimum": 1,
+          "letterType": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "typeTemplate": {
+            "type": "string"
+          },
+          "typeTemplateName": {
+            "type": "string"
+          },
+          "letterSample": {
             "type": "integer",
-            "format": "int32"
+            "format": "int64"
           },
-          "sort": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "ACTUAL"
+            ]
           }
         }
       },
-      "PageLetterTemplateDto": {
+      "PageLetterTemplateBriefInfoDto": {
         "type": "object",
         "properties": {
           "totalElements": {
@@ -820,7 +2666,7 @@
           "content": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/LetterTemplateDto"
+              "$ref": "#/components/schemas/LetterTemplateBriefInfoDto"
             }
           },
           "number": {
@@ -848,6 +2694,255 @@
           }
         }
       },
+      "DataFilterFaqQuestionSearchCriteria": {
+        "type": "object",
+        "properties": {
+          "searchCriteria": {
+            "$ref": "#/components/schemas/FaqQuestionSearchCriteria"
+          },
+          "subFilter": {
+            "$ref": "#/components/schemas/QueryFilter"
+          }
+        }
+      },
+      "FaqQuestionSearchCriteria": {
+        "type": "object",
+        "properties": {
+          "mirrorService": {
+            "type": "string",
+            "enum": [
+              "MA",
+              "BP",
+              "EP"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "questionType": {
+            "type": "string",
+            "enum": [
+              "GENERAL_QUESTIONS",
+              "ADDITIONAL_AGREEMENTS"
+            ]
+          }
+        }
+      },
+      "PageFaqQuestionDto": {
+        "type": "object",
+        "properties": {
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FaqQuestionDto"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CalendarProductionSearchCriteria": {
+        "type": "object",
+        "properties": {
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "DataFilterCalendarProductionSearchCriteria": {
+        "type": "object",
+        "properties": {
+          "searchCriteria": {
+            "$ref": "#/components/schemas/CalendarProductionSearchCriteria"
+          },
+          "subFilter": {
+            "$ref": "#/components/schemas/QueryFilter"
+          }
+        }
+      },
+      "PageCalendarProductionDto": {
+        "type": "object",
+        "properties": {
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CalendarProductionDto"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/SortObject"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "StandardAnswerVersion": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "orderNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "answerType": {
+            "type": "string",
+            "enum": [
+              "POSITIVE",
+              "NEGATIVE",
+              "ANY"
+            ]
+          },
+          "isDefault": {
+            "type": "boolean"
+          }
+        }
+      },
+      "StandardQuestion": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "orderNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "code": {
+            "type": "string"
+          },
+          "answerVersions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StandardAnswerVersion"
+            }
+          }
+        }
+      },
+      "ServiceSegmentSubsegmentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "serviceCode": {
+            "type": "string"
+          },
+          "segmentId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "subsegmentId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "segmentName": {
+            "type": "string"
+          },
+          "subsegmentName": {
+            "type": "string"
+          }
+        }
+      },
+      "ServiceOfferTypeForEPDto": {
+        "type": "object",
+        "properties": {
+          "serviceCode": {
+            "type": "string"
+          },
+          "offerType": {
+            "type": "string"
+          },
+          "withCostingDefault": {
+            "type": "boolean"
+          }
+        }
+      },
+      "OfferTypeDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
       "DocumentDto": {
         "type": "object",
         "properties": {
@@ -860,6 +2955,10 @@
           },
           "fileMimeType": {
             "type": "string"
+          },
+          "fileSize": {
+            "type": "integer",
+            "format": "int64"
           },
           "createDate": {
             "type": "string",
@@ -874,6 +2973,83 @@
           },
           "lastUpdateUser": {
             "type": "string"
+          }
+        }
+      },
+      "LetterTemplateTypeDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "TemplateDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "variables": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "templateFileInfo": {
+            "$ref": "#/components/schemas/FileInfoDto"
+          }
+        }
+      },
+      "DocumentInfoDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "mimeType": {
+            "type": "string"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastUpdateDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "UserGuideDto": {
+        "type": "object",
+        "properties": {
+          "templateId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "description": {
+            "type": "string"
+          },
+          "documentInfo": {
+            "$ref": "#/components/schemas/DocumentInfoDto"
+          }
+        }
+      },
+      "ReferenceDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "object"
+          },
+          "value": {
+            "type": "object"
           }
         }
       }

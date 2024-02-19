@@ -10,6 +10,7 @@ import igc.mirror.segment.view.ServiceSegmentSubsegmentDto;
 import igc.mirror.service.dto.RestPage;
 import igc.mirror.service.dto.ServiceVersionDTO;
 import igc.mirror.service.exchange.ReferenceSavingResult;
+import igc.mirror.service.filter.SegmentSearchCriteria;
 import igc.mirror.service.filter.ServiceProductSearchCriteria;
 import igc.mirror.service.filter.ServiceVersionSearchCriteria;
 import igc.mirror.utils.qfilter.DataFilter;
@@ -254,17 +255,18 @@ public class NSIService {
     }
 
 
-    public List<SegmentDto> getSegmentsByType(SegmentRecordType segmentRecordType) {
+    public Page<SegmentDto> getSegmentsByFilter(DataFilter<SegmentSearchCriteria> filter) {
         logger.info("Получение данных справочника сегментов. Вызов сервиса НСИ ");
 
-        String uri = String.join("/", REFERENCE_SERVICE, String.valueOf(segmentRecordType));
+        String uri = String.join("/", REFERENCE_SERVICE, "segment/filter");
 
         return webClient
-                .get()
+                .post()
                 .uri(uri)
                 .header(HttpHeaders.USER_AGENT, userAgent)
                 .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", userDetails.getJwtTokenValue()))
+                .body(Mono.just(filter), DataFilter.class)
                 .retrieve()
                 .onStatus(
                         HttpStatusCode::is4xxClientError,
@@ -272,7 +274,7 @@ public class NSIService {
                 .onStatus(
                         HttpStatusCode::is5xxServerError,
                         response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не доступен", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
-                .bodyToMono(new ParameterizedTypeReference<List<SegmentDto>>() {
+                .bodyToMono(new ParameterizedTypeReference<RestPage<SegmentDto>>() {
                 })
                 .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
                 .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance),

@@ -4,23 +4,29 @@ import igc.mirror.segment.ref.SegmentRecordType;
 import igc.mirror.segment.service.SegmentService;
 import igc.mirror.segment.view.SegmentDto;
 import igc.mirror.segment.view.ServiceSegmentSubsegmentDto;
+import igc.mirror.service.filter.SegmentSearchCriteria;
+import igc.mirror.utils.qfilter.DataFilter;
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 public class SegmentController {
-    @Autowired
-    private SegmentService segmentService;
+
+    private final SegmentService segmentService;
+
+    public SegmentController(SegmentService segmentService) {
+        this.segmentService = segmentService;
+    }
 
     @Operation(summary = "Справочник сегментов/подсегментов")
-    @GetMapping(path = "/{segmentRecordType}")
-    public List<SegmentDto> getSegmentsByType(@PathVariable SegmentRecordType segmentRecordType){
-        return segmentService.getSegmentsByType(segmentRecordType);
+    @PostMapping(path = "/segment/filter")
+    public Page<SegmentDto> getSegmentsByType(@RequestBody(required = false) DataFilter<SegmentSearchCriteria> filter,
+                                              Pageable pageable){
+        return segmentService.getSegmentsByFilter(filter,pageable);
     }
 
     @Operation(summary = "Актуальные сочетания услуга-сегмент-подсегмент")

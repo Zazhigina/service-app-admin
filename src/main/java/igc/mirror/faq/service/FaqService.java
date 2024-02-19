@@ -96,7 +96,6 @@ public class FaqService {
                 .toList();
     }
 
-    @PreAuthorize("hasAuthority('CONFIG_VALUE.READ')")
     public Page<FaqQuestionDto> findQuestionsByFilters(DataFilter<FaqQuestionSearchCriteria> dataFilter, Pageable pageable) {
         DataFilter<FaqQuestionSearchCriteria> filter = Optional.of(dataFilter).orElseGet(DataFilter::new);
         FaqQuestionSearchCriteria criteria = Optional.of(filter.getSearchCriteria()).orElseGet(FaqQuestionSearchCriteria::new);
@@ -108,8 +107,7 @@ public class FaqService {
                 .toList();
         return new PageImpl<>(questionDtos, pageable, questionPage.getTotalElements());
     }
-
-    @PreAuthorize("hasAuthority('CONFIG_VALUE.READ')")
+    
     public FaqQuestionDto findQuestionById(Long id) {
         return faqQuestionMapper.modelToDto(faqQuestionRepository.findById(id));
     }

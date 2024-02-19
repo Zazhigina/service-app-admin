@@ -22,7 +22,7 @@ public class SegmentService {
     }
 
     public Page<SegmentDto> getSegmentsByFilter(DataFilter<SegmentSearchCriteria> filter, Pageable pageable) {
-        return nsiService.getSegmentsByFilter(filter);
+        return nsiService.getSegmentsByFilter(filter,pageable);
     }
 
     public List<ServiceSegmentSubsegmentDto> findServiceSegmentSubsegmentsByServiceCode(String serviceCode, SegmentRecordType segmentRecordType) {

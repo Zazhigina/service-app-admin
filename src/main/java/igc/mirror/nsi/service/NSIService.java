@@ -9,6 +9,7 @@ import igc.mirror.segment.view.SegmentDto;
 import igc.mirror.segment.view.ServiceSegmentSubsegmentDto;
 import igc.mirror.service.dto.RestPage;
 import igc.mirror.service.dto.ServiceVersionDTO;
+import igc.mirror.service.dto.ServiceVersionReadDto;
 import igc.mirror.service.exchange.ReferenceSavingResult;
 import igc.mirror.service.filter.SegmentSearchCriteria;
 import igc.mirror.service.filter.ServiceProductSearchCriteria;
@@ -145,7 +146,7 @@ public class NSIService {
 
     }
 
-    public Page<ServiceVersionDTO> findServiceVersionByFilters(DataFilter<ServiceVersionSearchCriteria> filter, Pageable pageable) {
+    public Page<ServiceVersionReadDto> findServiceVersionByFilters(DataFilter<ServiceVersionSearchCriteria> filter, Pageable pageable) {
 
         logger.info("Получение данных мэппинга услуг справочника КТ-777. Вызов сервиса НСИ с параметрами {}", filter);
 
@@ -165,7 +166,7 @@ public class NSIService {
                 .onStatus(
                         HttpStatusCode::is5xxServerError,
                         response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не доступен", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
-                .bodyToMono(new ParameterizedTypeReference<RestPage<ServiceVersionDTO>>() {
+                .bodyToMono(new ParameterizedTypeReference<RestPage<ServiceVersionReadDto>>() {
                 })
                 .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
                 .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance),

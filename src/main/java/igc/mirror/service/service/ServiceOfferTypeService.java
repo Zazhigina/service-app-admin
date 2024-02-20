@@ -162,7 +162,7 @@ public class ServiceOfferTypeService {
         return new PageImpl<>(servicesDto, pageable, services.getTotalElements());
     }
 
-    public Page<ServiceVersionDTO> findServiceVersionByFilters(DataFilter<ServiceVersionSearchCriteria> filter, Pageable pageable) {
+    public Page<ServiceVersionReadDto> findServiceVersionByFilters(DataFilter<ServiceVersionSearchCriteria> filter, Pageable pageable) {
         return nsiService.findServiceVersionByFilters(filter, pageable);
     }
 

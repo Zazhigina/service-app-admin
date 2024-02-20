@@ -162,11 +162,11 @@ public class ServiceOfferTypeService {
         return new PageImpl<>(servicesDto, pageable, services.getTotalElements());
     }
 
-    public Page<ServiceVersionReadDto> findServiceVersionByFilters(DataFilter<ServiceVersionSearchCriteria> filter, Pageable pageable) {
+    public Page<ServiceVersionDto> findServiceVersionByFilters(DataFilter<ServiceVersionSearchCriteria> filter, Pageable pageable) {
         return nsiService.findServiceVersionByFilters(filter, pageable);
     }
 
-    public ServiceVersionDTO changeServiceVersion(ServiceVersionDTO serviceVersion) {
+    public ServiceVersionChangedDto changeServiceVersion(ServiceVersionChangedDto serviceVersion) {
         return nsiService.changeServiceVersion(serviceVersion);
     }
 
@@ -174,7 +174,7 @@ public class ServiceOfferTypeService {
         return nsiService.deleteServiceVersion(id);
     }
 
-    public ReferenceSavingResult uploadServiceVersion(List<ServiceVersionDTO> listServiceVersion) {
+    public ReferenceSavingResult uploadServiceVersion(List<ServiceVersionChangedDto> listServiceVersion) {
         return nsiService.uploadServiceVersion(listServiceVersion);
     }
 }

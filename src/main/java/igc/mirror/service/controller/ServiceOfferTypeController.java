@@ -61,16 +61,16 @@ public class ServiceOfferTypeController {
 
     @PostMapping("service-version/filter")
     @Operation(summary = "Mэппинг услуг справочника КТ-777")
-   // @PreAuthorize("hasAuthority('CONFIG_VALUE.READ')")
-    public Page<ServiceVersionReadDto> findServiceVersionByFilters(@RequestBody(required = false) DataFilter<ServiceVersionSearchCriteria> filter,
-                                                               Pageable pageable){
+    @PreAuthorize("hasAuthority('CONFIG_VALUE.READ')")
+    public Page<ServiceVersionDto> findServiceVersionByFilters(@RequestBody(required = false) DataFilter<ServiceVersionSearchCriteria> filter,
+                                                               Pageable pageable) {
         return serviceOfferTypeService.findServiceVersionByFilters(filter, pageable);
     }
 
     @PutMapping("/service-version")
     @Operation(summary = "Сохранение/изменение мэппинга услуг справочника КТ-777")
-   // @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
-    public ServiceVersionDTO updateServiceVersion(@RequestBody ServiceVersionDTO serviceVersion){
+    @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
+    public ServiceVersionChangedDto updateServiceVersion(@RequestBody ServiceVersionChangedDto serviceVersion) {
 
         return serviceOfferTypeService.changeServiceVersion(serviceVersion);
     }
@@ -86,7 +86,7 @@ public class ServiceOfferTypeController {
     @PostMapping("/service-version")
     @Operation(summary = "Загрузка мэппинга услуг справочника КТ-777")
     @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
-    public ReferenceSavingResult updateServiceVersion(@RequestBody List<ServiceVersionDTO> listServiceVersion){
+    public ReferenceSavingResult updateServiceVersion(@RequestBody List<ServiceVersionChangedDto> listServiceVersion) {
         return serviceOfferTypeService.uploadServiceVersion(listServiceVersion);
     }
 }

@@ -61,15 +61,15 @@ public class ServiceOfferTypeController {
 
     @PostMapping("service-version/filter")
     @Operation(summary = "Mэппинг услуг справочника КТ-777")
-    @PreAuthorize("hasAuthority('CONFIG_VALUE.READ')")
-    public Page<ServiceVersionDTO> findServiceVersionByFilters(@RequestBody(required = false) DataFilter<ServiceVersionSearchCriteria> filter,
+   // @PreAuthorize("hasAuthority('CONFIG_VALUE.READ')")
+    public Page<ServiceVersionReadDto> findServiceVersionByFilters(@RequestBody(required = false) DataFilter<ServiceVersionSearchCriteria> filter,
                                                                Pageable pageable){
         return serviceOfferTypeService.findServiceVersionByFilters(filter, pageable);
     }
 
     @PutMapping("/service-version")
     @Operation(summary = "Сохранение/изменение мэппинга услуг справочника КТ-777")
-    @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
+   // @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
     public ServiceVersionDTO updateServiceVersion(@RequestBody ServiceVersionDTO serviceVersion){
 
         return serviceOfferTypeService.changeServiceVersion(serviceVersion);

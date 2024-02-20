@@ -2,7 +2,7 @@ package igc.mirror.service.dto;
 
 import java.time.LocalDateTime;
 
-public class ServiceVersionDTO {
+public class ServiceVersionReadDto {
     /**
      * Идентификатор записи
      */
@@ -19,26 +19,31 @@ public class ServiceVersionDTO {
      */
     private String oldServiceCode;
     private String oldServiceName;
+    private String oldServiceCatalog;
 
     /**
      * Старый код сегмента
      */
     private Long oldSegmentId;
+    private String oldSegmentName;
 
     /**
      * Старый код подсегмента
      */
     private Long oldSubsegmentId;
+    private String oldSubsegmentName;
 
     /**
      * Новый код сегмента
      */
     private Long newSegmentId;
+    private String newSegmentName;
 
     /**
      * Новый код подсегмента
      */
     private Long newSubsegmentId;
+    private String newSubsegmentName;
 
     /**
      * Версия КТ-777
@@ -70,7 +75,7 @@ public class ServiceVersionDTO {
      */
     private String lastUpdateUser;
 
-    public ServiceVersionDTO() {
+    public ServiceVersionReadDto() {
 
     }
 
@@ -162,12 +167,28 @@ public class ServiceVersionDTO {
         this.oldServiceName = oldServiceName;
     }
 
+    public String getOldServiceCatalog() {
+        return oldServiceCatalog;
+    }
+
+    public void setOldServiceCatalog(String oldServiceCatalog) {
+        this.oldServiceCatalog = oldServiceCatalog;
+    }
+
     public Long getOldSegmentId() {
         return oldSegmentId;
     }
 
     public void setOldSegmentId(Long oldSegmentId) {
         this.oldSegmentId = oldSegmentId;
+    }
+
+    public String getOldSegmentName() {
+        return oldSegmentName;
+    }
+
+    public void setOldSegmentName(String oldSegmentName) {
+        this.oldSegmentName = oldSegmentName;
     }
 
     public Long getOldSubsegmentId() {
@@ -178,6 +199,14 @@ public class ServiceVersionDTO {
         this.oldSubsegmentId = oldSubsegmentId;
     }
 
+    public String getOldSubsegmentName() {
+        return oldSubsegmentName;
+    }
+
+    public void setOldSubsegmentName(String oldSubsegmentName) {
+        this.oldSubsegmentName = oldSubsegmentName;
+    }
+
     public Long getNewSegmentId() {
         return newSegmentId;
     }
@@ -186,11 +215,27 @@ public class ServiceVersionDTO {
         this.newSegmentId = newSegmentId;
     }
 
+    public String getNewSegmentName() {
+        return newSegmentName;
+    }
+
+    public void setNewSegmentName(String newSegmentName) {
+        this.newSegmentName = newSegmentName;
+    }
+
     public Long getNewSubsegmentId() {
         return newSubsegmentId;
     }
 
     public void setNewSubsegmentId(Long newSubsegmentId) {
         this.newSubsegmentId = newSubsegmentId;
+    }
+
+    public String getNewSubsegmentName() {
+        return newSubsegmentName;
+    }
+
+    public void setNewSubsegmentName(String newSubsegmentName) {
+        this.newSubsegmentName = newSubsegmentName;
     }
 }

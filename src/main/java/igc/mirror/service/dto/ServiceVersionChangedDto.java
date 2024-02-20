@@ -2,7 +2,7 @@ package igc.mirror.service.dto;
 
 import java.time.LocalDateTime;
 
-public class ServiceVersionDTO {
+public class ServiceVersionChangedDto {
     /**
      * Идентификатор записи
      */
@@ -12,13 +12,11 @@ public class ServiceVersionDTO {
      * Новый код услуги и наименование
      */
     private String newServiceCode;
-    private String newServiceName;
 
     /**
      * Старый код услуги и наименование
      */
     private String oldServiceCode;
-    private String oldServiceName;
 
     /**
      * Старый код сегмента
@@ -70,7 +68,7 @@ public class ServiceVersionDTO {
      */
     private String lastUpdateUser;
 
-    public ServiceVersionDTO() {
+    public ServiceVersionChangedDto() {
 
     }
 
@@ -144,22 +142,6 @@ public class ServiceVersionDTO {
 
     public void setLastUpdateUser(String lastUpdateUser) {
         this.lastUpdateUser = lastUpdateUser;
-    }
-
-    public String getNewServiceName() {
-        return newServiceName;
-    }
-
-    public void setNewServiceName(String newServiceName) {
-        this.newServiceName = newServiceName;
-    }
-
-    public String getOldServiceName() {
-        return oldServiceName;
-    }
-
-    public void setOldServiceName(String oldServiceName) {
-        this.oldServiceName = oldServiceName;
     }
 
     public Long getOldSegmentId() {

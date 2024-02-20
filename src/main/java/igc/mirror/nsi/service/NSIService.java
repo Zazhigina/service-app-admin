@@ -8,8 +8,8 @@ import igc.mirror.segment.ref.SegmentRecordType;
 import igc.mirror.segment.view.SegmentDto;
 import igc.mirror.segment.view.ServiceSegmentSubsegmentDto;
 import igc.mirror.service.dto.RestPage;
-import igc.mirror.service.dto.ServiceVersionDTO;
-import igc.mirror.service.dto.ServiceVersionReadDto;
+import igc.mirror.service.dto.ServiceVersionChangedDto;
+import igc.mirror.service.dto.ServiceVersionDto;
 import igc.mirror.service.exchange.ReferenceSavingResult;
 import igc.mirror.service.filter.SegmentSearchCriteria;
 import igc.mirror.service.filter.ServiceProductSearchCriteria;
@@ -146,7 +146,7 @@ public class NSIService {
 
     }
 
-    public Page<ServiceVersionReadDto> findServiceVersionByFilters(DataFilter<ServiceVersionSearchCriteria> filter, Pageable pageable) {
+    public Page<ServiceVersionDto> findServiceVersionByFilters(DataFilter<ServiceVersionSearchCriteria> filter, Pageable pageable) {
 
         logger.info("Получение данных мэппинга услуг справочника КТ-777. Вызов сервиса НСИ с параметрами {}", filter);
 
@@ -166,7 +166,7 @@ public class NSIService {
                 .onStatus(
                         HttpStatusCode::is5xxServerError,
                         response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не доступен", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
-                .bodyToMono(new ParameterizedTypeReference<RestPage<ServiceVersionReadDto>>() {
+                .bodyToMono(new ParameterizedTypeReference<RestPage<ServiceVersionDto>>() {
                 })
                 .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
                 .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance),
@@ -176,7 +176,7 @@ public class NSIService {
                 .block();
     }
 
-    public ServiceVersionDTO changeServiceVersion(ServiceVersionDTO serviceVersion) {
+    public ServiceVersionChangedDto changeServiceVersion(ServiceVersionChangedDto serviceVersion) {
 
         logger.info("Схранение/изменение мэппинга услуг справочника КТ-777. Вызов сервиса НСИ с параметрами {}", serviceVersion);
 
@@ -188,10 +188,10 @@ public class NSIService {
                 .header(HttpHeaders.USER_AGENT, userAgent)
                 .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", userDetails.getJwtTokenValue()))
-                .body(Mono.just(serviceVersion), ServiceVersionDTO.class)
+                .body(Mono.just(serviceVersion), ServiceVersionChangedDto.class)
                 //.exchangeToMono(clientResponse -> clientResponse.toEntity(Resource.class))
                 .exchangeToMono(clientResponse -> clientResponse.statusCode().equals(HttpStatus.OK) ?
-                        clientResponse.bodyToMono(ServiceVersionDTO.class) :
+                        clientResponse.bodyToMono(ServiceVersionChangedDto.class) :
                         clientResponse.createError())
                 .log()
                 .block();
@@ -226,7 +226,7 @@ public class NSIService {
                 .block();
     }
 
-    public ReferenceSavingResult uploadServiceVersion(List<ServiceVersionDTO> listServiceVersion) {
+    public ReferenceSavingResult uploadServiceVersion(List<ServiceVersionChangedDto> listServiceVersion) {
 
         logger.info("Загрузка мэппинга услуг справочника КТ-777. Вызов сервиса НСИ с параметрами {}", listServiceVersion);
 

@@ -2,7 +2,7 @@ package igc.mirror.service.dto;
 
 import java.time.LocalDateTime;
 
-public class ServiceVersionReadDto {
+public class ServiceVersionDto {
     /**
      * Идентификатор записи
      */
@@ -75,7 +75,7 @@ public class ServiceVersionReadDto {
      */
     private String lastUpdateUser;
 
-    public ServiceVersionReadDto() {
+    public ServiceVersionDto() {
 
     }
 

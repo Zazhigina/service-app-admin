@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -54,9 +53,9 @@ public class ServiceOfferTypeController {
     @Operation(summary = "Справочник услуг")
     @PostMapping(path = "service-offer-type/service-product/filter")
     public Page<ServiceProductDto> findServiceProduct(@RequestBody(required = false) DataFilter<ServiceProductSearchCriteria> filter,
-                                                      @RequestParam MultiValueMap<String, String> params, Pageable pageable) {
+                                                      Pageable pageable) {
 
-        return serviceOfferTypeService.findServiceProduct(filter, params, pageable);
+        return serviceOfferTypeService.findServiceProduct(filter, pageable);
     }
 
     @PostMapping("service-version/filter")
@@ -78,7 +77,7 @@ public class ServiceOfferTypeController {
     @DeleteMapping("/service-version/{id}")
     @Operation(summary = "Удаление мэппинга услуг справочника КТ-777")
     @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
-    public Long deleteServiceVersion(@PathVariable Long id){
+    public Long deleteServiceVersion(@PathVariable Long id) {
 
         return serviceOfferTypeService.deleteServiceVersion(id);
     }

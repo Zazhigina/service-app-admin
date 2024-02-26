@@ -19,7 +19,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.MultiValueMap;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -79,7 +78,7 @@ public class ServiceOfferTypeService {
     public ServiceOfferTypeForEPDto getOfferTypeByServiceCode(String service) {
         List<ServiceOfferType> records = serviceOfferTypeRepository.getOfferTypeByServiceCodes(List.of(service));
         if (!records.isEmpty()) {
-           return ServiceOfferTypeForEPDto.fromModel(records.get(0));
+            return ServiceOfferTypeForEPDto.fromModel(records.get(0));
         }
         return null;
     }
@@ -144,8 +143,8 @@ public class ServiceOfferTypeService {
 
     }
 
-    public Page<ServiceProductDto> findServiceProduct(DataFilter<ServiceProductSearchCriteria> filter, MultiValueMap<String, String> params, Pageable pageable) {
-        Page<ServiceProduct> services = nsiService.getServicesProductsByFilter(filter, params);
+    public Page<ServiceProductDto> findServiceProduct(DataFilter<ServiceProductSearchCriteria> filter, Pageable pageable) {
+        Page<ServiceProduct> services = nsiService.getServicesProductsByFilter(filter, pageable);
         List<ServiceProductDto> servicesDto = new ArrayList<>();
         if (!services.isEmpty()) {
             List<ServiceOfferType> records = serviceOfferTypeRepository.getOfferTypeByServiceCodes(services.stream().map(ServiceProduct::getCode).toList());

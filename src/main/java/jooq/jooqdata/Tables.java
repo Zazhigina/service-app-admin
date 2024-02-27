@@ -7,6 +7,7 @@ package jooqdata;
 import jooqdata.tables.AParam;
 import jooqdata.tables.TAnswerVersion;
 import jooqdata.tables.TCalendarProduction;
+import jooqdata.tables.TCostRange;
 import jooqdata.tables.TFaqAnswer;
 import jooqdata.tables.TFaqQuestion;
 import jooqdata.tables.TLetterTemplate;
@@ -38,6 +39,11 @@ public class Tables {
      * Производственный календарь
      */
     public static final TCalendarProduction T_CALENDAR_PRODUCTION = TCalendarProduction.T_CALENDAR_PRODUCTION;
+
+    /**
+     * Диапазоны стоимостных показателей
+     */
+    public static final TCostRange T_COST_RANGE = TCostRange.T_COST_RANGE;
 
     /**
      * FAQ: ответ на вопрос

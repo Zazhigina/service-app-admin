@@ -10,6 +10,7 @@ import java.util.List;
 import jooqdata.tables.AParam;
 import jooqdata.tables.TAnswerVersion;
 import jooqdata.tables.TCalendarProduction;
+import jooqdata.tables.TCostRange;
 import jooqdata.tables.TFaqAnswer;
 import jooqdata.tables.TFaqQuestion;
 import jooqdata.tables.TLetterTemplate;
@@ -53,6 +54,11 @@ public class Admin extends SchemaImpl {
      * Производственный календарь
      */
     public final TCalendarProduction T_CALENDAR_PRODUCTION = TCalendarProduction.T_CALENDAR_PRODUCTION;
+
+    /**
+     * Диапазоны стоимостных показателей
+     */
+    public final TCostRange T_COST_RANGE = TCostRange.T_COST_RANGE;
 
     /**
      * FAQ: ответ на вопрос
@@ -125,6 +131,7 @@ public class Admin extends SchemaImpl {
             AParam.A_PARAM,
             TAnswerVersion.T_ANSWER_VERSION,
             TCalendarProduction.T_CALENDAR_PRODUCTION,
+            TCostRange.T_COST_RANGE,
             TFaqAnswer.T_FAQ_ANSWER,
             TFaqQuestion.T_FAQ_QUESTION,
             TLetterTemplate.T_LETTER_TEMPLATE,

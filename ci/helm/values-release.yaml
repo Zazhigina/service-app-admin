@@ -80,9 +80,9 @@ ingress:
         - path: /api/admin/?(.*)
           pathType: Prefix
   tls:
-    - secretName: mirror-tls
+    - secretName: mirror-release-tls
       hosts:
-        - mirror.inlinegroup-c.ru
+        - mirror-release.inlinegroup-c.ru
 
 resources:
   limits:

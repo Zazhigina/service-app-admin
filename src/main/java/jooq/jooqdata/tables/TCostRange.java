@@ -4,6 +4,7 @@
 package jooqdata.tables;
 
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.function.Function;
 
@@ -58,17 +59,17 @@ public class TCostRange extends TableImpl<TCostRangeRecord> {
     /**
      * The column <code>admin.t_cost_range.lower_bound</code>. Нижняя граница
      */
-    public final TableField<TCostRangeRecord, String> LOWER_BOUND = createField(DSL.name("lower_bound"), SQLDataType.VARCHAR.nullable(false), this, "Нижняя граница");
+    public final TableField<TCostRangeRecord, BigDecimal> LOWER_BOUND = createField(DSL.name("lower_bound"), SQLDataType.NUMERIC.nullable(false), this, "Нижняя граница");
 
     /**
      * The column <code>admin.t_cost_range.upper_bound</code>. Верхняя граница
      */
-    public final TableField<TCostRangeRecord, String> UPPER_BOUND = createField(DSL.name("upper_bound"), SQLDataType.VARCHAR.nullable(false), this, "Верхняя граница");
+    public final TableField<TCostRangeRecord, BigDecimal> UPPER_BOUND = createField(DSL.name("upper_bound"), SQLDataType.NUMERIC.nullable(false), this, "Верхняя граница");
 
     /**
      * The column <code>admin.t_cost_range.interval_step</code>. Шаг Интервала 
      */
-    public final TableField<TCostRangeRecord, String> INTERVAL_STEP = createField(DSL.name("interval_step"), SQLDataType.VARCHAR.nullable(false), this, "Шаг Интервала ");
+    public final TableField<TCostRangeRecord, BigDecimal> INTERVAL_STEP = createField(DSL.name("interval_step"), SQLDataType.NUMERIC.nullable(false), this, "Шаг Интервала ");
 
     /**
      * The column <code>admin.t_cost_range.range_text</code>. Текст диапазона
@@ -185,14 +186,14 @@ public class TCostRange extends TableImpl<TCostRangeRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<Long, String, String, String, String, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
+    public Row9<Long, BigDecimal, BigDecimal, BigDecimal, String, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
         return (Row9) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function9<? super Long, ? super String, ? super String, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function9<? super Long, ? super BigDecimal, ? super BigDecimal, ? super BigDecimal, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -200,7 +201,7 @@ public class TCostRange extends TableImpl<TCostRangeRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function9<? super Long, ? super String, ? super String, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function9<? super Long, ? super BigDecimal, ? super BigDecimal, ? super BigDecimal, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

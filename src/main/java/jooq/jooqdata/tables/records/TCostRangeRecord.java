@@ -4,6 +4,7 @@
 package jooqdata.tables.records;
 
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import jooqdata.tables.TCostRange;
@@ -19,7 +20,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Диапазоны стоимостных показателей
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class TCostRangeRecord extends UpdatableRecordImpl<TCostRangeRecord> implements Record9<Long, String, String, String, String, LocalDateTime, String, LocalDateTime, String> {
+public class TCostRangeRecord extends UpdatableRecordImpl<TCostRangeRecord> implements Record9<Long, BigDecimal, BigDecimal, BigDecimal, String, LocalDateTime, String, LocalDateTime, String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,43 +41,43 @@ public class TCostRangeRecord extends UpdatableRecordImpl<TCostRangeRecord> impl
     /**
      * Setter for <code>admin.t_cost_range.lower_bound</code>. Нижняя граница
      */
-    public void setLowerBound(String value) {
+    public void setLowerBound(BigDecimal value) {
         set(1, value);
     }
 
     /**
      * Getter for <code>admin.t_cost_range.lower_bound</code>. Нижняя граница
      */
-    public String getLowerBound() {
-        return (String) get(1);
+    public BigDecimal getLowerBound() {
+        return (BigDecimal) get(1);
     }
 
     /**
      * Setter for <code>admin.t_cost_range.upper_bound</code>. Верхняя граница
      */
-    public void setUpperBound(String value) {
+    public void setUpperBound(BigDecimal value) {
         set(2, value);
     }
 
     /**
      * Getter for <code>admin.t_cost_range.upper_bound</code>. Верхняя граница
      */
-    public String getUpperBound() {
-        return (String) get(2);
+    public BigDecimal getUpperBound() {
+        return (BigDecimal) get(2);
     }
 
     /**
      * Setter for <code>admin.t_cost_range.interval_step</code>. Шаг Интервала 
      */
-    public void setIntervalStep(String value) {
+    public void setIntervalStep(BigDecimal value) {
         set(3, value);
     }
 
     /**
      * Getter for <code>admin.t_cost_range.interval_step</code>. Шаг Интервала 
      */
-    public String getIntervalStep() {
-        return (String) get(3);
+    public BigDecimal getIntervalStep() {
+        return (BigDecimal) get(3);
     }
 
     /**
@@ -169,12 +170,12 @@ public class TCostRangeRecord extends UpdatableRecordImpl<TCostRangeRecord> impl
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<Long, String, String, String, String, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
+    public Row9<Long, BigDecimal, BigDecimal, BigDecimal, String, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
         return (Row9) super.fieldsRow();
     }
 
     @Override
-    public Row9<Long, String, String, String, String, LocalDateTime, String, LocalDateTime, String> valuesRow() {
+    public Row9<Long, BigDecimal, BigDecimal, BigDecimal, String, LocalDateTime, String, LocalDateTime, String> valuesRow() {
         return (Row9) super.valuesRow();
     }
 
@@ -184,17 +185,17 @@ public class TCostRangeRecord extends UpdatableRecordImpl<TCostRangeRecord> impl
     }
 
     @Override
-    public Field<String> field2() {
+    public Field<BigDecimal> field2() {
         return TCostRange.T_COST_RANGE.LOWER_BOUND;
     }
 
     @Override
-    public Field<String> field3() {
+    public Field<BigDecimal> field3() {
         return TCostRange.T_COST_RANGE.UPPER_BOUND;
     }
 
     @Override
-    public Field<String> field4() {
+    public Field<BigDecimal> field4() {
         return TCostRange.T_COST_RANGE.INTERVAL_STEP;
     }
 
@@ -229,17 +230,17 @@ public class TCostRangeRecord extends UpdatableRecordImpl<TCostRangeRecord> impl
     }
 
     @Override
-    public String component2() {
+    public BigDecimal component2() {
         return getLowerBound();
     }
 
     @Override
-    public String component3() {
+    public BigDecimal component3() {
         return getUpperBound();
     }
 
     @Override
-    public String component4() {
+    public BigDecimal component4() {
         return getIntervalStep();
     }
 
@@ -274,17 +275,17 @@ public class TCostRangeRecord extends UpdatableRecordImpl<TCostRangeRecord> impl
     }
 
     @Override
-    public String value2() {
+    public BigDecimal value2() {
         return getLowerBound();
     }
 
     @Override
-    public String value3() {
+    public BigDecimal value3() {
         return getUpperBound();
     }
 
     @Override
-    public String value4() {
+    public BigDecimal value4() {
         return getIntervalStep();
     }
 
@@ -320,19 +321,19 @@ public class TCostRangeRecord extends UpdatableRecordImpl<TCostRangeRecord> impl
     }
 
     @Override
-    public TCostRangeRecord value2(String value) {
+    public TCostRangeRecord value2(BigDecimal value) {
         setLowerBound(value);
         return this;
     }
 
     @Override
-    public TCostRangeRecord value3(String value) {
+    public TCostRangeRecord value3(BigDecimal value) {
         setUpperBound(value);
         return this;
     }
 
     @Override
-    public TCostRangeRecord value4(String value) {
+    public TCostRangeRecord value4(BigDecimal value) {
         setIntervalStep(value);
         return this;
     }
@@ -368,7 +369,7 @@ public class TCostRangeRecord extends UpdatableRecordImpl<TCostRangeRecord> impl
     }
 
     @Override
-    public TCostRangeRecord values(Long value1, String value2, String value3, String value4, String value5, LocalDateTime value6, String value7, LocalDateTime value8, String value9) {
+    public TCostRangeRecord values(Long value1, BigDecimal value2, BigDecimal value3, BigDecimal value4, String value5, LocalDateTime value6, String value7, LocalDateTime value8, String value9) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -395,7 +396,7 @@ public class TCostRangeRecord extends UpdatableRecordImpl<TCostRangeRecord> impl
     /**
      * Create a detached, initialised TCostRangeRecord
      */
-    public TCostRangeRecord(Long id, String lowerBound, String upperBound, String intervalStep, String rangeText, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser) {
+    public TCostRangeRecord(Long id, BigDecimal lowerBound, BigDecimal upperBound, BigDecimal intervalStep, String rangeText, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser) {
         super(TCostRange.T_COST_RANGE);
 
         setId(id);

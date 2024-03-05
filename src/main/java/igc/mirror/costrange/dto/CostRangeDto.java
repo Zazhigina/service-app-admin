@@ -2,6 +2,7 @@ package igc.mirror.costrange.dto;
 
 import igc.mirror.costrange.model.CostRange;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class CostRangeDto {
@@ -14,17 +15,17 @@ public class CostRangeDto {
     /**
      * Нижняя граница
      */
-    private String lowerBound;
+    private BigDecimal lowerBound;
 
     /**
      * Верхняя граница
      */
-    private String upperBound;
+    private BigDecimal upperBound;
 
     /**
      * Шаг Интервала
      */
-    private String intervalStep;
+    private BigDecimal intervalStep;
 
     /**
      * Текст диапазона
@@ -76,27 +77,27 @@ public class CostRangeDto {
         this.id = id;
     }
 
-    public String getLowerBound() {
+    public BigDecimal getLowerBound() {
         return lowerBound;
     }
 
-    public void setLowerBound(String lowerBound) {
+    public void setLowerBound(BigDecimal lowerBound) {
         this.lowerBound = lowerBound;
     }
 
-    public String getUpperBound() {
+    public BigDecimal getUpperBound() {
         return upperBound;
     }
 
-    public void setUpperBound(String upperBound) {
+    public void setUpperBound(BigDecimal upperBound) {
         this.upperBound = upperBound;
     }
 
-    public String getIntervalStep() {
+    public BigDecimal getIntervalStep() {
         return intervalStep;
     }
 
-    public void setIntervalStep(String intervalStep) {
+    public void setIntervalStep(BigDecimal intervalStep) {
         this.intervalStep = intervalStep;
     }
 

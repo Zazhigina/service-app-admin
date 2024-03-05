@@ -72,18 +72,15 @@ public class CostRangeService {
 
     private void validateCostRangeBeforeChange(CostRangeDto newCostRange) {
 
-        if (newCostRange.getLowerBound() == null ||
-                newCostRange.getLowerBound().isEmpty()) {
+        if (newCostRange.getLowerBound() == null) {
             throw new EntityNotFoundException("Не указана Нижняя граница диапазона", null, CostRangeDto.class);
         }
 
-        if (newCostRange.getUpperBound() == null ||
-                newCostRange.getUpperBound().isEmpty()) {
+        if (newCostRange.getUpperBound() == null ) {
             throw new EntityNotFoundException("Не указана Верхняя граница диапазона", null, CostRangeDto.class);
         }
 
-        if (newCostRange.getIntervalStep() == null ||
-                newCostRange.getIntervalStep().isEmpty()) {
+        if (newCostRange.getIntervalStep() == null) {
             throw new EntityNotFoundException("Не указан Шаг интервала", null, CostRangeDto.class);
         }
 

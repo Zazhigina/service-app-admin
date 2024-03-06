@@ -14,11 +14,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class CostRangeService {
+
+    private static List<CostRangeDto> costRangesValues;
 
     @Autowired
     CostRangeRepository costRangeRepository;
@@ -37,9 +40,19 @@ public class CostRangeService {
                     .collect(Collectors.toList()), pageable, costRanges.getTotalElements());
     }
 
+    public List<CostRangeDto> getCostRanges() {
+
+        if (costRangesValues == null)
+            costRangesValues = costRangeRepository.getCostRanges();
+
+        return costRangesValues;
+    }
+
     public CostRangeDto changeCostRange(CostRangeDto newCostRange) {
         //Проверка
         validateCostRangeBeforeChange(newCostRange);
+
+        costRangesValues = null;
 
         if (newCostRange.getId() != null) {
             CostRange сostRange = costRangeRepository.getCostRangeById(newCostRange.getId());
@@ -96,6 +109,8 @@ public class CostRangeService {
 
         if (сostRange == null)
             throw new EntityNotFoundException("Отсутствует запись id " + id, null, CostRangeDto.class);
+
+        costRangesValues = null;
 
         return costRangeRepository.deleteServiceVersionById(id);
     }

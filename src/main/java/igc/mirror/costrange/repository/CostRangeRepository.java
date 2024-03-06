@@ -148,4 +148,10 @@ public class CostRangeRepository {
                 .returningResult(T_COST_RANGE.ID)
                 .fetchOneInto(Long.class);
     }
+
+    public List<CostRangeDto> getCostRanges() {
+        return dsl.select(T_COST_RANGE.fields())
+                .from(T_COST_RANGE)
+                .fetchInto(CostRangeDto.class);
+    }
 }

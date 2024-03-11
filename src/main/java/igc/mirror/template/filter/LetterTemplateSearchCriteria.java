@@ -8,7 +8,6 @@ import igc.mirror.utils.qfilter.SearchCriteria;
 public class LetterTemplateSearchCriteria extends SearchCriteria {
     private String letterType;
     private String title;
-    @JsonIgnore
     private LetterTemplateType letterTemplateType;
     @JsonIgnore
     private TemplateStatus status;

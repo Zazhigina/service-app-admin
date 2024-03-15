@@ -79,7 +79,7 @@ public class WebClientConfig {
                 .exchangeStrategies(ExchangeStrategies.builder()
                         .codecs(configurer ->
                                 configurer.defaultCodecs()
-                                        .maxInMemorySize(10 * 1024 * 1024)
+                                        .maxInMemorySize(20 * 1024 * 1024)
                         )
                         .build())
                 .clientConnector(new ReactorClientHttpConnector(httpClient))

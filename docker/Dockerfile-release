@@ -14,7 +14,7 @@ ARG MAVEN_REPOSITORY_SUB_CA_URL=""
 ARG BUILD_APP_DIR='/application'
 
 #
-FROM  $QUAYIO_IMAGE_REPOSITORY/klovercloud/gradle:7.6.0-jdk17 as build
+FROM $QUAYIO_IMAGE_REPOSITORY/klovercloud/gradle:7.6.0-jdk17 as build
 
 ARG BUILD_APP_DIR
 ARG MAVEN_REPOSITORY
@@ -23,7 +23,7 @@ ARG MAVEN_REPOSITORY_ROOT_CA_URL
 ARG MAVEN_REPOSITORY_SUB_CA_URL
 
 ENV TZ Europe/Moscow
-WORKDIR $BUILD_APP_DIR
+WORKDIR /application
 COPY . .
 
 ENV GRADLE_USER_HOME=$BUILD_APP_DIR/gradle
@@ -38,7 +38,7 @@ RUN JKS_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) \
 
 RUN java -Djarmode=layertools -jar $BUILD_APP_DIR/build/libs/root.jar extract
 #
-FROM  $RH_IMAGE_REPOSITORY/ubi9/openjdk-17-runtime:1.17-1.1705573249
+FROM $RH_IMAGE_REPOSITORY/ubi9/openjdk-17-runtime:1.18-1
 ARG BUILD_APP_DIR
 ARG UID=1001
 ARG UBI9_REPO_URL
@@ -57,9 +57,7 @@ RUN if [ -n "$UBI9_REPO_URL" ]; then \
        curl -k $UBI9_REPO_URL --output /etc/yum.repos.d/ubi.repo; \
     fi; \
     microdnf --setopt=tsflags=nodocs install -y \
-        openssl-libs-3.0.7-25.el9_3 python3-3.9.18-1.el9_3.1 \
-        rpm-4.16.1.3-27.el9_3 gnutls-3.7.6-23.el9_3.3 sqlite-libs-3.34.1-7.el9_3 \
-        nspr-4.35.0-6.el9_3 nss-3.90.0-6.el9_3 nss-softokn-3.90.0-6.el9_3 && \
+        curl-minimal-7.76.1-26.el9_3.3 libcurl-minimal-7.76.1-26.el9_3.3 && \
     microdnf clean all && \
     rm -rf /var/cache/yum
 
@@ -69,7 +67,7 @@ RUN mkdir -p ${BUILD_APP_DIR}
 RUN chown -R $UID:0 ${BUILD_APP_DIR}
 USER $UID
 
-WORKDIR $BUILD_APP_DIR
+WORKDIR /application
 
 COPY --chown=$UID:0 ./docker/entrypoint.sh /
 RUN chmod a+x /entrypoint.sh

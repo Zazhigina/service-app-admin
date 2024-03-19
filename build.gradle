@@ -83,7 +83,12 @@ dependencies {
     jooqGenerator "org.postgresql:postgresql:${postgresJDBCVersion}"
 
     // Security
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    // implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    // fix vulnerability version com.nimbusds:nimbus-jose-jwt
+    implementation ('org.springframework.boot:spring-boot-starter-oauth2-resource-server') {
+        exclude group: 'com.nimbusds', module: 'nimbus-jose-jwt'
+    }
+    implementation 'com.nimbusds:nimbus-jose-jwt:9.37.2'
 
     // swagger and OpenAPI
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocOpenApiStarterWebmvcUiVersion}"

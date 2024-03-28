@@ -30,7 +30,7 @@ public class QuestionRepository {
     private Condition getConditionStandardQuestion(QuestionOwner owner) {
         Condition wherePhrase = DSL.noCondition();
         if (owner != null)
-            wherePhrase = wherePhrase.and(QUESTION.OWNER.eq(owner.getCode()));
+            wherePhrase = wherePhrase.and(QUESTION.OWNER.eq(owner.getCode()).or(QUESTION.OWNER.eq(String.valueOf(owner))));
         return wherePhrase;
     }
 

@@ -10,12 +10,12 @@ ALTER TABLE "admin".t_question ADD CONSTRAINT t_question_un UNIQUE (code, owner)
 
 --вставка вопросов заинтересованности для МТР
 INSERT INTO "admin".t_question (id, name, order_no, actual_to, create_date, create_user, last_update_date, last_update_user, code, owner) VALUES
-(11003, 'Заинтересованы ли Вы в участии в закупке МТР в соответствии с предметом планируемой закупки и Техническим заданием?', 1, NULL, '2024-03-27 16:28:05.291', NULL, NULL, NULL, 'PARTICIPATION_INTEREST', 'INTEREST_REQUEST_MTR'),
-(12003, 'Имеется ли у Вас опыт поставки МТР в соответствии с предметом планируемой закупки и Техническим заданием?', 2, NULL, '2024-03-27 16:28:05.291', NULL, NULL, NULL, 'WORK_EXPERIENCE', 'INTEREST_REQUEST_MTR'),
-(13003, 'Готовы ли Вы предоставить Коммерческое предложение?', 3, NULL, '2024-03-27 16:28:05.291', NULL, NULL, NULL, 'SEND_OFFER', 'INTEREST_REQUEST_MTR');
+(11003, 'Заинтересованы ли Вы в участии в закупке МТР в соответствии с предметом планируемой закупки и Техническим заданием?', 1, NULL, '2024-03-27 16:28:05.291', NULL, NULL, NULL, 'PARTICIPATION_INTEREST', 'MATERIAL_INTEREST_REQUEST'),
+(12003, 'Имеется ли у Вас опыт поставки МТР в соответствии с предметом планируемой закупки и Техническим заданием?', 2, NULL, '2024-03-27 16:28:05.291', NULL, NULL, NULL, 'WORK_EXPERIENCE', 'MATERIAL_INTEREST_REQUEST'),
+(13003, 'Готовы ли Вы предоставить Коммерческое предложение?', 3, NULL, '2024-03-27 16:28:05.291', NULL, NULL, NULL, 'SEND_OFFER', 'MATERIAL_INTEREST_REQUEST');
 
 --изменение типа владельца
-UPDATE "admin".t_question SET owner = 'INTEREST_REQUEST_SERVICE' WHERE owner = 'SERVICE_PRODUCT';
+UPDATE "admin".t_question SET owner = 'SERVICE_INTEREST_REQUEST' WHERE owner = 'SERVICE_PRODUCT';
 
 -- вставка соответствующих ответов
 INSERT INTO "admin".t_answer_version (id, question_id, name, order_no, create_date, create_user, last_update_date, last_update_user, is_default, type) values

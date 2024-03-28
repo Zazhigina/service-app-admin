@@ -29,8 +29,11 @@ public class QuestionRepository {
 
     private Condition getConditionStandardQuestion(QuestionOwner owner) {
         Condition wherePhrase = DSL.noCondition();
-        if (owner != null)
-            wherePhrase = wherePhrase.and(QUESTION.OWNER.eq(owner.getCode()).or(QUESTION.OWNER.eq(String.valueOf(owner))));
+        if (owner != null){
+            //временное решение, после переноса убрать
+            String str = owner.equals(QuestionOwner.SERVICE_INTEREST_REQUEST)? "SERVICE_PRODUCT" : "";
+            wherePhrase = wherePhrase.and(QUESTION.OWNER.eq(String.valueOf(owner)).or(QUESTION.OWNER.eq(str)));
+        }
         return wherePhrase;
     }
 

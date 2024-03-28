@@ -18,7 +18,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.UUID;
 
@@ -53,7 +53,7 @@ public class EisContractsTask {
 
         AuthResponseDto authResponseDto = keycloakAuthClient.authenticate(scheduleTasksUserName, scheduleTasksPassword);
 
-        EISContractsUploadRequestDto uploadPeriod = new EISContractsUploadRequestDto(YearMonth.now().atDay(1).minusMonths(1), LocalDate.now());
+        EISContractsUploadRequestDto uploadPeriod = new EISContractsUploadRequestDto(YearMonth.now().atDay(1).minusMonths(1).atStartOfDay(), LocalDateTime.now());
 
         logger.info("Подготовка к запуску задания по приему закупочных процедур для репликации в целевую систему завершена. Период загрузки {} - {}",
                 uploadPeriod.getDownloadDateFrom(), uploadPeriod.getDownloadDateTo());

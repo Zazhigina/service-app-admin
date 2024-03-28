@@ -1,26 +1,26 @@
 package igc.mirror.task.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class EISContractsUploadRequestDto {
     /**
      * Дата начало периода загрузки
      */
-    private LocalDate downloadDateFrom;
+    private LocalDateTime downloadDateFrom;
     /**
      * Дата окончания периода загрузки
      */
-    private LocalDate downloadDateTo;
+    private LocalDateTime downloadDateTo;
 
-    public EISContractsUploadRequestDto(LocalDate downloadDateFrom, LocalDate downloadDateTo) {
+    public EISContractsUploadRequestDto(LocalDateTime downloadDateFrom, LocalDateTime downloadDateTo) {
         this.downloadDateFrom = downloadDateFrom;
         this.downloadDateTo = downloadDateTo;
     }
 
-    public LocalDate getDownloadDateFrom() {
+    public LocalDateTime getDownloadDateFrom() {
         return downloadDateFrom;
     }
-    public LocalDate getDownloadDateTo() {
+    public LocalDateTime getDownloadDateTo() {
         return downloadDateTo;
     }
 }

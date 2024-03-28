@@ -28,7 +28,7 @@ application:
       - key: KEYCLOAK_SUB_CA_URL
         value: https://nexus.dso.techpark.local/repository/local-repo/CA/sub-ca.pem
       - key: MIRROR_SCHEDULE_TASKS_CRON_REPLICATE_PROCEDURE_RECORDS
-        value: 0 0 1 4 * ?
+        value: 0 0 1 20 * ?
       - key: MIRROR_SCHEDULE_TASKS_CRON_SAVE_SEARCH_HISTORY
         value: 0 30 23 * * *
       - key: MIRROR_SCHEDULE_TASKS_CRON_NOTIFY_OFFER_END

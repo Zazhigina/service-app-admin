@@ -1,7 +1,7 @@
 package igc.mirror.question.ref;
 
 public enum QuestionOwner {
-    SERVICE_PRODUCT("SERVICE_PRODUCT"), MATERIAL("MATERIAL");
+    SERVICE_INTEREST_REQUEST("SERVICE_PRODUCT"), MATERIAL_INTEREST_REQUEST("MATERIAL");
 
     final String code;
 

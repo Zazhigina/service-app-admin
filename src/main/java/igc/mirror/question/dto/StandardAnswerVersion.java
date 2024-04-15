@@ -23,7 +23,7 @@ public class StandardAnswerVersion {
     /**
      * Вариант ответа выбран по умолчанию
      */
-    private boolean isDefault;
+    private Boolean isDefault;
 
     /**
      * Тип ответа
@@ -33,7 +33,7 @@ public class StandardAnswerVersion {
     public StandardAnswerVersion() {
     }
 
-    public StandardAnswerVersion(Long id, String name, Integer orderNo, boolean isDefault, AnswerType answerType) {
+    public StandardAnswerVersion(Long id, String name, Integer orderNo, Boolean isDefault, AnswerType answerType) {
         this.id = id;
         this.name = name;
         this.orderNo = orderNo;
@@ -41,7 +41,7 @@ public class StandardAnswerVersion {
         this.answerType = answerType;
     }
 
-    public StandardAnswerVersion(Long id, String name, Integer orderNo, boolean isDefault, String answerType) {
+    public StandardAnswerVersion(Long id, String name, Integer orderNo, Boolean isDefault, String answerType) {
         this.id = id;
         this.name = name;
         this.orderNo = orderNo;
@@ -74,11 +74,11 @@ public class StandardAnswerVersion {
     }
 
     @JsonProperty("isDefault")
-    public boolean isDefault() {
+    public Boolean isDefault() {
         return isDefault;
     }
 
-    public void setDefault(boolean isDefault) {
+    public void setDefault(Boolean isDefault) {
         this.isDefault = isDefault;
     }
 

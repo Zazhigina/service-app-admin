@@ -26,7 +26,7 @@ public class AnswerVersionDto {
     /**
      * Вариант ответа выбран по умолчанию
      */
-    private boolean isDefault;
+    private Boolean isDefault;
 
     /**
      * Тип ответа
@@ -36,14 +36,14 @@ public class AnswerVersionDto {
     public AnswerVersionDto() {
     }
 
-    public AnswerVersionDto(String name, Integer orderNo, boolean isDefault, AnswerType answerType) {
+    public AnswerVersionDto(String name, Integer orderNo, Boolean isDefault, AnswerType answerType) {
         this.name = name;
         this.orderNo = orderNo;
         this.isDefault = isDefault;
         this.answerType = answerType;
     }
 
-    public AnswerVersionDto(String name, Integer orderNo, boolean isDefault, String answerType) {
+    public AnswerVersionDto(String name, Integer orderNo, Boolean isDefault, String answerType) {
         this.name = name;
         this.orderNo = orderNo;
         this.isDefault = isDefault;
@@ -71,11 +71,11 @@ public class AnswerVersionDto {
     }
 
     @JsonProperty("isDefault")
-    public boolean isDefault() {
+    public Boolean isDefault() {
         return isDefault;
     }
 
-    public void setDefault(boolean isDefault) {
+    public void setDefault(Boolean isDefault) {
         this.isDefault = isDefault;
     }
 

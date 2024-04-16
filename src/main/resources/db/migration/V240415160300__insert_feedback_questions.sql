@@ -5,20 +5,20 @@ https://gitlab.inlinegroup-c.ru/mirror/backend/service-app-admin/-/issues/95
 
 --вставка вопросов для обратной связи инициатора, еп 
 INSERT INTO "admin".t_question (id, name, order_no, actual_to, create_date, create_user, last_update_date, last_update_user, code, owner) VALUES
-(31004, 'Как вы оцениваете функциональность интерфейса?', 1, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_FUNCTIONALITY', 'EP_INICIATOR_RATING'),
-(32004, 'Насколько легко вам было ориентироваться в интерфейсе?', 2, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_EASY_NAVIGATION', 'EP_INICIATOR_RATING'),
-(33004, 'Какое общее впечатление у вас сложилось о работе в интерфейсе?', 3, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_GENERAL_IMPRESSION', 'EP_INICIATOR_RATING'),
-(34004, 'Как быстро вам удалось рассчитать цену закупки в интерфейсе?', 4, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_QUICKLY_CALCULATE', 'EP_INICIATOR_RATING'),
+(31004, 'Как вы оцениваете функциональность интерфейса?', 1, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_FUNCTIONALITY', 'EP_INITIATOR_RATING'),
+(32004, 'Насколько легко вам было ориентироваться в интерфейсе?', 2, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_EASY_NAVIGATION', 'EP_INITIATOR_RATING'),
+(33004, 'Какое общее впечатление у вас сложилось о работе в интерфейсе?', 3, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_GENERAL_IMPRESSION', 'EP_INITIATOR_RATING'),
+(34004, 'Как быстро вам удалось рассчитать цену закупки в интерфейсе?', 4, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_QUICKLY_CALCULATE', 'EP_INITIATOR_RATING'),
 --вставка вопросов для обратной связи поставщика, еп
 (41004, 'Как вы оцениваете функциональность интерфейса?', 1, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_FUNCTIONALITY', 'EP_CONTRACTOR_RATING'),
 (42004, 'Насколько легко вам было ориентироваться в интерфейсе?', 2, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_EASY_NAVIGATION', 'EP_CONTRACTOR_RATING'),
 (43004, 'Какое общее впечатление у вас сложилось о работе в интерфейсе?', 3, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_GENERAL_IMPRESSION', 'EP_CONTRACTOR_RATING'),
 (44004, 'Как быстро вам удалось оформить коммерческое предложение в интерфейсе?', 4, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_QUICKLY_CALCULATE', 'EP_CONTRACTOR_RATING'),
 --вставка вопросов для обратной связи инициатора, ma 
-(51004, 'Как вы оцениваете функциональность интерфейса?', 1, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_FUNCTIONALITY', 'MA_INICIATOR_RATING'),
-(52004, 'Насколько легко вам было ориентироваться в интерфейсе?', 2, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_EASY_NAVIGATION', 'MA_INICIATOR_RATING'),
-(53004, 'Какое общее впечатление у вас сложилось о работе в интерфейсе?', 3, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_GENERAL_IMPRESSION', 'MA_INICIATOR_RATING'),
-(54004, 'Как быстро вам удалось выполнить поиск поставщиков в интерфейсе?', 4, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_QUICKLY_CALCULATE', 'MA_INICIATOR_RATING');
+(51004, 'Как вы оцениваете функциональность интерфейса?', 1, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_FUNCTIONALITY', 'MA_INITIATOR_RATING'),
+(52004, 'Насколько легко вам было ориентироваться в интерфейсе?', 2, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_EASY_NAVIGATION', 'MA_INITIATOR_RATING'),
+(53004, 'Какое общее впечатление у вас сложилось о работе в интерфейсе?', 3, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_GENERAL_IMPRESSION', 'MA_INITIATOR_RATING'),
+(54004, 'Как быстро вам удалось выполнить поиск поставщиков в интерфейсе?', 4, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_QUICKLY_CALCULATE', 'MA_INITIATOR_RATING');
 
 -- вставка соответствующих ответов
 INSERT INTO "admin".t_answer_version (id, question_id, name, order_no, create_date, create_user, last_update_date, last_update_user, is_default, type) values

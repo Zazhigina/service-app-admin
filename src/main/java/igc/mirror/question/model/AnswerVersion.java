@@ -25,7 +25,7 @@ public class AnswerVersion {
    /**
     * Вариант ответа выбран по умолчанию
     */
-   private boolean isDefault;
+   private Boolean isDefault;
 
    /**
     * Дата и время создания документа
@@ -54,7 +54,7 @@ public class AnswerVersion {
 
    public AnswerVersion() {}
 
-   public AnswerVersion(Long id, Long questionId, String name, Integer orderNo, boolean isDefault,
+   public AnswerVersion(Long id, Long questionId, String name, Integer orderNo, Boolean isDefault,
                         LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate,
                         String lastUpdateUser, AnswerType answerType) {
       this.id = id;
@@ -69,7 +69,7 @@ public class AnswerVersion {
       this.answerType = answerType;
    }
 
-   public AnswerVersion(Long id, Long questionId, String name, Integer orderNo, boolean isDefault,
+   public AnswerVersion(Long id, Long questionId, String name, Integer orderNo, Boolean isDefault,
                         LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate,
                         String lastUpdateUser, String answerType) {
       this.id = id;
@@ -116,11 +116,11 @@ public class AnswerVersion {
       this.orderNo = orderNo;
    }
 
-   public boolean isDefault() {
+   public Boolean isDefault() {
       return isDefault;
    }
 
-   public void setDefault(boolean isDefault) {
+   public void setDefault(Boolean isDefault) {
       this.isDefault = isDefault;
    }
 

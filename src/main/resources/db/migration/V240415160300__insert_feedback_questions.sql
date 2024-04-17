@@ -18,7 +18,9 @@ INSERT INTO "admin".t_question (id, name, order_no, actual_to, create_date, crea
 (51004, 'Как вы оцениваете функциональность интерфейса?', 1, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_FUNCTIONALITY', 'MA_INITIATOR_RATING'),
 (52004, 'Насколько легко вам было ориентироваться в интерфейсе?', 2, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_EASY_NAVIGATION', 'MA_INITIATOR_RATING'),
 (53004, 'Какое общее впечатление у вас сложилось о работе в интерфейсе?', 3, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_GENERAL_IMPRESSION', 'MA_INITIATOR_RATING'),
-(54004, 'Как быстро вам удалось выполнить поиск поставщиков в интерфейсе?', 4, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_QUICKLY_CALCULATE', 'MA_INITIATOR_RATING');
+(54004, 'Как быстро вам удалось выполнить поиск поставщиков в интерфейсе?', 4, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'INTERFACE_QUICKLY_CALCULATE', 'MA_INITIATOR_RATING'),
+--вставка вопроса для оценки результата поиска поставщика
+(61002, 'Как вы оцениваете результат поиска поставщиков?', 1, NULL, '2024-04-15 12:00:05.291', NULL, NULL, NULL, 'SEARCH_RESULT', 'MA_SEARCH_RESULT');
 
 -- вставка соответствующих ответов
 INSERT INTO "admin".t_answer_version (id, question_id, name, order_no, create_date, create_user, last_update_date, last_update_user, is_default, type) values
@@ -98,4 +100,8 @@ INSERT INTO "admin".t_answer_version (id, question_id, name, order_no, create_da
 (52544, 54004, 'Хотелось бы чуть быстрее', 2, '2024-04-15 12:00:05.291', NULL, NULL, NULL, NULL, 'LIGHT_GREEN'),
 (53544, 54004, 'Ничего впечатляющего', 3, '2024-04-15 12:00:05.291', NULL, NULL, NULL, NULL, 'YELLOW'), 
 (54544, 54004, 'Чуть быстрее черепахи', 4, '2024-04-15 12:00:05.291', NULL, NULL, NULL, NULL, 'ORANGE'),
-(55544, 54004, 'Поиск поставщиков занял у меня целую вечность!', 5, '2024-04-15 12:00:05.291', NULL, NULL, NULL, NULL, 'RED');
+(55544, 54004, 'Поиск поставщиков занял у меня целую вечность!', 5, '2024-04-15 12:00:05.291', NULL, NULL, NULL, NULL, 'RED'),
+
+(61612, 61002, 'Отлично!', 1, '2024-04-15 12:00:05.291', NULL, NULL, NULL, NULL, 'POSITIVE'),
+(62612, 61002, 'Не понравилось', 2, '2024-04-15 12:00:05.291', NULL, NULL, NULL, NULL, 'NEGATIVE')
+;

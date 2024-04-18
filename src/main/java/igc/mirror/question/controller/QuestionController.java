@@ -49,4 +49,10 @@ public class QuestionController {
     public List<StandardQuestion> findAllStandardQuestions(@PathVariable QuestionOwner owner) {
         return questionService.findAllStandardQuestions(owner);
     }
+
+    @GetMapping("/standard-question/{id}")
+    @Operation(summary = "Получить вопрос по идентификатору и список возможных ответов к нему")
+    public StandardQuestion findStandardQuestionById(@PathVariable Long id) {
+        return questionService.findStandardQuestionById(id);
+    }
 }

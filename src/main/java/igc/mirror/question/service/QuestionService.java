@@ -92,4 +92,14 @@ public class QuestionService {
         return questionRepository.findAllStandardQuestionsByOwner(owner)
                 .into(StandardQuestion.class);
     }
+
+    /**
+     * Получает вопрос и список ответов к нему по идентификатору
+     * @param id - идентификатор искомого вопроса
+     * @return - вопрос с ответами
+     */
+    public StandardQuestion findStandardQuestionById(Long id) {
+        logger.info("Поиск вопроса с идентификатором {} и возможных ответов для него", id);
+        return questionRepository.findStandardQuestionById(id);
+    }
 }

@@ -1,5 +1,6 @@
 package igc.mirror.question.repository;
 
+import igc.mirror.question.dto.StandardQuestion;
 import igc.mirror.question.model.Question;
 import igc.mirror.question.ref.QuestionOwner;
 import jooqdata.tables.TAnswerVersion;
@@ -69,6 +70,31 @@ public class QuestionRepository {
      */
     public Optional<Question> findQuestionById(Long id) {
         return dsl.fetchOptional(QUESTION, QUESTION.ID.eq(id)).map(r -> r.into(Question.class));
+    }
+
+    /**
+     * Поиск вопроса и его ответов по id
+     * @param id Идентификатор вопроса
+     * @return Вопрос с ответами
+     */
+    public StandardQuestion findStandardQuestionById(Long id) {
+        return dsl.select(QUESTION.ID,
+                        QUESTION.NAME,
+                        QUESTION.ORDER_NO,
+                        QUESTION.CODE,
+                        QUESTION.ACTUAL_TO,
+                        QUESTION.OWNER,
+                        multiset(
+                                select(ANSWER_VERSION.ID,
+                                        ANSWER_VERSION.NAME,
+                                        ANSWER_VERSION.ORDER_NO,
+                                        ANSWER_VERSION.IS_DEFAULT,
+                                        ANSWER_VERSION.TYPE.as("answerType"))
+                                        .from(ANSWER_VERSION)
+                                        .where(ANSWER_VERSION.QUESTION_ID.eq(QUESTION.ID))).as("answerVersions"))
+                .from(QUESTION)
+                .where(QUESTION.ID.equal(id))
+                .fetchAnyInto(StandardQuestion.class);
     }
 
     /**

@@ -3,11 +3,11 @@ package igc.mirror.question.ref;
 public enum AnswerType {
     POSITIVE("Положительный"),
     NEGATIVE("Отрицательный"),
-    GREEN("5"),
-    LIGHT_GREEN("4"),
-    YELLOW("3"),
-    ORANGE("2"),
-    RED("1"),
+    GREEN("5 баллов"),
+    LIGHT_GREEN("4 балла"),
+    YELLOW("3 балла"),
+    ORANGE("2 балла"),
+    RED("1 балл"),
     ANY("Другой");
 
     private String name;

@@ -50,7 +50,7 @@ public class QuestionController {
         return questionService.findAllStandardQuestions(owner);
     }
 
-    @GetMapping("/standard-question/{id}")
+    @GetMapping("/standard-question-by-id/{id}")
     @Operation(summary = "Получить вопрос по идентификатору и список возможных ответов к нему")
     public StandardQuestion findStandardQuestionById(@PathVariable Long id) {
         return questionService.findStandardQuestionById(id);

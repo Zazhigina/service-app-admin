@@ -6,6 +6,9 @@ public class SuccessInfo {
     private int status;
     private String message;
 
+    public SuccessInfo() {
+    }
+
     public SuccessInfo(String message) {
         this.status = HttpStatus.OK.value();
         this.message = message;

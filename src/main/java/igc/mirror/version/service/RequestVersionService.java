@@ -13,8 +13,6 @@ import igc.mirror.version.dto.RequestVersionProcessingStatus;
 import igc.mirror.version.dto.RequestVersionRating;
 import igc.mirror.version.filter.IncomingRequestVersionRatingSearchCriteria;
 import igc.mirror.version.filter.RequestVersionRatingSearchCriteria;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -28,8 +26,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class RequestVersionService {
-    static final Logger logger = LoggerFactory.getLogger(RequestVersionService.class);
-
     private final RemoteRequestVersionService remoteRequestVersionService;
     private final QuestionService questionService;
 
@@ -46,7 +42,7 @@ public class RequestVersionService {
      * @param pageable настройки пагинации
      * @return страница с данными
      */
-    @PreAuthorize("hasAuthority('CONFIG_VALUE.READ')")
+    @PreAuthorize("hasAuthority('APP_ADMIN.EXEC')")
     public Page<PreparedRequestVersionRatingDto> findRequestVersionRatingsByFilter(DataFilter<IncomingRequestVersionRatingSearchCriteria> filter, Pageable pageable) {
         //определение списка идентификаторов ответов по указанным типам ответов в исходных критериях поиска
         Map<Long, AnswerType> answerTypesByIds = findRequestVersionRatingAnswerIdsByTypes(filter.getSearchCriteria().getAnswerTypes());
@@ -95,7 +91,7 @@ public class RequestVersionService {
      * @param versionProcessingStatus данные для изменения статуса версии поиска
      * @return информация об успешном изменении
      */
-    @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
+    @PreAuthorize("hasAuthority('APP_ADMIN.EXEC')")
     public SuccessInfo changeRequestVersionProcessingStatus(RequestVersionProcessingStatus versionProcessingStatus) {
         return remoteRequestVersionService.changeRequestVersionProcessingStatus(versionProcessingStatus);
     }

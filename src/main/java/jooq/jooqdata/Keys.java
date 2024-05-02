@@ -6,6 +6,7 @@ package jooqdata;
 
 import jooqdata.tables.AParam;
 import jooqdata.tables.TAnswerVersion;
+import jooqdata.tables.TAppControl;
 import jooqdata.tables.TCalendarProduction;
 import jooqdata.tables.TCostRange;
 import jooqdata.tables.TFaqAnswer;
@@ -19,6 +20,7 @@ import jooqdata.tables.TServiceOfferType;
 import jooqdata.tables.TVariable;
 import jooqdata.tables.records.AParamRecord;
 import jooqdata.tables.records.TAnswerVersionRecord;
+import jooqdata.tables.records.TAppControlRecord;
 import jooqdata.tables.records.TCalendarProductionRecord;
 import jooqdata.tables.records.TCostRangeRecord;
 import jooqdata.tables.records.TFaqAnswerRecord;
@@ -51,6 +53,7 @@ public class Keys {
 
     public static final UniqueKey<AParamRecord> A_PARAM_PK = Internal.createUniqueKey(AParam.A_PARAM, DSL.name("a_param_pk"), new TableField[] { AParam.A_PARAM.KEY }, true);
     public static final UniqueKey<TAnswerVersionRecord> T_ANSWER_VERSION_PK = Internal.createUniqueKey(TAnswerVersion.T_ANSWER_VERSION, DSL.name("t_answer_version_pk"), new TableField[] { TAnswerVersion.T_ANSWER_VERSION.ID }, true);
+    public static final UniqueKey<TAppControlRecord> T_APP_CONTROL_PKEY = Internal.createUniqueKey(TAppControl.T_APP_CONTROL, DSL.name("t_app_control_pkey"), new TableField[] { TAppControl.T_APP_CONTROL.NAME }, true);
     public static final UniqueKey<TCalendarProductionRecord> T_CALENDAR_PRODUCTION_PK = Internal.createUniqueKey(TCalendarProduction.T_CALENDAR_PRODUCTION, DSL.name("t_calendar_production_pk"), new TableField[] { TCalendarProduction.T_CALENDAR_PRODUCTION.ID }, true);
     public static final UniqueKey<TCalendarProductionRecord> T_CALENDAR_PRODUCTION_UN = Internal.createUniqueKey(TCalendarProduction.T_CALENDAR_PRODUCTION, DSL.name("t_calendar_production_un"), new TableField[] { TCalendarProduction.T_CALENDAR_PRODUCTION.YEAR }, true);
     public static final UniqueKey<TCostRangeRecord> T_COST_RANGE_PK = Internal.createUniqueKey(TCostRange.T_COST_RANGE, DSL.name("t_cost_range_pk"), new TableField[] { TCostRange.T_COST_RANGE.ID }, true);

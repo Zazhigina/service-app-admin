@@ -6,6 +6,7 @@ package jooqdata;
 
 import jooqdata.tables.AParam;
 import jooqdata.tables.TAnswerVersion;
+import jooqdata.tables.TAppControl;
 import jooqdata.tables.TCalendarProduction;
 import jooqdata.tables.TCostRange;
 import jooqdata.tables.TFaqAnswer;
@@ -34,6 +35,11 @@ public class Tables {
      * Вариант ответа на вопрос
      */
     public static final TAnswerVersion T_ANSWER_VERSION = TAnswerVersion.T_ANSWER_VERSION;
+
+    /**
+     * Управление сервисами(заглушка)
+     */
+    public static final TAppControl T_APP_CONTROL = TAppControl.T_APP_CONTROL;
 
     /**
      * Производственный календарь

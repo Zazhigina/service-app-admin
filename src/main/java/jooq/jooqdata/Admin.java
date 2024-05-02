@@ -9,6 +9,7 @@ import java.util.List;
 
 import jooqdata.tables.AParam;
 import jooqdata.tables.TAnswerVersion;
+import jooqdata.tables.TAppControl;
 import jooqdata.tables.TCalendarProduction;
 import jooqdata.tables.TCostRange;
 import jooqdata.tables.TFaqAnswer;
@@ -49,6 +50,11 @@ public class Admin extends SchemaImpl {
      * Вариант ответа на вопрос
      */
     public final TAnswerVersion T_ANSWER_VERSION = TAnswerVersion.T_ANSWER_VERSION;
+
+    /**
+     * Управление сервисами(заглушка)
+     */
+    public final TAppControl T_APP_CONTROL = TAppControl.T_APP_CONTROL;
 
     /**
      * Производственный календарь
@@ -130,6 +136,7 @@ public class Admin extends SchemaImpl {
         return Arrays.asList(
             AParam.A_PARAM,
             TAnswerVersion.T_ANSWER_VERSION,
+            TAppControl.T_APP_CONTROL,
             TCalendarProduction.T_CALENDAR_PRODUCTION,
             TCostRange.T_COST_RANGE,
             TFaqAnswer.T_FAQ_ANSWER,

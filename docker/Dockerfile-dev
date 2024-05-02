@@ -39,7 +39,7 @@ RUN JKS_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) \
 
 RUN java -Djarmode=layertools -jar $BUILD_APP_DIR/build/libs/root.jar extract
 #
-FROM $RH_IMAGE_REPOSITORY/ubi9/openjdk-17-runtime:1.18-1
+FROM $RH_IMAGE_REPOSITORY/ubi9/openjdk-17-runtime:1.18-3
 ARG BUILD_APP_DIR
 ARG UID=1001
 ARG UBI9_REPO_URL
@@ -48,19 +48,19 @@ ARG UBI9_REPO_URL_SUB_CA
 
 ENV TZ Europe/Moscow
 
-USER root
-# update Important packages
-RUN if [ -n "$UBI9_REPO_URL" ]; then \
-       curl -k -s $UBI9_REPO_URL_CA --output /etc/pki/ca-trust/source/anchors/root-ca-gazprom-neft.pem; \
-       curl -k -s $UBI9_REPO_URL_SUB_CA --output /etc/pki/ca-trust/source/anchors/sub-ca-gazprom-neft.pem; \
-       update-ca-trust; \
-       rm -rf /etc/yum.repos.d/ubi.repo; \
-       curl -k $UBI9_REPO_URL --output /etc/yum.repos.d/ubi.repo; \
-    fi; \
-    microdnf --setopt=tsflags=nodocs install -y \
-    curl-minimal-7.76.1-26.el9_3.3 libcurl-minimal-7.76.1-26.el9_3.3 expat-2.5.0-1.el9_3.1 && \
-    microdnf clean all && \
-    rm -rf /var/cache/yum
+# USER root
+# # update Important packages
+# RUN if [ -n "$UBI9_REPO_URL" ]; then \
+#        curl -k -s $UBI9_REPO_URL_CA --output /etc/pki/ca-trust/source/anchors/root-ca-gazprom-neft.pem; \
+#        curl -k -s $UBI9_REPO_URL_SUB_CA --output /etc/pki/ca-trust/source/anchors/sub-ca-gazprom-neft.pem; \
+#        update-ca-trust; \
+#        rm -rf /etc/yum.repos.d/ubi.repo; \
+#        curl -k $UBI9_REPO_URL --output /etc/yum.repos.d/ubi.repo; \
+#     fi; \
+#     microdnf --setopt=tsflags=nodocs install -y \
+#     curl-minimal-7.76.1-26.el9_3.3 libcurl-minimal-7.76.1-26.el9_3.3 expat-2.5.0-1.el9_3.1 && \
+#     microdnf clean all && \
+#     rm -rf /var/cache/yum
 
 # Set permissions so that the container runs without root access
 USER 0

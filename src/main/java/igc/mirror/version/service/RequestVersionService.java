@@ -112,13 +112,6 @@ public class RequestVersionService {
      */
     @PreAuthorize("hasAuthority('APP_ADMIN.EXEC')")
     public ResponseEntity<Resource> getExcelReportRequestContractorVersion(Long requestVersionId) {
-        Resource resource = remoteRequestVersionService.getExcelReportRequestContractorVersion(requestVersionId);
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(XLSX_MEDIA_TYPE))
-                .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment()
-                        .filename(REQUEST_CONTRACTOR_VERSION_FILENAME, StandardCharsets.UTF_8)
-                        .build().toString())
-                .body(resource);
+        return remoteRequestVersionService.getExcelReportRequestContractorVersion(requestVersionId);
     }
 }

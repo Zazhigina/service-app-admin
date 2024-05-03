@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyExtractors;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -131,7 +132,7 @@ public class RemoteRequestVersionService {
      * @param requestVersionId, идентификатор версии поиска
      * @return файл excel "Перечень найденных поставщиков"
      */
-    public Resource getExcelReportRequestContractorVersion(Long requestVersionId) {
+    public ResponseEntity<Resource> getExcelReportRequestContractorVersion(Long requestVersionId) {
         logger.info("Выгрузка отчета \"Перечень найденных поставщиков\" для версии поиска {} в excel. Вызов сервиса REPORT", requestVersionId);
 
         String uri = String.join("/", REQUEST_VERSION_SERVICE, "version", String.valueOf(requestVersionId), "contractor");
@@ -149,7 +150,8 @@ public class RemoteRequestVersionService {
                 .onStatus(
                         HttpStatusCode::is5xxServerError,
                         response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не доступен", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
-                .bodyToMono(Resource.class)
+                .toEntity(new ParameterizedTypeReference<Resource>() {
+                })
                 .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
                 .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance),
                         throwable -> new RemoteServiceCallException("Ошибка обработки данных при получении ответа", HttpStatus.BAD_REQUEST, uri, throwable.getMessage()))

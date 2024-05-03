@@ -9,6 +9,7 @@ import igc.mirror.version.service.RequestVersionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -37,5 +38,11 @@ public class RequestVersionController {
     @PutMapping(path = "/version/processing-status")
     public ResponseEntity<SuccessInfo> changeRequestVersionProcessingStatus(@RequestBody RequestVersionProcessingStatus versionProcessingStatus) {
         return new ResponseEntity<>(requestVersionService.changeRequestVersionProcessingStatus(versionProcessingStatus), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Перечень найденных поставщиков по версии поиска")
+    @PostMapping(path = "/version/{requestVersionId}/contractor")
+    public ResponseEntity<Resource> getExcelReportRequestContractorVersion(@PathVariable Long requestVersionId) {
+        return requestVersionService.getExcelReportRequestContractorVersion(requestVersionId);
     }
 }

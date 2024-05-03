@@ -16,6 +16,7 @@ import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -36,12 +37,17 @@ public class RemoteRequestVersionService {
     @Value("${mirror.application.user-agent}")
     private String userAgent;
     private final UserDetails userDetails;
-    private final WebClient webClient;
+    private final WebClient webClientMa;
+    private final WebClient webClientReport;
     private final WebServiceUtil webServiceUtil;
 
-    public RemoteRequestVersionService(UserDetails userDetails, @Qualifier("ma") WebClient webClient, WebServiceUtil webServiceUtil) {
+    public RemoteRequestVersionService(UserDetails userDetails,
+                                       @Qualifier("ma") WebClient webClientMa,
+                                       @Qualifier("report") WebClient webClientReport,
+                                       WebServiceUtil webServiceUtil) {
         this.userDetails = userDetails;
-        this.webClient = webClient;
+        this.webClientMa = webClientMa;
+        this.webClientReport = webClientReport;
         this.webServiceUtil = webServiceUtil;
     }
 
@@ -60,7 +66,7 @@ public class RemoteRequestVersionService {
         String uri = String.join("/", REQUEST_VERSION_SERVICE, "/version-rating/filter");
         String urlTemplate = webServiceUtil.buildUriByPageableProperties(uri, pageable);
 
-        return webClient
+        return webClientMa
                 .post()
                 .uri(urlTemplate)
                 .header(HttpHeaders.USER_AGENT, userAgent)
@@ -96,7 +102,7 @@ public class RemoteRequestVersionService {
 
         String uri = String.join("/", REQUEST_VERSION_SERVICE, "version/processing-status");
 
-        return webClient
+        return webClientMa
                 .put()
                 .uri(uri)
                 .header(HttpHeaders.USER_AGENT, userAgent)
@@ -111,6 +117,39 @@ public class RemoteRequestVersionService {
                         HttpStatusCode::is5xxServerError,
                         response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не доступен", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
                 .bodyToMono(SuccessInfo.class)
+                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
+                .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance),
+                        throwable -> new RemoteServiceCallException("Ошибка обработки данных при получении ответа", HttpStatus.BAD_REQUEST, uri, throwable.getMessage()))
+                .doOnError(err -> logger.error("Ошибка получения данных удаленного сервиса - {}", err.getMessage()))
+                .log()
+                .block();
+    }
+
+    /**
+     * Выгрузка отчета "Перечень найденных поставщиков" для версии поиска в excel
+     *
+     * @param requestVersionId, идентификатор версии поиска
+     * @return файл excel "Перечень найденных поставщиков"
+     */
+    public Resource getExcelReportRequestContractorVersion(Long requestVersionId) {
+        logger.info("Выгрузка отчета \"Перечень найденных поставщиков\" для версии поиска {} в excel. Вызов сервиса REPORT", requestVersionId);
+
+        String uri = String.join("/", REQUEST_VERSION_SERVICE, "version", String.valueOf(requestVersionId), "contractor");
+
+        return webClientReport
+                .post()
+                .uri(uri)
+                .header(HttpHeaders.USER_AGENT, userAgent)
+                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", userDetails.getJwtTokenValue()))
+                .retrieve()
+                .onStatus(
+                        HttpStatusCode::is4xxClientError,
+                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не найден", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
+                .onStatus(
+                        HttpStatusCode::is5xxServerError,
+                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не доступен", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
+                .bodyToMono(Resource.class)
                 .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
                 .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance),
                         throwable -> new RemoteServiceCallException("Ошибка обработки данных при получении ответа", HttpStatus.BAD_REQUEST, uri, throwable.getMessage()))

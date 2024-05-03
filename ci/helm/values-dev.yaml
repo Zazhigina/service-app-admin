@@ -17,6 +17,8 @@ application:
         value: http://service-app-ep.tzriu:8080
       - key: MIRROR_ENDPOINT_NSI
         value: http://service-app-nsi.tzriu:8080
+      - key: MIRROR_ENDPOINT_REPORT
+        value: http://service-app-report.tzriu:8080
       - key: MIRROR_KEYCLOAK_BASE_URL
         value: http://localhost
       - key: MIRROR_KEYCLOAK_REALM

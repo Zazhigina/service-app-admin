@@ -19,6 +19,8 @@ application:
         value: http://service-app-ep.tzriu:8080
       - key: MIRROR_ENDPOINT_NSI
         value: http://service-app-nsi.tzriu:8080
+      - key: MIRROR_ENDPOINT_REPORT
+        value: http://service-app-report.tzriu:8080
       - key: MIRROR_KEYCLOAK_BASE_URL
         value: https://sso-apps-745.apps.test.gazprom-neft.local/auth
       - key: MIRROR_KEYCLOAK_REALM

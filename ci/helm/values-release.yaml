@@ -25,6 +25,8 @@ application:
         value: http://service-app-ep.mirror-release:8080
       - key: MIRROR_ENDPOINT_NSI
         value: http://service-app-nsi.mirror-release:8080
+      - key: MIRROR_ENDPOINT_REPORT
+        value: http://service-app-report.mirror-release:8080
       - key: MIRROR_KEYCLOAK_BASE_URL
         value: https://keycloak-dev.inlinegroup-c.ru
       - key: MIRROR_KEYCLOAK_REALM

@@ -35,6 +35,9 @@ public class WebClientConfig {
     @Value("${mirror.endpoint.nsi}")
     private String nsiUrl;
 
+    @Value("${mirror.endpoint.report}")
+    private String reportUrl;
+
     @Bean("rbac")
     public WebClient webClientRbac(){
         HttpClient httpClient = HttpClient.create();
@@ -99,6 +102,15 @@ public class WebClientConfig {
         HttpClient httpClient = HttpClient.create();
         return WebClient.builder()
                 .baseUrl(nsiUrl)
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
+    }
+
+    @Bean("report")
+    public WebClient webClientReport() {
+        HttpClient httpClient = HttpClient.create();
+        return WebClient.builder()
+                .baseUrl(reportUrl)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }

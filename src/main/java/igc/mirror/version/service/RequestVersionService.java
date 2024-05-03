@@ -13,19 +13,27 @@ import igc.mirror.version.dto.RequestVersionProcessingStatus;
 import igc.mirror.version.dto.RequestVersionRating;
 import igc.mirror.version.filter.IncomingRequestVersionRatingSearchCriteria;
 import igc.mirror.version.filter.RequestVersionRatingSearchCriteria;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class RequestVersionService {
+    private static final String XLSX_MEDIA_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    private static final String REQUEST_CONTRACTOR_VERSION_FILENAME = "RequestContractorVersion.xlsx";
     private final RemoteRequestVersionService remoteRequestVersionService;
     private final QuestionService questionService;
 
@@ -94,5 +102,23 @@ public class RequestVersionService {
     @PreAuthorize("hasAuthority('APP_ADMIN.EXEC')")
     public SuccessInfo changeRequestVersionProcessingStatus(RequestVersionProcessingStatus versionProcessingStatus) {
         return remoteRequestVersionService.changeRequestVersionProcessingStatus(versionProcessingStatus);
+    }
+
+    /**
+     * Выгрузка отчета "Перечень найденных поставщиков" для версии поиска в excel
+     *
+     * @param requestVersionId, идентификатор версии поиска
+     * @return файл excel "Перечень найденных поставщиков"
+     */
+    @PreAuthorize("hasAuthority('APP_ADMIN.EXEC')")
+    public ResponseEntity<Resource> getExcelReportRequestContractorVersion(Long requestVersionId) {
+        Resource resource = remoteRequestVersionService.getExcelReportRequestContractorVersion(requestVersionId);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(XLSX_MEDIA_TYPE))
+                .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment()
+                        .filename(REQUEST_CONTRACTOR_VERSION_FILENAME, StandardCharsets.UTF_8)
+                        .build().toString())
+                .body(resource);
     }
 }

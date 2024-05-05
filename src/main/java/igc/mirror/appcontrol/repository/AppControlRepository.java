@@ -1,6 +1,7 @@
 package igc.mirror.appcontrol.repository;
 
 import igc.mirror.appcontrol.dto.AppControlDto;
+import igc.mirror.appcontrol.dto.AppControlEnabledAllDto;
 import igc.mirror.exception.common.EntityNotFoundException;
 import jooqdata.tables.TAppControl;
 import org.jooq.Condition;
@@ -8,7 +9,6 @@ import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -57,6 +57,14 @@ public class AppControlRepository {
                 .fetchOptional()
                 .map(r -> r.into(AppControlDto.class))
                 .orElseThrow(() -> new EntityNotFoundException(null, AppControlDto.class));
+    }
+
+    public List<AppControlDto> setEnabledAll(AppControlEnabledAllDto enabledAllDto, String user) {
+        return dsl.update(TAppControl.T_APP_CONTROL)
+                .set(TAppControl.T_APP_CONTROL.ENABLED, enabledAllDto.getEnabled())
+                .set(TAppControl.T_APP_CONTROL.LAST_UPDATE_USER, user)
+                .returningResult(TAppControl.T_APP_CONTROL.fields())
+                .fetchInto(AppControlDto.class);
     }
 
 }

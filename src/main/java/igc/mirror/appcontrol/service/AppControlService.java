@@ -1,5 +1,6 @@
 package igc.mirror.appcontrol.service;
 
+import igc.mirror.appcontrol.dto.AppControlEnabledAllDto;
 import igc.mirror.auth.UserDetails;
 import igc.mirror.appcontrol.dto.AppControlDto;
 import igc.mirror.appcontrol.dto.AppControlEditableDto;
@@ -20,14 +21,11 @@ import java.util.List;
 @Validated
 public class AppControlService {
     static final Logger logger = LoggerFactory.getLogger(AppControlService.class);
-    private final UserDetails userDetails;
-    private final AppControlRepository appControlRepository;
     @Autowired
-    public AppControlService(AppControlRepository appControlRepository,
-                             UserDetails userDetails) {
-        this.appControlRepository = appControlRepository;
-        this.userDetails = userDetails;
-    }
+    AppControlRepository appControlRepository;
+    @Autowired
+    private UserDetails userDetails;
+
 
     /**
      * Находит сервисы по названию сервиса
@@ -59,5 +57,17 @@ public class AppControlService {
         changeAppControl.setLastUpdateUser(userDetails.getUsername());
 
         return appControlRepository.save(changeAppControl);
+    }
+
+    /**
+     * Изменяет enabled всех сервисов
+     *
+     * @param enabledAllDto название сервиса
+     * @return список сервисов
+     */
+    @Transactional
+    public List<AppControlDto> setAppControlEnabledAll(@Valid AppControlEnabledAllDto enabledAllDto) {
+        logger.info("Изменение enabled всех сервисов - {}", enabledAllDto.getEnabled());
+        return appControlRepository.setEnabledAll(enabledAllDto, userDetails.getUsername());
     }
 }

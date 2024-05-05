@@ -4,6 +4,7 @@ package igc.mirror.appcontrol.controller;
 import igc.mirror.appcontrol.dto.AppControlDto;
 
 import igc.mirror.appcontrol.dto.AppControlEditableDto;
+import igc.mirror.appcontrol.dto.AppControlEnabledAllDto;
 import igc.mirror.appcontrol.service.AppControlService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -22,7 +23,7 @@ import java.util.List;
 public class AppControlController {
 
     @Autowired
-    private AppControlService appControlService;
+    AppControlService appControlService;
 
     @GetMapping("/appservice")
     @Operation(summary = "Получение списка сервисов")
@@ -36,5 +37,12 @@ public class AppControlController {
     @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
     public ResponseEntity<AppControlDto> editAppControl(@PathVariable String name, @RequestBody AppControlEditableDto appControlEditableDto) {
         return ResponseEntity.ok(appControlService.changeAppControl(name, appControlEditableDto));
+    }
+
+    @PutMapping("/appservice/setenabled")
+    @Operation(summary = "Изменение enabled всех сервисов")
+    @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
+    public List<AppControlDto> setAppControlEnabledAll(@RequestBody AppControlEnabledAllDto appControlEnabledAllDto) {
+        return appControlService.setAppControlEnabledAll(appControlEnabledAllDto);
     }
 }

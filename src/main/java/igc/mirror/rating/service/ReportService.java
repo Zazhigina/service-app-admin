@@ -2,6 +2,7 @@ package igc.mirror.rating.service;
 
 import igc.mirror.auth.UserDetails;
 import igc.mirror.config.LoggingConstants;
+import igc.mirror.exception.common.EntityNotFoundException;
 import igc.mirror.exception.common.RemoteServiceCallException;
 import igc.mirror.version.service.RemoteRequestVersionService;
 import org.slf4j.Logger;
@@ -62,15 +63,19 @@ public class ReportService {
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", userDetails.getJwtTokenValue()))
                 .retrieve()
                 .onStatus(
+                        HttpStatus.NO_CONTENT::equals,
+                        response -> Mono.error(new EntityNotFoundException("Нет данных для формирования отчета по обратной связи", null, ReportService.class)))
+                .onStatus(
                         HttpStatusCode::is4xxClientError,
                         response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не найден", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
                 .onStatus(
                         HttpStatusCode::is5xxServerError,
                         response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не доступен", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
+
                 .toEntity(new ParameterizedTypeReference<Resource>() {
                 })
                 .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
-                .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance),
+                .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance).and(Predicate.not(EntityNotFoundException.class::isInstance)),
                         throwable -> new RemoteServiceCallException("Ошибка обработки данных при получении ответа", HttpStatus.BAD_REQUEST, uri, throwable.getMessage()))
                 .doOnError(err -> logger.error("Ошибка получения данных удаленного сервиса - {}", err.getMessage()))
                 .log()

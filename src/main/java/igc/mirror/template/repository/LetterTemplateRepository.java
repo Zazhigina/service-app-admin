@@ -26,7 +26,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static org.jooq.impl.DSL.select;
+import static org.jooq.impl.DSL.*;
 
 @Repository
 public class LetterTemplateRepository implements JooqCommonRepository<LetterTemplate, Long> {
@@ -169,6 +169,14 @@ public class LetterTemplateRepository implements JooqCommonRepository<LetterTemp
 
             if(criteria.getStatus() != null)
                 condition = condition.and(TLetterTemplate.T_LETTER_TEMPLATE.STATUS.eq(criteria.getStatus().name()));
+
+
+            if (criteria.getLetterTypeLikeList() != null) {
+                condition = condition.and(TLetterTemplate.T_LETTER_TEMPLATE.LETTER_TYPE.like(any(array(
+                        criteria.getLetterTypeLikeList().stream().map(v -> criteria.getLikePattern(v))
+                                .toArray(String[]::new)
+                ))));
+            }
         }
 
         return

@@ -55,7 +55,10 @@ public class FaqService {
 
         letterTemplateSearchCriteria.setLetterTemplateType(LetterTemplateType.DOCUMENT);
         letterTemplateSearchCriteria.setStatus(TemplateStatus.ACTUAL);
-        letterTemplateSearchCriteria.setLetterType(String.format("%s_USER_GUIDE", mirrorService != null ? mirrorService.name() : ""));
+        letterTemplateSearchCriteria.setLetterTypeLikeList(List.of(
+                String.format("%s_USER_GUIDE", mirrorService != null ? mirrorService.name() : ""),
+                String.format("%s_PARTNER_GUIDE", mirrorService != null ? mirrorService.name() : "")
+        ));
 
         var userGuideTemplates = letterTemplateRepository.findByFilters(new DataFilter<>(letterTemplateSearchCriteria, null));
         var userGuideTemplateDocIds = userGuideTemplates.stream()

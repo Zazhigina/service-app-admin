@@ -24,6 +24,8 @@ application:
         value: http://service-app-nsi.mirror-demo:8080
       - key: MIRROR_ENDPOINT_REPORT
         value: http://service-app-report.mirror-demo:8080
+      - key: MIRROR_ENDPOINT_CHAT
+        value: http://service-app-chat.mirror-demo:8080
       - key: MIRROR_KEYCLOAK_BASE_URL
         value: https://effect-authn.inlinegroup-c.ru
       - key: MIRROR_KEYCLOAK_REALM

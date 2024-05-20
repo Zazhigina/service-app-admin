@@ -13,15 +13,14 @@ import igc.mirror.utils.qfilter.QueryFilter;
 import jakarta.annotation.PostConstruct;
 import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
-import org.jooq.Condition;
-import org.jooq.DSLContext;
+import org.jooq.*;
 import org.jooq.Record;
-import org.jooq.Select;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -80,6 +79,11 @@ public class LetterTemplateRepository implements JooqCommonRepository<LetterTemp
         return new PageImpl<>(letterTemplateList, pageable, total);
     }
 
+    @Override
+    public List<LetterTemplate> findByFilters(DataFilter<?> dataFilter) {
+        return findByFilters(dataFilter, Sort.unsorted());
+    }
+
     public List<LetterTemplateBriefInfoDto> findTemplates(DataFilter<LetterTemplateSearchCriteria> dataFilter, Pageable pageable) {
         LetterTemplateSearchCriteria criteria = (dataFilter != null ? dataFilter.getSearchCriteria() : null);
         QueryFilter subFilter = (dataFilter != null ? dataFilter.getSubFilter() : null);
@@ -88,11 +92,10 @@ public class LetterTemplateRepository implements JooqCommonRepository<LetterTemp
                 .into(LetterTemplateBriefInfoDto.class);
     }
 
-    @Override
-    public List<LetterTemplate> findByFilters(DataFilter<?> dataFilter) {
+    public List<LetterTemplate> findByFilters(DataFilter<?> dataFilter, Sort sort) {
         LetterTemplateSearchCriteria criteria = (dataFilter != null ? (LetterTemplateSearchCriteria) dataFilter.getSearchCriteria() : null);
 
-        List<LetterTemplate> letterTemplateList = dsl.fetch(QueryBuilder.buildQuery(initLetterTemplateQuery(criteria), dataFilter.getSubFilter()))
+        List<LetterTemplate> letterTemplateList = dsl.fetch(QueryBuilder.buildQuery(initLetterTemplateQuery(criteria, sort), dataFilter.getSubFilter()))
                 .into(LetterTemplate.class);
 
         return letterTemplateList;
@@ -150,6 +153,14 @@ public class LetterTemplateRepository implements JooqCommonRepository<LetterTemp
                         .fetchOptional()
                         .orElseThrow(() -> new EntityNotFoundException(null, LetterTemplate.class))
                         .into(LetterTemplate.class);
+    }
+
+    private Select<? extends Record> initLetterTemplateQuery(LetterTemplateSearchCriteria criteria, Sort pageableSort) {
+        var jooqOrders = QueryBuilder.buildSortList(TLetterTemplate.T_LETTER_TEMPLATE, pageableSort);
+
+        SelectConditionStep<? extends Record> query = (SelectConditionStep<? extends Record>) initLetterTemplateQuery(criteria);
+        return query
+                .orderBy(jooqOrders);
     }
 
     private Select<? extends Record> initLetterTemplateQuery(LetterTemplateSearchCriteria criteria) {

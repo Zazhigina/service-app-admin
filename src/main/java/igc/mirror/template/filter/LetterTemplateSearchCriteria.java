@@ -5,12 +5,16 @@ import igc.mirror.template.ref.LetterTemplateType;
 import igc.mirror.template.ref.TemplateStatus;
 import igc.mirror.utils.qfilter.SearchCriteria;
 
+import java.util.List;
+
 public class LetterTemplateSearchCriteria extends SearchCriteria {
     private String letterType;
     private String title;
     private LetterTemplateType letterTemplateType;
     @JsonIgnore
     private TemplateStatus status;
+    @JsonIgnore
+    private List<String> letterTypeLikeList;
 
     public LetterTemplateSearchCriteria() {}
     public LetterTemplateSearchCriteria(String letterType, String title) {
@@ -48,5 +52,13 @@ public class LetterTemplateSearchCriteria extends SearchCriteria {
 
     public void setStatus(TemplateStatus status) {
         this.status = status;
+    }
+
+    public List<String> getLetterTypeLikeList() {
+        return letterTypeLikeList;
+    }
+
+    public void setLetterTypeLikeList(List<String> letterTypeLikeList) {
+        this.letterTypeLikeList = letterTypeLikeList;
     }
 }

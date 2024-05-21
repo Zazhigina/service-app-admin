@@ -75,6 +75,7 @@ mirror:
     ep: ${MIRROR_ENDPOINT_EP}
     nsi: ${MIRROR_ENDPOINT_NSI}
     report: ${MIRROR_ENDPOINT_REPORT}
+    chat: ${MIRROR_ENDPOINT_CHAT}
   application:
     user-agent: ${SPRING_APPLICATION_NAME}/${APPLICATION_VERSION}
   keycloak:

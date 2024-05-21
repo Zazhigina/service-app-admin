@@ -45,6 +45,10 @@ public class RemoteParamService {
     private WebClient webClientEp;
 
     @Autowired
+    @Qualifier("chat")
+    private WebClient webClientChat;
+
+    @Autowired
     private UserDetails userDetails;
 
     public void clearMaParameterCache() {
@@ -92,6 +96,30 @@ public class RemoteParamService {
                 .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
                 .doOnError(err -> logger.error("Ошибка запуска удаленного сервиса {} - {}", uri, err.getMessage()))
                 .doOnSuccess(success -> logger.info("Обновление кеша ma завершено."))
+                .subscribe();
+    }
+
+    public void clearChatParameterCache() {
+
+        logger.info("Сброс кеша параметров приложения chat");
+
+        String uri = String.join("/", "", "param/cache");
+
+        webClientChat
+                .delete()
+                .uri(uri)
+                .header(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                .header(HttpHeaders.USER_AGENT, userAgent)
+                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", userDetails.getJwtTokenValue()))
+                .accept(MediaType.APPLICATION_JSON)
+                .acceptCharset(StandardCharsets.UTF_8)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .log()
+                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
+                .doOnError(err -> logger.error("Ошибка запуска удаленного сервиса {} - {}", uri, err.getMessage()))
+                .doOnSuccess(success -> logger.info("Обновление кеша chat завершено."))
                 .subscribe();
     }
 }

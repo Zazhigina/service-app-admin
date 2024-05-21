@@ -69,6 +69,8 @@ public class ParamRestController {
         String message = "Задание на очистку кеша параметров передано в приложение ma";
         remoteParamService.clearEpParameterCache();
         message = message + ", ep";
+        remoteParamService.clearChatParameterCache();
+        message = message + ", chat";
         return ResponseEntity.ok(message);
     }
 }

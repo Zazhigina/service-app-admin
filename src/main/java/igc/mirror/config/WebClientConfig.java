@@ -38,6 +38,9 @@ public class WebClientConfig {
     @Value("${mirror.endpoint.report}")
     private String reportUrl;
 
+    @Value("${mirror.endpoint.chat}")
+    private String chatUrl;
+
     @Bean("rbac")
     public WebClient webClientRbac(){
         HttpClient httpClient = HttpClient.create();
@@ -111,6 +114,15 @@ public class WebClientConfig {
         HttpClient httpClient = HttpClient.create();
         return WebClient.builder()
                 .baseUrl(reportUrl)
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
+    }
+
+    @Bean("chat")
+    public WebClient webClientChat() {
+        HttpClient httpClient = HttpClient.create();
+        return WebClient.builder()
+                .baseUrl(chatUrl)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }

@@ -23,6 +23,10 @@ application:
         value: http://service-app-report.tzriu:8080
       - key: MIRROR_ENDPOINT_CHAT
         value: http://service-app-chat.tzriu:8080
+      - key: MIRROR_ENDPOINT_USER_PROFILE
+        value: http://service-app-userprofile.tzriu:8080
+      - key: MIRROR_ENDPOINT_NOTIFICATION
+        value: http://service-app-notification.tzriu:8080
       - key: MIRROR_KEYCLOAK_BASE_URL
         value: https://sso-apps-745.apps.test.gazprom-neft.local/auth
       - key: MIRROR_KEYCLOAK_REALM
@@ -41,6 +45,8 @@ application:
         value: 0 0 9 * * *
       - key: MIRROR_SCHEDULE_TASKS_CRON_CHANGE_STATUS_OFFER_END
         value: 0 1 0 * * *
+      - key: MIRROR_SCHEDULE_TASKS_CRON_NOTIFICATION_PROCESS
+        value: 0 0 1 * * *
     secret:
       - key: SPRING_DATASOURCE_USERNAME
         secretName: mirror-pg-cred

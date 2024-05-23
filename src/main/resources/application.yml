@@ -76,6 +76,8 @@ mirror:
     nsi: ${MIRROR_ENDPOINT_NSI}
     report: ${MIRROR_ENDPOINT_REPORT}
     chat: ${MIRROR_ENDPOINT_CHAT}
+    user-profile: ${MIRROR_ENDPOINT_USER_PROFILE}
+    notification: ${MIRROR_ENDPOINT_NOTIFICATION}
   application:
     user-agent: ${SPRING_APPLICATION_NAME}/${APPLICATION_VERSION}
   keycloak:
@@ -92,3 +94,4 @@ mirror:
         save-search-history: ${MIRROR_SCHEDULE_TASKS_CRON_SAVE_SEARCH_HISTORY:0 30 23 * * *}
         notify-offer-end: ${MIRROR_SCHEDULE_TASKS_CRON_NOTIFY_OFFER_END:0 0 9 * * *}
         status-offer-end: ${MIRROR_SCHEDULE_TASKS_CRON_CHANGE_STATUS_OFFER_END:0 1 0 * * *}
+        notification-process: ${MIRROR_SCHEDULE_TASKS_CRON_NOTIFICATION_PROCESS:0 0 1 * * *}

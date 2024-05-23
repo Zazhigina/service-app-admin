@@ -41,6 +41,12 @@ public class WebClientConfig {
     @Value("${mirror.endpoint.chat}")
     private String chatUrl;
 
+    @Value("${mirror.endpoint.user-profile}")
+    private String userprofileBaseUrl;
+
+    @Value("${mirror.endpoint.notification}")
+    private String notificationBaseUrl;
+
     @Bean("rbac")
     public WebClient webClientRbac(){
         HttpClient httpClient = HttpClient.create();
@@ -123,6 +129,24 @@ public class WebClientConfig {
         HttpClient httpClient = HttpClient.create();
         return WebClient.builder()
                 .baseUrl(chatUrl)
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
+    }
+
+    @Bean("userprofile")
+    public WebClient webClientUserProfile(){
+        HttpClient httpClient = HttpClient.create();
+        return WebClient.builder()
+                .baseUrl(userprofileBaseUrl)
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
+    }
+
+    @Bean("notification")
+    public WebClient webClientNotification(){
+        HttpClient httpClient = HttpClient.create();
+        return WebClient.builder()
+                .baseUrl(notificationBaseUrl)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }

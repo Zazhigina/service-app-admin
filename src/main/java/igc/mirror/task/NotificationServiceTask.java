@@ -63,7 +63,7 @@ public class NotificationServiceTask {
 
     private void deleteNoticesDurationEnd(AuthResponseDto authResponseDto) {
 
-        String uri = new String("/notices/duration-end/delete");
+        String uri = new String("/notice/duration-end/deleting");
 
         webClient
                 .put()

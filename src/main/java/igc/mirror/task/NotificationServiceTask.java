@@ -26,7 +26,11 @@ public class NotificationServiceTask {
 
     @Autowired
     @Qualifier("notification")
-    private WebClient webClient;
+    private WebClient webClientNotification;
+
+    @Autowired
+    @Qualifier("userprofile")
+    private WebClient webClientUserProfile;
 
     @Autowired
     private KeycloakAuthClient keycloakAuthClient;
@@ -57,6 +61,13 @@ public class NotificationServiceTask {
             //ignore
         }
 
+        //Очищаем карту настроек пользователей (кэш)
+        try {
+            deleteUserSettingsBuffered(authResponseDto);
+        } catch (Exception e) {
+            //ignore
+        }
+
         MDC.remove(USER_AGENT_KEY);
         MDC.remove(X_REQUEST_ID_KEY);
     }
@@ -65,7 +76,7 @@ public class NotificationServiceTask {
 
         String uri = new String("/notice/duration-end/deleting");
 
-        webClient
+        webClientNotification
                 .put()
                 .uri(uri)
                 .header("Authorization", "Bearer " + authResponseDto.getAccessToken())
@@ -77,6 +88,26 @@ public class NotificationServiceTask {
                 .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
                 .doOnError(err -> logger.error("Ошибка запуска удаленного сервиса - {}", err.getMessage()))
                 .doOnSuccess(success -> logger.info("Уведомления с истекшим сроком хранения отмечены как удаленные."))
+                .log()
+                .block();
+    }
+
+    private void deleteUserSettingsBuffered(AuthResponseDto authResponseDto) {
+
+        String uri = new String("/user-setting-buffered");
+
+        webClientUserProfile
+                .delete()
+                .uri(uri)
+                .header("Authorization", "Bearer " + authResponseDto.getAccessToken())
+                .header(HttpHeaders.USER_AGENT, userAgent)
+                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(X_REQUEST_ID_KEY))
+                .retrieve()
+                .bodyToMono(Void.class)
+                .log()
+                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
+                .doOnError(err -> logger.error("Ошибка запуска удаленного сервиса - {}", err.getMessage()))
+                .doOnSuccess(success -> logger.info("Карта настроек пользователей (кэш) очищена."))
                 .log()
                 .block();
     }

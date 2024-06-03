@@ -56,7 +56,7 @@ public class FaqService {
 
         letterTemplateSearchCriteria.setLetterTemplateType(LetterTemplateType.DOCUMENT);
         letterTemplateSearchCriteria.setStatus(TemplateStatus.ACTUAL);
-        letterTemplateSearchCriteria.setLetterTypeLikeList(List.of(
+        letterTemplateSearchCriteria.setLetterTypeRightLikeList(List.of(
                 String.format("%s_USER_GUIDE", mirrorService != null ? mirrorService.name() : ""),
                 String.format("%s_PARTNER_GUIDE", mirrorService != null ? mirrorService.name() : "")
         ));

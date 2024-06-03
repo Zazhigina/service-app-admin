@@ -14,7 +14,7 @@ public class LetterTemplateSearchCriteria extends SearchCriteria {
     @JsonIgnore
     private TemplateStatus status;
     @JsonIgnore
-    private List<String> letterTypeLikeList;
+    private List<String> letterTypeRightLikeList;
 
     public LetterTemplateSearchCriteria() {}
     public LetterTemplateSearchCriteria(String letterType, String title) {
@@ -54,11 +54,11 @@ public class LetterTemplateSearchCriteria extends SearchCriteria {
         this.status = status;
     }
 
-    public List<String> getLetterTypeLikeList() {
-        return letterTypeLikeList;
+    public List<String> getLetterTypeRightLikeList() {
+        return letterTypeRightLikeList;
     }
 
-    public void setLetterTypeLikeList(List<String> letterTypeLikeList) {
-        this.letterTypeLikeList = letterTypeLikeList;
+    public void setLetterTypeRightLikeList(List<String> letterTypeRightLikeList) {
+        this.letterTypeRightLikeList = letterTypeRightLikeList;
     }
 }

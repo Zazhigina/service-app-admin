@@ -181,10 +181,9 @@ public class LetterTemplateRepository implements JooqCommonRepository<LetterTemp
             if(criteria.getStatus() != null)
                 condition = condition.and(TLetterTemplate.T_LETTER_TEMPLATE.STATUS.eq(criteria.getStatus().name()));
 
-
-            if (criteria.getLetterTypeLikeList() != null) {
+            if (criteria.getLetterTypeRightLikeList() != null) {
                 condition = condition.and(TLetterTemplate.T_LETTER_TEMPLATE.LETTER_TYPE.like(any(array(
-                        criteria.getLetterTypeLikeList().stream().map(v -> criteria.getLikePattern(v))
+                        criteria.getLetterTypeRightLikeList().stream().map(v -> criteria.getLikePatternRight(v))
                                 .toArray(String[]::new)
                 ))));
             }

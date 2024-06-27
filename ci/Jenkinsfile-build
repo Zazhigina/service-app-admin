@@ -44,8 +44,9 @@ pipeline {
     parameters {
         string(name: 'email', defaultValue: 'Zaytsev.OI@gazprom-neft.ru,Stronin.IYu@omsk.gazprom-neft.ru', description: 'Email address for reports', trim: true)
         booleanParam(name: 'SAST', defaultValue: false, description: 'Run SAST code check [TRUST]')
-        booleanParam(name: 'SCA', defaultValue: false, description: 'Run SCA/Dtrack dependency check [TRUST]')
-        booleanParam(name: 'Clair', defaultValue: false, description: 'Run Clair container check [TRUST]')
+        booleanParam(name: 'SCA', defaultValue: false, description: 'Run CodeScoring check [TRUST]')
+        booleanParam(name: 'CSec', defaultValue: false, description: 'Run Container Security check [TRUST]')
+        choice(name: 'TYPE', choices: ["luntry", "clair"], description: 'luntry or clair')
     }
 
     agent {
@@ -64,36 +65,39 @@ pipeline {
     }
 
     stages {
-        stage('Sast scan') {
+        stage("Set build name") {
+            steps {
+                script {
+                    buildSetter()
+                }
+            }
+        }
+
+        stage('SAST scan') {
             when {
                 equals(actual: BUILD_ENVIRONMENT, expected: 'trust')
                 equals(actual: params.SAST, expected: true)
             }
             steps {
-                doSastCheck "manualWithParameters", [sast_lang: "Java", "repos_for_scan": scan_repos, "sast_generate_reports": true]
+                doSastCheck "manualWithParameters", [sast_lang: "Java", "repos_for_scan": scan_repos, "sast_generate_reports": true, "sast_generate_reports_email_list": params.email]
             }
         }
 
-        stage('Run CodeScoring Check') {
+        stage('CodeScoring check') {
             when {
                 equals(actual: BUILD_ENVIRONMENT, expected: 'trust')
                 equals(actual: params.SCA, expected: true)
             }
             steps {
                 script {
-                    def result = doScaCheck('git_url': "ssh://alm-itsk.gazprom-neft.local:8180/TFS/GPN/${PROJECT_ID}/_git/${OCP_APP_NAME}", 'git_branch': "${BRANCH}", 'email': params.email)
+                    def result = doScaCheck('git_url': "ssh://alm-itsk.gazprom-neft.local:8180/TFS/GPN/${PROJECT_ID}/_git/${OCP_APP_NAME}",
+                                            'git_branch': "${BRANCH}",
+                                            'email': params.email,
+                                            'report_archive_name': "${OCP_APP_NAME}-${GIT_COMMIT_SHORT}_SCA.zip")
                     println("=== pipeline scan result ===\npassed: $result.passed\nreport: $result.report\nmessage: $result.message")
                     if (!result.passed) {
                         error('SCA сканирование завершено. Обнаружены критические уязвимости')
                     }
-                }
-            }
-        }
-
-        stage("Set build name") {
-            steps {
-                script {
-                    buildSetter()
                 }
             }
         }
@@ -129,16 +133,18 @@ pipeline {
             }
         }
 
-        stage ("Run Container Security check") {
+        stage ("Container Security check") {
             when {
                 equals(actual: BUILD_ENVIRONMENT, expected: 'trust')
-                equals(actual: params.Clair, expected: true)
+                equals(actual: params.CSec, expected: true)
             }
             steps {
                 script {
                     doContainerSecurityCheck(["registry": "$REGISTRY",
                                               "image": "$PROJECT_ID/$OCP_APP_NAME:$GIT_COMMIT_SHORT",
-                                              "mail": params.email
+                                              "mail": params.email,
+                                              "csec_type": params.TYPE,
+                                              "report_archive_name": "${OCP_APP_NAME}-${GIT_COMMIT_SHORT}_CSec"
                     ])
                 }
             }

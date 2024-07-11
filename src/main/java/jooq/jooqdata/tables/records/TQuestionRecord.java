@@ -10,8 +10,8 @@ import jooqdata.tables.TQuestion;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record10;
-import org.jooq.Row10;
+import org.jooq.Record11;
+import org.jooq.Row11;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Преднастроенный вопрос
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implements Record10<Long, String, Integer, LocalDateTime, LocalDateTime, String, LocalDateTime, String, String, String> {
+public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implements Record11<Long, String, Integer, LocalDateTime, LocalDateTime, String, LocalDateTime, String, String, String, String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -169,6 +169,22 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
         return (String) get(9);
     }
 
+    /**
+     * Setter for <code>admin.t_question.annex</code>. Приложение к ответу на
+     * вопрос
+     */
+    public void setAnnex(String value) {
+        set(10, value);
+    }
+
+    /**
+     * Getter for <code>admin.t_question.annex</code>. Приложение к ответу на
+     * вопрос
+     */
+    public String getAnnex() {
+        return (String) get(10);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -179,17 +195,17 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
     }
 
     // -------------------------------------------------------------------------
-    // Record10 type implementation
+    // Record11 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<Long, String, Integer, LocalDateTime, LocalDateTime, String, LocalDateTime, String, String, String> fieldsRow() {
-        return (Row10) super.fieldsRow();
+    public Row11<Long, String, Integer, LocalDateTime, LocalDateTime, String, LocalDateTime, String, String, String, String> fieldsRow() {
+        return (Row11) super.fieldsRow();
     }
 
     @Override
-    public Row10<Long, String, Integer, LocalDateTime, LocalDateTime, String, LocalDateTime, String, String, String> valuesRow() {
-        return (Row10) super.valuesRow();
+    public Row11<Long, String, Integer, LocalDateTime, LocalDateTime, String, LocalDateTime, String, String, String, String> valuesRow() {
+        return (Row11) super.valuesRow();
     }
 
     @Override
@@ -243,6 +259,11 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
     }
 
     @Override
+    public Field<String> field11() {
+        return TQuestion.T_QUESTION.ANNEX;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -293,6 +314,11 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
     }
 
     @Override
+    public String component11() {
+        return getAnnex();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -340,6 +366,11 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
     @Override
     public String value10() {
         return getOwner();
+    }
+
+    @Override
+    public String value11() {
+        return getAnnex();
     }
 
     @Override
@@ -403,7 +434,13 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
     }
 
     @Override
-    public TQuestionRecord values(Long value1, String value2, Integer value3, LocalDateTime value4, LocalDateTime value5, String value6, LocalDateTime value7, String value8, String value9, String value10) {
+    public TQuestionRecord value11(String value) {
+        setAnnex(value);
+        return this;
+    }
+
+    @Override
+    public TQuestionRecord values(Long value1, String value2, Integer value3, LocalDateTime value4, LocalDateTime value5, String value6, LocalDateTime value7, String value8, String value9, String value10, String value11) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -414,6 +451,7 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
         value8(value8);
         value9(value9);
         value10(value10);
+        value11(value11);
         return this;
     }
 
@@ -431,7 +469,7 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
     /**
      * Create a detached, initialised TQuestionRecord
      */
-    public TQuestionRecord(Long id, String name, Integer orderNo, LocalDateTime actualTo, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, String code, String owner) {
+    public TQuestionRecord(Long id, String name, Integer orderNo, LocalDateTime actualTo, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, String code, String owner, String annex) {
         super(TQuestion.T_QUESTION);
 
         setId(id);
@@ -444,5 +482,6 @@ public class TQuestionRecord extends UpdatableRecordImpl<TQuestionRecord> implem
         setLastUpdateUser(lastUpdateUser);
         setCode(code);
         setOwner(owner);
+        setAnnex(annex);
     }
 }

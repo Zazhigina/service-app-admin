@@ -15,11 +15,11 @@ import jooqdata.tables.records.TQuestionRecord;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function10;
+import org.jooq.Function11;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row10;
+import org.jooq.Row11;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -104,6 +104,12 @@ public class TQuestion extends TableImpl<TQuestionRecord> {
      * The column <code>admin.t_question.owner</code>. Владелец, enum
      */
     public final TableField<TQuestionRecord, String> OWNER = createField(DSL.name("owner"), SQLDataType.VARCHAR(30), this, "Владелец, enum");
+
+    /**
+     * The column <code>admin.t_question.annex</code>. Приложение к ответу на
+     * вопрос
+     */
+    public final TableField<TQuestionRecord, String> ANNEX = createField(DSL.name("annex"), SQLDataType.VARCHAR(15), this, "Приложение к ответу на вопрос");
 
     private TQuestion(Name alias, Table<TQuestionRecord> aliased) {
         this(alias, aliased, null);
@@ -193,18 +199,18 @@ public class TQuestion extends TableImpl<TQuestionRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row10 type methods
+    // Row11 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<Long, String, Integer, LocalDateTime, LocalDateTime, String, LocalDateTime, String, String, String> fieldsRow() {
-        return (Row10) super.fieldsRow();
+    public Row11<Long, String, Integer, LocalDateTime, LocalDateTime, String, LocalDateTime, String, String, String, String> fieldsRow() {
+        return (Row11) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function10<? super Long, ? super String, ? super Integer, ? super LocalDateTime, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super String, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function11<? super Long, ? super String, ? super Integer, ? super LocalDateTime, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -212,7 +218,7 @@ public class TQuestion extends TableImpl<TQuestionRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function10<? super Long, ? super String, ? super Integer, ? super LocalDateTime, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super String, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function11<? super Long, ? super String, ? super Integer, ? super LocalDateTime, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

@@ -43,13 +43,14 @@ public class QuestionRepository {
      *
      * @return список вопросов
      */
-    public Result<Record7<Long, String, Integer, String, LocalDateTime, String, Result<Record5<Long, String, Integer, Boolean, String>>>> findAllStandardQuestionsByOwner(QuestionOwner owner) {
+    public Result<Record8<Long, String, Integer, String, LocalDateTime, String, String, Result<Record5<Long, String, Integer, Boolean, String>>>> findAllStandardQuestionsByOwner(QuestionOwner owner) {
         return dsl.select(QUESTION.ID,
                         QUESTION.NAME,
                         QUESTION.ORDER_NO,
                         QUESTION.CODE,
                         QUESTION.ACTUAL_TO,
                         QUESTION.OWNER,
+                        QUESTION.ANNEX,
                         multiset(
                                 select(ANSWER_VERSION.ID,
                                         ANSWER_VERSION.NAME,
@@ -84,6 +85,7 @@ public class QuestionRepository {
                         QUESTION.CODE,
                         QUESTION.ACTUAL_TO,
                         QUESTION.OWNER,
+                        QUESTION.ANNEX,
                         multiset(
                                 select(ANSWER_VERSION.ID,
                                         ANSWER_VERSION.NAME,
@@ -114,6 +116,7 @@ public class QuestionRepository {
     public void updateQuestion(Question question) {
         dsl.update(QUESTION)
                 .set(QUESTION.NAME, question.getName())
+                .set(QUESTION.ANNEX, question.getAnnex() == null ? null : question.getAnnex().toString())
                 .set(QUESTION.ACTUAL_TO, question.getActualTo())
                 .set(QUESTION.LAST_UPDATE_USER, question.getLastUpdateUser())
                 .where(QUESTION.ID.equal(question.getId()))

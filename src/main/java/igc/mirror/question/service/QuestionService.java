@@ -62,6 +62,7 @@ public class QuestionService {
         if (optionalQuestion.isPresent()) {
             Question currentQuestion = optionalQuestion.get();
             currentQuestion.setName(changedQuestionDto.getName());
+            currentQuestion.setAnnex(changedQuestionDto.getAnnex());
             currentQuestion.setActualTo(changedQuestionDto.getActualTo());
             currentQuestion.setLastUpdateUser(userDetails.getUsername());
             questionRepository.updateQuestion(currentQuestion);

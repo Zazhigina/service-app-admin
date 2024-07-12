@@ -1,5 +1,8 @@
 package igc.mirror.question.model;
 
+import igc.mirror.question.ref.QuestionAnnex;
+import org.jooq.tools.StringUtils;
+
 import java.time.LocalDateTime;
 
 public class Question {
@@ -44,6 +47,11 @@ public class Question {
      * Код стандартного вопроса
      */
     private String code;
+
+    /**
+     * Приложение к ответу на вопрос
+     */
+    public QuestionAnnex annex;
 
     public Question() {
     }
@@ -118,5 +126,13 @@ public class Question {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public QuestionAnnex getAnnex() {
+        return annex;
+    }
+
+    public void setAnnex(String annex) {
+        this.annex = StringUtils.isEmpty(annex) ? QuestionAnnex.EMPTY : QuestionAnnex.valueOf(annex);
     }
 }

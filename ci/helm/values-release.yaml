@@ -13,6 +13,8 @@ application:
         value: release
       - key: MIRROR_DATASOURCE_URL
         value: "jdbc:postgresql://igcs0009.inlinegroup-c.ru:5432/mirror_release"
+      - key: MIRROR_ENDPOINT_PY_ES_DATA_MGMT
+        value: http://service-py-es-data-mgmt.mirror-release:8080
       - key: MIRROR_ENDPOINT_MA
         value: http://service-app-ma.mirror-release:8080
       - key: MIRROR_ENDPOINT_RBAC

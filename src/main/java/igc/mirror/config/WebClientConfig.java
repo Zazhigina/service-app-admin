@@ -10,6 +10,8 @@ import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
+import javax.net.ssl.SSLException;
+
 @Configuration
 public class WebClientConfig {
     static final Logger logger = LoggerFactory.getLogger(WebClientConfig.class);
@@ -46,6 +48,9 @@ public class WebClientConfig {
 
     @Value("${mirror.endpoint.notification}")
     private String notificationBaseUrl;
+
+    @Value("${mirror.endpoint.es-data-mgmt}")
+    private String pyEsDataMgmtBaseUrl;
 
     @Bean("rbac")
     public WebClient webClientRbac(){
@@ -147,6 +152,15 @@ public class WebClientConfig {
         HttpClient httpClient = HttpClient.create();
         return WebClient.builder()
                 .baseUrl(notificationBaseUrl)
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
+    }
+
+    @Bean("pyEsDataMgmt")
+    public WebClient webClientPythonEsDataMgmt() throws SSLException {
+        HttpClient httpClient = HttpClient.create();
+        return WebClient.builder()
+                .baseUrl(pyEsDataMgmtBaseUrl)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }

@@ -78,6 +78,7 @@ mirror:
     chat: ${MIRROR_ENDPOINT_CHAT}
     user-profile: ${MIRROR_ENDPOINT_USER_PROFILE}
     notification: ${MIRROR_ENDPOINT_NOTIFICATION}
+    es-data-mgmt: ${MIRROR_ENDPOINT_PY_ES_DATA_MGMT}
   application:
     user-agent: ${SPRING_APPLICATION_NAME}/${APPLICATION_VERSION}
   keycloak:

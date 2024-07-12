@@ -15,16 +15,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
-import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -60,10 +57,10 @@ public class NeuroService {
                 : Collections.emptyList();
     }
 
-    public Boolean buildVectors(String version) {
+    public ElasticSearchOperations buildVectors(String version) {
         String uri = "/build-vectors?version=" + version;
-        ResponseEntity<Boolean> responseEntity =
-                callEsDataMgmt(uri, HttpMethod.POST, new ParameterizedTypeReference<Boolean>() {}, null);
+        ResponseEntity<ElasticSearchOperations> responseEntity =
+                callEsDataMgmt(uri, HttpMethod.POST, new ParameterizedTypeReference<ElasticSearchOperations>() {}, null);
         return responseEntity != null && responseEntity.getBody() != null ? responseEntity.getBody() : null;
     }
 

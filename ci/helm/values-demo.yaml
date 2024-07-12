@@ -10,6 +10,8 @@ application:
         value: trunk
       - key: MIRROR_DATASOURCE_URL
         value: "jdbc:postgresql://igcs0009.inlinegroup-c.ru:5432/mirror_demo"
+      - key: MIRROR_ENDPOINT_PY_ES_DATA_MGMT
+        value: http://service-py-es-data-mgmt.mirror-demo:8080
       - key: MIRROR_ENDPOINT_MA
         value: http://service-app-ma.mirror-demo:8080
       - key: MIRROR_ENDPOINT_RBAC

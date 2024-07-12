@@ -5,6 +5,8 @@ application:
         value: admin
       - key: SPRING_PROFILES_ACTIVE
         value: trust
+      - key: MIRROR_ENDPOINT_PY_ES_DATA_MGMT
+        value: http://service-py-es-data-mgmt.tzriu:8080
       - key: MIRROR_ENDPOINT_MA
         value: http://service-app-ma.tzriu:8080
       - key: MIRROR_ENDPOINT_RBAC

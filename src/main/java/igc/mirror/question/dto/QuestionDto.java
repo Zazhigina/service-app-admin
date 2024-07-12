@@ -36,11 +36,19 @@ public class QuestionDto {
     private String code;
 
     /**
+     * Владелец
+     */
+    private QuestionOwner owner;
+
+    /**
+     * Приложение к ответу на вопрос
+     */
+    public String annex;
+
+    /**
      * Перечень вариантов ответов на вопрос
      */
     private List<AnswerVersionDto> answerVersions;
-
-    private QuestionOwner owner;
 
     public QuestionDto() {
     }
@@ -105,5 +113,13 @@ public class QuestionDto {
 
     public void setOwner(QuestionOwner owner) {
         this.owner = owner;
+    }
+
+    public String getAnnex() {
+        return annex;
+    }
+
+    public void setAnnex(String annex) {
+        this.annex = annex;
     }
 }

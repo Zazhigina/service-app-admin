@@ -25,6 +25,11 @@ public class StandardQuestion {
     private String code;
 
     /**
+     * Приложение к ответу на вопрос
+     */
+    public String annex;
+
+    /**
      * Перечень вариантов ответов на вопрос
      */
     private List<StandardAnswerVersion> answerVersions;
@@ -70,5 +75,13 @@ public class StandardQuestion {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getAnnex() {
+        return annex;
+    }
+
+    public void setAnnex(String annex) {
+        this.annex = annex;
     }
 }

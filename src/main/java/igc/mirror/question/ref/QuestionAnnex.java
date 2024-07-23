@@ -3,6 +3,7 @@ package igc.mirror.question.ref;
 public enum QuestionAnnex {
     EMPTY("Нет требований (пусто)"),
     FILE("Файл"),
+    FILE_REQUIRED("Файл необходим"),
     COMMENT("Комментарий");
 
     private final String name;

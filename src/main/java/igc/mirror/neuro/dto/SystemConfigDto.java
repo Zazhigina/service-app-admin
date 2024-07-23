@@ -34,12 +34,12 @@ public class SystemConfigDto {
     public Map<String, Object> convertToPySchema() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         return Map.ofEntries(
-            Map.entry("date", this.date.format(formatter)),
-            Map.entry("is_active", this.isActive),
+            Map.entry("date", this.date != null ? this.date.format(formatter) : ""),
+            Map.entry("is_active", this.isActive != null ? this.isActive : Boolean.FALSE),
             Map.entry("config_version", this.configVersion),
             Map.entry("neuronet_version", this.neuronetVersion),
             Map.entry("neuronet_path", this.neuronetPath),
-            Map.entry("reindex_status", this.reindexStatus),
+            Map.entry("reindex_status", this.reindexStatus != null ? this.reindexStatus : ""),
             Map.entry("default_indexes", this.defaultIndexes)
         );
     }

@@ -32,7 +32,7 @@ public class NeuroController {
 
     @PutMapping("/system-config")
     @Operation(summary = "Добавить конфигурацию")
-//    @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
+    @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
     public ElasticSearchOperations addSystemConfig(@RequestBody SystemConfigDto systemConfigDto) {
         return neuroService.addSystemConfig(systemConfigDto);
     }

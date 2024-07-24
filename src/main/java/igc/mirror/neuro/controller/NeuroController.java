@@ -2,7 +2,7 @@ package igc.mirror.neuro.controller;
 
 import igc.mirror.neuro.dto.ElasticSearchOperations;
 import igc.mirror.neuro.dto.NeuronetInfoDto;
-import igc.mirror.neuro.dto.SystemConfigDto;
+import igc.mirror.neuro.dto.SystemConfigFrontDto;
 import igc.mirror.neuro.ref.ConfigType;
 import igc.mirror.neuro.service.NeuroService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,15 +26,15 @@ public class NeuroController {
     @GetMapping("/system-config")
     @Operation(summary = "Получить конфигурацию")
     @PreAuthorize("hasAuthority('CONFIG_VALUE.READ')")
-    public List<SystemConfigDto> getSystemConfig(@RequestParam(name = "configType", required = false, defaultValue = "ACTIVE") ConfigType configType) {
+    public List<SystemConfigFrontDto> getSystemConfig(@RequestParam(name = "configType", required = false, defaultValue = "ACTIVE") ConfigType configType) {
         return neuroService.loadSystemConfig(configType);
     }
 
     @PutMapping("/system-config")
     @Operation(summary = "Добавить конфигурацию")
     @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
-    public ElasticSearchOperations addSystemConfig(@RequestBody SystemConfigDto systemConfigDto) {
-        return neuroService.addSystemConfig(systemConfigDto);
+    public ElasticSearchOperations addSystemConfig(@RequestBody SystemConfigFrontDto systemConfigFrontDto) {
+        return neuroService.addSystemConfig(systemConfigFrontDto.convertToSystemConfigDto());
     }
 
     @DeleteMapping("/system-config")

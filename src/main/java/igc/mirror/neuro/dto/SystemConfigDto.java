@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -17,11 +18,11 @@ public class SystemConfigDto {
     private float neuronetVersion;
     private String neuronetPath;
     private String reindexStatus;
-    private Map<String, Object> defaultIndexes;
+    private Map<String, IndexDto> defaultIndexes;
 
     public SystemConfigDto(LocalDateTime date, Boolean is_active, float config_version,
                            float neuronet_version, String neuronet_path, String reindex_status,
-                           Map<String, Object> default_indexes) {
+                           Map<String, IndexDto> default_indexes) {
         this.date = date;
         this.isActive = is_active;
         this.configVersion = config_version;
@@ -41,6 +42,19 @@ public class SystemConfigDto {
             Map.entry("neuronet_path", this.neuronetPath),
             Map.entry("reindex_status", this.reindexStatus != null ? this.reindexStatus : ""),
             Map.entry("default_indexes", this.defaultIndexes)
+        );
+    }
+
+    public SystemConfigFrontDto convertToSystemConfigFront() {
+        List<IndexDto> defaultIndexesList = this.defaultIndexes.values().stream().toList();
+        return new SystemConfigFrontDto(
+                this.date,
+                this.isActive != null ? this.isActive : Boolean.FALSE,
+                this.configVersion,
+                this.neuronetVersion,
+                this.neuronetPath,
+                this.reindexStatus != null ? this.reindexStatus : "",
+                defaultIndexesList
         );
     }
 

@@ -6,6 +6,7 @@ import igc.mirror.exception.common.RemoteServiceCallException;
 import igc.mirror.neuro.dto.ElasticSearchOperations;
 import igc.mirror.neuro.dto.NeuronetInfoDto;
 import igc.mirror.neuro.dto.SystemConfigDto;
+import igc.mirror.neuro.dto.SystemConfigFrontDto;
 import igc.mirror.neuro.ref.ConfigType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ import reactor.core.publisher.Mono;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 @Service
@@ -42,11 +44,13 @@ public class NeuroService {
     @Autowired
     private UserDetails userDetails;
 
-    public List<SystemConfigDto> loadSystemConfig(ConfigType configType) {
+    public List<SystemConfigFrontDto> loadSystemConfig(ConfigType configType) {
         String uri = "/system-config?config_type=" + configType.getName();
         ResponseEntity<List<SystemConfigDto>> responseEntity =
                 callEsDataMgmt(uri, HttpMethod.GET, new ParameterizedTypeReference<List<SystemConfigDto>>() {}, null);
-        return responseEntity != null ? responseEntity.getBody() : null;
+        return responseEntity != null
+                ? Objects.requireNonNull(responseEntity.getBody()).stream().map(SystemConfigDto::convertToSystemConfigFront).toList()
+                : null;
     }
 
     public List<NeuronetInfoDto> loadListNeuronets() {

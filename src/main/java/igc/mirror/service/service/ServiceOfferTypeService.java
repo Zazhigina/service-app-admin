@@ -2,8 +2,11 @@ package igc.mirror.service.service;
 
 import igc.mirror.auth.UserDetails;
 import igc.mirror.exception.common.IllegalEntityStateException;
+import igc.mirror.exception.handler.SuccessInfo;
 import igc.mirror.nsi.model.ServiceProduct;
 import igc.mirror.nsi.service.NSIService;
+import igc.mirror.prcat.dto.PrcatServiceVersionDto;
+import igc.mirror.prcat.service.PrcatService;
 import igc.mirror.service.dto.*;
 import igc.mirror.service.exchange.ReferenceSavingResult;
 import igc.mirror.service.filter.ServiceOfferTypeSearchCriteria;
@@ -17,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +35,9 @@ public class ServiceOfferTypeService {
 
     @Autowired
     NSIService nsiService;
+
+    @Autowired
+    PrcatService prcatService;
 
     @Autowired
     private UserDetails userDetails;
@@ -175,5 +183,11 @@ public class ServiceOfferTypeService {
 
     public ReferenceSavingResult uploadServiceVersion(List<ServiceVersionChangedDto> listServiceVersion) {
         return nsiService.uploadServiceVersion(listServiceVersion);
+    }
+
+    @PreAuthorize("hasAuthority('CONFIG_VALUE.READ')")
+    public ResponseEntity<SuccessInfo> sendServiceVersionToPrcat() {
+        prcatService.sendServiceVersions(nsiService.getServiceVersionList());
+        return ResponseEntity.ok(new SuccessInfo("Данные успешно отправлены"));
     }
 }

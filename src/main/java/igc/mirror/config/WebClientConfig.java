@@ -37,6 +37,9 @@ public class WebClientConfig {
     @Value("${mirror.endpoint.nsi}")
     private String nsiUrl;
 
+    @Value("${mirror.endpoint.prcat}")
+    private String prcatUrl;
+
     @Value("${mirror.endpoint.report}")
     private String reportUrl;
 
@@ -116,6 +119,15 @@ public class WebClientConfig {
         HttpClient httpClient = HttpClient.create();
         return WebClient.builder()
                 .baseUrl(nsiUrl)
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
+    }
+
+    @Bean("prcat")
+    public WebClient webClientPrcat() {
+        HttpClient httpClient = HttpClient.create();
+        return WebClient.builder()
+                .baseUrl(prcatUrl)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }

@@ -74,6 +74,7 @@ mirror:
     doc: ${MIRROR_ENDPOINT_DOC}
     ep: ${MIRROR_ENDPOINT_EP}
     nsi: ${MIRROR_ENDPOINT_NSI}
+    prcat: ${MIRROR_ENDPOINT_PRCAT}
     report: ${MIRROR_ENDPOINT_REPORT}
     chat: ${MIRROR_ENDPOINT_CHAT}
     user-profile: ${MIRROR_ENDPOINT_USER_PROFILE}

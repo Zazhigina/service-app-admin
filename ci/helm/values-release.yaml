@@ -27,6 +27,8 @@ application:
         value: http://service-app-ep.mirror-release:8080
       - key: MIRROR_ENDPOINT_NSI
         value: http://service-app-nsi.mirror-release:8080
+      - key: MIRROR_ENDPOINT_PRCAT
+        value: http://service-app-prcat.mirror-release:8080
       - key: MIRROR_ENDPOINT_REPORT
         value: http://service-app-report.mirror-release:8080
       - key: MIRROR_ENDPOINT_CHAT

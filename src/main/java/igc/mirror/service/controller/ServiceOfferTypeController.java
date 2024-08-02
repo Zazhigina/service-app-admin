@@ -1,5 +1,7 @@
 package igc.mirror.service.controller;
 
+import igc.mirror.exception.handler.SuccessInfo;
+import igc.mirror.prcat.dto.PrcatServiceVersionDto;
 import igc.mirror.service.dto.*;
 import igc.mirror.service.exchange.ReferenceSavingResult;
 import igc.mirror.service.filter.ServiceOfferTypeSearchCriteria;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -87,5 +90,11 @@ public class ServiceOfferTypeController {
     @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
     public ReferenceSavingResult updateServiceVersion(@RequestBody List<ServiceVersionChangedDto> listServiceVersion) {
         return serviceOfferTypeService.uploadServiceVersion(listServiceVersion);
+    }
+
+    @PostMapping("/service-version/send-to-prcat")
+    @Operation(summary = "Отправить мэппинг в Справочник расценок")
+    public ResponseEntity<SuccessInfo> sendServiceVersionToPrcat() {
+        return serviceOfferTypeService.sendServiceVersionToPrcat();
     }
 }

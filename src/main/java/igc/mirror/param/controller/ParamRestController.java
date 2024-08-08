@@ -58,7 +58,6 @@ public class ParamRestController {
 
     @GetMapping("/professional-email")
     @Operation(summary = "Почтовые ящики для Профессионал 4.0")
-    @PreAuthorize("hasAuthority('CONFIG_VALUE.READ')")
     public ResponseEntity<ProfessionalEmailDto> findProfessionalEmail() {
         return ResponseEntity.ok(paramService.findProfessionalEmails());
     }

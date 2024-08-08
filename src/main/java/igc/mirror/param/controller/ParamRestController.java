@@ -2,6 +2,7 @@ package igc.mirror.param.controller;
 
 import igc.mirror.param.dto.ParamDto;
 import igc.mirror.param.dto.ParamEditableDto;
+import igc.mirror.param.dto.ProfessionalEmailDto;
 import igc.mirror.param.service.ParamService;
 import igc.mirror.param.service.RemoteParamService;
 import igc.mirror.utils.qfilter.DataFilter;
@@ -53,6 +54,13 @@ public class ParamRestController {
     @PreAuthorize("hasAuthority('CONFIG_VALUE.READ')")
     public ResponseEntity<ParamDto> findByKey(@PathVariable String key) {
         return ResponseEntity.ok(paramService.findByKey(key));
+    }
+
+    @GetMapping("/professional-email")
+    @Operation(summary = "Почтовые ящики для Профессионал 4.0")
+    @PreAuthorize("hasAuthority('CONFIG_VALUE.READ')")
+    public ResponseEntity<ProfessionalEmailDto> findProfessionalEmail() {
+        return ResponseEntity.ok(paramService.findProfessionalEmails());
     }
 
     @PostMapping("/map")

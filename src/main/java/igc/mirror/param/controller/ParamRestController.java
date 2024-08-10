@@ -9,13 +9,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -24,12 +24,10 @@ import java.util.Map;
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Ведение параметров")
 public class ParamRestController {
-    private ParamService paramService;
+    private final ParamService paramService;
+    private final RemoteParamService remoteParamService;
 
-    private RemoteParamService remoteParamService;
-
-    @Autowired
-    public ParamRestController(ParamService paramService, RemoteParamService remoteParamService){
+    public ParamRestController(ParamService paramService, RemoteParamService remoteParamService) {
         this.paramService = paramService;
         this.remoteParamService = remoteParamService;
     }
@@ -64,7 +62,7 @@ public class ParamRestController {
     @DeleteMapping("/cache-remote")
     @Operation(summary = "Очистка кеша параметров удаленных сервисов")
     @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
-    public ResponseEntity<String> clearRemoteServiceParamCache(){
+    public ResponseEntity<String> clearRemoteServiceParamCache() {
         remoteParamService.clearMaParameterCache();
         String message = "Задание на очистку кеша параметров передано в приложение ma";
         remoteParamService.clearEpParameterCache();
@@ -72,5 +70,11 @@ public class ParamRestController {
         remoteParamService.clearChatParameterCache();
         message = message + ", chat";
         return ResponseEntity.ok(message);
+    }
+
+    @PutMapping("prcat-integration-start-date")
+    @Operation(summary = "Заполнение значения параметра PRCAT_INTEGRATION.START_DATE")
+    public ParamDto fillPrcatIntegrationStartDateParam(@RequestBody LocalDateTime prcatIntegrationStartDate) {
+        return paramService.fillPrcatIntegrationStartDateParam(prcatIntegrationStartDate);
     }
 }

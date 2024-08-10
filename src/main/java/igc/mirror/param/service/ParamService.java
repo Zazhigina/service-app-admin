@@ -18,7 +18,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -47,7 +49,7 @@ public class ParamService {
     public Page<ParamDto> findParamsByFilters(DataFilter<?> dataFilter, Pageable pageable) {
         Page<Param> paramPage = paramRepository.findByFilters(dataFilter, pageable);
 
-        return new PageImpl<>(paramPage.getContent().stream().map(paramModel -> ParamDto.fromModel(paramModel)).collect(Collectors.toList()),
+        return new PageImpl<>(paramPage.getContent().stream().map(ParamDto::fromModel).collect(Collectors.toList()),
                 pageable, paramPage.getTotalElements());
     }
 
@@ -91,4 +93,20 @@ public class ParamService {
         return paramRepository.getParamKeysAsMap(keys);
     }
 
+    /**
+     * Заполняет значение параметра "PRCAT_INTEGRATION.START_DATE"
+     *
+     * @param prcatIntegrationStartDate дата начала использования сервиса Справочник расценок
+     * @return параметр с заполненным значением
+     */
+    public ParamDto fillPrcatIntegrationStartDateParam(@RequestBody LocalDateTime prcatIntegrationStartDate) {
+        final String KEY = "PRCAT_INTEGRATION.START_DATE";
+
+        ParamDto paramDto = findByKey(KEY);
+
+        Param changeParam = new Param(KEY, paramDto.getName(), prcatIntegrationStartDate.toString());
+        changeParam.setLastUpdateUser(userDetails.getUsername());
+
+        return ParamDto.fromModel(paramRepository.save(changeParam));
+    }
 }

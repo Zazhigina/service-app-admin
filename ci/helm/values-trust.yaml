@@ -51,6 +51,8 @@ application:
         value: 0 1 0 * * *
       - key: MIRROR_SCHEDULE_TASKS_CRON_NOTIFICATION_PROCESS
         value: 0 0 1 * * *
+      - key: MIRROR_SCHEDULE_TASKS_CRON_DAILY_INTEGRATION_UPLOADING
+        value: 0 0 5 * * *
     secret:
       - key: SPRING_DATASOURCE_USERNAME
         secretName: mirror-pg-cred

@@ -52,7 +52,7 @@ public class UpdatePricingTask {
         String uri = "effect/exchange/professional/roles";
 
         webClient
-                .put()
+                .post()
                 .uri(uri)
                 .header("Authorization", "Bearer " + authResponseDto.getAccessToken())
                 .header(HttpHeaders.USER_AGENT, userAgent)

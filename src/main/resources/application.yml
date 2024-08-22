@@ -92,7 +92,7 @@ mirror:
       username:
       password:
       cron:
-        replicate-procedure-records: ${MIRROR_SCHEDULE_TASKS_CRON_REPLICATE_PROCEDURE_RECORDS:0 0 1 20 * ?}
+        replicate-procedure-records: "0 * * * * *"
         save-search-history: ${MIRROR_SCHEDULE_TASKS_CRON_SAVE_SEARCH_HISTORY:0 30 23 * * *}
         notify-offer-end: ${MIRROR_SCHEDULE_TASKS_CRON_NOTIFY_OFFER_END:0 0 9 * * *}
         status-offer-end: ${MIRROR_SCHEDULE_TASKS_CRON_CHANGE_STATUS_OFFER_END:0 1 0 * * *}

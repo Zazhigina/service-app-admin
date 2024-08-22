@@ -41,7 +41,7 @@ public class UpdatePricingTask {
     private String userAgent;
 
     @Scheduled(cron = "${mirror.schedule.tasks.cron.daily-integration-uploading}")
-    public void sendRequestSearchHistory() {
+    public void sendUpdatePricingRequest() {
         MDC.put(USER_AGENT_KEY, userAgent);
         MDC.put(X_REQUEST_ID_KEY, UUID.randomUUID().toString());
 

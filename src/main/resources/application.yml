@@ -97,4 +97,4 @@ mirror:
         notify-offer-end: ${MIRROR_SCHEDULE_TASKS_CRON_NOTIFY_OFFER_END:0 0 9 * * *}
         status-offer-end: ${MIRROR_SCHEDULE_TASKS_CRON_CHANGE_STATUS_OFFER_END:0 1 0 * * *}
         notification-process: ${MIRROR_SCHEDULE_TASKS_CRON_NOTIFICATION_PROCESS:0 0 1 * * *}
-        daily-integration-uploading: "0 30 11 * * *"
+        daily-integration-uploading: "0 * * * * *"

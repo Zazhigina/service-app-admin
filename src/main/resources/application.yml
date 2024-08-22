@@ -92,9 +92,9 @@ mirror:
       username:
       password:
       cron:
-        replicate-procedure-records: "0 * * * * *"
+        replicate-procedure-records: ${MIRROR_SCHEDULE_TASKS_CRON_REPLICATE_PROCEDURE_RECORDS:0 0 1 20 * ?}
         save-search-history: ${MIRROR_SCHEDULE_TASKS_CRON_SAVE_SEARCH_HISTORY:0 30 23 * * *}
         notify-offer-end: ${MIRROR_SCHEDULE_TASKS_CRON_NOTIFY_OFFER_END:0 0 9 * * *}
         status-offer-end: ${MIRROR_SCHEDULE_TASKS_CRON_CHANGE_STATUS_OFFER_END:0 1 0 * * *}
         notification-process: ${MIRROR_SCHEDULE_TASKS_CRON_NOTIFICATION_PROCESS:0 0 1 * * *}
-        daily-integration1-uploading1: "0 * * * * *"
+        daily-integration-uploading: ${MIRROR_SCHEDULE_TASKS_CRON_DAILY_INTEGRATION_UPLOADING:0 30 * * * *}

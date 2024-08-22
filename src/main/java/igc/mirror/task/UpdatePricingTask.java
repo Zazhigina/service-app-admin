@@ -40,7 +40,7 @@ public class UpdatePricingTask {
     @Value("${mirror.application.user-agent}")
     private String userAgent;
 
-    @Scheduled(cron = "${mirror.schedule.tasks.cron.daily-integration1-uploading1}")
+    @Scheduled(cron = "${mirror.schedule.tasks.cron.daily-integration-uploading}")
     public void sendUpdatePricingRequest() {
         MDC.put(USER_AGENT_KEY, userAgent);
         MDC.put(X_REQUEST_ID_KEY, UUID.randomUUID().toString());

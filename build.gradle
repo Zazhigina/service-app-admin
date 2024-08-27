@@ -104,6 +104,11 @@ dependencies {
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBinding}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+    //ldap
+    implementation("org.springframework.ldap:spring-ldap-core")
+    implementation("org.springframework.security:spring-security-ldap")
+    implementation("com.unboundid:unboundid-ldapsdk")
 }
 
 test {

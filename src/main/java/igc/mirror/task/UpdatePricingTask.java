@@ -42,14 +42,14 @@ public class UpdatePricingTask {
 
     @Scheduled(cron = "${mirror.schedule.tasks.cron.daily-integration-uploading}")
     public void sendUpdatePricingRequest() {
-        MDC.put(USER_AGENT_KEY, userAgent);
-        MDC.put(X_REQUEST_ID_KEY, UUID.randomUUID().toString());
-
-        logger.info("Запуск обновления списка прайсингов из Профессионалы 4.0");
-
-        AuthResponseDto authResponseDto = keycloakAuthClient.authenticate(scheduleTasksUserName, scheduleTasksPassword);
-
-        String uri = "effect/exchange/professional/roles";
+//        MDC.put(USER_AGENT_KEY, userAgent);
+//        MDC.put(X_REQUEST_ID_KEY, UUID.randomUUID().toString());
+//
+//        logger.info("Запуск обновления списка прайсингов из Профессионалы 4.0");
+//
+//        AuthResponseDto authResponseDto = keycloakAuthClient.authenticate(scheduleTasksUserName, scheduleTasksPassword);
+//
+//        String uri = "effect/exchange/professional/roles";
 
 //        webClient
 //                .post()
@@ -65,8 +65,8 @@ public class UpdatePricingTask {
 //                .doOnSuccess(success -> logger.info("Обновление списка прайсингов из Профессионалы 4.0 завершено"))
 //                .log()
 //                .block();
-
-        MDC.remove(USER_AGENT_KEY);
-        MDC.remove(X_REQUEST_ID_KEY);
+//
+//        MDC.remove(USER_AGENT_KEY);
+//        MDC.remove(X_REQUEST_ID_KEY);
     }
 }

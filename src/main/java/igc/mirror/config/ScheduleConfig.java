@@ -48,8 +48,8 @@ public class ScheduleConfig implements SchedulingConfigurer {
     public NotificationServiceTask notificationServiceTask () {
         return new NotificationServiceTask();
     }
-//    @Bean
-//    public UpdatePricingTask updatePricingTask() {
-//        return new UpdatePricingTask();
-//    }
+    @Bean
+    public UpdatePricingTask updatePricingTask() {
+        return new UpdatePricingTask();
+    }
 }

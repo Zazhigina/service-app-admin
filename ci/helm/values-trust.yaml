@@ -53,6 +53,14 @@ application:
         value: 0 0 1 * * *
       - key: MIRROR_SCHEDULE_TASKS_CRON_DAILY_INTEGRATION_UPLOADING
         value: 0 0 5 * * *
+      - key: MIRROR_LDAP_URL
+        value: ldap://SPB99-DC01.gazprom-neft.local
+      - key: MIRROR_LDAP_BASE
+        value: CN=Regions,DC=gazprom-neft,DC=local
+      - key: MIRROR_LDAP_FILTER
+        value: "CN=SPB-SSO-ALLUSERS-U200004739,CN=U200004739,CN=Groups,CN=ПАО Газпром нефть,CN=SPB,CN=Regions,DC=gazprom-neft,DC=local"
+      - key: MIRROR_LDAP_SVC_USERS
+        value: SPB-SSO-U200004739,mirror-uat-postgr,mirror-prod-postgr,mirror-mailbox-uat,mirror-mailbox,mirror-uat-tpartner,mirror-prod-tpartner,mirror-uat-bground,mirror-prod-bground,mirror-uat-techasuz,mirror-prod-techasuz,SPB-KLAD-D-tzriu2-M,SPB-KLAD-P-tzriu2-R
     secret:
       - key: SPRING_DATASOURCE_USERNAME
         secretName: mirror-pg-cred
@@ -68,6 +76,12 @@ application:
         secretKey: username
       - key: MIRROR_SCHEDULE_TASKS_PASSWORD
         secretName: mirror-sched-tasks-cred
+        secretKey: password
+      - key: MIRROR_LDAP_USERNAME
+        secretName: mirror-ldap-cred
+        secretKey: username
+      - key: MIRROR_LDAP_PASSWORD
+        secretName: mirror-ldap-cred
         secretKey: password
 
 fullnameOverride: "service-app-admin"

@@ -66,7 +66,7 @@ application:
       - key: MIRROR_LDAP_FILTER
         value: CN=SPB-SSO-ALLUSERS,CN=Users,DC=inlinegroup-c,DC=ru
       - key: MIRROR_LDAP_SVC_USERS
-        value: mirror_async,mirror_sched,mirror_integration
+        value: mirror_async,mirror_sched,mirror_integration,mirror-tpartner
     secret:
       - key: SPRING_DATASOURCE_USERNAME
         secretName: mirror-pg-cred

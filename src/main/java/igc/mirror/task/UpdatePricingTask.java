@@ -51,20 +51,20 @@ public class UpdatePricingTask {
 
         String uri = "effect/exchange/professional/roles";
 
-        webClient
-                .post()
-                .uri(uri)
-                .header("Authorization", "Bearer " + authResponseDto.getAccessToken())
-                .header(HttpHeaders.USER_AGENT, userAgent)
-                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(X_REQUEST_ID_KEY))
-                .retrieve()
-                .bodyToMono(Void.class)
-                .log()
-                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
-                .doOnError(err -> logger.error("Ошибка запуска удаленного сервиса - {}", err.getMessage()))
-                .doOnSuccess(success -> logger.info("Обновление списка прайсингов из Профессионалы 4.0 завершено"))
-                .log()
-                .block();
+//        webClient
+//                .post()
+//                .uri(uri)
+//                .header("Authorization", "Bearer " + authResponseDto.getAccessToken())
+//                .header(HttpHeaders.USER_AGENT, userAgent)
+//                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(X_REQUEST_ID_KEY))
+//                .retrieve()
+//                .bodyToMono(Void.class)
+//                .log()
+//                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
+//                .doOnError(err -> logger.error("Ошибка запуска удаленного сервиса - {}", err.getMessage()))
+//                .doOnSuccess(success -> logger.info("Обновление списка прайсингов из Профессионалы 4.0 завершено"))
+//                .log()
+//                .block();
 
         MDC.remove(USER_AGENT_KEY);
         MDC.remove(X_REQUEST_ID_KEY);

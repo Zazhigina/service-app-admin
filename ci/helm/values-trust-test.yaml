@@ -56,7 +56,7 @@ application:
       - key: MIRROR_LDAP_URL
         value: ldap://SPB99-DC01.gazprom-neft.local
       - key: MIRROR_LDAP_BASE
-        value: CN=Regions,DC=gazprom-neft,DC=local
+        value: DC=gazprom-neft,DC=local
       - key: MIRROR_LDAP_FILTER
         value: "CN=SPB-SSO-ALLUSERS-U200004739,CN=U200004739,CN=Groups,CN=ПАО Газпром нефть,CN=SPB,CN=Regions,DC=gazprom-neft,DC=local"
       - key: MIRROR_LDAP_SVC_USERS

@@ -137,4 +137,12 @@ public class ParamRepository implements JooqCommonRepository<Param, String> {
                 .where(AParam.A_PARAM.KEY.in(keys))
                 .fetchMap(AParam.A_PARAM.KEY, ParamDto.class);
     }
+
+    public List<Param> findProfessionalEmail() {
+        return dsl
+            .selectFrom(AParam.A_PARAM)
+            .where(AParam.A_PARAM.KEY.eq("PROFESSIONAL.EMAIL_SENDER")
+                    .or(AParam.A_PARAM.KEY.eq("PROFESSIONAL.COPY_EMAIL_SENDER")))
+            .fetchInto(Param.class);
+    }
 }

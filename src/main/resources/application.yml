@@ -99,9 +99,9 @@ mirror:
         notification-process: ${MIRROR_SCHEDULE_TASKS_CRON_NOTIFICATION_PROCESS:0 0 1 * * *}
         daily-integration-uploading: ${MIRROR_SCHEDULE_TASKS_CRON_DAILY_INTEGRATION_UPLOADING:0 0 5 * * *}
   ldap:
-    url: ldap://192.168.0.200:389
-    base: CN=Users,DC=ds,DC=domain,DC=loc
-    filter: CN=SPB-SSO-ALLUSERS,CN=Users,DC=ds,DC=domain,DC=loc
-    username: ds\administrator
-    password: adm_pwd
-    svc-users: svc_mirror_service, administrator2, administrator, svc_mirror_rpa
+    url: ${MIRROR_LDAP_URL}
+    base: ${MIRROR_LDAP_BASE}
+    filter: ${MIRROR_LDAP_FILTER}
+    username:
+    password:
+    svc-users: ${MIRROR_LDAP_SVC_USERS}

@@ -4,6 +4,7 @@ import igc.mirror.auth.UserDetails;
 import igc.mirror.exception.common.EntityNotFoundException;
 import igc.mirror.param.dto.ParamDto;
 import igc.mirror.param.dto.ParamEditableDto;
+import igc.mirror.param.dto.ProfessionalEmailDto;
 import igc.mirror.param.model.Param;
 import igc.mirror.param.repository.ParamRepository;
 import igc.mirror.utils.qfilter.DataFilter;
@@ -81,6 +82,14 @@ public class ParamService {
      */
     public ParamDto findByKey(String key){
         return ParamDto.fromModel(paramRepository.find(key));
+    }
+
+    /**
+     * Возвращает данные параметра по ключу
+     * @return почтовые данные
+     */
+    public ProfessionalEmailDto findProfessionalEmails(){
+        return ProfessionalEmailDto.fromParamList(paramRepository.findProfessionalEmail());
     }
 
     /**

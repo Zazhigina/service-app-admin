@@ -71,9 +71,13 @@ public class LdapUserService {
                 var groups = result.getMemberof();
                 for (int i = 0; i < groups.size(); i++) {
                     var currentGroup = groups.get(i);
-                    var group = ldapTemplate.lookup("CN=" + currentGroup.getName(), new LdapGroupAttributesMapper());
-                    currentGroup.setName(group.getName());
-                    currentGroup.setDescription(group.getDescription());
+                    try {
+                        var group = ldapTemplate.lookup("CN=" + currentGroup.getName(), new LdapGroupAttributesMapper());
+                        currentGroup.setName(group.getName());
+                        currentGroup.setDescription(group.getDescription());
+                    }
+                    catch (Exception e) {
+                    }
                 }
             }
 

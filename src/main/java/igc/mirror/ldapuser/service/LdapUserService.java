@@ -71,13 +71,10 @@ public class LdapUserService {
                 var groups = result.getMemberof();
                 for (int i = 0; i < groups.size(); i++) {
                     var currentGroup = groups.get(i);
-                    try {
-                        var group = ldapTemplate.lookup("CN=" + currentGroup.getName(), new LdapGroupAttributesMapper());
-                        currentGroup.setName(group.getName());
-                        currentGroup.setDescription(group.getDescription());
-                    }
-                    catch (Exception e) {
-                    }
+                    String dn = currentGroup.getDistinguishedName().replace("," + ldapBase, "");
+                    var group = ldapTemplate.lookup(dn, new LdapGroupAttributesMapper());
+                    currentGroup.setName(group.getName());
+                    currentGroup.setDescription(group.getDescription());
                 }
             }
 
@@ -163,13 +160,10 @@ public class LdapUserService {
             if(attrs.get("memberOf") != null) {
                 for (Enumeration vals = attrs.get("memberOf").getAll(); vals.hasMoreElements(); ) {
                     String groupName = (String) vals.nextElement();
-                    if (groupName.toLowerCase().startsWith("cn=")) {
-                        groupName = groupName.substring(3);
-                    }
-                    if (groupName.toLowerCase().startsWith("mirror")) {
-                        groupName = groupName.substring(0, groupName.indexOf(","));
+                    if (groupName.toLowerCase().startsWith("cn=mirror")) {
                         LdapGroup group = new LdapGroup();
-                        group.setName(groupName);
+                        group.setDistinguishedName(groupName);
+                        group.setName(groupName.substring(3, groupName.indexOf(",")));
                         memberOf.add(group);
                     }
                 }

@@ -35,7 +35,7 @@ public class ParamService {
 
     @Autowired
     public ParamService(ParamRepository paramRepository,
-                            UserDetails userDetails){
+                        UserDetails userDetails) {
         this.paramRepository = paramRepository;
         this.userDetails = userDetails;
     }
@@ -44,7 +44,7 @@ public class ParamService {
      * Возвращает список параметров
      *
      * @param dataFilter набор критериев поиска
-     * @param pageable настройки пэджинации и сортировки
+     * @param pageable   настройки пэджинации и сортировки
      * @return список параметров
      */
     public Page<ParamDto> findParamsByFilters(DataFilter<?> dataFilter, Pageable pageable) {
@@ -57,7 +57,7 @@ public class ParamService {
     /**
      * Изменяет данные параметра
      *
-     * @param key ключ
+     * @param key              ключ
      * @param paramEditableDto данные для редактирования параметра
      * @return отредактированный параметр
      */
@@ -66,8 +66,8 @@ public class ParamService {
     public ParamDto changeParam(@NotBlank String key, @Valid ParamEditableDto paramEditableDto) {
         logger.info("Изменение параметра с ключом - {}", key);
 
-        if(!paramRepository.checkExist(key))
-            throw new EntityNotFoundException(String.format("Параметр %s не найден",key), null, ParamEditableDto.class);
+        if (!paramRepository.checkExist(key))
+            throw new EntityNotFoundException(String.format("Параметр %s не найден", key), null, ParamEditableDto.class);
 
         Param changeParam = new Param(key, paramEditableDto.getName(), paramEditableDto.getVal());
         changeParam.setLastUpdateUser(userDetails.getUsername());
@@ -77,10 +77,11 @@ public class ParamService {
 
     /**
      * Возвращает данные параметра по ключу
+     *
      * @param key ключ
      * @return данные параметра
      */
-    public ParamDto findByKey(String key){
+    public ParamDto findByKey(String key) {
         return ParamDto.fromModel(paramRepository.find(key));
     }
 
@@ -110,12 +111,20 @@ public class ParamService {
      */
     public ParamDto fillPrcatIntegrationStartDateParam(@RequestBody LocalDateTime prcatIntegrationStartDate) {
         final String KEY = "PRCAT_INTEGRATION.START_DATE";
+        final String NAME = "Дата начала использования нового справочника расценок";
 
-        ParamDto paramDto = findByKey(KEY);
+        ParamDto paramDto;
+        Param param;
 
-        Param changeParam = new Param(KEY, paramDto.getName(), prcatIntegrationStartDate.toString());
-        changeParam.setLastUpdateUser(userDetails.getUsername());
+        try {
+            paramDto = findByKey(KEY);
+            param = new Param(KEY, paramDto.getName(), prcatIntegrationStartDate.toString());
+        } catch (Exception e) {
+            param = new Param(KEY, NAME, prcatIntegrationStartDate.toString());
+        }
 
-        return ParamDto.fromModel(paramRepository.save(changeParam));
+        param.setLastUpdateUser(userDetails.getUsername());
+
+        return ParamDto.fromModel(paramRepository.save(param));
     }
 }

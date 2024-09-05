@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ldap.core.AttributesMapper;
+import org.springframework.ldap.core.DirContextAdapter;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.ldap.filter.AndFilter;
@@ -19,7 +20,9 @@ import org.springframework.validation.annotation.Validated;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.SearchControls;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
@@ -55,7 +58,7 @@ public class LdapUserService {
 
             var controls = new SearchControls();
             controls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-            controls.setReturningAttributes(new String[]{ "sAMAccountName", "cn", "memberOf", "description", "accountexpires", "useraccountcontrol" });
+            controls.setReturningAttributes(new String[] { "sAMAccountName", "cn", "memberOf", "description", "useraccountcontrol" });
 
             AndFilter filter = new AndFilter();
             filter.and(new EqualsFilter("objectclass", "person"));
@@ -96,7 +99,7 @@ public class LdapUserService {
 
                 var controls = new SearchControls();
                 controls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-                controls.setReturningAttributes(new String[]{"sAMAccountName", "cn", "memberOf", "description", "accountexpires", "useraccountcontrol"});
+                controls.setReturningAttributes(new String[] { "sAMAccountName", "cn", "description", "accountexpires", "useraccountcontrol", "pwdlastset" });
 
                 AndFilter filter = new AndFilter();
                 filter.and(new EqualsFilter("objectclass", "person"));
@@ -111,6 +114,21 @@ public class LdapUserService {
 
                 var users = ldapTemplate.search("", filter.encode(), controls, new LdapUserAttributesMapper());
                 ldapUsers.addAll(users);
+
+                long maxPwdAge = 0;
+                DirContextAdapter cntx = (DirContextAdapter)ldapTemplate.lookup("");
+                if(cntx.attributeExists("maxpwdage")) {
+                    maxPwdAge = Math.abs(Long.parseLong((String)cntx.getObjectAttribute("maxpwdage")) / 10_000 / 1000);
+                }
+                for(LdapUser ldapUser : ldapUsers) {
+                    boolean isNoExpires = ldapUser.getIsNoExpires();
+                    if(!isNoExpires && maxPwdAge != 0 && ldapUser.getPwdLastSet() != null) {
+                        ldapUser.setAccountExpires(ldapUser.getPwdLastSet().plus(maxPwdAge, ChronoUnit.SECONDS));
+                    }
+                    if(isNoExpires) {
+                        ldapUser.setAccountExpires(LocalDateTime.MAX);
+                    }
+                }
 
             } catch (Exception e) {
                 logger.info("Ошибка при получении ролей СУЗ: {}", e.getMessage());
@@ -146,14 +164,15 @@ public class LdapUserService {
                 ldapUser.setDescription((String)attrs.get("description").get());
             }
             if(attrs.get("accountexpires") != null) {
-                long adDate = Long.parseLong((String)attrs.get("accountexpires").get());
-                long milliseconds = (adDate / 10000L) -  11644473600000L;
-                ldapUser.setAccountExpires(new Date(milliseconds).toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDateTime());
+                ldapUser.setAccountExpires(getDateFromAD(Long.parseLong((String)attrs.get("accountexpires").get())));
+            }
+            if(attrs.get("pwdlastset") != null) {
+                ldapUser.setPwdLastSet(getDateFromAD(Long.parseLong((String)attrs.get("pwdlastset").get())));
             }
             if(attrs.get("useraccountcontrol") != null) {
-                ldapUser.setIsDisabled(((String)attrs.get("useraccountcontrol").get()).equals("514"));
+                String user_acc_ctrl = (String)attrs.get("useraccountcontrol").get();
+                ldapUser.setIsDisabled(user_acc_ctrl.equals("514") || user_acc_ctrl.equals("66050"));
+                ldapUser.setIsNoExpires(user_acc_ctrl.equals("66048") || user_acc_ctrl.equals("66050"));
             }
 
             List<LdapGroup> memberOf = new ArrayList<>();
@@ -182,5 +201,11 @@ public class LdapUserService {
             }
             return ldapGroup;
         }
+    }
+
+    private static LocalDateTime getDateFromAD(long ms) {
+        return new Date((ms / 10000L) - 11644473600000L).toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 }

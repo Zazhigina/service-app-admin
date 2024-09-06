@@ -114,11 +114,18 @@ public class WebClientConfig {
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }
+
     @Bean("nsi")
     public WebClient webClientNSI() {
         HttpClient httpClient = HttpClient.create();
         return WebClient.builder()
                 .baseUrl(nsiUrl)
+                .exchangeStrategies(ExchangeStrategies.builder()
+                        .codecs(configurer ->
+                                configurer.defaultCodecs()
+                                        .maxInMemorySize(5 * 1024 * 1024)
+                        )
+                        .build())
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }
@@ -128,6 +135,12 @@ public class WebClientConfig {
         HttpClient httpClient = HttpClient.create();
         return WebClient.builder()
                 .baseUrl(prcatUrl)
+                .exchangeStrategies(ExchangeStrategies.builder()
+                        .codecs(configurer ->
+                                configurer.defaultCodecs()
+                                        .maxInMemorySize(5 * 1024 * 1024)
+                        )
+                        .build())
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }

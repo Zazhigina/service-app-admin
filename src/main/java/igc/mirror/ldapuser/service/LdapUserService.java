@@ -106,9 +106,6 @@ public class LdapUserService {
                     svc_names.or(new EqualsFilter("sAMAccountName", svcUsers[i]));
                 }
                 filter.and(svc_names);
-                if(!ldapFilter.isEmpty()) {
-                    filter.and(new EqualsFilter("memberOf", ldapFilter));
-                }
 
                 var users = ldapTemplate.search("", filter.encode(), controls, new LdapUserAttributesMapper());
                 ldapUsers.addAll(users);

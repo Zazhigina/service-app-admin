@@ -51,8 +51,9 @@ public class TemplateController {
 
     @GetMapping("/{id}/doc")
     @Operation(summary = "Выгрузка шаблона")
-    public ResponseEntity<Resource> downloadLetterTemplateDoc(@PathVariable Long id) {
-        DocumentDto document = templateService.downloadLetterTemplateDoc(id);
+    public ResponseEntity<Resource> downloadLetterTemplateDoc(@PathVariable Long id,
+                                                              @RequestParam(required = false, defaultValue = "false") Boolean isFileId) {
+        DocumentDto document = templateService.downloadLetterTemplateDoc(id, isFileId);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentDisposition(document.getContentDisposition());

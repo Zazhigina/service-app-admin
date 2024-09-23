@@ -165,13 +165,10 @@ public class TemplateService {
      * @param id ID шаблона
      * @return данные файла
      */
-    public DocumentDto downloadLetterTemplateDoc(Long id, Boolean isFileId) {
-        if (isFileId == null || Boolean.FALSE.equals(isFileId)) {
-            LetterTemplate letterTemplate = letterTemplateRepository.find(id);
-            return docService.downloadDocument(letterTemplate.getLetterSample());
-        } else {
-            return docService.downloadDocument(id);
-        }
+    public DocumentDto downloadLetterTemplateDoc(Long id) {
+        LetterTemplate letterTemplate = letterTemplateRepository.find(id);
+
+        return docService.downloadDocument(letterTemplate.getLetterSample());
     }
 
     /**

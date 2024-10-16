@@ -4,4 +4,4 @@
 */
 
 INSERT INTO "admin".a_param ("key", "name", val, create_date, create_user, last_update_date, last_update_user, default_val) values
-('INFLATION_RATE', 'Коэффициент инфляции в %', NULL, NULL, NULL, NULL, null, NULL);
+('INFLATION_RATE', 'Коэффициент инфляции в %', '4', NULL, NULL, NULL, null, NULL);

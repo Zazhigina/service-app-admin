@@ -6,7 +6,9 @@ import igc.mirror.doc.dto.DocumentDto;
 import igc.mirror.exception.common.EntityNotSavedException;
 import igc.mirror.exception.common.IllegalEntityStateException;
 import igc.mirror.template.dto.*;
+import igc.mirror.template.filter.LetterTemplateFilter;
 import igc.mirror.template.filter.LetterTemplateSearchCriteria;
+import igc.mirror.template.mapper.TemplateMapper;
 import igc.mirror.template.model.LetterTemplate;
 import igc.mirror.template.model.LetterTemplateVariable;
 import igc.mirror.template.ref.LetterTemplateAcceptableDocType;
@@ -16,41 +18,34 @@ import igc.mirror.template.repository.LetterTemplateRepository;
 import igc.mirror.template.repository.LetterTemplateVariableRepository;
 import igc.mirror.utils.qfilter.DataFilter;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Validated
+@RequiredArgsConstructor
 public class TemplateService {
     static final Logger logger = LoggerFactory.getLogger(TemplateService.class);
+
     private final LetterTemplateRepository letterTemplateRepository;
     private final UserDetails userDetails;
     private final DocService docService;
     private final LetterTemplateVariableRepository letterTemplateVariableRepository;
-
-    @Autowired
-    public TemplateService(LetterTemplateRepository letterTemplateRepository,
-                           UserDetails userDetails,
-                           DocService docService,
-                           LetterTemplateVariableRepository letterTemplateVariableRepository) {
-        this.letterTemplateRepository = letterTemplateRepository;
-        this.userDetails = userDetails;
-        this.docService = docService;
-        this.letterTemplateVariableRepository = letterTemplateVariableRepository;
-    }
+    private final TemplateMapper templateMapper;
 
     /**
      * Возвращает список найденных шаблонов по фильтру
@@ -214,5 +209,32 @@ public class TemplateService {
         template.setTemplateFileInfo(new FileInfoDto(documentInfo));
 
         return template;
+    }
+
+    public ResponseEntity<Resource> downloadTemplateByLetter(String letterType) {
+        Objects.requireNonNull(letterType);
+
+        var letterTemplate = letterTemplateRepository.findByLetterType(letterType);
+        if (!TemplateStatus.ACTUAL.name().equals(letterTemplate.getStatus()))
+            throw new IllegalEntityStateException("Шаблон не утвержден", letterTemplate.getId(), LetterTemplate.class);
+        var document = docService.downloadDocument(letterTemplate.getLetterSample());
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentDisposition(document.getContentDisposition());
+
+        return ResponseEntity.ok()
+                .headers(httpHeaders)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(document.getResource());
+    }
+
+    public List<LetterTemplateInfoDto> getTemplatesInfo(List<String> letterTypes) {
+        return templateMapper.templateToInfoDto(
+                letterTemplateRepository.getLetterTemplateListByParams(
+                        LetterTemplateFilter.builder()
+                                .letterTypes(letterTypes)
+                                .build()
+                )
+        );
     }
 }

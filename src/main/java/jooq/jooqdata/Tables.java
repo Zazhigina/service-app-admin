@@ -11,6 +11,8 @@ import jooqdata.tables.TCalendarProduction;
 import jooqdata.tables.TCostRange;
 import jooqdata.tables.TFaqAnswer;
 import jooqdata.tables.TFaqQuestion;
+import jooqdata.tables.TFeedback;
+import jooqdata.tables.TFeedbackThemes;
 import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
@@ -60,6 +62,16 @@ public class Tables {
      * FAQ: вопросы
      */
     public static final TFaqQuestion T_FAQ_QUESTION = TFaqQuestion.T_FAQ_QUESTION;
+
+    /**
+     * Обратная связь
+     */
+    public static final TFeedback T_FEEDBACK = TFeedback.T_FEEDBACK;
+
+    /**
+     * Справочник тем для обратной связи
+     */
+    public static final TFeedbackThemes T_FEEDBACK_THEMES = TFeedbackThemes.T_FEEDBACK_THEMES;
 
     /**
      * Шаблон письма

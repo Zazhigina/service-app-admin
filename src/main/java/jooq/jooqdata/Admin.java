@@ -14,6 +14,8 @@ import jooqdata.tables.TCalendarProduction;
 import jooqdata.tables.TCostRange;
 import jooqdata.tables.TFaqAnswer;
 import jooqdata.tables.TFaqQuestion;
+import jooqdata.tables.TFeedback;
+import jooqdata.tables.TFeedbackThemes;
 import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
@@ -75,6 +77,16 @@ public class Admin extends SchemaImpl {
      * FAQ: вопросы
      */
     public final TFaqQuestion T_FAQ_QUESTION = TFaqQuestion.T_FAQ_QUESTION;
+
+    /**
+     * Обратная связь
+     */
+    public final TFeedback T_FEEDBACK = TFeedback.T_FEEDBACK;
+
+    /**
+     * Справочник тем для обратной связи
+     */
+    public final TFeedbackThemes T_FEEDBACK_THEMES = TFeedbackThemes.T_FEEDBACK_THEMES;
 
     /**
      * Шаблон письма
@@ -141,6 +153,8 @@ public class Admin extends SchemaImpl {
             TCostRange.T_COST_RANGE,
             TFaqAnswer.T_FAQ_ANSWER,
             TFaqQuestion.T_FAQ_QUESTION,
+            TFeedback.T_FEEDBACK,
+            TFeedbackThemes.T_FEEDBACK_THEMES,
             TLetterTemplate.T_LETTER_TEMPLATE,
             TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM,
             TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM,

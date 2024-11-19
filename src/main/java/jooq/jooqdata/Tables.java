@@ -17,6 +17,7 @@ import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
 import jooqdata.tables.TLetterTemplateVariable;
+import jooqdata.tables.TMatrix;
 import jooqdata.tables.TQuestion;
 import jooqdata.tables.TServiceOfferType;
 import jooqdata.tables.TVariable;
@@ -92,6 +93,12 @@ public class Tables {
      * Переменные к шаблону письма
      */
     public static final TLetterTemplateVariable T_LETTER_TEMPLATE_VARIABLE = TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE;
+
+    /**
+     * Настройка матрицы Компания организатор / Организатор &lt;&gt; Заказчик /
+     * Инициатор"
+     */
+    public static final TMatrix T_MATRIX = TMatrix.T_MATRIX;
 
     /**
      * Преднастроенный вопрос

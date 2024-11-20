@@ -16,6 +16,7 @@ import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
 import jooqdata.tables.TLetterTemplateVariable;
+import jooqdata.tables.TMatrix;
 import jooqdata.tables.TQuestion;
 import jooqdata.tables.TServiceOfferType;
 import jooqdata.tables.TVariable;
@@ -31,6 +32,7 @@ import jooqdata.tables.records.TLetterTemplateAcceptableDocumentFormatEnumRecord
 import jooqdata.tables.records.TLetterTemplateRecord;
 import jooqdata.tables.records.TLetterTemplateTypeTemplateEnumRecord;
 import jooqdata.tables.records.TLetterTemplateVariableRecord;
+import jooqdata.tables.records.TMatrixRecord;
 import jooqdata.tables.records.TQuestionRecord;
 import jooqdata.tables.records.TServiceOfferTypeRecord;
 import jooqdata.tables.records.TVariableRecord;
@@ -69,6 +71,7 @@ public class Keys {
     public static final UniqueKey<TLetterTemplateTypeTemplateEnumRecord> T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM_PK = Internal.createUniqueKey(TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM, DSL.name("t_letter_template_type_template_enum_pk"), new TableField[] { TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM.ID }, true);
     public static final UniqueKey<TLetterTemplateTypeTemplateEnumRecord> T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM_UN = Internal.createUniqueKey(TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM, DSL.name("t_letter_template_type_template_enum_un"), new TableField[] { TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM.NAME }, true);
     public static final UniqueKey<TLetterTemplateVariableRecord> T_LETTER_TEMPLATE_VARIABLES_PK = Internal.createUniqueKey(TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE, DSL.name("t_letter_template_variables_pk"), new TableField[] { TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE.ID }, true);
+    public static final UniqueKey<TMatrixRecord> T_MATRIX_PKEY = Internal.createUniqueKey(TMatrix.T_MATRIX, DSL.name("t_matrix_pkey"), new TableField[] { TMatrix.T_MATRIX.ID }, true);
     public static final UniqueKey<TQuestionRecord> T_QUESTION_PK = Internal.createUniqueKey(TQuestion.T_QUESTION, DSL.name("t_question_pk"), new TableField[] { TQuestion.T_QUESTION.ID }, true);
     public static final UniqueKey<TQuestionRecord> T_QUESTION_UN = Internal.createUniqueKey(TQuestion.T_QUESTION, DSL.name("t_question_un"), new TableField[] { TQuestion.T_QUESTION.CODE, TQuestion.T_QUESTION.OWNER }, true);
     public static final UniqueKey<TServiceOfferTypeRecord> T_SERVICE_OFFER_TYPE_PK = Internal.createUniqueKey(TServiceOfferType.T_SERVICE_OFFER_TYPE, DSL.name("t_service_offer_type_pk"), new TableField[] { TServiceOfferType.T_SERVICE_OFFER_TYPE.ID }, true);

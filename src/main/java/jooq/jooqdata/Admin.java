@@ -20,6 +20,7 @@ import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
 import jooqdata.tables.TLetterTemplateVariable;
+import jooqdata.tables.TMatrix;
 import jooqdata.tables.TQuestion;
 import jooqdata.tables.TServiceOfferType;
 import jooqdata.tables.TVariable;
@@ -109,6 +110,12 @@ public class Admin extends SchemaImpl {
     public final TLetterTemplateVariable T_LETTER_TEMPLATE_VARIABLE = TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE;
 
     /**
+     * Настройка матрицы Компания организатор / Организатор &lt;&gt; Заказчик /
+     * Инициатор"
+     */
+    public final TMatrix T_MATRIX = TMatrix.T_MATRIX;
+
+    /**
      * Преднастроенный вопрос
      */
     public final TQuestion T_QUESTION = TQuestion.T_QUESTION;
@@ -159,6 +166,7 @@ public class Admin extends SchemaImpl {
             TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM,
             TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM,
             TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE,
+            TMatrix.T_MATRIX,
             TQuestion.T_QUESTION,
             TServiceOfferType.T_SERVICE_OFFER_TYPE,
             TVariable.T_VARIABLE

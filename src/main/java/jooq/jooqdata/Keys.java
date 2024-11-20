@@ -4,39 +4,8 @@
 package jooqdata;
 
 
-import jooqdata.tables.AParam;
-import jooqdata.tables.TAnswerVersion;
-import jooqdata.tables.TAppControl;
-import jooqdata.tables.TCalendarProduction;
-import jooqdata.tables.TCostRange;
-import jooqdata.tables.TFaqAnswer;
-import jooqdata.tables.TFaqQuestion;
-import jooqdata.tables.TFeedback;
-import jooqdata.tables.TLetterTemplate;
-import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
-import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
-import jooqdata.tables.TLetterTemplateVariable;
-import jooqdata.tables.TMatrix;
-import jooqdata.tables.TQuestion;
-import jooqdata.tables.TServiceOfferType;
-import jooqdata.tables.TVariable;
-import jooqdata.tables.records.AParamRecord;
-import jooqdata.tables.records.TAnswerVersionRecord;
-import jooqdata.tables.records.TAppControlRecord;
-import jooqdata.tables.records.TCalendarProductionRecord;
-import jooqdata.tables.records.TCostRangeRecord;
-import jooqdata.tables.records.TFaqAnswerRecord;
-import jooqdata.tables.records.TFaqQuestionRecord;
-import jooqdata.tables.records.TFeedbackRecord;
-import jooqdata.tables.records.TLetterTemplateAcceptableDocumentFormatEnumRecord;
-import jooqdata.tables.records.TLetterTemplateRecord;
-import jooqdata.tables.records.TLetterTemplateTypeTemplateEnumRecord;
-import jooqdata.tables.records.TLetterTemplateVariableRecord;
-import jooqdata.tables.records.TMatrixRecord;
-import jooqdata.tables.records.TQuestionRecord;
-import jooqdata.tables.records.TServiceOfferTypeRecord;
-import jooqdata.tables.records.TVariableRecord;
-
+import jooqdata.tables.*;
+import jooqdata.tables.records.*;
 import org.jooq.ForeignKey;
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
@@ -61,6 +30,7 @@ public class Keys {
     public static final UniqueKey<TCalendarProductionRecord> T_CALENDAR_PRODUCTION_PK = Internal.createUniqueKey(TCalendarProduction.T_CALENDAR_PRODUCTION, DSL.name("t_calendar_production_pk"), new TableField[] { TCalendarProduction.T_CALENDAR_PRODUCTION.ID }, true);
     public static final UniqueKey<TCalendarProductionRecord> T_CALENDAR_PRODUCTION_UN = Internal.createUniqueKey(TCalendarProduction.T_CALENDAR_PRODUCTION, DSL.name("t_calendar_production_un"), new TableField[] { TCalendarProduction.T_CALENDAR_PRODUCTION.YEAR }, true);
     public static final UniqueKey<TCostRangeRecord> T_COST_RANGE_PK = Internal.createUniqueKey(TCostRange.T_COST_RANGE, DSL.name("t_cost_range_pk"), new TableField[] { TCostRange.T_COST_RANGE.ID }, true);
+    public static final UniqueKey<TExternalSourceRecord> T_EXTERNAL_SOURCE_PK = Internal.createUniqueKey(TExternalSource.T_EXTERNAL_SOURCE, DSL.name("t_external_source_pk"), new TableField[] { TExternalSource.T_EXTERNAL_SOURCE.ID }, true);
     public static final UniqueKey<TFaqAnswerRecord> T_FAQ_ANSWER_PK = Internal.createUniqueKey(TFaqAnswer.T_FAQ_ANSWER, DSL.name("t_faq_answer_pk"), new TableField[] { TFaqAnswer.T_FAQ_ANSWER.ID }, true);
     public static final UniqueKey<TFaqQuestionRecord> T_FAQ_QUESTION_PK = Internal.createUniqueKey(TFaqQuestion.T_FAQ_QUESTION, DSL.name("t_faq_question_pk"), new TableField[] { TFaqQuestion.T_FAQ_QUESTION.ID }, true);
     public static final UniqueKey<TFeedbackRecord> T_FEEDBACK_THEMES_PKEY = Internal.createUniqueKey(TFeedback.T_FEEDBACK, DSL.name("t_feedback_themes_pkey"), new TableField[] { TFeedback.T_FEEDBACK.ID }, true);

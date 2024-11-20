@@ -4,23 +4,7 @@
 package jooqdata;
 
 
-import jooqdata.tables.AParam;
-import jooqdata.tables.TAnswerVersion;
-import jooqdata.tables.TAppControl;
-import jooqdata.tables.TCalendarProduction;
-import jooqdata.tables.TCostRange;
-import jooqdata.tables.TFaqAnswer;
-import jooqdata.tables.TFaqQuestion;
-import jooqdata.tables.TFeedback;
-import jooqdata.tables.TFeedbackThemes;
-import jooqdata.tables.TLetterTemplate;
-import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
-import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
-import jooqdata.tables.TLetterTemplateVariable;
-import jooqdata.tables.TMatrix;
-import jooqdata.tables.TQuestion;
-import jooqdata.tables.TServiceOfferType;
-import jooqdata.tables.TVariable;
+import jooqdata.tables.*;
 
 
 /**
@@ -53,6 +37,11 @@ public class Tables {
      * Диапазоны стоимостных показателей
      */
     public static final TCostRange T_COST_RANGE = TCostRange.T_COST_RANGE;
+
+    /**
+     * Системы-источники
+     */
+    public static final TExternalSource T_EXTERNAL_SOURCE = TExternalSource.T_EXTERNAL_SOURCE;
 
     /**
      * FAQ: ответ на вопрос

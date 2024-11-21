@@ -5,6 +5,7 @@ package jooqdata;
 
 
 import jooqdata.tables.TExternalSource;
+
 import org.jooq.Index;
 import org.jooq.OrderField;
 import org.jooq.impl.DSL;

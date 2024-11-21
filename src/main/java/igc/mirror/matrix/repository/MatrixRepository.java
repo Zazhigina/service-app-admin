@@ -42,10 +42,7 @@ public class MatrixRepository {
                     .set(TMatrix.T_MATRIX.ORG_CODE, matrix.getOrgCode())
                     .set(TMatrix.T_MATRIX.CUSTOMER_CODE, matrix.getCustomerCode())
                     .set(TMatrix.T_MATRIX.INITIATOR_CODE, matrix.getInitiatorCode())
-    //                .set(TMatrix.T_MATRIX.CREATE_DATE, matrix.getCreateDate())
                     .set(TMatrix.T_MATRIX.CREATE_USER, matrix.getCreateUser())
-    //                .set(TMatrix.T_MATRIX.LAST_UPDATE_DATE, matrix.getLastUpdateDate())
-    //                .set(TMatrix.T_MATRIX.LAST_UPDATE_USER, matrix.getLastUpdateUser())
                     .execute();
     }
 

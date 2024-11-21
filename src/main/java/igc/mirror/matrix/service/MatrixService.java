@@ -3,7 +3,7 @@ package igc.mirror.matrix.service;
 import igc.mirror.auth.UserDetails;
 import igc.mirror.config.LoggingConstants;
 import igc.mirror.exception.common.RemoteServiceCallException;
-import igc.mirror.matrix.dto.MatrixDTO;
+import igc.mirror.matrix.dto.MatrixDto;
 import igc.mirror.matrix.filter.InitiatorSearchCriteria;
 import igc.mirror.matrix.filter.MatrixSearchCriteria;
 import igc.mirror.matrix.filter.OrgSearchCriteria;
@@ -155,8 +155,6 @@ public class MatrixService {
 
         String urlTemplate = webServiceUtil.buildUriByPageableProperties(uri, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
 
-        //dataFilter.getSearchCriteria() == "orgCo"
-
         return webClient
                 .post()
                 .uri(urlTemplate)
@@ -289,9 +287,9 @@ public class MatrixService {
      *
      * @param matrixDTO данных в Матрицу Компания организатор / Организатор - Заказчик / Инициатор
      */
-    public void addMatrixInfo(List<MatrixDTO> matrixDTO) {
+    public void addMatrixInfo(List<MatrixDto> matrixDTO) {
 
-        for (MatrixDTO matrix_object : matrixDTO) {
+        for (MatrixDto matrix_object : matrixDTO) {
 
             var matrixInfo = matrixRepository.getMatrixInfoByAllParams(matrix_object.getCompanyCode(), matrix_object.getOrgCode(), matrix_object.getCustomerCode(), matrix_object.getInitiatorCode());
 
@@ -323,8 +321,8 @@ public class MatrixService {
     /**
      * Удалить заказчика/инициатора из Матрицы Компания организатор / Организатор - Заказчик / Инициатор
      */
-    public void deleteInfoByObject(List<MatrixDTO> matrixDTO) {
-        for (MatrixDTO matrix_object : matrixDTO) {
+    public void deleteInfoByObject(List<MatrixDto> matrixDTO) {
+        for (MatrixDto matrix_object : matrixDTO) {
 
             var matrixInfo = matrixRepository.getMatrixInfoByAllParams(matrix_object.getCompanyCode(), matrix_object.getOrgCode(), matrix_object.getCustomerCode(), matrix_object.getInitiatorCode());
 

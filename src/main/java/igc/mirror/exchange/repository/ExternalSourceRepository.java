@@ -25,7 +25,7 @@ public class ExternalSourceRepository {
                 .fetchOneInto(ExternalSource.class);
     }
 
-    private TExternalSourceRecord createExternalSourceRecord(ExternalSource externalSource) {
+    public TExternalSourceRecord createExternalSourceRecord(ExternalSource externalSource) {
         return dsl
                 .insertInto(T_EXTERNAL_SOURCE)
                 .set(dsl.newRecord(T_EXTERNAL_SOURCE, externalSource))
@@ -34,30 +34,26 @@ public class ExternalSourceRepository {
                 .orElseThrow(() -> new EntityNotSavedException("Возникли ошибки при сохранении данных", null, ExternalSourceDto.class));
     }
 
-    public Long createExternalSource(ExternalSource externalSource) {
-        return createExternalSourceRecord(externalSource).getId();
-    }
-
-    public void saveExternalSource(ExternalSource model) {
+    public void changeExternalSource(ExternalSource externalSource) {
         int count = dsl.update(T_EXTERNAL_SOURCE)
-                .set(T_EXTERNAL_SOURCE.CODE, model.getCode())
-                .set(T_EXTERNAL_SOURCE.NAME, model.getName())
-                .set(T_EXTERNAL_SOURCE.DESCRIPTION, model.getDescription())
-                .set(T_EXTERNAL_SOURCE.DELETED, model.isDeleted())
-                .set(T_EXTERNAL_SOURCE.LAST_UPDATE_USER, model.getLastUpdateUser())
-                .set(T_EXTERNAL_SOURCE.LAST_UPDATE_DATE, LocalDateTime.now())
-                .where(T_EXTERNAL_SOURCE.ID.eq(model.getId()))
+                .set(T_EXTERNAL_SOURCE.CODE, externalSource.getCode())
+                .set(T_EXTERNAL_SOURCE.NAME, externalSource.getName())
+                .set(T_EXTERNAL_SOURCE.DESCRIPTION, externalSource.getDescription())
+                .set(T_EXTERNAL_SOURCE.DELETED, externalSource.isDeleted())
+                .set(T_EXTERNAL_SOURCE.LAST_UPDATE_USER, externalSource.getLastUpdateUser())
+                .set(T_EXTERNAL_SOURCE.LAST_UPDATE_DATE, externalSource.getLastUpdateDate())
+                .where(T_EXTERNAL_SOURCE.ID.eq(externalSource.getId()))
                 .execute();
 
         if (count == 0)
-            throw new EntityNotFoundException("Объект не найден", model.getId(), ExternalSource.class);
+            throw new EntityNotFoundException("Объект не найден", externalSource.getId(), ExternalSource.class);
     }
 
-    public void markDeletedById(Long id, String userName) {
+    public void markDeletedById(Long id, String userName, LocalDateTime lastUpdateDate) {
         int count = dsl.update(T_EXTERNAL_SOURCE)
                 .set(T_EXTERNAL_SOURCE.DELETED, true)
                 .set(T_EXTERNAL_SOURCE.LAST_UPDATE_USER,userName)
-                .set(T_EXTERNAL_SOURCE.LAST_UPDATE_DATE, LocalDateTime.now())
+                .set(T_EXTERNAL_SOURCE.LAST_UPDATE_DATE, lastUpdateDate)
                 .where(T_EXTERNAL_SOURCE.ID.eq(id))
                 .execute();
 

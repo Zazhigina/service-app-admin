@@ -4,8 +4,41 @@
 package jooqdata;
 
 
-import jooqdata.tables.*;
-import jooqdata.tables.records.*;
+import jooqdata.tables.AParam;
+import jooqdata.tables.TAnswerVersion;
+import jooqdata.tables.TAppControl;
+import jooqdata.tables.TCalendarProduction;
+import jooqdata.tables.TCostRange;
+import jooqdata.tables.TExternalSource;
+import jooqdata.tables.TFaqAnswer;
+import jooqdata.tables.TFaqQuestion;
+import jooqdata.tables.TFeedback;
+import jooqdata.tables.TLetterTemplate;
+import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
+import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
+import jooqdata.tables.TLetterTemplateVariable;
+import jooqdata.tables.TMatrix;
+import jooqdata.tables.TQuestion;
+import jooqdata.tables.TServiceOfferType;
+import jooqdata.tables.TVariable;
+import jooqdata.tables.records.AParamRecord;
+import jooqdata.tables.records.TAnswerVersionRecord;
+import jooqdata.tables.records.TAppControlRecord;
+import jooqdata.tables.records.TCalendarProductionRecord;
+import jooqdata.tables.records.TCostRangeRecord;
+import jooqdata.tables.records.TExternalSourceRecord;
+import jooqdata.tables.records.TFaqAnswerRecord;
+import jooqdata.tables.records.TFaqQuestionRecord;
+import jooqdata.tables.records.TFeedbackRecord;
+import jooqdata.tables.records.TLetterTemplateAcceptableDocumentFormatEnumRecord;
+import jooqdata.tables.records.TLetterTemplateRecord;
+import jooqdata.tables.records.TLetterTemplateTypeTemplateEnumRecord;
+import jooqdata.tables.records.TLetterTemplateVariableRecord;
+import jooqdata.tables.records.TMatrixRecord;
+import jooqdata.tables.records.TQuestionRecord;
+import jooqdata.tables.records.TServiceOfferTypeRecord;
+import jooqdata.tables.records.TVariableRecord;
+
 import org.jooq.ForeignKey;
 import org.jooq.TableField;
 import org.jooq.UniqueKey;

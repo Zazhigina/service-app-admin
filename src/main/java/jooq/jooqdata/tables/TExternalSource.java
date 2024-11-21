@@ -4,20 +4,33 @@
 package jooqdata.tables;
 
 
-import jooqdata.Admin;
-import jooqdata.Indexes;
-import jooqdata.Keys;
-import jooqdata.tables.records.TExternalSourceRecord;
-import org.jooq.Record;
-import org.jooq.*;
-import org.jooq.impl.DSL;
-import org.jooq.impl.SQLDataType;
-import org.jooq.impl.TableImpl;
-
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+
+import jooqdata.Admin;
+import jooqdata.Indexes;
+import jooqdata.Keys;
+import jooqdata.tables.records.TExternalSourceRecord;
+
+import org.jooq.Field;
+import org.jooq.ForeignKey;
+import org.jooq.Function9;
+import org.jooq.Index;
+import org.jooq.Name;
+import org.jooq.Record;
+import org.jooq.Records;
+import org.jooq.Row9;
+import org.jooq.Schema;
+import org.jooq.SelectField;
+import org.jooq.Table;
+import org.jooq.TableField;
+import org.jooq.TableOptions;
+import org.jooq.UniqueKey;
+import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
+import org.jooq.impl.TableImpl;
 
 
 /**

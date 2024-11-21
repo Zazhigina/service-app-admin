@@ -4,14 +4,32 @@
 package jooqdata;
 
 
-import jooqdata.tables.*;
+import java.util.Arrays;
+import java.util.List;
+
+import jooqdata.tables.AParam;
+import jooqdata.tables.TAnswerVersion;
+import jooqdata.tables.TAppControl;
+import jooqdata.tables.TCalendarProduction;
+import jooqdata.tables.TCostRange;
+import jooqdata.tables.TExternalSource;
+import jooqdata.tables.TFaqAnswer;
+import jooqdata.tables.TFaqQuestion;
+import jooqdata.tables.TFeedback;
+import jooqdata.tables.TFeedbackThemes;
+import jooqdata.tables.TLetterTemplate;
+import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
+import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
+import jooqdata.tables.TLetterTemplateVariable;
+import jooqdata.tables.TMatrix;
+import jooqdata.tables.TQuestion;
+import jooqdata.tables.TServiceOfferType;
+import jooqdata.tables.TVariable;
+
 import org.jooq.Catalog;
 import org.jooq.Sequence;
 import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
-
-import java.util.Arrays;
-import java.util.List;
 
 
 /**

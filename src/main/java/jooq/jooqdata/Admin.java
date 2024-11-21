@@ -12,6 +12,7 @@ import jooqdata.tables.TAnswerVersion;
 import jooqdata.tables.TAppControl;
 import jooqdata.tables.TCalendarProduction;
 import jooqdata.tables.TCostRange;
+import jooqdata.tables.TExternalSource;
 import jooqdata.tables.TFaqAnswer;
 import jooqdata.tables.TFaqQuestion;
 import jooqdata.tables.TFeedback;
@@ -68,6 +69,11 @@ public class Admin extends SchemaImpl {
      * Диапазоны стоимостных показателей
      */
     public final TCostRange T_COST_RANGE = TCostRange.T_COST_RANGE;
+
+    /**
+     * Системы-источники
+     */
+    public final TExternalSource T_EXTERNAL_SOURCE = TExternalSource.T_EXTERNAL_SOURCE;
 
     /**
      * FAQ: ответ на вопрос
@@ -158,6 +164,7 @@ public class Admin extends SchemaImpl {
             TAppControl.T_APP_CONTROL,
             TCalendarProduction.T_CALENDAR_PRODUCTION,
             TCostRange.T_COST_RANGE,
+            TExternalSource.T_EXTERNAL_SOURCE,
             TFaqAnswer.T_FAQ_ANSWER,
             TFaqQuestion.T_FAQ_QUESTION,
             TFeedback.T_FEEDBACK,

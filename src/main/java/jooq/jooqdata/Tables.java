@@ -9,6 +9,7 @@ import jooqdata.tables.TAnswerVersion;
 import jooqdata.tables.TAppControl;
 import jooqdata.tables.TCalendarProduction;
 import jooqdata.tables.TCostRange;
+import jooqdata.tables.TExternalSource;
 import jooqdata.tables.TFaqAnswer;
 import jooqdata.tables.TFaqQuestion;
 import jooqdata.tables.TFeedback;
@@ -53,6 +54,11 @@ public class Tables {
      * Диапазоны стоимостных показателей
      */
     public static final TCostRange T_COST_RANGE = TCostRange.T_COST_RANGE;
+
+    /**
+     * Системы-источники
+     */
+    public static final TExternalSource T_EXTERNAL_SOURCE = TExternalSource.T_EXTERNAL_SOURCE;
 
     /**
      * FAQ: ответ на вопрос

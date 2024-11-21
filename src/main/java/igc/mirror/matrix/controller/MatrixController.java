@@ -67,8 +67,8 @@ public class MatrixController {
 
     @Operation(summary = "Сохранить матрицу")
     @PostMapping("/add")
-    public String matrixAddInfo(@RequestBody List<MatrixDto> matrixDTO) {
-        matrixService.addMatrixInfo(matrixDTO);
+    public String matrixAddInfo(@RequestBody List<MatrixDto> matrixDto) {
+        matrixService.addMatrixInfo(matrixDto);
         return "Запись добавлена";
     }
 
@@ -81,8 +81,8 @@ public class MatrixController {
 
     @Operation(summary = "Удалить заказчика и инициатора")
     @PostMapping("/delete")
-    public String matrixDeleteByObject(@RequestBody List<MatrixDto> matrixDTO) {
-        matrixService.deleteInfoByObject(matrixDTO);
+    public String matrixDeleteByObject(@RequestBody List<MatrixDto> matrixDto) {
+        matrixService.deleteInfoByObject(matrixDto);
         return "Запись удалена";
     }
 }

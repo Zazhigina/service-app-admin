@@ -15,6 +15,9 @@ import igc.mirror.poi.service.POIService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +36,9 @@ public class ExchangeService {
     private final ExternalSourceRepository externalSourceRepository;
     private final UserDetails userDetails;
     private final POIService poiService;
+
+    @Value("${mirror.application.purchase-procedure-template-path}")
+    Resource resourceProcedureTemplateFile;
 
     /**
      * Добавить запись о системе в справочник
@@ -248,6 +254,10 @@ public class ExchangeService {
             throw new IllegalEntityStateException("Ошибка при загрузке файла c закупочными процедурами", null, MultipartFile.class);
         }
         return procedureData;
+    }
+
+    public Resource getPurchaseProcedureTemplate() {
+        return resourceProcedureTemplateFile;
     }
 
     /**

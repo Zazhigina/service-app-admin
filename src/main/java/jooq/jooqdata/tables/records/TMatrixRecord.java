@@ -10,8 +10,8 @@ import jooqdata.tables.TMatrix;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record9;
-import org.jooq.Row9;
+import org.jooq.Record10;
+import org.jooq.Row10;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -20,7 +20,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Инициатор"
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class TMatrixRecord extends UpdatableRecordImpl<TMatrixRecord> implements Record9<Long, String, String, String, String, LocalDateTime, String, LocalDateTime, String> {
+public class TMatrixRecord extends UpdatableRecordImpl<TMatrixRecord> implements Record10<Long, String, String, String, String, LocalDateTime, String, LocalDateTime, String, Boolean> {
 
     private static final long serialVersionUID = 1L;
 
@@ -154,6 +154,20 @@ public class TMatrixRecord extends UpdatableRecordImpl<TMatrixRecord> implements
         return (String) get(8);
     }
 
+    /**
+     * Setter for <code>admin.t_matrix.is_deleted</code>. Статус удаления
+     */
+    public void setIsDeleted(Boolean value) {
+        set(9, value);
+    }
+
+    /**
+     * Getter for <code>admin.t_matrix.is_deleted</code>. Статус удаления
+     */
+    public Boolean getIsDeleted() {
+        return (Boolean) get(9);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -164,17 +178,17 @@ public class TMatrixRecord extends UpdatableRecordImpl<TMatrixRecord> implements
     }
 
     // -------------------------------------------------------------------------
-    // Record9 type implementation
+    // Record10 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<Long, String, String, String, String, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
-        return (Row9) super.fieldsRow();
+    public Row10<Long, String, String, String, String, LocalDateTime, String, LocalDateTime, String, Boolean> fieldsRow() {
+        return (Row10) super.fieldsRow();
     }
 
     @Override
-    public Row9<Long, String, String, String, String, LocalDateTime, String, LocalDateTime, String> valuesRow() {
-        return (Row9) super.valuesRow();
+    public Row10<Long, String, String, String, String, LocalDateTime, String, LocalDateTime, String, Boolean> valuesRow() {
+        return (Row10) super.valuesRow();
     }
 
     @Override
@@ -223,6 +237,11 @@ public class TMatrixRecord extends UpdatableRecordImpl<TMatrixRecord> implements
     }
 
     @Override
+    public Field<Boolean> field10() {
+        return TMatrix.T_MATRIX.IS_DELETED;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -268,6 +287,11 @@ public class TMatrixRecord extends UpdatableRecordImpl<TMatrixRecord> implements
     }
 
     @Override
+    public Boolean component10() {
+        return getIsDeleted();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -310,6 +334,11 @@ public class TMatrixRecord extends UpdatableRecordImpl<TMatrixRecord> implements
     @Override
     public String value9() {
         return getLastUpdateUser();
+    }
+
+    @Override
+    public Boolean value10() {
+        return getIsDeleted();
     }
 
     @Override
@@ -367,7 +396,13 @@ public class TMatrixRecord extends UpdatableRecordImpl<TMatrixRecord> implements
     }
 
     @Override
-    public TMatrixRecord values(Long value1, String value2, String value3, String value4, String value5, LocalDateTime value6, String value7, LocalDateTime value8, String value9) {
+    public TMatrixRecord value10(Boolean value) {
+        setIsDeleted(value);
+        return this;
+    }
+
+    @Override
+    public TMatrixRecord values(Long value1, String value2, String value3, String value4, String value5, LocalDateTime value6, String value7, LocalDateTime value8, String value9, Boolean value10) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -377,6 +412,7 @@ public class TMatrixRecord extends UpdatableRecordImpl<TMatrixRecord> implements
         value7(value7);
         value8(value8);
         value9(value9);
+        value10(value10);
         return this;
     }
 
@@ -394,7 +430,7 @@ public class TMatrixRecord extends UpdatableRecordImpl<TMatrixRecord> implements
     /**
      * Create a detached, initialised TMatrixRecord
      */
-    public TMatrixRecord(Long id, String companyCode, String orgCode, String customerCode, String initiatorCode, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser) {
+    public TMatrixRecord(Long id, String companyCode, String orgCode, String customerCode, String initiatorCode, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String lastUpdateUser, Boolean isDeleted) {
         super(TMatrix.T_MATRIX);
 
         setId(id);
@@ -406,5 +442,6 @@ public class TMatrixRecord extends UpdatableRecordImpl<TMatrixRecord> implements
         setCreateUser(createUser);
         setLastUpdateDate(lastUpdateDate);
         setLastUpdateUser(lastUpdateUser);
+        setIsDeleted(isDeleted);
     }
 }

@@ -82,6 +82,7 @@ mirror:
     es-data-mgmt: ${MIRROR_ENDPOINT_PY_ES_DATA_MGMT}
   application:
     user-agent: ${SPRING_APPLICATION_NAME}/${APPLICATION_VERSION}
+    purchase-procedure-template-path: "classpath:template/PurchaseProcedureTemplate.xlsx"
   keycloak:
     base-url: ${MIRROR_KEYCLOAK_BASE_URL}
     realm: ${MIRROR_KEYCLOAK_REALM}

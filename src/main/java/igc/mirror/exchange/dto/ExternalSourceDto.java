@@ -7,7 +7,7 @@ public record ExternalSourceDto(Long id, String code, String name, String descri
         return new ExternalSource(this);
     }
 
-     public ExternalSourceDto(ExternalSource model) {
+    public ExternalSourceDto(ExternalSource model) {
         this(
                 model.getId(),
                 model.getCode(),

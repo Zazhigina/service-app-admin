@@ -56,6 +56,11 @@ public class Matrix {
      */
     private String lastUpdateUser;
 
+    /**
+     * Статус удаления
+     */
+    private Boolean isDeleted;
+
     public Matrix() {
         this.companyCode = "";
         this.orgCode = "";

@@ -33,10 +33,16 @@ public class MatrixDto {
      */
     private String initiatorCode;
 
+    /**
+     * Статус удаления
+     */
+    private Boolean isDeleted;
+
     public MatrixDto(Matrix matrix) {
         this.companyCode   = matrix.getCompanyCode();
         this.orgCode       = matrix.getOrgCode();
         this.customerCode  = matrix.getCustomerCode();
         this.initiatorCode = matrix.getInitiatorCode();
+        this.isDeleted = matrix.getIsDeleted();
     }
 }

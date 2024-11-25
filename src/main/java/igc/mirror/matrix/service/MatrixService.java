@@ -300,9 +300,14 @@ public class MatrixService {
                 matrixFinalObj.setCustomerCode(matrixObject.getCustomerCode());
                 matrixFinalObj.setInitiatorCode(matrixObject.getInitiatorCode());
                 matrixFinalObj.fillAuthInfo(userDetails.getUsername());
+                matrixFinalObj.setIsDeleted(false);
                 matrixRepository.insertMatrixInfo(matrixFinalObj);
             } else {
-                continue;
+                for (Matrix matrix : matrixInfo) {
+                    if (matrix.getIsDeleted()){
+                        matrixRepository.undoDeleteByObject(matrix);
+                    }
+                }
             }
         }
     }

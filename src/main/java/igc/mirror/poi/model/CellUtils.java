@@ -11,72 +11,61 @@ import java.util.Locale;
 
 public class CellUtils {
 
+    private CellUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     private static String getISO8601StringForDate(Date date) {
         String dateISO8601 = "yyyy-MM-dd'T'HH:mm:ss'Z'";
         DateFormat dateFormat = new SimpleDateFormat(dateISO8601, Locale.US);
         return dateFormat.format(date);
     }
+
     public static String getTextValue(Cell c) {
-        String value = null;
-        switch(c.getCellType()){
-            case NUMBER:
-                CellNumber cd = (CellNumber)c;
-                Double dValue = cd.getVal();
-                DecimalFormat formatter;
-                if(dValue - dValue.intValue() > 0.0)
-                    formatter = new DecimalFormat("0.00");
-                else {
-                    formatter = new DecimalFormat("#");
-                    formatter.setMaximumFractionDigits(0);
+        return switch (c.getCellType()) {
+            case NUMBER -> {
+                CellNumber cn = ((CellNumber) c);
+                if (cn.getFormattedValue() != null) {
+                    yield cn.getFormattedValue();
+                } else {
+                    Double value = cn.getVal();
+                    DecimalFormat formatter;
+                    if (value - value.intValue() > 0.0)
+                        formatter = new DecimalFormat("0.00");
+                    else {
+                        formatter = new DecimalFormat("#");
+                        formatter.setMaximumFractionDigits(0);
+                    }
+
+                    yield formatter.format(value);
                 }
-                value = formatter.format(dValue);
-                break;
-            case DATE:
-                CellDate ct = (CellDate)c;
-                value = getISO8601StringForDate(ct.getVal());
-                break;
-            case STRING:
-                CellString cs = (CellString)c;
-                value = cs.getVal();
-                break;
-            default:
-                break;
-        }
-        return value;
+            }
+            case DATE -> getISO8601StringForDate(((CellDate) c).getVal());
+            case STRING -> ((CellString) c).getVal();
+            case BLANK -> null;
+        };
     }
 
     public static Long getLongValue(Cell c) {
-        Long value = null;
-        switch(c.getCellType()){
-            case NUMBER:
-                CellNumber cd = (CellNumber)c;
-                value = cd.getVal().longValue();
-                break;
-            case DATE:
-                CellDate ct = (CellDate)c;
-                value = ct.getVal().getTime();
-                break;
-            case STRING:
-                CellString cs = (CellString)c;
-                value = Long.valueOf(cs.getVal());
-                break;
-            default:
-                break;
-        }
-        return value;
+        return switch (c.getCellType()) {
+            case NUMBER -> ((CellNumber) c).getVal().longValue();
+            case DATE -> ((CellDate) c).getVal().getTime();
+            case STRING -> Long.valueOf(((CellString) c).getVal());
+            case BLANK -> null;
+        };
     }
 
     public static Integer getIntValue(Cell c) {
         Integer value = null;
-        switch(c.getCellType()){
+        switch (c.getCellType()) {
             case NUMBER:
-                CellNumber cd = (CellNumber)c;
+                CellNumber cd = (CellNumber) c;
                 value = cd.getVal().intValue();
                 break;
             case DATE:
                 break;
             case STRING:
-                CellString cs = (CellString)c;
+                CellString cs = (CellString) c;
                 value = Integer.valueOf(cs.getVal());
                 break;
             default:
@@ -87,15 +76,15 @@ public class CellUtils {
 
     public static BigDecimal getBigDecimalValue(Cell c) {
         BigDecimal value = null;
-        switch(c.getCellType()){
+        switch (c.getCellType()) {
             case NUMBER:
-                CellNumber cd = (CellNumber)c;
+                CellNumber cd = (CellNumber) c;
                 value = BigDecimal.valueOf(cd.getVal());
                 break;
             case DATE:
                 break;
             case STRING:
-                CellString cs = (CellString)c;
+                CellString cs = (CellString) c;
                 value = new BigDecimal(cs.getVal());
                 break;
             default:
@@ -106,11 +95,11 @@ public class CellUtils {
 
     public static LocalDateTime getDateValue(Cell c) {
         LocalDateTime value = null;
-        switch(c.getCellType()){
+        switch (c.getCellType()) {
             case NUMBER:
                 break;
             case DATE:
-                CellDate ct = (CellDate)c;
+                CellDate ct = (CellDate) c;
                 value = ct.getVal().toInstant()
                         .atZone(ZoneId.systemDefault())
                         .toLocalDateTime();

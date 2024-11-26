@@ -11,7 +11,7 @@ public class CellBlank implements Cell {
     private Integer num;
     private Integer styleID;
 
-    public CellBlank(Integer currentColumnNumber) {
+    public CellBlank(int currentColumnNumber) {
         this.num = currentColumnNumber;
     }
 

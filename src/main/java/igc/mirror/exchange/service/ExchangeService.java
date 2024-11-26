@@ -1,44 +1,73 @@
 package igc.mirror.exchange.service;
 
 import igc.mirror.auth.UserDetails;
+import igc.mirror.config.LoggingConstants;
 import igc.mirror.exception.common.EntityNotSavedException;
 import igc.mirror.exception.common.IllegalEntityStateException;
 import igc.mirror.exception.common.LoadFileException;
+import igc.mirror.exception.common.RemoteServiceCallException;
 import igc.mirror.exchange.dto.ExternalSourceDto;
 import igc.mirror.exchange.model.ExternalSource;
 import igc.mirror.exchange.model.ProcedureData;
 import igc.mirror.exchange.model.ProcedureItem;
 import igc.mirror.exchange.model.ProcedureOffer;
 import igc.mirror.exchange.repository.ExternalSourceRepository;
-import igc.mirror.poi.model.*;
+import igc.mirror.poi.model.CellUtils;
+import igc.mirror.poi.model.Row;
+import igc.mirror.poi.model.Sheet;
+import igc.mirror.poi.model.Workbook;
 import igc.mirror.poi.service.POIService;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
+import static igc.mirror.config.LoggingConstants.X_REQUEST_ID_KEY;
 import static java.util.stream.Collectors.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class ExchangeService {
     private final ExternalSourceRepository externalSourceRepository;
     private final UserDetails userDetails;
     private final POIService poiService;
+    private final WebClient webClient;
 
     @Value("${mirror.application.purchase-procedure-template-path}")
     Resource resourceProcedureTemplateFile;
+    @Value("${mirror.application.user-agent}")
+    private String userAgent;
+
+    public ExchangeService(ExternalSourceRepository externalSourceRepository,
+                           UserDetails userDetails, POIService poiService,
+                           @Qualifier("integration") WebClient webClient) {
+        this.externalSourceRepository = externalSourceRepository;
+        this.userDetails = userDetails;
+        this.poiService = poiService;
+        this.webClient = webClient;
+    }
 
     /**
      * Добавить запись о системе в справочник
@@ -108,9 +137,9 @@ public class ExchangeService {
         try (InputStream fileInputStream = file.getInputStream()) {
             List<PurchaseProcedureSheet> procedureRawData = processDataFromProcedureFile(fileInputStream);
             log.info("Excel data: {}", procedureRawData);
-            ProcedureData procedureData = convertRawToProcedure(source, procedureRawData);
+            ProcedureData procedureData = convertRawToProcedure(procedureRawData);
             // отправить в сервис интеграции
-            sendPurchaseProcedureToIntegration(procedureData);
+            sendPurchaseProcedureToIntegration(source, procedureData);
         } catch (IOException e) {
             throw new IllegalEntityStateException("Ошибка при загрузке файла c закупочными процедурами", null, MultipartFile.class);
         }
@@ -142,7 +171,7 @@ public class ExchangeService {
         PurchaseProcedureRow data = new PurchaseProcedureRow();
         row.getCells().forEach(cell -> {
             try {
-                String textValue = CellUtils.getTextValue(cell).trim();
+                String textValue = StringUtils.trim(CellUtils.getTextValue(cell));
 
                 switch (cell.getNum()) {
                     case 0 -> data.setLotNr(textValue);
@@ -185,9 +214,8 @@ public class ExchangeService {
         return data;
     }
 
-    private ProcedureData convertRawToProcedure(String source, List<PurchaseProcedureSheet> procedureRawData) {
+    private ProcedureData convertRawToProcedure(List<PurchaseProcedureSheet> procedureRawData) {
         ProcedureData data = new ProcedureData();
-        data.setSource(source);
         List<ProcedureItem> items = new ArrayList<>();
 
         procedureRawData.forEach(
@@ -225,9 +253,9 @@ public class ExchangeService {
                                                 k.customer,
                                                 k.nmc,
                                                 k.protocolDate,
-                                                Stream.of(k.okved.split(",")).map(String::trim).toList(),
-                                                Stream.of(k.okpd.split(",")).map(String::trim).toList(),
-                                                Stream.of(k.okato.split(",")).map(String::trim).toList(),
+                                                splitString(k.okved),
+                                                splitString(k.okpd),
+                                                splitString(k.okato),
                                                 offers
                                         )
                                 )
@@ -239,17 +267,43 @@ public class ExchangeService {
         return data;
     }
 
-    private void sendPurchaseProcedureToIntegration(ProcedureData procedureData) {
-        log.info("Data to send: {}", procedureData);
+    private List<String> splitString(String text) {
+        if (text != null)
+            return Stream.of(text.split(",")).map(String::trim).toList();
+        else
+            return new ArrayList<>();
+    }
+
+    private void sendPurchaseProcedureToIntegration(String source, ProcedureData procedureData) {
+        log.trace("Send to /exchange/experience/procedure");
+
+        String uri = String.join("/", "/exchange/experience/procedure", source);
+
+        webClient
+                .post()
+                .uri(uri)
+                .header(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                .header(HttpHeaders.USER_AGENT, userAgent)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + userDetails.getJwtTokenValue())
+                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(X_REQUEST_ID_KEY))
+                .accept(MediaType.APPLICATION_JSON)
+                .acceptCharset(StandardCharsets.UTF_8)
+                .body(Mono.just(procedureData), ProcedureData.class)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .log()
+                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
+                .doOnError(err -> log.error("Ошибка запуска удаленного сервиса - {}", err.getMessage()))
+                .subscribe(exchangeId -> log.info("Задание по приему закупочных процедур для репликации в целевую систему запущено. Идентификатор записи журнала - {}", exchangeId));
     }
 
     public ProcedureData loadPurchaseProcedureByFileTest(String source, MultipartFile file) {
         ProcedureData procedureData;
         try (InputStream fileInputStream = file.getInputStream()) {
             List<PurchaseProcedureSheet> procedureRawData = processDataFromProcedureFile(fileInputStream);
-            procedureData = convertRawToProcedure(source, procedureRawData);
+            procedureData = convertRawToProcedure(procedureRawData);
             // отправить в сервис интеграции
-            sendPurchaseProcedureToIntegration(procedureData);
+            sendPurchaseProcedureToIntegration(source, procedureData);
         } catch (IOException e) {
             throw new IllegalEntityStateException("Ошибка при загрузке файла c закупочными процедурами", null, MultipartFile.class);
         }

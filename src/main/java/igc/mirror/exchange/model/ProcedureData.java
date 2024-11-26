@@ -9,7 +9,6 @@ import java.util.List;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProcedureData {
-    private String source;
     private LocalDateTime syncDate;
     private String messageGuid;
     private List<ProcedureItem> items;

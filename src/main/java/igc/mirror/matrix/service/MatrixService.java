@@ -3,7 +3,7 @@ package igc.mirror.matrix.service;
 import igc.mirror.auth.UserDetails;
 import igc.mirror.config.LoggingConstants;
 import igc.mirror.exception.common.RemoteServiceCallException;
-import igc.mirror.matrix.dto.MatrixDTO;
+import igc.mirror.matrix.dto.MatrixDto;
 import igc.mirror.matrix.filter.InitiatorSearchCriteria;
 import igc.mirror.matrix.filter.MatrixSearchCriteria;
 import igc.mirror.matrix.filter.OrgSearchCriteria;
@@ -155,8 +155,6 @@ public class MatrixService {
 
         String urlTemplate = webServiceUtil.buildUriByPageableProperties(uri, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
 
-        //dataFilter.getSearchCriteria() == "orgCo"
-
         return webClient
                 .post()
                 .uri(urlTemplate)
@@ -287,24 +285,29 @@ public class MatrixService {
     /**
      * Сохранение данных в Матрицу Компания организатор / Организатор - Заказчик / Инициатор
      *
-     * @param matrixDTO данных в Матрицу Компания организатор / Организатор - Заказчик / Инициатор
+     * @param matrixDto данных в Матрицу Компания организатор / Организатор - Заказчик / Инициатор
      */
-    public void addMatrixInfo(List<MatrixDTO> matrixDTO) {
+    public void addMatrixInfo(List<MatrixDto> matrixDto) {
 
-        for (MatrixDTO matrix_object : matrixDTO) {
+        for (MatrixDto matrixObject : matrixDto) {
 
-            var matrixInfo = matrixRepository.getMatrixInfoByAllParams(matrix_object.getCompanyCode(), matrix_object.getOrgCode(), matrix_object.getCustomerCode(), matrix_object.getInitiatorCode());
+            var matrixInfo = matrixRepository.getMatrixInfoByAllParams(matrixObject.getCompanyCode(), matrixObject.getOrgCode(), matrixObject.getCustomerCode(), matrixObject.getInitiatorCode());
 
             if (matrixInfo.isEmpty()){
                 Matrix matrixFinalObj = new Matrix();
-                matrixFinalObj.setCompanyCode(matrix_object.getCompanyCode());
-                matrixFinalObj.setOrgCode(matrix_object.getOrgCode());
-                matrixFinalObj.setCustomerCode(matrix_object.getCustomerCode());
-                matrixFinalObj.setInitiatorCode(matrix_object.getInitiatorCode());
+                matrixFinalObj.setCompanyCode(matrixObject.getCompanyCode());
+                matrixFinalObj.setOrgCode(matrixObject.getOrgCode());
+                matrixFinalObj.setCustomerCode(matrixObject.getCustomerCode());
+                matrixFinalObj.setInitiatorCode(matrixObject.getInitiatorCode());
                 matrixFinalObj.fillAuthInfo(userDetails.getUsername());
+                matrixFinalObj.setIsDeleted(false);
                 matrixRepository.insertMatrixInfo(matrixFinalObj);
             } else {
-                continue;
+                for (Matrix matrix : matrixInfo) {
+                    if (matrix.getIsDeleted()){
+                        matrixRepository.undoDeleteByObject(matrix);
+                    }
+                }
             }
         }
     }
@@ -314,23 +317,23 @@ public class MatrixService {
      */
     public void deleteInfoByCompanyCode(String companyCode) {
 
-        var matrix_obj = matrixRepository.getInfoByCompanyCode(companyCode);
+        var matrixObj = matrixRepository.getInfoByCompanyCode(companyCode);
 
-        if (!matrix_obj.isEmpty()){
+        if (!matrixObj.isEmpty()){
             matrixRepository.deleteByCompanyCode(companyCode);
         }
     }
     /**
      * Удалить заказчика/инициатора из Матрицы Компания организатор / Организатор - Заказчик / Инициатор
      */
-    public void deleteInfoByObject(List<MatrixDTO> matrixDTO) {
-        for (MatrixDTO matrix_object : matrixDTO) {
+    public void deleteInfoByObject(List<MatrixDto> matrixDto) {
+        for (MatrixDto matrixObject : matrixDto) {
 
-            var matrixInfo = matrixRepository.getMatrixInfoByAllParams(matrix_object.getCompanyCode(), matrix_object.getOrgCode(), matrix_object.getCustomerCode(), matrix_object.getInitiatorCode());
+            var matrixInfo = matrixRepository.getMatrixInfoByAllParams(matrixObject.getCompanyCode(), matrixObject.getOrgCode(), matrixObject.getCustomerCode(), matrixObject.getInitiatorCode());
 
             if (!matrixInfo.isEmpty()){
 
-                matrixRepository.deleteByObject(matrix_object.getCompanyCode(), matrix_object.getOrgCode(), matrix_object.getCustomerCode(), matrix_object.getInitiatorCode());
+                matrixRepository.deleteByObject(matrixObject.getCompanyCode(), matrixObject.getOrgCode(), matrixObject.getCustomerCode(), matrixObject.getInitiatorCode());
 
             } else {
                 continue;

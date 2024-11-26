@@ -99,6 +99,8 @@ mirror:
         status-offer-end: ${MIRROR_SCHEDULE_TASKS_CRON_CHANGE_STATUS_OFFER_END:0 1 0 * * *}
         notification-process: ${MIRROR_SCHEDULE_TASKS_CRON_NOTIFICATION_PROCESS:0 0 1 * * *}
         daily-integration-uploading: ${MIRROR_SCHEDULE_TASKS_CRON_DAILY_INTEGRATION_UPLOADING:0 0 5 * * *}
+        document-deleting-marked: ${MIRROR_SCHEDULE_TASKS_CRON_DOCUMENT_DELETING_MARKED:0 0 1 * * *}
+        document-task-cleanup: ${MIRROR_SCHEDULE_TASKS_CRON_DOCUMENT_TASK_CLEANUP:0 0 1 * * *}
   ldap:
     url: ${MIRROR_LDAP_URL}
     base: ${MIRROR_LDAP_BASE}

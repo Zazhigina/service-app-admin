@@ -25,14 +25,14 @@ public class MatrixRepository {
         this.user = user;
     }
 
-    public List<Matrix> getMatrixInfoByAllParams(String company_code, String org_code, String customer_code, String initiator_code) {
+    public List<Matrix> getMatrixInfoByAllParams(String companyCode, String orgCode, String customerCode, String initiatorCode) {
 
         return dsl.select(TMatrix.T_MATRIX.fields())
                 .from(TMatrix.T_MATRIX)
-                .where(TMatrix.T_MATRIX.COMPANY_CODE.equal(company_code))
-                .and(TMatrix.T_MATRIX.ORG_CODE.equal(org_code))
-                .and(TMatrix.T_MATRIX.CUSTOMER_CODE.equal(customer_code))
-                .and(TMatrix.T_MATRIX.INITIATOR_CODE.equal(initiator_code))
+                .where(TMatrix.T_MATRIX.COMPANY_CODE.equal(companyCode))
+                .and(TMatrix.T_MATRIX.ORG_CODE.equal(orgCode))
+                .and(TMatrix.T_MATRIX.CUSTOMER_CODE.equal(customerCode))
+                .and(TMatrix.T_MATRIX.INITIATOR_CODE.equal(initiatorCode))
                 .fetchInto(Matrix.class);
     }
 
@@ -42,32 +42,45 @@ public class MatrixRepository {
                     .set(TMatrix.T_MATRIX.ORG_CODE, matrix.getOrgCode())
                     .set(TMatrix.T_MATRIX.CUSTOMER_CODE, matrix.getCustomerCode())
                     .set(TMatrix.T_MATRIX.INITIATOR_CODE, matrix.getInitiatorCode())
-    //                .set(TMatrix.T_MATRIX.CREATE_DATE, matrix.getCreateDate())
                     .set(TMatrix.T_MATRIX.CREATE_USER, matrix.getCreateUser())
-    //                .set(TMatrix.T_MATRIX.LAST_UPDATE_DATE, matrix.getLastUpdateDate())
-    //                .set(TMatrix.T_MATRIX.LAST_UPDATE_USER, matrix.getLastUpdateUser())
+                    .set(TMatrix.T_MATRIX.IS_DELETED, matrix.getIsDeleted())
                     .execute();
     }
 
-    public List<Matrix> getInfoByCompanyCode(String company_code){
+    public List<Matrix> getInfoByCompanyCode(String companyCode){
         return dsl.select(TMatrix.T_MATRIX.fields())
                 .from(TMatrix.T_MATRIX)
-                .where(TMatrix.T_MATRIX.COMPANY_CODE.equal(company_code))
+                .where(TMatrix.T_MATRIX.COMPANY_CODE.equal(companyCode))
                 .fetchInto(Matrix.class);
     }
 
-    public void deleteByCompanyCode(String company_code){
-        dsl.deleteFrom(TMatrix.T_MATRIX)
-                .where(TMatrix.T_MATRIX.COMPANY_CODE.equal(company_code))
+    public void deleteByCompanyCode(String companyCode){
+        dsl.update(TMatrix.T_MATRIX)
+                .set(TMatrix.T_MATRIX.IS_DELETED, true)
+                .set(TMatrix.T_MATRIX.LAST_UPDATE_USER, user.getUsername())
+                .where(TMatrix.T_MATRIX.COMPANY_CODE.equal(companyCode))
                 .execute();
     }
 
-    public void deleteByObject(String company_code, String org_code, String customer_code, String initiator_code){
-        dsl.deleteFrom(TMatrix.T_MATRIX)
-                .where(TMatrix.T_MATRIX.COMPANY_CODE.equal(company_code))
-                .and(TMatrix.T_MATRIX.ORG_CODE.equal(org_code))
-                .and(T_MATRIX.CUSTOMER_CODE.equal(customer_code))
-                .and(T_MATRIX.INITIATOR_CODE.equal(initiator_code))
+    public void deleteByObject(String companyCode, String orgCode, String customerCode, String initiatorCode){
+        dsl.update(TMatrix.T_MATRIX)
+                .set(TMatrix.T_MATRIX.IS_DELETED, true)
+                .set(TMatrix.T_MATRIX.LAST_UPDATE_USER, user.getUsername())
+                .where(TMatrix.T_MATRIX.COMPANY_CODE.equal(companyCode))
+                .and(TMatrix.T_MATRIX.ORG_CODE.equal(orgCode))
+                .and(TMatrix.T_MATRIX.CUSTOMER_CODE.equal(customerCode))
+                .and(TMatrix.T_MATRIX.INITIATOR_CODE.equal(initiatorCode))
+                .execute();
+    }
+
+    public void undoDeleteByObject(Matrix matrix){
+        dsl.update(TMatrix.T_MATRIX)
+                .set(TMatrix.T_MATRIX.IS_DELETED, false)
+                .set(TMatrix.T_MATRIX.LAST_UPDATE_USER, matrix.getLastUpdateUser())
+                .where(TMatrix.T_MATRIX.COMPANY_CODE.equal(matrix.getCompanyCode()))
+                .and(TMatrix.T_MATRIX.ORG_CODE.equal(matrix.getOrgCode()))
+                .and(TMatrix.T_MATRIX.CUSTOMER_CODE.equal(matrix.getCustomerCode()))
+                .and(TMatrix.T_MATRIX.INITIATOR_CODE.equal(matrix.getInitiatorCode()))
                 .execute();
     }
 

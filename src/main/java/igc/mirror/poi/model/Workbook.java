@@ -23,11 +23,6 @@ public class Workbook {
         this.sheets.forEach(
                 Sheet::recalculateSize
         );
-//        Iterator<Sheet> sheetIterator = sheets.iterator();
-//        while (sheetIterator.hasNext()) {
-//            Sheet sheet = sheetIterator.next();
-//            sheet.recalcSize();
-//        }
     }
 
     public void printForDebug() {

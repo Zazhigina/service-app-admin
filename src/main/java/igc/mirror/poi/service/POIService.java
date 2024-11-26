@@ -1,10 +1,8 @@
 package igc.mirror.poi.service;
 
 import igc.mirror.exception.common.IllegalEntityStateException;
-import igc.mirror.poi.model.ExcelParser;
-import igc.mirror.poi.model.Workbook;
-import igc.mirror.poi.model.XLSParser;
-import igc.mirror.poi.model.XLSXParser;
+import igc.mirror.poi.model.*;
+import igc.mirror.poi.parser.model.XLSXParser;
 import igc.mirror.poi.view.FileType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.poifs.filesystem.FileMagic;

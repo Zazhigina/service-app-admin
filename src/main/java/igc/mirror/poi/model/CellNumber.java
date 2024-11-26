@@ -11,10 +11,17 @@ public class CellNumber implements Cell {
     private Integer num;
     private Double val;
     private Integer styleID;
+    private String formattedValue;
 
-    public CellNumber(Integer num, Double val) {
+    public CellNumber(int num, Double val) {
         this.num = num;
         this.val = val;
+    }
+
+    public CellNumber(int num, Double val, String formattedValue) {
+        this.num = num;
+        this.val = val;
+        this.formattedValue = formattedValue;
     }
 
     @Override

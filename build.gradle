@@ -109,6 +109,10 @@ dependencies {
     implementation("org.springframework.ldap:spring-ldap-core")
     implementation("org.springframework.security:spring-security-ldap")
     implementation("com.unboundid:unboundid-ldapsdk")
+
+    // POI
+    implementation "org.apache.poi:poi:${apachePoiVersion}"
+    implementation "org.apache.poi:poi-ooxml:${apachePoiVersion}"
 }
 
 test {

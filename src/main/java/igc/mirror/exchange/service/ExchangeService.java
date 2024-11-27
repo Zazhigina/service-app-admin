@@ -136,7 +136,7 @@ public class ExchangeService {
     public void loadPurchaseProcedureByFile(String source, MultipartFile file) {
         try (InputStream fileInputStream = file.getInputStream()) {
             List<PurchaseProcedureSheet> procedureRawData = processDataFromProcedureFile(fileInputStream);
-            log.info("Excel data: {}", procedureRawData);
+            log.trace("Excel data: {}", procedureRawData);
             ProcedureData procedureData = convertRawToProcedure(procedureRawData);
             // отправить в сервис интеграции
             sendPurchaseProcedureToIntegration(source, procedureData);

@@ -13,11 +13,11 @@ import jooqdata.tables.records.TFeedbackRecord;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function8;
+import org.jooq.Function7;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row8;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -66,11 +66,6 @@ public class TFeedback extends TableImpl<TFeedbackRecord> {
     public final TableField<TFeedbackRecord, String> FEEDBACK_TEXT = createField(DSL.name("feedback_text"), SQLDataType.VARCHAR(1024), this, "Текст обращения");
 
     /**
-     * The column <code>admin.t_feedback.file_attachment</code>. Файл
-     */
-    public final TableField<TFeedbackRecord, String> FILE_ATTACHMENT = createField(DSL.name("file_attachment"), SQLDataType.VARCHAR(2048), this, "Файл");
-
-    /**
      * The column <code>admin.t_feedback.create_date</code>. Дата создания
      * обращения
      */
@@ -88,9 +83,9 @@ public class TFeedback extends TableImpl<TFeedbackRecord> {
     public final TableField<TFeedbackRecord, LocalDateTime> LAST_UPDATE_DATE = createField(DSL.name("last_update_date"), SQLDataType.LOCALDATETIME(6), this, "Дата и время изменения");
 
     /**
-     * The column <code>admin.t_feedback.file_store</code>. Хранение файла
+     * The column <code>admin.t_feedback.user_fullname</code>. ФИО инициатора
      */
-    public final TableField<TFeedbackRecord, byte[]> FILE_STORE = createField(DSL.name("file_store"), SQLDataType.BLOB, this, "Хранение файла");
+    public final TableField<TFeedbackRecord, String> USER_FULLNAME = createField(DSL.name("user_fullname"), SQLDataType.VARCHAR(1024), this, "ФИО инициатора");
 
     private TFeedback(Name alias, Table<TFeedbackRecord> aliased) {
         this(alias, aliased, null);
@@ -175,18 +170,18 @@ public class TFeedback extends TableImpl<TFeedbackRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row8 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<Integer, String, String, String, LocalDateTime, String, LocalDateTime, byte[]> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row7<Integer, String, String, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function8<? super Integer, ? super String, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super byte[], ? extends U> from) {
+    public <U> SelectField<U> mapping(Function7<? super Integer, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -194,7 +189,7 @@ public class TFeedback extends TableImpl<TFeedbackRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super Integer, ? super String, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super byte[], ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function7<? super Integer, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

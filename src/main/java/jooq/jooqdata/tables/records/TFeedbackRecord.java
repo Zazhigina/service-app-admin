@@ -10,8 +10,8 @@ import jooqdata.tables.TFeedback;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record8;
-import org.jooq.Row8;
+import org.jooq.Record7;
+import org.jooq.Row7;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Обратная связь
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implements Record8<Integer, String, String, String, LocalDateTime, String, LocalDateTime, byte[]> {
+public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implements Record7<Integer, String, String, LocalDateTime, String, LocalDateTime, String> {
 
     private static final long serialVersionUID = 1L;
 
@@ -66,25 +66,11 @@ public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implem
     }
 
     /**
-     * Setter for <code>admin.t_feedback.file_attachment</code>. Файл
-     */
-    public void setFileAttachment(String value) {
-        set(3, value);
-    }
-
-    /**
-     * Getter for <code>admin.t_feedback.file_attachment</code>. Файл
-     */
-    public String getFileAttachment() {
-        return (String) get(3);
-    }
-
-    /**
      * Setter for <code>admin.t_feedback.create_date</code>. Дата создания
      * обращения
      */
     public void setCreateDate(LocalDateTime value) {
-        set(4, value);
+        set(3, value);
     }
 
     /**
@@ -92,21 +78,21 @@ public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implem
      * обращения
      */
     public LocalDateTime getCreateDate() {
-        return (LocalDateTime) get(4);
+        return (LocalDateTime) get(3);
     }
 
     /**
      * Setter for <code>admin.t_feedback.create_user</code>. Автор обращения
      */
     public void setCreateUser(String value) {
-        set(5, value);
+        set(4, value);
     }
 
     /**
      * Getter for <code>admin.t_feedback.create_user</code>. Автор обращения
      */
     public String getCreateUser() {
-        return (String) get(5);
+        return (String) get(4);
     }
 
     /**
@@ -114,7 +100,7 @@ public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implem
      * изменения
      */
     public void setLastUpdateDate(LocalDateTime value) {
-        set(6, value);
+        set(5, value);
     }
 
     /**
@@ -122,21 +108,21 @@ public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implem
      * изменения
      */
     public LocalDateTime getLastUpdateDate() {
-        return (LocalDateTime) get(6);
+        return (LocalDateTime) get(5);
     }
 
     /**
-     * Setter for <code>admin.t_feedback.file_store</code>. Хранение файла
+     * Setter for <code>admin.t_feedback.user_fullname</code>. ФИО инициатора
      */
-    public void setFileStore(byte[] value) {
-        set(7, value);
+    public void setUserFullname(String value) {
+        set(6, value);
     }
 
     /**
-     * Getter for <code>admin.t_feedback.file_store</code>. Хранение файла
+     * Getter for <code>admin.t_feedback.user_fullname</code>. ФИО инициатора
      */
-    public byte[] getFileStore() {
-        return (byte[]) get(7);
+    public String getUserFullname() {
+        return (String) get(6);
     }
 
     // -------------------------------------------------------------------------
@@ -149,17 +135,17 @@ public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implem
     }
 
     // -------------------------------------------------------------------------
-    // Record8 type implementation
+    // Record7 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<Integer, String, String, String, LocalDateTime, String, LocalDateTime, byte[]> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row7<Integer, String, String, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 
     @Override
-    public Row8<Integer, String, String, String, LocalDateTime, String, LocalDateTime, byte[]> valuesRow() {
-        return (Row8) super.valuesRow();
+    public Row7<Integer, String, String, LocalDateTime, String, LocalDateTime, String> valuesRow() {
+        return (Row7) super.valuesRow();
     }
 
     @Override
@@ -178,28 +164,23 @@ public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implem
     }
 
     @Override
-    public Field<String> field4() {
-        return TFeedback.T_FEEDBACK.FILE_ATTACHMENT;
-    }
-
-    @Override
-    public Field<LocalDateTime> field5() {
+    public Field<LocalDateTime> field4() {
         return TFeedback.T_FEEDBACK.CREATE_DATE;
     }
 
     @Override
-    public Field<String> field6() {
+    public Field<String> field5() {
         return TFeedback.T_FEEDBACK.CREATE_USER;
     }
 
     @Override
-    public Field<LocalDateTime> field7() {
+    public Field<LocalDateTime> field6() {
         return TFeedback.T_FEEDBACK.LAST_UPDATE_DATE;
     }
 
     @Override
-    public Field<byte[]> field8() {
-        return TFeedback.T_FEEDBACK.FILE_STORE;
+    public Field<String> field7() {
+        return TFeedback.T_FEEDBACK.USER_FULLNAME;
     }
 
     @Override
@@ -218,28 +199,23 @@ public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implem
     }
 
     @Override
-    public String component4() {
-        return getFileAttachment();
-    }
-
-    @Override
-    public LocalDateTime component5() {
+    public LocalDateTime component4() {
         return getCreateDate();
     }
 
     @Override
-    public String component6() {
+    public String component5() {
         return getCreateUser();
     }
 
     @Override
-    public LocalDateTime component7() {
+    public LocalDateTime component6() {
         return getLastUpdateDate();
     }
 
     @Override
-    public byte[] component8() {
-        return getFileStore();
+    public String component7() {
+        return getUserFullname();
     }
 
     @Override
@@ -258,28 +234,23 @@ public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implem
     }
 
     @Override
-    public String value4() {
-        return getFileAttachment();
-    }
-
-    @Override
-    public LocalDateTime value5() {
+    public LocalDateTime value4() {
         return getCreateDate();
     }
 
     @Override
-    public String value6() {
+    public String value5() {
         return getCreateUser();
     }
 
     @Override
-    public LocalDateTime value7() {
+    public LocalDateTime value6() {
         return getLastUpdateDate();
     }
 
     @Override
-    public byte[] value8() {
-        return getFileStore();
+    public String value7() {
+        return getUserFullname();
     }
 
     @Override
@@ -301,37 +272,31 @@ public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implem
     }
 
     @Override
-    public TFeedbackRecord value4(String value) {
-        setFileAttachment(value);
-        return this;
-    }
-
-    @Override
-    public TFeedbackRecord value5(LocalDateTime value) {
+    public TFeedbackRecord value4(LocalDateTime value) {
         setCreateDate(value);
         return this;
     }
 
     @Override
-    public TFeedbackRecord value6(String value) {
+    public TFeedbackRecord value5(String value) {
         setCreateUser(value);
         return this;
     }
 
     @Override
-    public TFeedbackRecord value7(LocalDateTime value) {
+    public TFeedbackRecord value6(LocalDateTime value) {
         setLastUpdateDate(value);
         return this;
     }
 
     @Override
-    public TFeedbackRecord value8(byte[] value) {
-        setFileStore(value);
+    public TFeedbackRecord value7(String value) {
+        setUserFullname(value);
         return this;
     }
 
     @Override
-    public TFeedbackRecord values(Integer value1, String value2, String value3, String value4, LocalDateTime value5, String value6, LocalDateTime value7, byte[] value8) {
+    public TFeedbackRecord values(Integer value1, String value2, String value3, LocalDateTime value4, String value5, LocalDateTime value6, String value7) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -339,7 +304,6 @@ public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implem
         value5(value5);
         value6(value6);
         value7(value7);
-        value8(value8);
         return this;
     }
 
@@ -357,16 +321,15 @@ public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implem
     /**
      * Create a detached, initialised TFeedbackRecord
      */
-    public TFeedbackRecord(Integer id, String fbThemeName, String feedbackText, String fileAttachment, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, byte[] fileStore) {
+    public TFeedbackRecord(Integer id, String fbThemeName, String feedbackText, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String userFullname) {
         super(TFeedback.T_FEEDBACK);
 
         setId(id);
         setFbThemeName(fbThemeName);
         setFeedbackText(feedbackText);
-        setFileAttachment(fileAttachment);
         setCreateDate(createDate);
         setCreateUser(createUser);
         setLastUpdateDate(lastUpdateDate);
-        setFileStore(fileStore);
+        setUserFullname(userFullname);
     }
 }

@@ -59,6 +59,8 @@ application:
         value: "CN=SPB-SSO-ALLUSERS-U200004739,OU=U200004739,OU=Groups,OU=ПАО Газпром нефть,OU=SPB,OU=Regions,DC=gazprom-neft,DC=local"
       - key: MIRROR_LDAP_SVC_USERS
         value: SPB-SSO-U200004739,mirror-uat-postgr,mirror-prod-postgr,mirror-mailbox-uat,mirror-mailbox,mirror-uat-tpartner,mirror-prod-tpartner,mirror-uat-bground,mirror-prod-bground,mirror-uat-techasuz,mirror-prod-techasuz,SPB-KLAD-D-tzriu2-M,SPB-KLAD-P-tzriu2-R
+      - key: MIRROR_KVP
+        value: false
     secret:
       - key: MIRROR_DATASOURCE_URL
         secretName: mirror-pg-cred

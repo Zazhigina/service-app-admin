@@ -108,3 +108,4 @@ mirror:
     username:
     password:
     svc-users: ${MIRROR_LDAP_SVC_USERS}
+  kvp: ${MIRROR_KVP}

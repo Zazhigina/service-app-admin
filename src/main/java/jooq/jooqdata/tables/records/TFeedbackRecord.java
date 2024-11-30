@@ -10,8 +10,8 @@ import jooqdata.tables.TFeedback;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record7;
-import org.jooq.Row7;
+import org.jooq.Record8;
+import org.jooq.Row8;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -19,22 +19,22 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Обратная связь
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implements Record7<Integer, String, String, LocalDateTime, String, LocalDateTime, String> {
+public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implements Record8<Long, String, String, LocalDateTime, String, LocalDateTime, String, String> {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * Setter for <code>admin.t_feedback.id</code>. ID
      */
-    public void setId(Integer value) {
+    public void setId(Long value) {
         set(0, value);
     }
 
     /**
      * Getter for <code>admin.t_feedback.id</code>. ID
      */
-    public Integer getId() {
-        return (Integer) get(0);
+    public Long getId() {
+        return (Long) get(0);
     }
 
     /**
@@ -125,31 +125,47 @@ public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implem
         return (String) get(6);
     }
 
+    /**
+     * Setter for <code>admin.t_feedback.last_update_user</code>. Автор
+     * изменения
+     */
+    public void setLastUpdateUser(String value) {
+        set(7, value);
+    }
+
+    /**
+     * Getter for <code>admin.t_feedback.last_update_user</code>. Автор
+     * изменения
+     */
+    public String getLastUpdateUser() {
+        return (String) get(7);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
 
     @Override
-    public Record1<Integer> key() {
+    public Record1<Long> key() {
         return (Record1) super.key();
     }
 
     // -------------------------------------------------------------------------
-    // Record7 type implementation
+    // Record8 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<Integer, String, String, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row8<Long, String, String, LocalDateTime, String, LocalDateTime, String, String> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 
     @Override
-    public Row7<Integer, String, String, LocalDateTime, String, LocalDateTime, String> valuesRow() {
-        return (Row7) super.valuesRow();
+    public Row8<Long, String, String, LocalDateTime, String, LocalDateTime, String, String> valuesRow() {
+        return (Row8) super.valuesRow();
     }
 
     @Override
-    public Field<Integer> field1() {
+    public Field<Long> field1() {
         return TFeedback.T_FEEDBACK.ID;
     }
 
@@ -184,7 +200,12 @@ public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implem
     }
 
     @Override
-    public Integer component1() {
+    public Field<String> field8() {
+        return TFeedback.T_FEEDBACK.LAST_UPDATE_USER;
+    }
+
+    @Override
+    public Long component1() {
         return getId();
     }
 
@@ -219,7 +240,12 @@ public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implem
     }
 
     @Override
-    public Integer value1() {
+    public String component8() {
+        return getLastUpdateUser();
+    }
+
+    @Override
+    public Long value1() {
         return getId();
     }
 
@@ -254,7 +280,12 @@ public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implem
     }
 
     @Override
-    public TFeedbackRecord value1(Integer value) {
+    public String value8() {
+        return getLastUpdateUser();
+    }
+
+    @Override
+    public TFeedbackRecord value1(Long value) {
         setId(value);
         return this;
     }
@@ -296,7 +327,13 @@ public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implem
     }
 
     @Override
-    public TFeedbackRecord values(Integer value1, String value2, String value3, LocalDateTime value4, String value5, LocalDateTime value6, String value7) {
+    public TFeedbackRecord value8(String value) {
+        setLastUpdateUser(value);
+        return this;
+    }
+
+    @Override
+    public TFeedbackRecord values(Long value1, String value2, String value3, LocalDateTime value4, String value5, LocalDateTime value6, String value7, String value8) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -304,6 +341,7 @@ public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implem
         value5(value5);
         value6(value6);
         value7(value7);
+        value8(value8);
         return this;
     }
 
@@ -321,7 +359,7 @@ public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implem
     /**
      * Create a detached, initialised TFeedbackRecord
      */
-    public TFeedbackRecord(Integer id, String fbThemeName, String feedbackText, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String userFullname) {
+    public TFeedbackRecord(Long id, String fbThemeName, String feedbackText, LocalDateTime createDate, String createUser, LocalDateTime lastUpdateDate, String userFullname, String lastUpdateUser) {
         super(TFeedback.T_FEEDBACK);
 
         setId(id);
@@ -331,5 +369,6 @@ public class TFeedbackRecord extends UpdatableRecordImpl<TFeedbackRecord> implem
         setCreateUser(createUser);
         setLastUpdateDate(lastUpdateDate);
         setUserFullname(userFullname);
+        setLastUpdateUser(lastUpdateUser);
     }
 }

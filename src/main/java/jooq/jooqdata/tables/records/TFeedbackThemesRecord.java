@@ -5,7 +5,6 @@ package jooqdata.tables.records;
 
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import jooqdata.tables.TFeedbackThemes;
 
@@ -19,22 +18,22 @@ import org.jooq.impl.TableRecordImpl;
  * Справочник тем для обратной связи
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord> implements Record6<Integer, String, LocalDateTime, LocalDateTime, String, UUID> {
+public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord> implements Record6<Long, String, LocalDateTime, LocalDateTime, String, String> {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * Setter for <code>admin.t_feedback_themes.id</code>. ID
      */
-    public void setId(Integer value) {
+    public void setId(Long value) {
         set(0, value);
     }
 
     /**
      * Getter for <code>admin.t_feedback_themes.id</code>. ID
      */
-    public Integer getId() {
-        return (Integer) get(0);
+    public Long getId() {
+        return (Long) get(0);
     }
 
     /**
@@ -100,17 +99,19 @@ public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord
     }
 
     /**
-     * Setter for <code>admin.t_feedback_themes.unique_id</code>. GUID для темы
+     * Setter for <code>admin.t_feedback_themes.last_update_user</code>. Автор
+     * изменения
      */
-    public void setUniqueId(UUID value) {
+    public void setLastUpdateUser(String value) {
         set(5, value);
     }
 
     /**
-     * Getter for <code>admin.t_feedback_themes.unique_id</code>. GUID для темы
+     * Getter for <code>admin.t_feedback_themes.last_update_user</code>. Автор
+     * изменения
      */
-    public UUID getUniqueId() {
-        return (UUID) get(5);
+    public String getLastUpdateUser() {
+        return (String) get(5);
     }
 
     // -------------------------------------------------------------------------
@@ -118,17 +119,17 @@ public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<Integer, String, LocalDateTime, LocalDateTime, String, UUID> fieldsRow() {
+    public Row6<Long, String, LocalDateTime, LocalDateTime, String, String> fieldsRow() {
         return (Row6) super.fieldsRow();
     }
 
     @Override
-    public Row6<Integer, String, LocalDateTime, LocalDateTime, String, UUID> valuesRow() {
+    public Row6<Long, String, LocalDateTime, LocalDateTime, String, String> valuesRow() {
         return (Row6) super.valuesRow();
     }
 
     @Override
-    public Field<Integer> field1() {
+    public Field<Long> field1() {
         return TFeedbackThemes.T_FEEDBACK_THEMES.ID;
     }
 
@@ -153,12 +154,12 @@ public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord
     }
 
     @Override
-    public Field<UUID> field6() {
-        return TFeedbackThemes.T_FEEDBACK_THEMES.UNIQUE_ID;
+    public Field<String> field6() {
+        return TFeedbackThemes.T_FEEDBACK_THEMES.LAST_UPDATE_USER;
     }
 
     @Override
-    public Integer component1() {
+    public Long component1() {
         return getId();
     }
 
@@ -183,12 +184,12 @@ public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord
     }
 
     @Override
-    public UUID component6() {
-        return getUniqueId();
+    public String component6() {
+        return getLastUpdateUser();
     }
 
     @Override
-    public Integer value1() {
+    public Long value1() {
         return getId();
     }
 
@@ -213,12 +214,12 @@ public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord
     }
 
     @Override
-    public UUID value6() {
-        return getUniqueId();
+    public String value6() {
+        return getLastUpdateUser();
     }
 
     @Override
-    public TFeedbackThemesRecord value1(Integer value) {
+    public TFeedbackThemesRecord value1(Long value) {
         setId(value);
         return this;
     }
@@ -248,13 +249,13 @@ public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord
     }
 
     @Override
-    public TFeedbackThemesRecord value6(UUID value) {
-        setUniqueId(value);
+    public TFeedbackThemesRecord value6(String value) {
+        setLastUpdateUser(value);
         return this;
     }
 
     @Override
-    public TFeedbackThemesRecord values(Integer value1, String value2, LocalDateTime value3, LocalDateTime value4, String value5, UUID value6) {
+    public TFeedbackThemesRecord values(Long value1, String value2, LocalDateTime value3, LocalDateTime value4, String value5, String value6) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -278,7 +279,7 @@ public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord
     /**
      * Create a detached, initialised TFeedbackThemesRecord
      */
-    public TFeedbackThemesRecord(Integer id, String fbThemeName, LocalDateTime createDate, LocalDateTime lastUpdateDate, String createUser, UUID uniqueId) {
+    public TFeedbackThemesRecord(Long id, String fbThemeName, LocalDateTime createDate, LocalDateTime lastUpdateDate, String createUser, String lastUpdateUser) {
         super(TFeedbackThemes.T_FEEDBACK_THEMES);
 
         setId(id);
@@ -286,6 +287,6 @@ public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord
         setCreateDate(createDate);
         setLastUpdateDate(lastUpdateDate);
         setCreateUser(createUser);
-        setUniqueId(uniqueId);
+        setLastUpdateUser(lastUpdateUser);
     }
 }

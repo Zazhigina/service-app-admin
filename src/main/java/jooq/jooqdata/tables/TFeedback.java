@@ -13,11 +13,11 @@ import jooqdata.tables.records.TFeedbackRecord;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function7;
+import org.jooq.Function8;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row7;
+import org.jooq.Row8;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -53,7 +53,7 @@ public class TFeedback extends TableImpl<TFeedbackRecord> {
     /**
      * The column <code>admin.t_feedback.id</code>. ID
      */
-    public final TableField<TFeedbackRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("admin.get_id()", SQLDataType.INTEGER)), this, "ID");
+    public final TableField<TFeedbackRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).defaultValue(DSL.field("admin.get_id()", SQLDataType.BIGINT)), this, "ID");
 
     /**
      * The column <code>admin.t_feedback.fb_theme_name</code>. Имя темы
@@ -63,7 +63,7 @@ public class TFeedback extends TableImpl<TFeedbackRecord> {
     /**
      * The column <code>admin.t_feedback.feedback_text</code>. Текст обращения
      */
-    public final TableField<TFeedbackRecord, String> FEEDBACK_TEXT = createField(DSL.name("feedback_text"), SQLDataType.VARCHAR(1024), this, "Текст обращения");
+    public final TableField<TFeedbackRecord, String> FEEDBACK_TEXT = createField(DSL.name("feedback_text"), SQLDataType.CLOB, this, "Текст обращения");
 
     /**
      * The column <code>admin.t_feedback.create_date</code>. Дата создания
@@ -86,6 +86,12 @@ public class TFeedback extends TableImpl<TFeedbackRecord> {
      * The column <code>admin.t_feedback.user_fullname</code>. ФИО инициатора
      */
     public final TableField<TFeedbackRecord, String> USER_FULLNAME = createField(DSL.name("user_fullname"), SQLDataType.VARCHAR(1024), this, "ФИО инициатора");
+
+    /**
+     * The column <code>admin.t_feedback.last_update_user</code>. Автор
+     * изменения
+     */
+    public final TableField<TFeedbackRecord, String> LAST_UPDATE_USER = createField(DSL.name("last_update_user"), SQLDataType.VARCHAR(100), this, "Автор изменения");
 
     private TFeedback(Name alias, Table<TFeedbackRecord> aliased) {
         this(alias, aliased, null);
@@ -170,18 +176,18 @@ public class TFeedback extends TableImpl<TFeedbackRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row7 type methods
+    // Row8 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<Integer, String, String, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row8<Long, String, String, LocalDateTime, String, LocalDateTime, String, String> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function7<? super Integer, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function8<? super Long, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super String, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -189,7 +195,7 @@ public class TFeedback extends TableImpl<TFeedbackRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function7<? super Integer, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super Long, ? super String, ? super String, ? super LocalDateTime, ? super String, ? super LocalDateTime, ? super String, ? super String, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

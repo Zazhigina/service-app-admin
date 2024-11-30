@@ -13,7 +13,7 @@ import jooqdata.tables.TExternalSource;
 import jooqdata.tables.TFaqAnswer;
 import jooqdata.tables.TFaqQuestion;
 import jooqdata.tables.TFeedback;
-import jooqdata.tables.TFeedbackFileStore;
+import jooqdata.tables.TFeedbackFile;
 import jooqdata.tables.TFeedbackThemes;
 import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
@@ -77,9 +77,9 @@ public class Tables {
     public static final TFeedback T_FEEDBACK = TFeedback.T_FEEDBACK;
 
     /**
-     * Таблица для хранения вложений ОС
+     * Файлы обратной связи
      */
-    public static final TFeedbackFileStore T_FEEDBACK_FILE_STORE = TFeedbackFileStore.T_FEEDBACK_FILE_STORE;
+    public static final TFeedbackFile T_FEEDBACK_FILE = TFeedbackFile.T_FEEDBACK_FILE;
 
     /**
      * Справочник тем для обратной связи

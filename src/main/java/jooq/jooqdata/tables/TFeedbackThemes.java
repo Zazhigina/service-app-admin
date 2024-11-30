@@ -5,7 +5,6 @@ package jooqdata.tables;
 
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 import java.util.function.Function;
 
 import jooqdata.Admin;
@@ -52,7 +51,7 @@ public class TFeedbackThemes extends TableImpl<TFeedbackThemesRecord> {
     /**
      * The column <code>admin.t_feedback_themes.id</code>. ID
      */
-    public final TableField<TFeedbackThemesRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("admin.get_id()", SQLDataType.INTEGER)), this, "ID");
+    public final TableField<TFeedbackThemesRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).defaultValue(DSL.field("admin.get_id()", SQLDataType.BIGINT)), this, "ID");
 
     /**
      * The column <code>admin.t_feedback_themes.fb_theme_name</code>. Имя темы
@@ -78,9 +77,10 @@ public class TFeedbackThemes extends TableImpl<TFeedbackThemesRecord> {
     public final TableField<TFeedbackThemesRecord, String> CREATE_USER = createField(DSL.name("create_user"), SQLDataType.VARCHAR(100), this, "Автор создавший тему");
 
     /**
-     * The column <code>admin.t_feedback_themes.unique_id</code>. GUID для темы
+     * The column <code>admin.t_feedback_themes.last_update_user</code>. Автор
+     * изменения
      */
-    public final TableField<TFeedbackThemesRecord, UUID> UNIQUE_ID = createField(DSL.name("unique_id"), SQLDataType.UUID.defaultValue(DSL.field("gen_random_uuid()", SQLDataType.UUID)), this, "GUID для темы");
+    public final TableField<TFeedbackThemesRecord, String> LAST_UPDATE_USER = createField(DSL.name("last_update_user"), SQLDataType.VARCHAR(100), this, "Автор изменения");
 
     private TFeedbackThemes(Name alias, Table<TFeedbackThemesRecord> aliased) {
         this(alias, aliased, null);
@@ -164,14 +164,14 @@ public class TFeedbackThemes extends TableImpl<TFeedbackThemesRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<Integer, String, LocalDateTime, LocalDateTime, String, UUID> fieldsRow() {
+    public Row6<Long, String, LocalDateTime, LocalDateTime, String, String> fieldsRow() {
         return (Row6) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function6<? super Integer, ? super String, ? super LocalDateTime, ? super LocalDateTime, ? super String, ? super UUID, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function6<? super Long, ? super String, ? super LocalDateTime, ? super LocalDateTime, ? super String, ? super String, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -179,7 +179,7 @@ public class TFeedbackThemes extends TableImpl<TFeedbackThemesRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function6<? super Integer, ? super String, ? super LocalDateTime, ? super LocalDateTime, ? super String, ? super UUID, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function6<? super Long, ? super String, ? super LocalDateTime, ? super LocalDateTime, ? super String, ? super String, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

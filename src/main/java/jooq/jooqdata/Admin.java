@@ -16,7 +16,7 @@ import jooqdata.tables.TExternalSource;
 import jooqdata.tables.TFaqAnswer;
 import jooqdata.tables.TFaqQuestion;
 import jooqdata.tables.TFeedback;
-import jooqdata.tables.TFeedbackFileStore;
+import jooqdata.tables.TFeedbackFile;
 import jooqdata.tables.TFeedbackThemes;
 import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
@@ -92,9 +92,9 @@ public class Admin extends SchemaImpl {
     public final TFeedback T_FEEDBACK = TFeedback.T_FEEDBACK;
 
     /**
-     * Таблица для хранения вложений ОС
+     * Файлы обратной связи
      */
-    public final TFeedbackFileStore T_FEEDBACK_FILE_STORE = TFeedbackFileStore.T_FEEDBACK_FILE_STORE;
+    public final TFeedbackFile T_FEEDBACK_FILE = TFeedbackFile.T_FEEDBACK_FILE;
 
     /**
      * Справочник тем для обратной связи
@@ -174,7 +174,7 @@ public class Admin extends SchemaImpl {
             TFaqAnswer.T_FAQ_ANSWER,
             TFaqQuestion.T_FAQ_QUESTION,
             TFeedback.T_FEEDBACK,
-            TFeedbackFileStore.T_FEEDBACK_FILE_STORE,
+            TFeedbackFile.T_FEEDBACK_FILE,
             TFeedbackThemes.T_FEEDBACK_THEMES,
             TLetterTemplate.T_LETTER_TEMPLATE,
             TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM,

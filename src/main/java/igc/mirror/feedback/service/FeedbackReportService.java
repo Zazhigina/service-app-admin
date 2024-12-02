@@ -17,7 +17,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -26,39 +25,26 @@ import java.util.stream.Collectors;
 
 @Service
 public class FeedbackReportService {
-
-    @Autowired
-    private FeedbackRepository feedbackRepository;
-
+    private final FeedbackRepository feedbackRepository;
     private final HttpServletRequest request;
 
     @Autowired
-    public FeedbackReportService(HttpServletRequest request) {
+    public FeedbackReportService(FeedbackRepository feedbackRepository, HttpServletRequest request) {
+        this.feedbackRepository = feedbackRepository;
         this.request = request;
     }
 
     @Autowired
     private DSLContext dsl;
 
-    public Resource generateFeedbackReport(String date1, String date2) {
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        LocalDateTime startDate = null;
-        LocalDateTime endDate = null;
-
-        try {
-            if (date1 != null) {
-                startDate = LocalDate.parse(date1, formatter).atStartOfDay();
-            }
-            if (date2 != null) {
-                endDate = LocalDate.parse(date2, formatter).atTime(LocalTime.MAX);
-            }
-        } catch (DateTimeParseException ignored) { }
+    public Resource generateFeedbackReport(LocalDate date1, LocalDate date2) {
 
         ByteArrayResource resource;
         Workbook workbook;
 
-        List<FeedbackReportDto> reportData = feedbackRepository.getReportData(startDate, endDate);
+        List<FeedbackReportDto> reportData = feedbackRepository.getReportData(
+                date1 != null ? date1.atStartOfDay() : null,
+                date2 != null ? date2.atTime(LocalTime.MAX) : null);
 
         workbook = new XSSFWorkbook();
 

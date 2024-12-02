@@ -9,11 +9,9 @@ import igc.mirror.feedback.dto.FeedbackDto;
 import igc.mirror.feedback.repository.FeedbackRepository;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 

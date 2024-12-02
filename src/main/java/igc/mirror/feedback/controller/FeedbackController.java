@@ -9,6 +9,7 @@ import igc.mirror.feedback.service.FeedbackReportService;
 import igc.mirror.feedback.service.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.ResponseEntity;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,8 +56,8 @@ public class FeedbackController {
         return ResponseEntity.ok(new SuccessInfo("Тема для обращений удалена, ИД: " + id));
     }
 
-    @PostMapping(path = "/submit")
-    public ResponseEntity<String> submitFeedback(@RequestPart FeedbackDto feedbackDto, @RequestPart(required = false) MultipartFile[] fileBlobs) {
+    @PostMapping("")
+    public ResponseEntity<String> addFeedback(@RequestPart FeedbackDto feedbackDto, @RequestPart(required = false) MultipartFile[] fileBlobs) {
         try {
             feedbackService.addFeedback(feedbackDto, fileBlobs);
             return ResponseEntity.ok("Обращение сохранено");
@@ -88,7 +90,9 @@ public class FeedbackController {
     }
 
     @GetMapping("/report")
-    public ResponseEntity<Resource> getFeedbackReport(@RequestParam(required = false) String date1, @RequestParam(required = false) String date2) {
+    public ResponseEntity<Resource> getFeedbackReport(
+            @RequestParam(required = false) @DateTimeFormat(pattern="dd.MM.yyyy") LocalDate date1,
+            @RequestParam(required = false) @DateTimeFormat(pattern="dd.MM.yyyy") LocalDate date2) {
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))

@@ -18,14 +18,15 @@ import java.util.UUID;
 @Service
 public class FeedbackService {
 
-    @Autowired
-    private DSLContext dsl;
-    @Autowired
-    private FeedbackRepository feedbackRepository;
-    @Autowired
-    private UserDetails userDetails;
-    @Autowired
-    private DocService docService;
+    private final FeedbackRepository feedbackRepository;
+    private final UserDetails userDetails;
+    private final DocService docService;
+
+    public FeedbackService(FeedbackRepository feedbackRepository, UserDetails userDetails, DocService docService) {
+        this.feedbackRepository = feedbackRepository;
+        this.userDetails = userDetails;
+        this.docService = docService;
+    }
 
     public List<FeedbackThemeDto> findThemes() {
         return feedbackRepository.findThemes();

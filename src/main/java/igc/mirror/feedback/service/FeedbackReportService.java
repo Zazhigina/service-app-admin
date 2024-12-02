@@ -28,14 +28,10 @@ public class FeedbackReportService {
     private final FeedbackRepository feedbackRepository;
     private final HttpServletRequest request;
 
-    @Autowired
     public FeedbackReportService(FeedbackRepository feedbackRepository, HttpServletRequest request) {
         this.feedbackRepository = feedbackRepository;
         this.request = request;
     }
-
-    @Autowired
-    private DSLContext dsl;
 
     public Resource generateFeedbackReport(LocalDate date1, LocalDate date2) {
 

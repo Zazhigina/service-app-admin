@@ -13,6 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class FeedbackReportDto {
+    private Long id;
     private String fbThemeName;
     private String feedbackText;
     private String userFullname;

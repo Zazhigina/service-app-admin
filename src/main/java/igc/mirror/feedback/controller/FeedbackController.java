@@ -25,7 +25,7 @@ import java.util.UUID;
 
 
 @RestController
-@RequestMapping("/api/feedback")
+@RequestMapping("/feedback")
 public class FeedbackController {
     @Autowired
     private FeedbackService feedbackService;

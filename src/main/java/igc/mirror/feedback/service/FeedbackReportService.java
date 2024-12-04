@@ -28,14 +28,10 @@ public class FeedbackReportService {
     private final FeedbackRepository feedbackRepository;
     private final HttpServletRequest request;
 
-    @Autowired
     public FeedbackReportService(FeedbackRepository feedbackRepository, HttpServletRequest request) {
         this.feedbackRepository = feedbackRepository;
         this.request = request;
     }
-
-    @Autowired
-    private DSLContext dsl;
 
     public Resource generateFeedbackReport(LocalDate date1, LocalDate date2) {
 
@@ -130,8 +126,8 @@ public class FeedbackReportService {
                 UUID uid = record.getUid();
                 Cell cell = row.createCell(5);
                 if (fileName != null && uid != null) {
-                    String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-                    String uidLink = baseUrl + "/api/feedback/file?uid=" + uid.toString();
+                    String baseUrl = request.getScheme() + "://" + request.getServerName();
+                    String uidLink = baseUrl + "/api/admin/feedback/file?uid=" + uid.toString();
                     Hyperlink hyperlink = workbook.getCreationHelper().createHyperlink(HyperlinkType.URL);
                     hyperlink.setAddress(uidLink);
                     cell.setHyperlink(hyperlink);

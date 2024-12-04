@@ -7,25 +7,25 @@ import igc.mirror.feedback.dto.FeedbackFileDto;
 import igc.mirror.feedback.dto.FeedbackThemeDto;
 import igc.mirror.feedback.dto.FeedbackDto;
 import igc.mirror.feedback.repository.FeedbackRepository;
-import org.jooq.DSLContext;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 public class FeedbackService {
 
-    @Autowired
-    private DSLContext dsl;
-    @Autowired
-    private FeedbackRepository feedbackRepository;
-    @Autowired
-    private UserDetails userDetails;
-    @Autowired
-    private DocService docService;
+    private final FeedbackRepository feedbackRepository;
+    private final UserDetails userDetails;
+    private final DocService docService;
+
+    public FeedbackService(FeedbackRepository feedbackRepository, UserDetails userDetails, DocService docService) {
+        this.feedbackRepository = feedbackRepository;
+        this.userDetails = userDetails;
+        this.docService = docService;
+    }
 
     public List<FeedbackThemeDto> findThemes() {
         return feedbackRepository.findThemes();
@@ -50,10 +50,12 @@ public class FeedbackService {
 
         if (fileBlobs != null) {
             for (MultipartFile fileBlob : fileBlobs) {
-                String fileType = fileBlob.getContentType();
                 String fileName = fileBlob.getOriginalFilename();
-                if (fileName != null && fileType != null && !isSupportedFileType(fileType)) {
-                    throw new IllegalArgumentException("Неподдерживаемый тип файла: " + fileName.substring(fileName.lastIndexOf('.') + 1));
+                if (fileName != null) {
+                    String fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
+                    if(!isSupportedFileType(fileExtension)) {
+                        throw new IllegalArgumentException("Неподдерживаемый тип файла: " + fileExtension);
+                    }
                 }
             }
             for (MultipartFile fileBlob : fileBlobs) {
@@ -79,18 +81,8 @@ public class FeedbackService {
         );
     }
 
-    private boolean isSupportedFileType(String fileType) {
-        return fileType.equals("application/vnd.ms-excel") ||
-                fileType.equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") ||
-                fileType.equals("application/msword") ||
-                fileType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ||
-                fileType.equals("application/pdf") ||
-                fileType.equals("image/jpeg") ||
-                fileType.equals("image/jpg") ||
-                fileType.equals("image/png") ||
-                fileType.equals("application/zip") ||
-                fileType.equals("application/x-rar-compressed") ||
-                fileType.equals("application/vnd.rar") ||
-                fileType.equals("application/x-7z-compressed");
+    private boolean isSupportedFileType(String fileExtension) {
+        String[] extensionWhiteList = {"xls", "xlsx", "doc", "docx", "pdf", "jpeg", "jpg", "png", "zip", "rar", "7z"};
+        return Arrays.asList(extensionWhiteList).contains(fileExtension);
     }
 }

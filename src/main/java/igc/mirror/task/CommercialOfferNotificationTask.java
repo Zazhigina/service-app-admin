@@ -26,12 +26,17 @@ public class CommercialOfferNotificationTask {
     static final Logger logger = LoggerFactory.getLogger(CommercialOfferNotificationTask.class);
 
     private static final String EP_COMMERCIAL_OFFER_SERVICE = "commercial-offer-message";
-    private static final String SHEDULLER_MAILING_ALLOWED_PARAM = "SHEDULLER.MAILING_ALLOWED"; //todo create ApplicationParameter enum?
+    private static final String MA_INTEREST_REQUEST_ANSWER_SERVICE = "request/interest-contractor/answer";
+    private static final String SHEDULLER_MAILING_ALLOWED_PARAM = "SHEDULLER.MAILING_ALLOWED";
     private static final String MAILING_NOT_ALLOWED = "0";
 
     @Autowired
     @Qualifier("ep")
     private WebClient webClient;
+
+    @Autowired
+    @Qualifier("ma")
+    private WebClient webClientMA;
 
     @Autowired
     private KeycloakAuthClient keycloakAuthClient;
@@ -53,7 +58,7 @@ public class CommercialOfferNotificationTask {
         MDC.put(USER_AGENT_KEY, userAgent);
         MDC.put(X_REQUEST_ID_KEY, UUID.randomUUID().toString());
 
-        logger.info("Запуск задания по отправке уведомлений об окончании приема коммерческих предложений.");
+        logger.info("Запуск задания по отправке уведомлений");
 
         if (paramService.findByKey(SHEDULLER_MAILING_ALLOWED_PARAM).getVal().equals(MAILING_NOT_ALLOWED))
             logger.info("Возможность рассылки отключена. Для отправки уведомлений измените значение параметра 'Разрешить рассылку'");
@@ -64,6 +69,11 @@ public class CommercialOfferNotificationTask {
             sendOfferComingEndInitiatorMessage(authResponseDto);
             sendOfferCompletedContractorMessage(authResponseDto);
             sendOfferCompletedInitiatorMessage(authResponseDto);
+
+            sendAnswerComingEndContractorMessage(authResponseDto);
+            sendAnswerComingEndInitiatorMessage(authResponseDto);
+            sendAnswerCompletedContractorMessage(authResponseDto);
+            sendAnswerCompletedInitiatorMessage(authResponseDto);
         }
 
         MDC.remove(USER_AGENT_KEY);
@@ -142,6 +152,82 @@ public class CommercialOfferNotificationTask {
                 .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
                 .doOnError(err -> logger.error("Ошибка запуска удаленного сервиса - {}", err.getMessage()))
                 .doOnSuccess(success -> logger.info("Отправка уведомления инициаторам о завершившемся приеме КП выполнена."))
+                .log()
+                .block();
+    }
+
+    private void sendAnswerComingEndContractorMessage(AuthResponseDto authResponseDto) {
+        String uri = String.join("/", MA_INTEREST_REQUEST_ANSWER_SERVICE, "accepting-coming-end");
+
+        webClientMA
+                .post()
+                .uri(uri)
+                .header("Authorization", "Bearer " + authResponseDto.getAccessToken())
+                .header(HttpHeaders.USER_AGENT, userAgent)
+                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(X_REQUEST_ID_KEY))
+                .retrieve()
+                .bodyToMono(Void.class)
+                .log()
+                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
+                .doOnError(err -> logger.error("Ошибка запуска удаленного сервиса - {}", err.getMessage()))
+                .doOnSuccess(success -> logger.info("Отправка уведомления контрагентам о завершающемся приеме ответов выполнена."))
+                .log()
+                .block();
+    }
+
+    private void sendAnswerComingEndInitiatorMessage(AuthResponseDto authResponseDto) {
+        String uri = String.join("/", MA_INTEREST_REQUEST_ANSWER_SERVICE, "accepting-coming-end/initiator");
+
+        webClientMA
+                .post()
+                .uri(uri)
+                .header("Authorization", "Bearer " + authResponseDto.getAccessToken())
+                .header(HttpHeaders.USER_AGENT, userAgent)
+                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(X_REQUEST_ID_KEY))
+                .retrieve()
+                .bodyToMono(Void.class)
+                .log()
+                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
+                .doOnError(err -> logger.error("Ошибка запуска удаленного сервиса - {}", err.getMessage()))
+                .doOnSuccess(success -> logger.info("Отправка уведомления инициаторам о завершающемся приеме ответов выполнена."))
+                .log()
+                .block();
+    }
+
+    private void sendAnswerCompletedContractorMessage(AuthResponseDto authResponseDto) {
+        String uri = String.join("/", MA_INTEREST_REQUEST_ANSWER_SERVICE, "accepting-completed");
+
+        webClientMA
+                .post()
+                .uri(uri)
+                .header("Authorization", "Bearer " + authResponseDto.getAccessToken())
+                .header(HttpHeaders.USER_AGENT, userAgent)
+                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(X_REQUEST_ID_KEY))
+                .retrieve()
+                .bodyToMono(Void.class)
+                .log()
+                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
+                .doOnError(err -> logger.error("Ошибка запуска удаленного сервиса - {}", err.getMessage()))
+                .doOnSuccess(success -> logger.info("Отправка уведомления контрагентам о завершившемся приеме ответов выполнена."))
+                .log()
+                .block();
+    }
+
+    private void sendAnswerCompletedInitiatorMessage(AuthResponseDto authResponseDto) {
+        String uri = String.join("/", MA_INTEREST_REQUEST_ANSWER_SERVICE, "accepting-completed/initiator");
+
+        webClientMA
+                .post()
+                .uri(uri)
+                .header("Authorization", "Bearer " + authResponseDto.getAccessToken())
+                .header(HttpHeaders.USER_AGENT, userAgent)
+                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(X_REQUEST_ID_KEY))
+                .retrieve()
+                .bodyToMono(Void.class)
+                .log()
+                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
+                .doOnError(err -> logger.error("Ошибка запуска удаленного сервиса - {}", err.getMessage()))
+                .doOnSuccess(success -> logger.info("Отправка уведомления инициаторам о завершившемся приеме ответов выполнена."))
                 .log()
                 .block();
     }

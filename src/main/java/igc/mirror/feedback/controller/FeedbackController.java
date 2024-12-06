@@ -90,6 +90,7 @@ public class FeedbackController {
     }
 
     @GetMapping("/report")
+    @PreAuthorize("hasAuthority('CONFIG_VALUE.READ')")
     public ResponseEntity<Resource> getFeedbackReport(
             @RequestParam(required = false) @DateTimeFormat(pattern="dd.MM.yyyy") LocalDate date1,
             @RequestParam(required = false) @DateTimeFormat(pattern="dd.MM.yyyy") LocalDate date2) {

@@ -105,7 +105,7 @@ public class ExchangeService {
      * @param id Идентификатор записи из справочника систем
      */
     public void deleteExternalSource(Long id) {
-        externalSourceRepository.markDeletedById(id, userDetails.getUsername(), LocalDateTime.now());
+        externalSourceRepository.markDeletedById(id, userDetails.getUsername(), LocalDateTime.now(), true);
     }
 
     /**
@@ -312,6 +312,24 @@ public class ExchangeService {
 
     public Resource getPurchaseProcedureTemplate() {
         return resourceProcedureTemplateFile;
+    }
+
+    public ExternalSourceDto switchDeletedExternalSource(Long id) {
+        ExternalSource externalSource = externalSourceRepository.findById(id);
+        if (externalSource != null) {
+            externalSource.setDeleted(!externalSource.isDeleted());
+            externalSource.setLastUpdateUser(userDetails.getUsername());
+            externalSource.setLastUpdateDate(LocalDateTime.now());
+            externalSourceRepository.markDeletedById(
+                    externalSource.getId(),
+                    externalSource.getLastUpdateUser(),
+                    externalSource.getLastUpdateDate(),
+                    externalSource.isDeleted()
+            );
+
+            return new ExternalSourceDto(externalSource);
+        } else
+            return null;
     }
 
     /**

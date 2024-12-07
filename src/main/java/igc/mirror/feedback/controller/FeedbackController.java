@@ -77,6 +77,7 @@ public class FeedbackController {
     }
 
     @GetMapping("/file")
+    @PreAuthorize("hasAuthority('CONFIG_VALUE.READ')")
     public ResponseEntity<Resource> getFeedbackFile(@RequestParam UUID uid) {
         DocumentDto document = feedbackService.getFeedbackFile(uid);
 

@@ -144,7 +144,7 @@ public class FeedbackReportService {
                     Cell cell = row.createCell(5);
                     if (fileName != null && uid != null) {
                         String baseUrl = request.getScheme() + "://" + request.getServerName();
-                        String uidLink = baseUrl + "/api/admin/feedback/file?uid=" + uid.toString();
+                        String uidLink = baseUrl + "/feedback/feedback-file?uid=" + uid;
                         Hyperlink hyperlink = workbook.getCreationHelper().createHyperlink(HyperlinkType.URL);
                         hyperlink.setAddress(uidLink);
                         cell.setHyperlink(hyperlink);

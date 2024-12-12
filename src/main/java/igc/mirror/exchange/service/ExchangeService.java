@@ -224,7 +224,7 @@ public class ExchangeService {
                         .collect(groupingBy(
                                 PurchaseProcedureRow.KeyRecord::new,
                                 mapping(m -> new ProcedureOffer(
-                                                m.getContractorCode(),
+                                                (m.getContractorCode() != null) ? m.getContractorCode() : m.getInn() + m.getKpp(),
                                                 m.getContractorName(),
                                                 m.getContractorEsuCode(),
                                                 m.getInn(),

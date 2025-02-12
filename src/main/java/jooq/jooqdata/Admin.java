@@ -10,6 +10,7 @@ import java.util.List;
 import jooqdata.tables.AParam;
 import jooqdata.tables.TAnswerVersion;
 import jooqdata.tables.TAppControl;
+import jooqdata.tables.TCalendarDay;
 import jooqdata.tables.TCalendarProduction;
 import jooqdata.tables.TCostRange;
 import jooqdata.tables.TExternalSource;
@@ -60,6 +61,11 @@ public class Admin extends SchemaImpl {
      * Управление сервисами(заглушка)
      */
     public final TAppControl T_APP_CONTROL = TAppControl.T_APP_CONTROL;
+
+    /**
+     * Календарь рабочих и выходных дней (исключения)
+     */
+    public final TCalendarDay T_CALENDAR_DAY = TCalendarDay.T_CALENDAR_DAY;
 
     /**
      * Производственный календарь
@@ -168,6 +174,7 @@ public class Admin extends SchemaImpl {
             AParam.A_PARAM,
             TAnswerVersion.T_ANSWER_VERSION,
             TAppControl.T_APP_CONTROL,
+            TCalendarDay.T_CALENDAR_DAY,
             TCalendarProduction.T_CALENDAR_PRODUCTION,
             TCostRange.T_COST_RANGE,
             TExternalSource.T_EXTERNAL_SOURCE,

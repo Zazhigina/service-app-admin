@@ -14,6 +14,7 @@ import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -66,6 +67,12 @@ public class CalendarDayRepository {
         return dsl
             .selectFrom(T_CALENDAR_DAY)
             .where(condition);
+    }
+
+    public List<CalendarDayDto> findAllCalendarDays() {
+        return dsl
+            .selectFrom(T_CALENDAR_DAY)
+            .fetchInto(CalendarDayDto.class);
     }
 
     public CalendarDay getCalendarDay(Long id) {

@@ -48,6 +48,14 @@ public class CalendarDayService {
     }
 
     /**
+     * Возвращает все записи справочника рабочих и выходных дней
+     */
+    @PreAuthorize(AuthorityConstants.PreAuthorize.CONFIG_VALUE_READ)
+    public List<CalendarDayDto> findAllCalendarDays() {
+        return calendarDayRepository.findAllCalendarDays();
+    }
+
+    /**
      * Находит запись в справочник рабочих и выходных дней по id
      */
     @PreAuthorize(AuthorityConstants.PreAuthorize.CONFIG_VALUE_READ)

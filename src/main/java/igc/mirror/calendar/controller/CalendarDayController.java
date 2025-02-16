@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("calendar-day")
 @Tag(name = "Производственный календарь (рабочие и выходные дни)")
@@ -25,8 +27,14 @@ public class CalendarDayController {
 
     @Operation(summary = "Получение рабочих и выходных дней по указанному фильтру")
     @PostMapping(path = "/filter")
-    public Page<CalendarDayDto> findCalendarDay(@RequestBody(required = false) DataFilter<CalendarDaySearchCriteria> filter, Pageable pageable) {
+    public Page<CalendarDayDto> findCalendarDays(@RequestBody(required = false) DataFilter<CalendarDaySearchCriteria> filter, Pageable pageable) {
         return calendarDayService.findCalendarDaysByFilter(filter, pageable);
+    }
+
+    @Operation(summary = "Получение всех рабочих и выходных дней")
+    @GetMapping()
+    public List<CalendarDayDto> findAllCalendarDays() {
+        return calendarDayService.findAllCalendarDays();
     }
 
     @GetMapping("/{id}")

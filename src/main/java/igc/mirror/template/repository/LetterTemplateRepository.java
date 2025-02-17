@@ -2,6 +2,7 @@ package igc.mirror.template.repository;
 
 import igc.mirror.template.dto.LetterTemplateBriefInfoDto;
 import igc.mirror.exception.common.EntityNotFoundException;
+import igc.mirror.template.filter.LetterTemplateFilter;
 import igc.mirror.template.filter.LetterTemplateSearchCriteria;
 import igc.mirror.template.model.LetterTemplate;
 import igc.mirror.template.ref.LetterTemplateType;
@@ -24,6 +25,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.jooq.impl.DSL.*;
 
@@ -207,5 +209,18 @@ public class LetterTemplateRepository implements JooqCommonRepository<LetterTemp
         QueryFilter subFilter = (dataFilter != null ? dataFilter.getSubFilter() : null);
 
         return jooqRepositoryUtil.findRecordTotal(QueryBuilder.buildQuery(initLetterTemplateQuery(criteria), subFilter));
+    }
+
+    public List<LetterTemplate> getLetterTemplateListByParams(LetterTemplateFilter filter) {
+        var condition = noCondition();
+
+        condition = condition.and(Optional.ofNullable(filter.getLetterTypes())
+                .map(TLetterTemplate.T_LETTER_TEMPLATE.LETTER_TYPE::in)
+                .orElse(noCondition())
+        );
+
+        return dsl.selectFrom(TLetterTemplate.T_LETTER_TEMPLATE)
+                .where(condition)
+                .fetchInto(LetterTemplate.class);
     }
 }

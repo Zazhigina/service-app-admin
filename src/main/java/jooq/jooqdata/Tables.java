@@ -7,14 +7,20 @@ package jooqdata;
 import jooqdata.tables.AParam;
 import jooqdata.tables.TAnswerVersion;
 import jooqdata.tables.TAppControl;
+import jooqdata.tables.TCalendarDay;
 import jooqdata.tables.TCalendarProduction;
 import jooqdata.tables.TCostRange;
+import jooqdata.tables.TExternalSource;
 import jooqdata.tables.TFaqAnswer;
 import jooqdata.tables.TFaqQuestion;
+import jooqdata.tables.TFeedback;
+import jooqdata.tables.TFeedbackFile;
+import jooqdata.tables.TFeedbackThemes;
 import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
 import jooqdata.tables.TLetterTemplateVariable;
+import jooqdata.tables.TMatrix;
 import jooqdata.tables.TQuestion;
 import jooqdata.tables.TServiceOfferType;
 import jooqdata.tables.TVariable;
@@ -42,6 +48,11 @@ public class Tables {
     public static final TAppControl T_APP_CONTROL = TAppControl.T_APP_CONTROL;
 
     /**
+     * Календарь рабочих и выходных дней (исключения)
+     */
+    public static final TCalendarDay T_CALENDAR_DAY = TCalendarDay.T_CALENDAR_DAY;
+
+    /**
      * Производственный календарь
      */
     public static final TCalendarProduction T_CALENDAR_PRODUCTION = TCalendarProduction.T_CALENDAR_PRODUCTION;
@@ -52,6 +63,11 @@ public class Tables {
     public static final TCostRange T_COST_RANGE = TCostRange.T_COST_RANGE;
 
     /**
+     * Системы-источники
+     */
+    public static final TExternalSource T_EXTERNAL_SOURCE = TExternalSource.T_EXTERNAL_SOURCE;
+
+    /**
      * FAQ: ответ на вопрос
      */
     public static final TFaqAnswer T_FAQ_ANSWER = TFaqAnswer.T_FAQ_ANSWER;
@@ -60,6 +76,21 @@ public class Tables {
      * FAQ: вопросы
      */
     public static final TFaqQuestion T_FAQ_QUESTION = TFaqQuestion.T_FAQ_QUESTION;
+
+    /**
+     * Обратная связь
+     */
+    public static final TFeedback T_FEEDBACK = TFeedback.T_FEEDBACK;
+
+    /**
+     * Файлы обратной связи
+     */
+    public static final TFeedbackFile T_FEEDBACK_FILE = TFeedbackFile.T_FEEDBACK_FILE;
+
+    /**
+     * Справочник тем для обратной связи
+     */
+    public static final TFeedbackThemes T_FEEDBACK_THEMES = TFeedbackThemes.T_FEEDBACK_THEMES;
 
     /**
      * Шаблон письма
@@ -80,6 +111,12 @@ public class Tables {
      * Переменные к шаблону письма
      */
     public static final TLetterTemplateVariable T_LETTER_TEMPLATE_VARIABLE = TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE;
+
+    /**
+     * Настройка матрицы Компания организатор / Организатор &lt;&gt; Заказчик /
+     * Инициатор"
+     */
+    public static final TMatrix T_MATRIX = TMatrix.T_MATRIX;
 
     /**
      * Преднастроенный вопрос

@@ -39,7 +39,7 @@ RUN JKS_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) \
 
 RUN java -Djarmode=layertools -jar $BUILD_APP_DIR/build/libs/root.jar extract
 #
-FROM $RH_IMAGE_REPOSITORY/ubi9/openjdk-17-runtime:1.20-2
+FROM $RH_IMAGE_REPOSITORY/ubi9/openjdk-17-runtime:1.21-1.1733995521
 ARG BUILD_APP_DIR
 ARG UID=1001
 ARG UBI9_REPO_URL
@@ -58,7 +58,7 @@ ENV TZ Europe/Moscow
 #        curl -k $UBI9_REPO_URL --output /etc/yum.repos.d/ubi.repo; \
 #     fi; \
 #     microdnf --setopt=tsflags=nodocs install -y \
-#     curl-minimal-7.76.1-26.el9_3.3 libcurl-minimal-7.76.1-26.el9_3.3 expat-2.5.0-1.el9_3.1 && \
+#     python3-3.9.18-3.el9_4.6 python3-libs-3.9.18-3.el9_4.6 && \
 #     microdnf clean all && \
 #     rm -rf /var/cache/yum
 

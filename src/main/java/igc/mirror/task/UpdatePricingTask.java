@@ -39,34 +39,39 @@ public class UpdatePricingTask {
 
     @Value("${mirror.application.user-agent}")
     private String userAgent;
+    @Value("${mirror.kvp}")
+    private Boolean kvp;
 
     @Scheduled(cron = "${mirror.schedule.tasks.cron.daily-integration-uploading}")
     public void sendUpdatePricingRequest() {
-        MDC.put(USER_AGENT_KEY, userAgent);
-        MDC.put(X_REQUEST_ID_KEY, UUID.randomUUID().toString());
+        if (kvp == null || !kvp) {
 
-        logger.info("Запуск обновления списка прайсингов из Профессионалы 4.0");
+            MDC.put(USER_AGENT_KEY, userAgent);
+            MDC.put(X_REQUEST_ID_KEY, UUID.randomUUID().toString());
 
-        AuthResponseDto authResponseDto = keycloakAuthClient.authenticate(scheduleTasksUserName, scheduleTasksPassword);
+            logger.info("Запуск обновления списка прайсингов из Профессионалы 4.0");
 
-        String uri = "effect/exchange/professional/roles";
+            AuthResponseDto authResponseDto = keycloakAuthClient.authenticate(scheduleTasksUserName, scheduleTasksPassword);
 
-        webClient
-                .post()
-                .uri(uri)
-                .header("Authorization", "Bearer " + authResponseDto.getAccessToken())
-                .header(HttpHeaders.USER_AGENT, userAgent)
-                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(X_REQUEST_ID_KEY))
-                .retrieve()
-                .bodyToMono(Void.class)
-                .log()
-                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
-                .doOnError(err -> logger.error("Ошибка запуска удаленного сервиса - {}", err.getMessage()))
-                .doOnSuccess(success -> logger.info("Обновление списка прайсингов из Профессионалы 4.0 завершено"))
-                .log()
-                .block();
+            String uri = "effect/exchange/professional/roles";
 
-        MDC.remove(USER_AGENT_KEY);
-        MDC.remove(X_REQUEST_ID_KEY);
+            webClient
+                    .post()
+                    .uri(uri)
+                    .header("Authorization", "Bearer " + authResponseDto.getAccessToken())
+                    .header(HttpHeaders.USER_AGENT, userAgent)
+                    .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(X_REQUEST_ID_KEY))
+                    .retrieve()
+                    .bodyToMono(Void.class)
+                    .log()
+                    .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
+                    .doOnError(err -> logger.error("Ошибка запуска удаленного сервиса - {}", err.getMessage()))
+                    .doOnSuccess(success -> logger.info("Обновление списка прайсингов из Профессионалы 4.0 завершено"))
+                    .log()
+                    .block();
+
+            MDC.remove(USER_AGENT_KEY);
+            MDC.remove(X_REQUEST_ID_KEY);
+        }
     }
 }

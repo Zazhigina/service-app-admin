@@ -38,6 +38,21 @@ public class UserDetails {
     }
 
     /**
+     * Возвращает полное имя авторизированного пользователя
+     * В случае, если endpoint включен в разрешенные(e.g. permitAll()) - метод вернет null
+     * @return userFullname
+     */
+    public String getUserFullname() {
+        try{
+            Jwt jwt =
+                    (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            return jwt.getClaim("given_name");
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    /**
      * Получение списка ролей пользователя
      *
      * @param jwt Jwt токен

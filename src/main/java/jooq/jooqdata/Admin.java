@@ -10,14 +10,20 @@ import java.util.List;
 import jooqdata.tables.AParam;
 import jooqdata.tables.TAnswerVersion;
 import jooqdata.tables.TAppControl;
+import jooqdata.tables.TCalendarDay;
 import jooqdata.tables.TCalendarProduction;
 import jooqdata.tables.TCostRange;
+import jooqdata.tables.TExternalSource;
 import jooqdata.tables.TFaqAnswer;
 import jooqdata.tables.TFaqQuestion;
+import jooqdata.tables.TFeedback;
+import jooqdata.tables.TFeedbackFile;
+import jooqdata.tables.TFeedbackThemes;
 import jooqdata.tables.TLetterTemplate;
 import jooqdata.tables.TLetterTemplateAcceptableDocumentFormatEnum;
 import jooqdata.tables.TLetterTemplateTypeTemplateEnum;
 import jooqdata.tables.TLetterTemplateVariable;
+import jooqdata.tables.TMatrix;
 import jooqdata.tables.TQuestion;
 import jooqdata.tables.TServiceOfferType;
 import jooqdata.tables.TVariable;
@@ -57,6 +63,11 @@ public class Admin extends SchemaImpl {
     public final TAppControl T_APP_CONTROL = TAppControl.T_APP_CONTROL;
 
     /**
+     * Календарь рабочих и выходных дней (исключения)
+     */
+    public final TCalendarDay T_CALENDAR_DAY = TCalendarDay.T_CALENDAR_DAY;
+
+    /**
      * Производственный календарь
      */
     public final TCalendarProduction T_CALENDAR_PRODUCTION = TCalendarProduction.T_CALENDAR_PRODUCTION;
@@ -67,6 +78,11 @@ public class Admin extends SchemaImpl {
     public final TCostRange T_COST_RANGE = TCostRange.T_COST_RANGE;
 
     /**
+     * Системы-источники
+     */
+    public final TExternalSource T_EXTERNAL_SOURCE = TExternalSource.T_EXTERNAL_SOURCE;
+
+    /**
      * FAQ: ответ на вопрос
      */
     public final TFaqAnswer T_FAQ_ANSWER = TFaqAnswer.T_FAQ_ANSWER;
@@ -75,6 +91,21 @@ public class Admin extends SchemaImpl {
      * FAQ: вопросы
      */
     public final TFaqQuestion T_FAQ_QUESTION = TFaqQuestion.T_FAQ_QUESTION;
+
+    /**
+     * Обратная связь
+     */
+    public final TFeedback T_FEEDBACK = TFeedback.T_FEEDBACK;
+
+    /**
+     * Файлы обратной связи
+     */
+    public final TFeedbackFile T_FEEDBACK_FILE = TFeedbackFile.T_FEEDBACK_FILE;
+
+    /**
+     * Справочник тем для обратной связи
+     */
+    public final TFeedbackThemes T_FEEDBACK_THEMES = TFeedbackThemes.T_FEEDBACK_THEMES;
 
     /**
      * Шаблон письма
@@ -95,6 +126,12 @@ public class Admin extends SchemaImpl {
      * Переменные к шаблону письма
      */
     public final TLetterTemplateVariable T_LETTER_TEMPLATE_VARIABLE = TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE;
+
+    /**
+     * Настройка матрицы Компания организатор / Организатор &lt;&gt; Заказчик /
+     * Инициатор"
+     */
+    public final TMatrix T_MATRIX = TMatrix.T_MATRIX;
 
     /**
      * Преднастроенный вопрос
@@ -137,14 +174,20 @@ public class Admin extends SchemaImpl {
             AParam.A_PARAM,
             TAnswerVersion.T_ANSWER_VERSION,
             TAppControl.T_APP_CONTROL,
+            TCalendarDay.T_CALENDAR_DAY,
             TCalendarProduction.T_CALENDAR_PRODUCTION,
             TCostRange.T_COST_RANGE,
+            TExternalSource.T_EXTERNAL_SOURCE,
             TFaqAnswer.T_FAQ_ANSWER,
             TFaqQuestion.T_FAQ_QUESTION,
+            TFeedback.T_FEEDBACK,
+            TFeedbackFile.T_FEEDBACK_FILE,
+            TFeedbackThemes.T_FEEDBACK_THEMES,
             TLetterTemplate.T_LETTER_TEMPLATE,
             TLetterTemplateAcceptableDocumentFormatEnum.T_LETTER_TEMPLATE_ACCEPTABLE_DOCUMENT_FORMAT_ENUM,
             TLetterTemplateTypeTemplateEnum.T_LETTER_TEMPLATE_TYPE_TEMPLATE_ENUM,
             TLetterTemplateVariable.T_LETTER_TEMPLATE_VARIABLE,
+            TMatrix.T_MATRIX,
             TQuestion.T_QUESTION,
             TServiceOfferType.T_SERVICE_OFFER_TYPE,
             TVariable.T_VARIABLE

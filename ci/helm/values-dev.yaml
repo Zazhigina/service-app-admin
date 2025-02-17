@@ -51,6 +51,8 @@ application:
         value: 0 0 1 * * *
       - key: MIRROR_SCHEDULE_TASKS_CRON_DAILY_INTEGRATION_UPLOADING
         value: 0 0 5 * * *
+      - key: MIRROR_KVP
+        value: false
     secret:
       - key: MIRROR_DATASOURCE_URL
         secretName: mirror-pg-cred

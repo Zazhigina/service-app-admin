@@ -2,10 +2,7 @@ package igc.mirror.template.controller;
 
 import igc.mirror.doc.dto.DocumentDto;
 import igc.mirror.exception.handler.SuccessInfo;
-import igc.mirror.template.dto.LetterTemplateBriefInfoDto;
-import igc.mirror.template.dto.LetterTemplateDto;
-import igc.mirror.template.dto.LetterTemplateTypeDto;
-import igc.mirror.template.dto.TemplateDto;
+import igc.mirror.template.dto.*;
 import igc.mirror.template.filter.LetterTemplateSearchCriteria;
 import igc.mirror.template.service.TemplateService;
 import igc.mirror.utils.qfilter.DataFilter;
@@ -90,5 +87,17 @@ public class TemplateController {
     @Operation(summary = "Запрос шаблона по наименованию параметра")
     public ResponseEntity<TemplateDto> retrieveTemplate(@RequestParam("param") String letterType) {
         return ResponseEntity.ok(templateService.retrieveTemplate(letterType));
+    }
+
+    @GetMapping("/by-param/doc")
+    @Operation(summary = "Получение шаблона по наименованию параметра")
+    public ResponseEntity<Resource> downloadTemplateByLetter(@RequestParam("param") String letterType) {
+        return templateService.downloadTemplateByLetter(letterType);
+    }
+
+    @PostMapping("/by-letter-types/info")
+    @Operation(summary = "Информация о шаблонах по списку имен")
+    public ResponseEntity<List<LetterTemplateInfoDto>> getTemplatesInfo(@RequestBody List<String> letterTypes) {
+        return ResponseEntity.ok(templateService.getTemplatesInfo(letterTypes));
     }
 }

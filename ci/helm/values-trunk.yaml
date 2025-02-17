@@ -1,6 +1,3 @@
-# Default values for tzriu-be-spring.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
 image:
   repository: nexus-registry.inlinegroup-c.ru/tzriu/service-app-admin
 
@@ -60,13 +57,15 @@ application:
       - key: MIRROR_SCHEDULE_TASKS_CRON_DAILY_INTEGRATION_UPLOADING
         value: 0 0 5 * * *
       - key: MIRROR_LDAP_URL
-        value: ldap://tau.inlinegroup-c.ru
+        value: ldap://samba-ad-dh.inlinegroup-c.ru
       - key: MIRROR_LDAP_BASE
         value: CN=Users,DC=inlinegroup-c,DC=ru
       - key: MIRROR_LDAP_FILTER
         value: CN=SPB-SSO-ALLUSERS,CN=Users,DC=inlinegroup-c,DC=ru
       - key: MIRROR_LDAP_SVC_USERS
         value: mirror_async,mirror_sched,mirror_integration,mirror-tpartner
+      - key: MIRROR_KVP
+        value: false
     secret:
       - key: SPRING_DATASOURCE_USERNAME
         secretName: mirror-pg-cred

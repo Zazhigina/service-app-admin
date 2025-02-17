@@ -1,5 +1,6 @@
 package igc.mirror.calendar.controller;
 
+import igc.mirror.auth.AuthorityConstants;
 import igc.mirror.calendar.dto.CalendarDayDto;
 import igc.mirror.calendar.filter.CalendarDaySearchCriteria;
 import igc.mirror.calendar.service.CalendarDayService;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,38 +27,43 @@ public class CalendarDayController {
         this.calendarDayService = calendarDayService;
     }
 
-    @Operation(summary = "Получение рабочих и выходных дней по указанному фильтру")
     @PostMapping(path = "/filter")
+    @Operation(summary = "Получение рабочих и выходных дней по указанному фильтру")
+    @PreAuthorize(AuthorityConstants.PreAuthorize.CONFIG_VALUE_READ)
     public Page<CalendarDayDto> findCalendarDays(@RequestBody(required = false) DataFilter<CalendarDaySearchCriteria> filter, Pageable pageable) {
         return calendarDayService.findCalendarDaysByFilter(filter, pageable);
     }
 
-    @Operation(summary = "Получение всех рабочих и выходных дней")
     @GetMapping()
+    @Operation(summary = "Получение всех рабочих и выходных дней")
     public List<CalendarDayDto> findAllCalendarDays() {
         return calendarDayService.findAllCalendarDays();
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Получение записи о рабочих и выходных днях")
+    @PreAuthorize(AuthorityConstants.PreAuthorize.CONFIG_VALUE_READ)
     public CalendarDayDto getCalendarDay(@PathVariable Long id) {
         return calendarDayService.getCalendarDay(id);
     }
 
     @PostMapping()
     @Operation(summary = "Создание записи о рабочих и выходных днях")
+    @PreAuthorize(AuthorityConstants.PreAuthorize.CONFIG_VALUE_CHANGE)
     public CalendarDayDto createCalendarDay(@RequestBody CalendarDayDto calendarDay) {
         return calendarDayService.createCalendarDay(calendarDay);
     }
 
     @PutMapping()
     @Operation(summary = "Изменение записи о рабочих и выходных днях")
+    @PreAuthorize(AuthorityConstants.PreAuthorize.CONFIG_VALUE_CHANGE)
     public CalendarDayDto changeCalendarDay(@RequestBody CalendarDayDto calendarDay) {
         return calendarDayService.changeCalendarDay(calendarDay);
     }
 
-    @Operation(summary = "Удаление записи о рабочих и выходных днях")
     @DeleteMapping("/{id}")
+    @Operation(summary = "Удаление записи о рабочих и выходных днях")
+    @PreAuthorize(AuthorityConstants.PreAuthorize.CONFIG_VALUE_CHANGE)
     public SuccessInfo deleteCalendarDay(@PathVariable Long id) {
         calendarDayService.deleteCalendarDay(id);
         return new SuccessInfo("Запись удалена");

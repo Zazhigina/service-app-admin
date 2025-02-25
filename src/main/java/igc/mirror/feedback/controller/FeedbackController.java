@@ -56,6 +56,12 @@ public class FeedbackController {
         return ResponseEntity.ok(new SuccessInfo("Тема для обращений удалена, ИД: " + id));
     }
 
+    @PutMapping("/theme/sort")
+    @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
+    public List<FeedbackThemeDto> putThemeSort(@RequestBody List<FeedbackThemeDto> sortedThemes) {
+        return feedbackService.updateSortTheme(sortedThemes);
+    }
+
     @PostMapping("")
     public ResponseEntity<String> addFeedback(@RequestPart FeedbackDto feedbackDto, @RequestPart(required = false) MultipartFile[] fileBlobs) {
         try {

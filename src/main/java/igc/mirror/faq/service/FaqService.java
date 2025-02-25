@@ -62,10 +62,7 @@ public class FaqService {
 
         letterTypeRightLikeList.add(String.format("%s_USER_GUIDE", mirrorService != null ? mirrorService.name() : ""));
         letterTypeRightLikeList.add(String.format("%s_PARTNER_GUIDE", mirrorService != null ? mirrorService.name() : ""));
-//        letterTemplateSearchCriteria.setLetterTypeRightLikeList(List.of(
-//                String.format("%s_USER_GUIDE", mirrorService != null ? mirrorService.name() : ""),
-//                String.format("%s_PARTNER_GUIDE", mirrorService != null ? mirrorService.name() : "")
-//        ));
+
         if (!mirrorService.name().startsWith("MTR_"))
             letterTypeRightLikeList.add("COMMON_USER_GUIDE");
         else

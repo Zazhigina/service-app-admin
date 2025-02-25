@@ -39,6 +39,12 @@ public class ExchangeController {
         return new ResponseEntity<>(new SuccessInfo("Объект сохранен"), HttpStatus.OK);
     }
 
+    @Operation(summary = "Изменить метку удаления для записи в справочнике систем")
+    @PutMapping("ref/external-source/{id}/switch-deleted")
+    public ExternalSourceDto switchDeletedExternalSource(@PathVariable Long id) {
+        return exchangeService.switchDeletedExternalSource(id);
+    }
+
     @Operation(summary = "Пометить на удаление запись в справочнике систем")
     @DeleteMapping("ref/external-source/{id}")
     public ResponseEntity<SuccessInfo> deleteExternalSource(@PathVariable Long id) {

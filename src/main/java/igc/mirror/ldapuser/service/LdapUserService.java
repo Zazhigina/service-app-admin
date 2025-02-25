@@ -155,7 +155,7 @@ public class LdapUserService {
             if(attrs.get("memberOf") != null) {
                 for (Enumeration vals = attrs.get("memberOf").getAll(); vals.hasMoreElements(); ) {
                     String groupName = (String) vals.nextElement();
-                    if (groupName.toLowerCase().startsWith("cn=mirror")) {
+                    if (groupName.toLowerCase().startsWith("cn=mirror") || groupName.toLowerCase().startsWith("cn=effect")) {
                         LdapGroup group = new LdapGroup();
                         group.setDistinguishedName(groupName);
                         group.setName(groupName.substring(3, groupName.indexOf(",")));

@@ -49,9 +49,9 @@ public class ExternalSourceRepository {
             throw new EntityNotFoundException("Объект не найден", externalSource.getId(), ExternalSource.class);
     }
 
-    public void markDeletedById(Long id, String userName, LocalDateTime lastUpdateDate) {
+    public void markDeletedById(Long id, String userName, LocalDateTime lastUpdateDate, boolean isDeleted) {
         int count = dsl.update(T_EXTERNAL_SOURCE)
-                .set(T_EXTERNAL_SOURCE.DELETED, true)
+                .set(T_EXTERNAL_SOURCE.DELETED, isDeleted)
                 .set(T_EXTERNAL_SOURCE.LAST_UPDATE_USER,userName)
                 .set(T_EXTERNAL_SOURCE.LAST_UPDATE_DATE, lastUpdateDate)
                 .where(T_EXTERNAL_SOURCE.ID.eq(id))
@@ -64,4 +64,17 @@ public class ExternalSourceRepository {
     public List<ExternalSource> getAllExternalSources() {
         return dsl.selectFrom(T_EXTERNAL_SOURCE).fetchInto(ExternalSource.class);
     }
+
+//    public ExternalSource switchDeletedById(Long id, String userName, LocalDateTime lastUpdateDate) {
+//        ExternalSource externalSource = findById(id);
+//        if (externalSource != null) {
+//            externalSource.setDeleted(!externalSource.isDeleted());
+//            externalSource.setLastUpdateUser(userName);
+//            externalSource.setLastUpdateDate(lastUpdateDate);
+//
+//            markDeletedById(externalSource.getId(), externalSource.getLastUpdateUser(), externalSource.getLastUpdateDate());
+//        }
+//
+//        return externalSource;
+//    }
 }

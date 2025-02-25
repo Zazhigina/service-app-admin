@@ -1,5 +1,6 @@
 package igc.mirror.costrange.controller;
 
+import igc.mirror.auth.AuthorityConstants;
 import igc.mirror.costrange.service.CostRangeService;
 import igc.mirror.costrange.dto.CostRangeDto;
 import igc.mirror.costrange.filter.CostRangeSearchCriteria;
@@ -24,7 +25,7 @@ public class CostRangeController {
 
     @PostMapping("/filter")
     @Operation(summary = "Диапазоны стоимостных показателей")
-    @PreAuthorize("hasAuthority('CONFIG_VALUE.READ')")
+    @PreAuthorize(AuthorityConstants.PreAuthorize.CONFIG_VALUE_READ)
     public Page<CostRangeDto> findCostRangeByFilters(@RequestBody(required = false) DataFilter<CostRangeSearchCriteria> filter,
                                                      Pageable pageable) {
         return costRangeService.findCostRangeByFilters(filter, pageable);
@@ -38,7 +39,7 @@ public class CostRangeController {
 
     @PutMapping("")
     @Operation(summary = "Сохранение/изменение диапазона стоимостных показателей")
-    @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
+    @PreAuthorize(AuthorityConstants.PreAuthorize.CONFIG_VALUE_CHANGE)
     public CostRangeDto changeCostRange(@RequestBody CostRangeDto costRange) {
 
         return costRangeService.changeCostRange(costRange);
@@ -46,7 +47,7 @@ public class CostRangeController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление диапазона стоимостных показателей")
-    @PreAuthorize("hasAuthority('CONFIG_VALUE.CHANGE')")
+    @PreAuthorize(AuthorityConstants.PreAuthorize.CONFIG_VALUE_CHANGE)
     public Long deleteCostRange(@PathVariable Long id) {
 
         return costRangeService.deleteCostRange(id);

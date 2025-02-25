@@ -36,7 +36,9 @@ import reactor.core.publisher.Mono;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -105,7 +107,7 @@ public class ExchangeService {
      * @param id Идентификатор записи из справочника систем
      */
     public void deleteExternalSource(Long id) {
-        externalSourceRepository.markDeletedById(id, userDetails.getUsername(), LocalDateTime.now());
+        externalSourceRepository.markDeletedById(id, userDetails.getUsername(), LocalDateTime.now(), true);
     }
 
     /**
@@ -179,8 +181,8 @@ public class ExchangeService {
                     case 2 -> data.setLotName(textValue);
                     case 3 -> data.setProcedureNr(textValue);
                     case 4 -> data.setProcedureId(textValue);
-                    case 5 -> data.setPlanCompletionDate(textValue);
-                    case 6 -> data.setDateOfPublication(textValue);
+                    case 5 -> data.setPlanCompletionDate(CellUtils.getDateValue(cell).toLocalDate());
+                    case 6 -> data.setDateOfPublication(CellUtils.getDateValue(cell).toLocalDate());
                     case 7 -> data.setOrganizer(textValue);
                     case 8 -> data.setOrganizerCode(textValue);
                     case 9 -> data.setInitiator(textValue);
@@ -189,7 +191,7 @@ public class ExchangeService {
                     case 12 -> data.setServiceCode(textValue);
                     case 13 -> data.setCustomer(textValue);
                     case 14 -> data.setNmc(textValue);
-                    case 15 -> data.setProtocolDate(textValue);
+                    case 15 -> data.setProtocolDate(CellUtils.getDateValue(cell).toLocalDate());
                     case 16 -> data.setOkved(textValue);
                     case 17 -> data.setOkpd(textValue);
                     case 18 -> data.setOkato(textValue);
@@ -199,12 +201,10 @@ public class ExchangeService {
                     case 22 -> data.setInn(textValue);
                     case 23 -> data.setKpp(textValue);
                     case 24 -> data.setCost(textValue);
-                    case 25 -> data.setContractDate(textValue);
+                    case 25 -> data.setContractDate(CellUtils.getDateValue(cell).toLocalDate());
                     case 26 -> data.setOfferStatus(textValue);
 
-                    default -> {
-                        break;
-                    }
+                    default -> {}
                 }
             } catch (Exception e) {
                 throw new LoadFileException(String.format("Некорректные данные в строке %d столбце %d", row.getNum() + 1, cell.getNum() + 1));
@@ -224,13 +224,13 @@ public class ExchangeService {
                         .collect(groupingBy(
                                 PurchaseProcedureRow.KeyRecord::new,
                                 mapping(m -> new ProcedureOffer(
-                                                m.getContractorCode(),
+                                                (m.getContractorCode() != null) ? m.getContractorCode() : m.getInn() + m.getKpp(),
                                                 m.getContractorName(),
                                                 m.getContractorEsuCode(),
                                                 m.getInn(),
                                                 m.getKpp(),
                                                 m.getCost(),
-                                                m.getContractDate(),
+                                                (m.getContractDate() != null) ? m.getContractDate().format(DateTimeFormatter.ISO_LOCAL_DATE) : null,
                                                 m.getOfferStatus())
                                         , toList())
                         ))
@@ -303,7 +303,7 @@ public class ExchangeService {
             List<PurchaseProcedureSheet> procedureRawData = processDataFromProcedureFile(fileInputStream);
             procedureData = convertRawToProcedure(procedureRawData);
             // отправить в сервис интеграции
-            sendPurchaseProcedureToIntegration(source, procedureData);
+//            sendPurchaseProcedureToIntegration(source, procedureData);
         } catch (IOException e) {
             throw new IllegalEntityStateException("Ошибка при загрузке файла c закупочными процедурами", null, MultipartFile.class);
         }
@@ -312,6 +312,24 @@ public class ExchangeService {
 
     public Resource getPurchaseProcedureTemplate() {
         return resourceProcedureTemplateFile;
+    }
+
+    public ExternalSourceDto switchDeletedExternalSource(Long id) {
+        ExternalSource externalSource = externalSourceRepository.findById(id);
+        if (externalSource != null) {
+            externalSource.setDeleted(!externalSource.isDeleted());
+            externalSource.setLastUpdateUser(userDetails.getUsername());
+            externalSource.setLastUpdateDate(LocalDateTime.now());
+            externalSourceRepository.markDeletedById(
+                    externalSource.getId(),
+                    externalSource.getLastUpdateUser(),
+                    externalSource.getLastUpdateDate(),
+                    externalSource.isDeleted()
+            );
+
+            return new ExternalSourceDto(externalSource);
+        } else
+            return null;
     }
 
     /**
@@ -324,8 +342,8 @@ public class ExchangeService {
         String lotName;
         String procedureNr;
         String procedureId;
-        String planCompletionDate;
-        String dateOfPublication;
+        LocalDate planCompletionDate;
+        LocalDate dateOfPublication;
         String organizer;
         String organizerCode;
         String initiator;
@@ -334,7 +352,7 @@ public class ExchangeService {
         String serviceCode;
         String customer;
         String nmc;
-        String protocolDate;
+        LocalDate protocolDate;
         String okved;
         String okpd;
         String okato;
@@ -344,7 +362,7 @@ public class ExchangeService {
         String inn;
         String kpp;
         String cost;
-        String contractDate;
+        LocalDate contractDate;
         String offerStatus;
 
         /**
@@ -356,9 +374,13 @@ public class ExchangeService {
                          String customer, String nmc, String protocolDate, String okved, String okpd, String okato) {
             KeyRecord(PurchaseProcedureRow row) {
                 this(row.getLotNr(), row.getLotId(), row.getLotName(), row.getProcedureNr(), row.getProcedureId(),
-                        row.getPlanCompletionDate(), row.getDateOfPublication(), row.getOrganizer(), row.getOrganizerCode(),
+                        (row.getPlanCompletionDate() != null) ? row.getPlanCompletionDate().format(DateTimeFormatter.ISO_LOCAL_DATE) : null,
+                        (row.getDateOfPublication() != null) ? row.getDateOfPublication().format(DateTimeFormatter.ISO_LOCAL_DATE) : null,
+                        row.getOrganizer(), row.getOrganizerCode(),
                         row.getInitiator(), row.getPurchaseCategory(), row.getPurchaseForm(), row.getServiceCode(),
-                        row.getCustomer(), row.getNmc(), row.getProtocolDate(), row.getOkved(), row.getOkpd(), row.getOkato());
+                        row.getCustomer(), row.getNmc(),
+                        (row.getProtocolDate() != null) ? row.getProtocolDate().format(DateTimeFormatter.ISO_LOCAL_DATE) : null,
+                        row.getOkved(), row.getOkpd(), row.getOkato());
             }
         }
     }

@@ -7,6 +7,7 @@ package jooqdata;
 import jooqdata.tables.AParam;
 import jooqdata.tables.TAnswerVersion;
 import jooqdata.tables.TAppControl;
+import jooqdata.tables.TCalendarDay;
 import jooqdata.tables.TCalendarProduction;
 import jooqdata.tables.TCostRange;
 import jooqdata.tables.TExternalSource;
@@ -45,6 +46,11 @@ public class Tables {
      * Управление сервисами(заглушка)
      */
     public static final TAppControl T_APP_CONTROL = TAppControl.T_APP_CONTROL;
+
+    /**
+     * Календарь рабочих и выходных дней (исключения)
+     */
+    public static final TCalendarDay T_CALENDAR_DAY = TCalendarDay.T_CALENDAR_DAY;
 
     /**
      * Производственный календарь

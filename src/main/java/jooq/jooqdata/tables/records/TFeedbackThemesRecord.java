@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 import jooqdata.tables.TFeedbackThemes;
 
 import org.jooq.Field;
-import org.jooq.Record6;
-import org.jooq.Row6;
+import org.jooq.Record7;
+import org.jooq.Row7;
 import org.jooq.impl.TableRecordImpl;
 
 
@@ -18,7 +18,7 @@ import org.jooq.impl.TableRecordImpl;
  * Справочник тем для обратной связи
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord> implements Record6<Long, String, LocalDateTime, LocalDateTime, String, String> {
+public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord> implements Record7<Long, String, LocalDateTime, LocalDateTime, String, String, Integer> {
 
     private static final long serialVersionUID = 1L;
 
@@ -114,18 +114,32 @@ public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord
         return (String) get(5);
     }
 
+    /**
+     * Setter for <code>admin.t_feedback_themes.num</code>. Номер для сортировки
+     */
+    public void setNum(Integer value) {
+        set(6, value);
+    }
+
+    /**
+     * Getter for <code>admin.t_feedback_themes.num</code>. Номер для сортировки
+     */
+    public Integer getNum() {
+        return (Integer) get(6);
+    }
+
     // -------------------------------------------------------------------------
-    // Record6 type implementation
+    // Record7 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<Long, String, LocalDateTime, LocalDateTime, String, String> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row7<Long, String, LocalDateTime, LocalDateTime, String, String, Integer> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 
     @Override
-    public Row6<Long, String, LocalDateTime, LocalDateTime, String, String> valuesRow() {
-        return (Row6) super.valuesRow();
+    public Row7<Long, String, LocalDateTime, LocalDateTime, String, String, Integer> valuesRow() {
+        return (Row7) super.valuesRow();
     }
 
     @Override
@@ -159,6 +173,11 @@ public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord
     }
 
     @Override
+    public Field<Integer> field7() {
+        return TFeedbackThemes.T_FEEDBACK_THEMES.NUM;
+    }
+
+    @Override
     public Long component1() {
         return getId();
     }
@@ -189,6 +208,11 @@ public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord
     }
 
     @Override
+    public Integer component7() {
+        return getNum();
+    }
+
+    @Override
     public Long value1() {
         return getId();
     }
@@ -216,6 +240,11 @@ public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord
     @Override
     public String value6() {
         return getLastUpdateUser();
+    }
+
+    @Override
+    public Integer value7() {
+        return getNum();
     }
 
     @Override
@@ -255,13 +284,20 @@ public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord
     }
 
     @Override
-    public TFeedbackThemesRecord values(Long value1, String value2, LocalDateTime value3, LocalDateTime value4, String value5, String value6) {
+    public TFeedbackThemesRecord value7(Integer value) {
+        setNum(value);
+        return this;
+    }
+
+    @Override
+    public TFeedbackThemesRecord values(Long value1, String value2, LocalDateTime value3, LocalDateTime value4, String value5, String value6, Integer value7) {
         value1(value1);
         value2(value2);
         value3(value3);
         value4(value4);
         value5(value5);
         value6(value6);
+        value7(value7);
         return this;
     }
 
@@ -279,7 +315,7 @@ public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord
     /**
      * Create a detached, initialised TFeedbackThemesRecord
      */
-    public TFeedbackThemesRecord(Long id, String fbThemeName, LocalDateTime createDate, LocalDateTime lastUpdateDate, String createUser, String lastUpdateUser) {
+    public TFeedbackThemesRecord(Long id, String fbThemeName, LocalDateTime createDate, LocalDateTime lastUpdateDate, String createUser, String lastUpdateUser, Integer num) {
         super(TFeedbackThemes.T_FEEDBACK_THEMES);
 
         setId(id);
@@ -288,5 +324,6 @@ public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord
         setLastUpdateDate(lastUpdateDate);
         setCreateUser(createUser);
         setLastUpdateUser(lastUpdateUser);
+        setNum(num);
     }
 }

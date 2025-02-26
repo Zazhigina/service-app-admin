@@ -124,6 +124,7 @@ public class FeedbackRepository {
                         T_FEEDBACK.FB_THEME_NAME,
                         T_FEEDBACK.CREATE_DATE,
                         T_FEEDBACK.USER_FULLNAME,
+                        T_FEEDBACK.CREATE_USER,
                         T_FEEDBACK.FEEDBACK_TEXT,
                         T_FEEDBACK_FILE.FILENAME,
                         T_FEEDBACK_FILE.UID

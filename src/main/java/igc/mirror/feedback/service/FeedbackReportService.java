@@ -72,8 +72,8 @@ public class FeedbackReportService {
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         cellStyle.setWrapText(true);
 
-        String[] headers = {"№п/п", "Дата подачи обращения", "ФИО инициатора обращения", "Сообщение пользователя", "Наименование файла", "Ссылка на вложенный файл"};
-        Integer[] columnWidth = {2000, 6000, 10000, 14000, 9000, 20000};
+        String[] headers = {"№п/п", "Дата подачи обращения", "ФИО инициатора обращения", "Логин инициатора обращения", "Сообщение пользователя", "Наименование файла", "Ссылка на вложенный файл"};
+        Integer[] columnWidth = {2000, 6000, 10000, 8000, 14000, 9000, 20000};
 
         if(groupedReportData.isEmpty()) {
             Sheet sheet = workbook.createSheet("Лист 1");
@@ -123,9 +123,11 @@ public class FeedbackReportService {
                 feedbackRow.getCell(1).setCellStyle(cellStyle);
                 feedbackRow.createCell(2).setCellValue(feedbackRecords.get(0).getUserFullname());
                 feedbackRow.getCell(2).setCellStyle(cellStyle);
-                String feedbackText = feedbackRecords.get(0).getFeedbackText();
-                feedbackRow.createCell(3).setCellValue(feedbackText);
+                feedbackRow.createCell(3).setCellValue(feedbackRecords.get(0).getCreateUser());
                 feedbackRow.getCell(3).setCellStyle(cellStyle);
+                String feedbackText = feedbackRecords.get(0).getFeedbackText();
+                feedbackRow.createCell(4).setCellValue(feedbackText);
+                feedbackRow.getCell(4).setCellStyle(cellStyle);
 
                 int counterSubRows = 0;
                 for (FeedbackReportDto record : feedbackRecords) {
@@ -138,10 +140,10 @@ public class FeedbackReportService {
                     }
 
                     String fileName = record.getFilename();
-                    row.createCell(4).setCellValue(fileName != null && !fileName.isEmpty() ? fileName : "Файл не прикреплен");
-                    row.getCell(4).setCellStyle(cellStyle);
+                    row.createCell(5).setCellValue(fileName != null && !fileName.isEmpty() ? fileName : "Файл не прикреплен");
+                    row.getCell(5).setCellStyle(cellStyle);
                     UUID uid = record.getUid();
-                    Cell cell = row.createCell(5);
+                    Cell cell = row.createCell(6);
                     if (fileName != null && uid != null) {
                         String baseUrl = request.getScheme() + "://" + request.getServerName();
                         String uidLink = baseUrl + "/feedback/feedback-file?uid=" + uid;

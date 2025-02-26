@@ -7,11 +7,13 @@ import igc.mirror.feedback.dto.FeedbackThemeDto;
 import jooqdata.tables.TFeedback;
 import jooqdata.tables.TFeedbackFile;
 import jooqdata.tables.TFeedbackThemes;
+import jooqdata.tables.records.TFeedbackThemesRecord;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,6 +32,7 @@ public class FeedbackRepository {
 
     public List<FeedbackThemeDto> findThemes() {
         return dsl.selectFrom(T_FEEDBACK_THEMES)
+                .orderBy(T_FEEDBACK_THEMES.NUM.asc().nullsLast())
                 .fetchInto(FeedbackThemeDto.class);
     }
     public FeedbackThemeDto addTheme(FeedbackThemeDto theme) {
@@ -58,6 +61,17 @@ public class FeedbackRepository {
         dsl.deleteFrom(T_FEEDBACK_THEMES)
                 .where(T_FEEDBACK_THEMES.ID.equal(id))
                 .execute();
+    }
+
+    public List<FeedbackThemeDto> updateSortTheme(List<FeedbackThemeDto> sortedThemes) {
+        List<UpdateConditionStep<TFeedbackThemesRecord>> updates = new ArrayList<>();
+        for(FeedbackThemeDto sortedTheme : sortedThemes) {
+            updates.add(dsl.update(T_FEEDBACK_THEMES)
+                    .set(T_FEEDBACK_THEMES.NUM, sortedTheme.getNum())
+                    .where(T_FEEDBACK_THEMES.ID.equal(sortedTheme.getId())));
+        }
+        dsl.batch(updates).execute();
+        return findThemes();
     }
 
     public FeedbackDto addFeedback(FeedbackDto feedback) {

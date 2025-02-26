@@ -42,6 +42,10 @@ public class FeedbackService {
         feedbackRepository.deleteThemeById(id);
     }
 
+    public List<FeedbackThemeDto> updateSortTheme(List<FeedbackThemeDto> sortedThemes) {
+        return feedbackRepository.updateSortTheme(sortedThemes);
+    }
+
     public void addFeedback(FeedbackDto feedbackDto, MultipartFile[] fileBlobs) {
         feedbackDto.setCreateUser(userDetails.getUsername());
         feedbackDto.setUserFullname(userDetails.getUserFullname());

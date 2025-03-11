@@ -13,7 +13,8 @@ public enum MirrorService {
     MTR_MA("Поиск поставщиков МТР"),
     MTR_EP("Расчет цены закупки МТР"),
     ANALYTICS("Аналитика"),
-    PDD("Конструктор документов");
+    PDD("Конструктор документов"),
+    EBASE("База опыта");
 
     private final String name;
 }

@@ -8,16 +8,16 @@
 INSERT INTO "admin".t_letter_template
     (id, letter_type, title, letter_sample, create_date, create_user, last_update_date, last_update_user, type_template, acceptable_document_format, status)
 VALUES
-    (521005, 'EP_COMMERCIAL_OFFER_PUBLISHING', 'Effect. Открытый анализ рынка с запросом коммерческого предложения - публикация запроса на сайте Закупки Газпром нефть)', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'DOCUMENT', 'html', 'DRAFT'),
-    (522005, 'EP_COMMERCIAL_OFFER_PUBLISHING_UPDATE_INITIATOR', 'Effect. Открытый анализ рынка с запросом коммерческого предложения - изменение публикации запроса на сайте Закупки Газпром нефть', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'DOCUMENT', 'html', 'DRAFT'),
-    (523005, 'EP_COMMERCIAL_OFFER_PUBLISHING_CANCEL_INITIATOR', 'Effect. Открытый анализ рынка с запросом коммерческого предложения - снятие публикации запроса на сайте Закупки Газпром нефть', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'DOCUMENT', 'html', 'DRAFT'),
-    (524005, 'MA_INTEREST_OF_REQUEST_PUBLISHING', 'Effect. Открытый анализ рынка - публикация запроса заинтересованности на сайте Закупки Газпром нефть', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'DOCUMENT', 'html', 'DRAFT'),
-    (525005, 'MA_INTEREST_OF_REQUEST_PUBLISHING_UPDATE_INITIATOR', 'Effect. Открытый анализ рынка - изменение публикации запроса заинтересованности на сайте Закупки Газпром нефть', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'DOCUMENT', 'html', 'DRAFT'),
-    (526005, 'MA_INTEREST_OF_REQUEST_UPDATE_CONTRACTOR', 'Effect. Анализ рынка - изменение запроса заинтересованности', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'DOCUMENT', 'html', 'DRAFT'),
-    (527005, 'MA_INTEREST_OF_REQUEST_PUBLISHING_CANCEL_INITIATOR', 'Effect. Открытый анализ рынка - снятие публикации запроса заинтересованности на сайте Закупки Газпром нефть', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'DOCUMENT', 'html', 'DRAFT'),
-    (528005, 'MANUAL_PUBLISH_NOTE', 'Блок ручного описания для публикации', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'DOCUMENT', 'html', 'DRAFT'),
-    (529005, 'PUBLISH_NOTE_FOR_REFERENCE', 'Блок описания для публикации со ссылкой', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'DOCUMENT', 'html', 'DRAFT'),
-    (530005, 'PUBLISH_NOTE_FOR_CONTACTS', 'Блок описания для публикации с контактными данными', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'DOCUMENT', 'html', 'DRAFT');
+    (521005, 'EP_COMMERCIAL_OFFER_PUBLISHING', 'Effect. Открытый анализ рынка с запросом коммерческого предложения - публикация запроса на сайте Закупки Газпром нефть)', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'TEMPLATE', 'html', 'DRAFT'),
+    (522005, 'EP_COMMERCIAL_OFFER_PUBLISHING_UPDATE_INITIATOR', 'Effect. Открытый анализ рынка с запросом коммерческого предложения - изменение публикации запроса на сайте Закупки Газпром нефть', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'TEMPLATE', 'html', 'DRAFT'),
+    (523005, 'EP_COMMERCIAL_OFFER_PUBLISHING_CANCEL_INITIATOR', 'Effect. Открытый анализ рынка с запросом коммерческого предложения - снятие публикации запроса на сайте Закупки Газпром нефть', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'TEMPLATE', 'html', 'DRAFT'),
+    (524005, 'MA_INTEREST_OF_REQUEST_PUBLISHING', 'Effect. Открытый анализ рынка - публикация запроса заинтересованности на сайте Закупки Газпром нефть', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'TEMPLATE', 'html', 'DRAFT'),
+    (525005, 'MA_INTEREST_OF_REQUEST_PUBLISHING_UPDATE_INITIATOR', 'Effect. Открытый анализ рынка - изменение публикации запроса заинтересованности на сайте Закупки Газпром нефть', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'TEMPLATE', 'html', 'DRAFT'),
+    (526005, 'MA_INTEREST_OF_REQUEST_UPDATE_CONTRACTOR', 'Effect. Анализ рынка - изменение запроса заинтересованности', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'TEMPLATE', 'html', 'DRAFT'),
+    (527005, 'MA_INTEREST_OF_REQUEST_PUBLISHING_CANCEL_INITIATOR', 'Effect. Открытый анализ рынка - снятие публикации запроса заинтересованности на сайте Закупки Газпром нефть', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'TEMPLATE', 'html', 'DRAFT'),
+    (528005, 'MANUAL_PUBLISH_NOTE', 'Блок ручного описания для публикации', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'TEMPLATE', 'html', 'DRAFT'),
+    (529005, 'PUBLISH_NOTE_FOR_REFERENCE', 'Блок описания для публикации со ссылкой', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'TEMPLATE', 'html', 'DRAFT'),
+    (530005, 'PUBLISH_NOTE_FOR_CONTACTS', 'Блок описания для публикации с контактными данными', NULL,'2025-05-20 16:45:01.321', NULL, NULL, NULL, 'TEMPLATE', 'html', 'DRAFT');
 
 INSERT INTO "admin".t_variable
     (id, name, description, default_val, create_date, create_user, last_update_date, last_update_user)

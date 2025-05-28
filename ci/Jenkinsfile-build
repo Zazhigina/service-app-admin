@@ -9,6 +9,8 @@ withFolderProperties{
     RH_REGISTRY_TRUST_CRED_ID = "${env.RH_REGISTRY_TRUST_CRED_ID}"
     RH_REGISTRY_DEV = "${env.RH_REGISTRY_DEV}"
     RH_REGISTRY_DEV_CRED_ID = "${env.RH_REGISTRY_DEV_CRED_ID}"
+    REDOS_REGISTRY_TRUST = "${env.REDOS_REGISTRY_TRUST}"
+    REDOS_REGISTRY_TRUST_CRED_ID = "${env.REDOS_REGISTRY_TRUST_CRED_ID}"
     QUAY_REGISTRY_TRUST = "${env.QUAY_REGISTRY_TRUST}"
     QUAY_REGISTRY_TRUST_CRED_ID = "${env.QUAY_REGISTRY_TRUST_CRED_ID}"
     QUAY_REGISTRY_DEV = "${env.QUAY_REGISTRY_DEV}"
@@ -23,8 +25,10 @@ withFolderProperties{
 if (BUILD_ENVIRONMENT == 'trust') {
     REGISTRY = REGISTRY_TRUST
     REGISTRY_CRED_ID = REGISTRY_TRUST_CRED_ID
-    RH_REGISTRY = RH_REGISTRY_TRUST
-    RH_REGISTRY_CRED_ID = RH_REGISTRY_TRUST_CRED_ID
+    // DOCKER_REGISTRY = RH_REGISTRY_TRUST
+    // DOCKER_REGISTRY_CRED_ID = RH_REGISTRY_TRUST_CRED_ID
+    DOCKER_REGISTRY = REDOS_REGISTRY_TRUST
+    DOCKER_REGISTRY_CRED_ID = REDOS_REGISTRY_TRUST_CRED_ID
     QUAY_REGISTRY = QUAY_REGISTRY_TRUST
     QUAY_REGISTRY_CRED_ID = QUAY_REGISTRY_TRUST_CRED_ID
 } else if (BUILD_ENVIRONMENT == 'dev') {
@@ -106,8 +110,8 @@ pipeline {
             steps {
                 doDocker("login", ["registryCred": "$REGISTRY_CRED_ID",
                                    "registry": "$REGISTRY"])
-                doDocker("login", ["registryCred": "$RH_REGISTRY_CRED_ID",
-                                   "registry": "$RH_REGISTRY"])
+                doDocker("login", ["registryCred": "$DOCKER_REGISTRY_CRED_ID",
+                                   "registry": "$DOCKER_REGISTRY"])
                 doDocker("login", ["registryCred": "$QUAY_REGISTRY_CRED_ID",
                                    "registry": "$QUAY_REGISTRY"])
             }

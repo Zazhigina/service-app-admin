@@ -4,6 +4,7 @@ public enum OfferType {
     COMMON("Общий профиль"),
     AUTO_TRANSPORT("Транспортные услуги"),
     IT_LICENSE("ИТ-лицензии"),
+    SIMPLE("Профиль не определен"),
     SHANK("Хвостовики");
 
     private final String name;

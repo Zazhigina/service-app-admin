@@ -1,0 +1,134 @@
+package igc.mirror.coefficientsetting.service;
+
+import igc.mirror.auth.UserDetails;
+import igc.mirror.coefficientsetting.dto.OfferCoefficientSettingDto;
+import igc.mirror.coefficientsetting.filter.OfferCoefficientsSettingSearchCriteria;
+import igc.mirror.coefficientsetting.model.OfferCoefficientSetting;
+import igc.mirror.config.LoggingConstants;
+import igc.mirror.exception.common.RemoteServiceCallException;
+import igc.mirror.utils.qfilter.DataFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyExtractors;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.function.Predicate;
+
+@Service
+public class CoefficientSettingService {
+
+    static final Logger logger = LoggerFactory.getLogger(CoefficientSettingService.class);
+
+    static final String REFERENCE_SERVICE = "offer/coefficient";
+
+    @Value("${mirror.application.user-agent}")
+    private String userAgent;
+
+    @Autowired
+    UserDetails userDetails;
+
+    @Autowired
+    @Qualifier("ep")
+    private WebClient webClient;
+
+    public List<OfferCoefficientSetting> changeOfferCoefficientsSetting(List<OfferCoefficientSettingDto> coefficientsSetting) {
+
+        logger.info("Изменение настройки для коэффициентов в КП");
+
+        String uri = String.join("/", REFERENCE_SERVICE, "setting");
+
+        return webClient
+                .put()
+                .uri(uri)
+                .header(HttpHeaders.USER_AGENT, userAgent)
+                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", userDetails.getJwtTokenValue()))
+                .body(Mono.just(coefficientsSetting), OfferCoefficientSettingDto.class)
+                .retrieve()
+                .onStatus(
+                        HttpStatusCode::is4xxClientError,
+                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не найден", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
+                .onStatus(
+                        HttpStatusCode::is5xxServerError,
+                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не доступен", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
+                .bodyToMono(new ParameterizedTypeReference<List<OfferCoefficientSetting>>() {
+                })
+                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
+                .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance),
+                        throwable -> new RemoteServiceCallException("Ошибка обработки данных при получении ответа", HttpStatus.BAD_REQUEST, uri, throwable.getMessage()))
+                .doOnError(err -> logger.error("Ошибка получения данных удаленного сервиса - {}", err.getMessage()))
+                .log()
+                .block();
+    }
+
+    public String deleteOfferCoefficientsSetting(List<Long> ids) {
+
+        logger.info("Удаление настройки для коэффициентов в КП");
+
+        String uri = String.join("/", REFERENCE_SERVICE, "setting/delete");
+
+        return webClient
+                .post()
+                .uri(uri)
+                .header(HttpHeaders.USER_AGENT, userAgent)
+                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", userDetails.getJwtTokenValue()))
+                .body(Mono.just(ids), Long.class)
+                .retrieve()
+                .onStatus(
+                        HttpStatusCode::is4xxClientError,
+                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не найден", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
+                .onStatus(
+                        HttpStatusCode::is5xxServerError,
+                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не доступен", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
+                .bodyToMono(String.class)
+                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
+                .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance),
+                        throwable -> new RemoteServiceCallException("Ошибка обработки данных при получении ответа", HttpStatus.BAD_REQUEST, uri, throwable.getMessage()))
+                .doOnError(err -> logger.error("Ошибка получения данных удаленного сервиса - {}", err.getMessage()))
+                .log()
+                .block();
+    }
+
+    public List<OfferCoefficientSetting> findOfferCoefficientsSetting(DataFilter<OfferCoefficientsSettingSearchCriteria> filter) {
+
+        logger.info("Поиск настроек для коэффициентов в КП");
+
+        String uri = String.join("/", REFERENCE_SERVICE, "setting/filter");
+
+        return webClient
+                .post()
+                .uri(uri)
+                .header(HttpHeaders.USER_AGENT, userAgent)
+                .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", userDetails.getJwtTokenValue()))
+                .body(Mono.just(filter), OfferCoefficientsSettingSearchCriteria.class)
+                .retrieve()
+                .onStatus(
+                        HttpStatusCode::is4xxClientError,
+                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не найден", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
+                .onStatus(
+                        HttpStatusCode::is5xxServerError,
+                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не доступен", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
+                .bodyToMono(new ParameterizedTypeReference<List<OfferCoefficientSetting>>() {
+                })
+                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
+                .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance),
+                        throwable -> new RemoteServiceCallException("Ошибка обработки данных при получении ответа", HttpStatus.BAD_REQUEST, uri, throwable.getMessage()))
+                .doOnError(err -> logger.error("Ошибка получения данных удаленного сервиса - {}", err.getMessage()))
+                .log()
+                .block();
+    }
+}

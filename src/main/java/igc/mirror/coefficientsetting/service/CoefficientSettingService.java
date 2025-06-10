@@ -6,7 +6,9 @@ import igc.mirror.coefficientsetting.filter.OfferCoefficientsSettingSearchCriter
 import igc.mirror.coefficientsetting.model.OfferCoefficientSetting;
 import igc.mirror.config.LoggingConstants;
 import igc.mirror.exception.common.RemoteServiceCallException;
+import igc.mirror.service.dto.RestPage;
 import igc.mirror.utils.qfilter.DataFilter;
+import igc.mirror.utils.web.WebServiceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -14,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -42,6 +46,9 @@ public class CoefficientSettingService {
     @Autowired
     @Qualifier("ep")
     private WebClient webClient;
+
+    @Autowired
+    WebServiceUtil webServiceUtil;
 
     public List<OfferCoefficientSetting> changeOfferCoefficientsSetting(List<OfferCoefficientSettingDto> coefficientsSetting) {
 
@@ -102,15 +109,16 @@ public class CoefficientSettingService {
                 .block();
     }
 
-    public List<OfferCoefficientSetting> findOfferCoefficientsSetting(DataFilter<OfferCoefficientsSettingSearchCriteria> filter) {
+    public Page<OfferCoefficientSetting> findOfferCoefficientsSetting(DataFilter<OfferCoefficientsSettingSearchCriteria> filter, Pageable pageable) {
 
         logger.info("Поиск настроек для коэффициентов в КП");
 
         String uri = String.join("/", REFERENCE_SERVICE, "setting/filter");
+        String urlTemplate = webServiceUtil.buildUriByPageableProperties(uri, pageable);
 
         return webClient
                 .post()
-                .uri(uri)
+                .uri(urlTemplate)
                 .header(HttpHeaders.USER_AGENT, userAgent)
                 .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", userDetails.getJwtTokenValue()))
@@ -122,7 +130,7 @@ public class CoefficientSettingService {
                 .onStatus(
                         HttpStatusCode::is5xxServerError,
                         response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не доступен", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
-                .bodyToMono(new ParameterizedTypeReference<List<OfferCoefficientSetting>>() {
+                .bodyToMono(new ParameterizedTypeReference<RestPage<OfferCoefficientSetting>>() {
                 })
                 .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
                 .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance),

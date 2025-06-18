@@ -23,8 +23,6 @@ import java.util.Optional;
 public class UrlVerificationServiceHealthIndicator implements HealthIndicator {
     private final MonitoringRepository monitoringRepository;
     private final ParamRepository paramRepository;
-    private static volatile Boolean start;
-
     @Scheduled(cron = "0 */5 * * * *")
     public void review() {
         try {

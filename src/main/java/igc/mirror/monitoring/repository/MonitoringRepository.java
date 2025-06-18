@@ -90,7 +90,7 @@ public class MonitoringRepository {
                 .returningResult(T_MONITORING.ID, T_MONITORING.URL, T_MONITORING.SUMMARY)
                 .fetchOptional()
                 .orElseThrow(() ->
-                        new EntityNotSavedException("Ошибка при сохранении данных мониторинга в БД", (Long) null, MonitoringData.class))
+                        new EntityNotSavedException("Ошибка при сохранении данных мониторинга в БД", null, MonitoringData.class))
                 .into(MonitoringData.class);
 
         ServiceData serviceData = dsl.selectFrom(T_SERVICE_DATE)

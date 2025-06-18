@@ -1,6 +1,5 @@
 package igc.mirror.monitoring.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.hibernate.validator.constraints.URL;
 

@@ -37,8 +37,6 @@ public class MonitoringController {
     private final MonitoringService monitoringService;
     private final ParamService paramService;
 
-    private static final int TIMEOUT = 50000;
-
     @GetMapping({"/service"})
     @CrossOrigin(origins = {"http://localhost:3000"})
     @Operation(summary = "Получить список сервисов для мониторинга")

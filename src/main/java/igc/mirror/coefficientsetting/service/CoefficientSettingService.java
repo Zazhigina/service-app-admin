@@ -63,19 +63,22 @@ public class CoefficientSettingService {
                 .header(LoggingConstants.X_REQUEST_ID_HEADER, MDC.get(LoggingConstants.X_REQUEST_ID_KEY))
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", userDetails.getJwtTokenValue()))
                 .body(Mono.just(coefficientsSetting), OfferCoefficientSettingDto.class)
-                .retrieve()
-                .onStatus(
-                        HttpStatusCode::is4xxClientError,
-                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не найден", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
-                .onStatus(
-                        HttpStatusCode::is5xxServerError,
-                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не доступен", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
-                .bodyToMono(new ParameterizedTypeReference<List<OfferCoefficientSetting>>() {
-                })
-                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
-                .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance),
-                        throwable -> new RemoteServiceCallException("Ошибка обработки данных при получении ответа", HttpStatus.BAD_REQUEST, uri, throwable.getMessage()))
-                .doOnError(err -> logger.error("Ошибка получения данных удаленного сервиса - {}", err.getMessage()))
+                .exchangeToMono(clientResponse -> clientResponse.statusCode().equals(HttpStatus.OK) ?
+                        clientResponse.bodyToMono(new ParameterizedTypeReference<List<OfferCoefficientSetting>>() {}) :
+                        clientResponse.createError())
+//                .retrieve()
+//                .onStatus(
+//                        HttpStatusCode::is4xxClientError,
+//                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не найден", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
+//                .onStatus(
+//                        HttpStatusCode::is5xxServerError,
+//                        response -> Mono.error(new RemoteServiceCallException("Сервис " + uri + " не доступен", response.statusCode(), uri, response.body(BodyExtractors.toDataBuffers()).toString())))
+//                .bodyToMono(new ParameterizedTypeReference<List<OfferCoefficientSetting>>() {
+//                })
+//                .onErrorMap(WebClientRequestException.class, throwable -> new RemoteServiceCallException("Неизвестный url", HttpStatus.INTERNAL_SERVER_ERROR, uri, throwable.getMessage()))
+//                .onErrorMap(Predicate.not(RemoteServiceCallException.class::isInstance),
+//                        throwable -> new RemoteServiceCallException("Ошибка обработки данных при получении ответа", HttpStatus.BAD_REQUEST, uri, throwable.getMessage()))
+//                .doOnError(err -> logger.error("Ошибка получения данных удаленного сервиса - {}", err.getMessage()))
                 .log()
                 .block();
     }

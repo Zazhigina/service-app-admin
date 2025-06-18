@@ -22,6 +22,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("param")
+@CrossOrigin(origins = {"http://localhost:3000"})
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Ведение параметров")
 public class ParamRestController {

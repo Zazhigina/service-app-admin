@@ -13,7 +13,9 @@ CREATE TABLE "admin".t_service_date (
     id BIGINT  DEFAULT admin.get_id() NOT NULL, --Первичный ключ
     name varchar NOT NULL, -- Наименование сервиса
     description varchar NOT NULL, -- Описание
-    CONSTRAINT t_mirror_service_pk PRIMARY KEY (id)
+    CONSTRAINT t_mirror_service_pk PRIMARY KEY (id),
+    CONSTRAINT uk_service_name UNIQUE (name)
+
 );
 COMMENT ON TABLE "admin".t_service_date IS 'Файл проверок мониторинга';
 
@@ -61,11 +63,12 @@ VALUES('MA', 'Поиск поставщиков'),
 
 CREATE TABLE "admin".t_monitoring (
     id BIGINT DEFAULT admin.get_id() NOT NULL, -- ID
-    service_date_id  BIGINT  NOT NULL, -- Индификатор сервиса
+    service_date_id  BIGINT NOT NULL , -- Индификатор сервиса
     url varchar(100) NOT NULL, -- Адрес запроса
     summary varchar(255) NULL, -- Краткое сожержание
+    is_active BOOLEAN DEFAULT TRUE NOT NULL, -- Флаг актуальности записи
     CONSTRAINT t_monitoring_pkey PRIMARY KEY (id),
-    CONSTRAINT fk_monitoring_service FOREIGN KEY (service_date_id) REFERENCES admin.t_service_date(id)
+    CONSTRAINT fk_monitoring_service FOREIGN KEY (service_date_id) REFERENCES admin.t_service_date(id) ON DELETE CASCADE
 );
 COMMENT ON TABLE "admin".t_monitoring IS 'Мониторинг сервисов';
 
@@ -75,6 +78,8 @@ COMMENT ON COLUMN "admin".t_monitoring.id IS 'ID';
 COMMENT ON COLUMN "admin".t_monitoring.service_date_id IS 'Индификатор сервиса';
 COMMENT ON COLUMN "admin".t_monitoring.url IS 'Адрес запроса';
 COMMENT ON COLUMN "admin".t_monitoring.summary IS 'Краткое содержание';
+COMMENT ON COLUMN "admin".t_monitoring.is_active IS 'Флаг актуальности записи';
+
 
 -- Trigger: tr_before_row
 
@@ -98,9 +103,12 @@ EXECUTE FUNCTION admin.fn_before_row();
 
 CREATE TABLE "admin".t_monitoring_statistics (
     id BIGINT NOT NULL DEFAULT admin.get_id(), -- Первичный ключ
-    monitoring_id BIGINT NULL, -- Идентификатор мониторинга
-    result_check varchar(100) NULL, -- Результат проверки
+    monitoring_id BIGINT NULL ,
+    service_name varchar(50) NULL, --имя сервиса
+    url varchar(100) NULL, -- Адрес запроса
+    result_check varchar(50) NULL, -- Результат проверки
     create_date timestamp NULL, -- Дата и время создания
+    deleted BOOLEAN DEFAULT TRUE NOT NULL, -- Флаг удаления записи
     CONSTRAINT t_monitoring_statistics_pk PRIMARY KEY (id),
     CONSTRAINT t_monitoring_statistics_fk FOREIGN KEY (monitoring_id)
         REFERENCES "admin".t_monitoring(id)
@@ -113,9 +121,11 @@ COMMENT ON TABLE "admin".t_monitoring_statistics IS 'Файл проверок �
 
 COMMENT ON COLUMN "admin".t_monitoring_statistics.id IS 'Первичный ключ';
 COMMENT ON COLUMN "admin".t_monitoring_statistics.monitoring_id IS 'Идентификатор мониторинга';
+COMMENT ON COLUMN "admin".t_monitoring_statistics.service_name IS 'Наименование сервиса';
+COMMENT ON COLUMN "admin".t_monitoring_statistics.url IS 'Адрес запроса';
 COMMENT ON COLUMN "admin".t_monitoring_statistics.result_check IS 'Результат проверки';
 COMMENT ON COLUMN "admin".t_monitoring_statistics.create_date IS 'Дата и время создания';
-
+COMMENT ON COLUMN "admin".t_monitoring_statistics.deleted IS 'Флаг удаления записи';
 
 -- Table Triggers
 
@@ -126,62 +136,10 @@ CREATE TRIGGER tr_before_row
 EXECUTE FUNCTION admin.fn_before_row();
 
 
-/*
-Материализованное представление для актуальных данных
-*/
-
-CREATE MATERIALIZED VIEW admin.monitoring_with_latest_stats AS
-SELECT
-    m.*,
-    s.name AS service_name,
-    ms.result_check AS last_result,
-    ms.create_date AS last_check_date
-FROM
-    admin.t_monitoring m
-        JOIN
-    admin.t_service_date s ON m.service_date_id = s.id
-        LEFT JOIN LATERAL (
-        SELECT result_check, create_date
-        FROM admin.t_monitoring_statistics
-        WHERE monitoring_id = m.id
-        ORDER BY create_date DESC
-        LIMIT 1
-        ) ms ON TRUE;
-
-
-/*
-Функция обновления представления
-*/
-
-CREATE OR REPLACE FUNCTION admin.refresh_monitoring_view()
-    RETURNS TRIGGER AS $$
-BEGIN
-    REFRESH MATERIALIZED VIEW admin.monitoring_with_latest_stats;
-    RETURN NULL;
-END;
-$$ LANGUAGE plpgsql;
-
-
-/*
-Триггеры для автоматического обновления представления
-*/
-
-CREATE TRIGGER tr_refresh_after_stats_change
-    AFTER INSERT OR UPDATE OR DELETE ON admin.t_monitoring_statistics
-    FOR EACH STATEMENT EXECUTE FUNCTION admin.refresh_monitoring_view();
-
-CREATE TRIGGER tr_refresh_after_monitoring_change
-    AFTER INSERT OR UPDATE OR DELETE ON admin.t_monitoring
-    FOR EACH STATEMENT EXECUTE FUNCTION admin.refresh_monitoring_view();
-
-/*
-Индексы для оптимизации
-*/
-
-CREATE INDEX idx_monitoring_stats ON admin.t_monitoring_statistics(monitoring_id, create_date DESC);
-CREATE UNIQUE INDEX idx_monitoring_view ON admin.monitoring_with_latest_stats(id);
-
-
-
+-- Индексы
+CREATE INDEX idx_monitoring_stats_composite ON admin.t_monitoring_statistics (monitoring_id, create_date DESC);
+CREATE INDEX idx_monitoring_service ON admin.t_monitoring(service_date_id);
+CREATE INDEX idx_monitoring_url ON admin.t_monitoring(url);
+CREATE INDEX idx_monitoring_deleted ON admin.t_monitoring_statistics (monitoring_id, deleted, create_date DESC);
 
 

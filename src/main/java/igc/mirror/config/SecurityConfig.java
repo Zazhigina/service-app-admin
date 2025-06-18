@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 @EnableMethodSecurity
 public class SecurityConfig {
     private static final String[] PUBLIC_ENDPOINT = {
-            "/public/**", "/v3/api-docs/**", "/actuator/**"
+            "/**", "/public/**", "/v3/api-docs/**", "/actuator/**"
     };
 
     private static final String ALL_REQUEST_ROLE_NEEDED = "ROLE_BASE";

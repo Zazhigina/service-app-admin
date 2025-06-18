@@ -4,10 +4,12 @@ import igc.mirror.exception.common.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
@@ -92,6 +94,21 @@ public class EntityExceptionHandler {
         return new ResponseEntity<>(exceptionInfo, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    ResponseEntity<ExceptionInfo> handleValidationException(MethodArgumentNotValidException ex, HttpServletRequest request) {
+        List<DetailExceptionInfo> details = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> new DetailExceptionInfo(error.getDefaultMessage(), error.getField()))
+                .toList();
+
+        ExceptionInfo exceptionInfo = new ExceptionInfo("Ошибка валидации", null);
+        exceptionInfo.setDetails(details);
+        exceptionInfo.setPublicErrorInfo(request, HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>(exceptionInfo, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(EntityDuplicatedException.class)
     ResponseEntity<ExceptionInfo> handleEntityNotFound(EntityDuplicatedException ex, HttpServletRequest request) {
         ExceptionInfo exceptionInfo = ex.getExceptionInfo();
@@ -107,7 +124,7 @@ public class EntityExceptionHandler {
         body.put("timestamp", exceptionInfo.getTimestamp());
         body.put("status", exceptionInfo.getStatus());
         body.put("error", exceptionInfo.getError());
-        body.put("path",  exceptionInfo.getPath());
+        body.put("path", exceptionInfo.getPath());
         body.put("cause", exceptionInfo.getCause());
         body.put("remoteUrl", ex.getRemoteUrl());
         body.put("remoteStatus", ex.getRemoteStatus());

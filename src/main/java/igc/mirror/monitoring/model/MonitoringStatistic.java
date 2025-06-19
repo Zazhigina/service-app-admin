@@ -1,6 +1,5 @@
 package igc.mirror.monitoring.model;
 
-import igc.mirror.monitoring.dto.MonitoringDataDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +12,38 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MonitoringStatistic {
+    /**
+     * Идентификатор журнала сервисов
+     */
     private Long id;
-    private MonitoringDataDto monitoringData;
+
+    /**
+     * Сервис
+     */
+    private String serviceName;
+
+    /**
+     * Адрес запроса
+     */
+    private String url;
+
+    /**
+     * Краткое содержание
+     */
+    private String summary;
+
+    /**
+     * Результат проверки
+     */
     private String resultCheck;
+
+    /**
+     * Дата и время проверки
+     */
     private LocalDateTime createDate;
+
+    /**
+     * Флаг удаления записи
+     */
+    private Boolean deleted;
 }

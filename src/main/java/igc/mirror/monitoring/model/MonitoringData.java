@@ -18,7 +18,7 @@ public class MonitoringData {
     /**
      * Сервис
      */
-    private ServiceData serviceData;
+    private String serviceName;
 
     /**
      * Адрес запроса

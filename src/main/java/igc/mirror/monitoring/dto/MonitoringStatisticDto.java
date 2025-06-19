@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class MonitoringCheckDto {
+public class MonitoringStatisticDto {
+
     private String serviceName;
-    private String serviceDescription;
     private String url;
     private String summary;
     private String resultCheck;

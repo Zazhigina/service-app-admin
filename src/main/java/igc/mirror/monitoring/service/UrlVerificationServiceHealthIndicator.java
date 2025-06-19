@@ -23,7 +23,7 @@ import java.util.Optional;
 public class UrlVerificationServiceHealthIndicator implements HealthIndicator {
     private final MonitoringRepository monitoringRepository;
     private final ParamRepository paramRepository;
-    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(cron = "0 */40 * * * *")
     public void review() {
         try {
             if (!isHealthMonitoringEnabled()) {

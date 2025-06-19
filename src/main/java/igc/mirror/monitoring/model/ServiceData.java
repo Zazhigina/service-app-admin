@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ServiceData {
 
-    private Long id;
     /**
      * Название сервиса
      */

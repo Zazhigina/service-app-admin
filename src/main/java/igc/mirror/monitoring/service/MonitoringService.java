@@ -1,13 +1,17 @@
 package igc.mirror.monitoring.service;
 
+import igc.mirror.appcontrol.dto.AppControlDto;
+import igc.mirror.appcontrol.repository.AppControlRepository;
+import igc.mirror.appcontrol.service.AppControlService;
+import igc.mirror.exception.common.EntityDuplicatedException;
+import igc.mirror.exception.common.EntityNotFoundException;
 import igc.mirror.monitoring.dto.*;
 import igc.mirror.monitoring.mapper.MonitoringDataMapper;
 import igc.mirror.monitoring.mapper.ServiceDataMapper;
 import igc.mirror.monitoring.model.MonitoringData;
+import igc.mirror.monitoring.model.MonitoringStatistic;
 import igc.mirror.monitoring.model.ServiceData;
-import igc.mirror.monitoring.repository.BaseServiceRepository;
 import igc.mirror.monitoring.repository.MonitoringRepository;
-import jooqdata.tables.TServiceDate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Row;
@@ -22,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.function.Consumer;
 
-import static jooqdata.Tables.T_SERVICE_DATE;
 import static jooqdata.tables.TMonitoring.T_MONITORING;
 
 @Service
@@ -32,23 +35,28 @@ public class MonitoringService {
 
     private final MonitoringRepository monitoringRepository;
     private final MonitoringDataMapper monitoringDataMapper;
-    private final BaseServiceRepository baseServiceRepository;
-    private final ServiceDataMapper serviceDataMapper;
+    private final AppControlRepository appControlRepository;
+
     @Transactional
     public MonitoringDataDto createMonitoringData(MonitoringDataSaveDto monitoringDataSaveDto) {
         log.info("Запрос на сохранение MonitoringData");
 
-        ServiceData service = monitoringRepository.findServiceByName(monitoringDataSaveDto.getName().toUpperCase());
-        log.info("ServiceData найден в списке сервисов: {}", service.getName().toUpperCase());
+        List<String> serviceNameList = getServiceData();
+        if (serviceNameList.contains(monitoringDataSaveDto.getServiceName())) {
+            log.info("Имя сервиса найден в списке сервисов");
 
-        MonitoringData monitoringData = monitoringDataMapper.saveDtoToEntity(monitoringDataSaveDto);
-        monitoringData.setServiceData(service);
+            MonitoringData savedData = monitoringRepository.add(monitoringDataSaveDto);
+            log.info("Успешно сохранено MonitoringData с ID: {}", savedData.getId());
 
-        MonitoringData savedData = monitoringRepository.add(monitoringData);
-        log.info("Успешно сохранено MonitoringData с ID: {}", savedData.getId());
-
-        return monitoringDataMapper.entityToSaveDto(savedData);
+            return monitoringDataMapper.entityToSaveDto(savedData);
+        } else {
+            throw new EntityNotFoundException(
+                    String.format("Ошибка: сервиса с именем %s не существует!", monitoringDataSaveDto.getServiceName()),
+                    null, MonitoringData.class
+            );
+        }
     }
+
     @Transactional
     public MonitoringDataDto updateMonitoringData(MonitoringDataUpdateDto updateDto, Long id) {
         log.info("Запрос на обновление MonitoringData с ID={}", id);
@@ -60,15 +68,23 @@ public class MonitoringService {
         updateField(updateDto.getSummary(), existingData.getSummary(), "Summary", existingData::setSummary, T_MONITORING.SUMMARY, updateFields);
         updateField(updateDto.getIsActive(), existingData.getIsActive(), "Is_Active", existingData::setIsActive, T_MONITORING.IS_ACTIVE, updateFields);
 
-        if (updateDto.getName() != null) {
-            ServiceData newService = monitoringRepository.findServiceByName(updateDto.getName().toUpperCase());
-            log.info("ServiceData найден: {}", newService.getName());
+        if (updateDto.getServiceName() != null) {
+            List<String> serviceNameList = getServiceData();
 
-            String oldServiceName = existingData.getServiceData().getName();
-            if (!Objects.equals(newService.getName(), oldServiceName)) {
-                log.info("Обновление Service: {} -> {}", oldServiceName, newService.getName());
-                existingData.setServiceData(newService);
-                updateFields.put(T_MONITORING.SERVICE_DATE_ID, newService.getId());
+            if (serviceNameList.contains(updateDto.getServiceName())) {
+                String newService = updateDto.getServiceName();
+
+                log.info("ServiceData найден: {}", newService);
+
+                String oldServiceName = existingData.getServiceName();
+
+                if (!Objects.equals(newService, oldServiceName)) {
+                    log.info("Обновление Service: {} -> {}", oldServiceName, newService);
+
+                    existingData.setServiceName(newService);
+
+                    updateFields.put(T_MONITORING.SERVICE_NAME, newService);
+                }
             }
         }
 
@@ -78,12 +94,10 @@ public class MonitoringService {
         }
 
         MonitoringData updated = monitoringRepository.updateInDb(updateFields, id);
-        updated.setServiceData(existingData.getServiceData());
 
         log.info("MonitoringData с ID={} успешно обновлён", id);
         return monitoringDataMapper.entityToSaveDto(updated);
     }
-
 
     private <T> void updateField(
             T newValue,
@@ -105,11 +119,12 @@ public class MonitoringService {
         log.info("Запрос на удаление MonitoringData");
 
         monitoringRepository.deactivateStatsByIdMonitoring(id);
-        log.info("Диактивировано поле isActual в статистике мониторинга с ID={}", id);
+        log.info("Активировано поле deleted в статистике мониторинга с ID={}", id);
 
         monitoringRepository.deleteMonitoringById(id);
         log.info("MonitoringData с ID={} удалён", id);
     }
+
     @Transactional
     public List<MonitoringDataDto> getListMonitoringData() {
         log.info("Запрос на получение всех записей MonitoringData");
@@ -121,14 +136,16 @@ public class MonitoringService {
 
         return data.stream().map(monitoringDataMapper::entityToSaveDto).toList();
     }
+
     @Transactional
-    public List<MonitoringCheckDto> getListInfoMonitoringData() {
+    public List<MonitoringStatisticDto> getListInfoMonitoringData() {
         log.info("Запрос на получение списка актуальных записей статистики мониторинга сервиса");
 
         return monitoringRepository.findAllActualMonitoring().stream().map(monitoringDataMapper::statisticToCheckDto).toList();
     }
+
     @Transactional
-    public List<MonitoringCheckDto> findAllMonitoringStatistic() {
+    public List<MonitoringStatisticDto> findAllMonitoringStatistic() {
         log.info("Запрос на получение списка всех записей статистики мониторинга сервиса");
 
         return monitoringRepository.findAllMonitoring().stream().map(monitoringDataMapper::statisticToCheckDto).toList();
@@ -141,67 +158,21 @@ public class MonitoringService {
 
         monitoringRepository.deleteMonitoringStatistic();
     }
-    @Transactional
-    public ServiceDataDto createServiceData(ServiceDataSaveDto serviceDataSaveDto) {
-        serviceDataSaveDto.setName(serviceDataSaveDto.getName().toUpperCase());
-        log.info("Запрос на сохранение ServiceData");
 
-        return serviceDataMapper.entityToSaveDto(baseServiceRepository.create(serviceDataSaveDto));
-    }
-    @Transactional
-    public ServiceDataDto updateServiceData(ServiceDataUpdateDto updatedData, Long id) {
-        log.info("Запрос на обновление ServiceData");
-        Map<Field<?>, Object> updateFields = new HashMap<>();
-
-        ServiceData existingData = baseServiceRepository.findServiceById(id);
-
-        Optional.ofNullable(updatedData.getName())
-                .filter(name -> !name.equals(existingData.getName()) && !name.isEmpty())
-                .ifPresent(name -> {
-                    updateFields.put(TServiceDate.T_SERVICE_DATE.NAME, name.toUpperCase());
-                    log.info("Поле 'name' обновлено: {} -> {}", existingData.getName(), name.toUpperCase());
-                });
-
-        Optional.ofNullable(updatedData.getDescription())
-                .filter(desc -> !desc.equals(existingData.getDescription()) && !desc.isEmpty())
-                .ifPresent(desc -> {
-                    updateFields.put(T_SERVICE_DATE.DESCRIPTION, desc);
-                    log.info("Поле 'description' обновлено: {} -> {}", existingData.getDescription(), desc);
-                });
-
-        if (updateFields.isEmpty()) {
-            log.info("Данные по сервису с ID {} не были изменены.", id);
-            return serviceDataMapper.entityToSaveDto(existingData);
-        }
-
-        log.info("Обновление полей сервиса ID {}: {}", id, updateFields.keySet());
-
-        ServiceData updated = baseServiceRepository.updateInDb(updateFields, existingData.getId());
-        log.info("ServiceData с ID={} успешно обновлён", id);
-
-        return serviceDataMapper.entityToSaveDto(updated);
-    }
 
     @Transactional
-    public List<ServiceDataDto> getServiceData() {
-        log.info("Запрос на получение списка ServiceData");
+    public List<String> getServiceData() {
+        log.info("Запрос на получение списка сервисов");
 
-        List<ServiceData> allService = baseServiceRepository.findAllServiceData();
+        List<AppControlDto> allService = appControlRepository.findAppControl("");
         log.info("Успешно получены данные");
 
         log.info("Найдено {} записей", allService.size());
 
-        return allService.stream().map(serviceDataMapper::entityToSaveDto).toList();
-    }
-    @Transactional
-    public void removeServiceData(Long id) {
-        log.info("Запрос на удаление ServiceData");
-
-        monitoringRepository.deactivateStatsByIdMonitoring(id);
-        baseServiceRepository.deleteServiceById(id);
+        return allService.stream().map(service -> service.getName().substring(3).toUpperCase()).toList();
     }
 
-    public Workbook generateExcel(List<MonitoringCheckDto> records) {
+    public Workbook generateExcel(List<MonitoringStatisticDto> records) {
 
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Monitoring Check");
@@ -213,10 +184,9 @@ public class MonitoringService {
         }
 
         int rowNum = 1;
-        for (MonitoringCheckDto dto : records) {
+        for (MonitoringStatisticDto dto : records) {
             Row row = sheet.createRow(rowNum++);
             row.createCell(0).setCellValue(dto.getServiceName());
-            row.createCell(1).setCellValue(dto.getServiceDescription());
             row.createCell(2).setCellValue(dto.getUrl());
             row.createCell(3).setCellValue(dto.getSummary());
             row.createCell(4).setCellValue(dto.getResultCheck());

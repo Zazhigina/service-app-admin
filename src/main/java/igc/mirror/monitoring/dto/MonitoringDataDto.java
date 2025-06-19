@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class MonitoringDataDto {
 
-    private ServiceDataDto serviceData;
+    private Long id;
+    private String serviceName;
     private String url;
     private String summary;
 }

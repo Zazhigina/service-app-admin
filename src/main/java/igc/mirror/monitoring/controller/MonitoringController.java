@@ -37,7 +37,7 @@ public class MonitoringController {
     private final MonitoringService monitoringService;
     private final ParamService paramService;
 
-    @GetMapping({"/service"})
+    @GetMapping()
     @CrossOrigin(origins = {"http://localhost:3000"})
     @Operation(summary = "Получить список сервисов для мониторинга")
     public List<MonitoringDataDto> getMonitoringData() {
@@ -47,7 +47,7 @@ public class MonitoringController {
     @GetMapping({"/actual"})
     @CrossOrigin(origins = {"http://localhost:3000"})
     @Operation(summary = "Получить все актуальные данные по статистике сервисов для мониторинга ")
-    public List<MonitoringCheckDto> getInfoMonitoringData() {
+    public List<MonitoringStatisticDto> getInfoMonitoringData() {
         return monitoringService.getListInfoMonitoringData();
     }
 
@@ -95,7 +95,7 @@ public class MonitoringController {
     public ResponseEntity<ByteArrayResource> exportMonitoringData() {
         log.info("GET запрос на формирование файлов из мониторинга");
 
-        List<MonitoringCheckDto> records = monitoringService.findAllMonitoringStatistic();
+        List<MonitoringStatisticDto> records = monitoringService.findAllMonitoringStatistic();
         try (Workbook workbook = monitoringService.generateExcel(records);
              ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
@@ -115,6 +115,12 @@ public class MonitoringController {
         } catch (IOException e) {
             throw new RuntimeException("Ошибка при создании Excel-файла", e);
         }
+    }
+    @GetMapping("/service")
+    @Operation(summary = "Получить список сервисов")
+    @CrossOrigin(origins = {"http://localhost:3000"})
+    public List<String> getServiceData() {
+        return monitoringService.getServiceData();
     }
 
 }

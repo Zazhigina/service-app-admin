@@ -6,7 +6,6 @@ import igc.mirror.exception.common.EntityNotSavedException;
 import igc.mirror.monitoring.dto.MonitoringDataSaveDto;
 import igc.mirror.monitoring.model.MonitoringData;
 import igc.mirror.monitoring.model.MonitoringStatistic;
-import igc.mirror.monitoring.model.ServiceData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
@@ -19,7 +18,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static jooqdata.tables.TMonitoring.T_MONITORING;
-import static jooqdata.tables.TServiceDate.T_SERVICE_DATE;
 import static jooqdata.tables.TMonitoringStatistics.T_MONITORING_STATISTICS;
 import static org.jooq.impl.DSL.*;
 
@@ -36,11 +34,11 @@ public class MonitoringRepository {
      * @param data новая запись
      * @return сохраненная в базе данных новая запись
      */
-    public MonitoringData add(MonitoringData data) {
+    public MonitoringData add(MonitoringDataSaveDto data) {
         if (checkExist(data)) {
             throw new EntityDuplicatedException(
                     String.format("Ошибка: запись с URL %s уже существует!", data.getUrl()),
-                    data.getId(), MonitoringData.class
+                    null, MonitoringData.class
             );
         }
         return save(data);
@@ -51,28 +49,13 @@ public class MonitoringRepository {
      *
      * @param data запись
      */
-    private Boolean checkExist(MonitoringData data) {
+    private Boolean checkExist(MonitoringDataSaveDto data) {
         return dsl
                 .fetchExists(selectOne()
                         .from(T_MONITORING)
-                        .join(T_SERVICE_DATE)
-                        .on(T_MONITORING.SERVICE_DATE_ID.eq(T_SERVICE_DATE.ID))
-                        .where(T_SERVICE_DATE.NAME.eq(data.getServiceData().getName()))
+                        .where(T_MONITORING.SERVICE_NAME.eq(data.getServiceName())
+                                .and(T_MONITORING.URL.eq(data.getUrl())))
                 );
-    }
-
-    /**
-     * Получение сервиса по имени
-     *
-     * @param name имя сервиса
-     */
-    public ServiceData findServiceByName(String name) {
-        return dsl.selectFrom(T_SERVICE_DATE)
-                .where(T_SERVICE_DATE.NAME.eq(name))
-                .fetchOptional()
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Сервис с именем " + name + " не найден", null, ServiceData.class))
-                .into(ServiceData.class);
     }
 
 
@@ -82,22 +65,16 @@ public class MonitoringRepository {
      * @param data новая запись
      * @return сохраненная в базе данных новая запись
      */
-    private MonitoringData save(MonitoringData data) {
+    private MonitoringData save(MonitoringDataSaveDto data) {
         MonitoringData savedData = dsl.insertInto(T_MONITORING)
-                .set(T_MONITORING.SERVICE_DATE_ID, data.getServiceData().getId())
+                .set(T_MONITORING.SERVICE_NAME, data.getServiceName())
                 .set(T_MONITORING.URL, data.getUrl())
                 .set(T_MONITORING.SUMMARY, data.getSummary())
-                .returningResult(T_MONITORING.ID, T_MONITORING.URL, T_MONITORING.SUMMARY)
+                .returningResult(T_MONITORING.ID, T_MONITORING.SERVICE_NAME, T_MONITORING.URL, T_MONITORING.SUMMARY, T_MONITORING.IS_ACTIVE)
                 .fetchOptional()
                 .orElseThrow(() ->
                         new EntityNotSavedException("Ошибка при сохранении данных мониторинга в БД", null, MonitoringData.class))
                 .into(MonitoringData.class);
-
-        ServiceData serviceData = dsl.selectFrom(T_SERVICE_DATE)
-                .where(T_SERVICE_DATE.ID.eq(data.getServiceData().getId()))
-                .fetchOneInto(ServiceData.class);
-
-        savedData.setServiceData(serviceData);
 
         return savedData;
     }
@@ -113,18 +90,10 @@ public class MonitoringRepository {
         MonitoringData updateData = dsl.update(T_MONITORING)
                 .set(updateFields)
                 .where(T_MONITORING.ID.eq(id))
-                .returningResult(T_MONITORING.ID, T_MONITORING.SERVICE_DATE_ID, T_MONITORING.URL, T_MONITORING.SUMMARY, T_MONITORING.IS_ACTIVE)
+                .returningResult(T_MONITORING.ID, T_MONITORING.SERVICE_NAME, T_MONITORING.URL, T_MONITORING.SUMMARY, T_MONITORING.IS_ACTIVE)
                 .fetchOptional()
                 .orElseThrow(() -> new EntityNotSavedException("Ошибка при обновлении данных мониторинга в БД", null, MonitoringDataSaveDto.class))
                 .into(MonitoringData.class);
-
-        ServiceData serviceData = dsl.select(T_SERVICE_DATE)
-                .from(T_MONITORING)
-                .join(T_SERVICE_DATE).on(T_MONITORING.SERVICE_DATE_ID.eq(T_SERVICE_DATE.ID))
-                .where(T_MONITORING.ID.eq(id))
-                .fetchOneInto(ServiceData.class);
-
-        updateData.setServiceData(serviceData);
 
         return updateData;
     }
@@ -139,16 +108,13 @@ public class MonitoringRepository {
     public MonitoringData findMonitoringById(Long id) {
 
         return dsl.select(
-                        T_SERVICE_DATE.ID.as("serviceData.id"),
-                        T_SERVICE_DATE.NAME.as("serviceData.name"),
-                        T_SERVICE_DATE.DESCRIPTION.as("serviceData.description"),
                         T_MONITORING.ID,
+                        T_MONITORING.SERVICE_NAME,
                         T_MONITORING.URL,
                         T_MONITORING.SUMMARY,
                         T_MONITORING.IS_ACTIVE
                 )
                 .from(T_MONITORING)
-                .join(T_SERVICE_DATE).on(T_MONITORING.SERVICE_DATE_ID.eq(T_SERVICE_DATE.ID))
                 .where(T_MONITORING.ID.eq(id))
                 .fetchOptional()
                 .orElseThrow(() -> new EntityNotFoundException(
@@ -166,13 +132,12 @@ public class MonitoringRepository {
      */
     public List<MonitoringData> findAllMonitoringData() {
         return dsl.select(
-                        T_SERVICE_DATE.NAME.as("serviceData.name"),
-                        T_SERVICE_DATE.DESCRIPTION.as("serviceData.description"),
+                        T_MONITORING.ID,
+                        T_MONITORING.SERVICE_NAME,
                         T_MONITORING.URL,
                         T_MONITORING.SUMMARY,
                         T_MONITORING.IS_ACTIVE)
                 .from(T_MONITORING)
-                .join(T_SERVICE_DATE).on(T_MONITORING.SERVICE_DATE_ID.eq(T_SERVICE_DATE.ID))
                 .fetchInto(MonitoringData.class);
     }
 
@@ -183,30 +148,35 @@ public class MonitoringRepository {
      * @return список актуальных записей из MonitoringWithStatsDto
      */
     public List<MonitoringStatistic> findAllActualMonitoring() {
-        Table<?> latestStats = DSL.select(
-                        T_MONITORING_STATISTICS.MONITORING_ID,
+        Table<?> latestStats = DSL
+                .select(
+                        T_MONITORING_STATISTICS.URL,
                         DSL.max(T_MONITORING_STATISTICS.CREATE_DATE).as("max_date")
                 )
                 .from(T_MONITORING_STATISTICS)
                 .where(T_MONITORING_STATISTICS.DELETED.eq(false))
-                .groupBy(T_MONITORING_STATISTICS.MONITORING_ID)
+                .groupBy(T_MONITORING_STATISTICS.URL)
                 .asTable("latest_stats");
 
         return dsl.select(
-                        T_SERVICE_DATE.NAME.as("monitoringData.serviceData.name"),
-                        T_SERVICE_DATE.DESCRIPTION.as("monitoringData.serviceData.description"),
-                        T_MONITORING.URL.as("monitoringData.url"),
-                        T_MONITORING.SUMMARY.as("monitoringData.summary"),
+                        T_MONITORING.SERVICE_NAME,
+                        T_MONITORING.URL,
+                        T_MONITORING.SUMMARY,
                         T_MONITORING_STATISTICS.RESULT_CHECK,
                         T_MONITORING_STATISTICS.CREATE_DATE
                 )
-                .from(T_MONITORING_STATISTICS)
+                .from(T_MONITORING)
                 .join(latestStats)
-                .on(T_MONITORING_STATISTICS.MONITORING_ID.eq(latestStats.field("monitoring_id", Long.class))
-                        .and(T_MONITORING_STATISTICS.CREATE_DATE.eq(latestStats.field("max_date", LocalDateTime.class))))
-                .join(T_MONITORING).on(T_MONITORING_STATISTICS.MONITORING_ID.eq(T_MONITORING.ID))
-                .join(T_SERVICE_DATE).on(T_MONITORING.SERVICE_DATE_ID.eq(T_SERVICE_DATE.ID))
+                .on(T_MONITORING.URL.eq(latestStats.field("url", String.class)))
+                .join(T_MONITORING_STATISTICS)
+                .on(
+                        T_MONITORING_STATISTICS.URL.eq(latestStats.field("url", String.class))
+                                .and(T_MONITORING_STATISTICS.CREATE_DATE.eq(latestStats.field("max_date", LocalDateTime.class)))
+                )
+                .where(T_MONITORING.IS_ACTIVE.eq(true))
                 .fetchInto(MonitoringStatistic.class);
+
+
     }
 
     /**
@@ -217,16 +187,15 @@ public class MonitoringRepository {
 
     public List<MonitoringStatistic> findAllMonitoring() {
         return dsl.select(
-                        T_SERVICE_DATE.NAME.as("monitoringData.serviceData.name"),
-                        T_SERVICE_DATE.DESCRIPTION.as("monitoringData.serviceData.description"),
-                        T_MONITORING.URL.as("monitoringData.url"),
-                        T_MONITORING.SUMMARY.as("monitoringData.summary"),
+                        T_MONITORING_STATISTICS.ID,
+                        T_MONITORING_STATISTICS.SERVICE_NAME,
+                        T_MONITORING_STATISTICS.URL/*.as("monitoringData.url")*/,
+                        T_MONITORING_STATISTICS.SUMMARY,
                         T_MONITORING_STATISTICS.RESULT_CHECK,
-                        T_MONITORING_STATISTICS.CREATE_DATE
+                        T_MONITORING_STATISTICS.CREATE_DATE,
+                        T_MONITORING_STATISTICS.DELETED
                 )
                 .from(T_MONITORING_STATISTICS)
-                .join(T_MONITORING).on(T_MONITORING_STATISTICS.MONITORING_ID.eq(T_MONITORING.ID))
-                .join(T_SERVICE_DATE).on(T_MONITORING.SERVICE_DATE_ID.eq(T_SERVICE_DATE.ID))
                 .fetchInto(MonitoringStatistic.class);
     }
 
@@ -263,16 +232,14 @@ public class MonitoringRepository {
      * @param status статус после проверки
      */
     public void updateStatus(String url, String status) {
-        MonitoringData monitoring = dsl.select(T_SERVICE_DATE.ID.as("serviceData.id"),
-                        T_SERVICE_DATE.NAME.as("serviceData.name"),
-                        T_SERVICE_DATE.DESCRIPTION.as("serviceData.description"),
+        MonitoringData monitoring = dsl.select(
                         T_MONITORING.ID,
+                        T_MONITORING.SERVICE_NAME,
                         T_MONITORING.URL,
                         T_MONITORING.SUMMARY,
                         T_MONITORING.IS_ACTIVE
                 )
                 .from(T_MONITORING)
-                .join(T_SERVICE_DATE).on(T_MONITORING.SERVICE_DATE_ID.eq(T_SERVICE_DATE.ID))
                 .where(T_MONITORING.URL.eq(url))
                 .fetchOneInto(MonitoringData.class);
 
@@ -284,26 +251,25 @@ public class MonitoringRepository {
 
         // Вставляем запись в t_monitoring_statistics
         dsl.insertInto(T_MONITORING_STATISTICS)
-                .set(T_MONITORING_STATISTICS.MONITORING_ID, monitoring.getId())
-                .set(T_MONITORING_STATISTICS.SERVICE_NAME, monitoring.getServiceData().getName())
+                .set(T_MONITORING_STATISTICS.SERVICE_NAME, monitoring.getServiceName())
                 .set(T_MONITORING_STATISTICS.URL, monitoring.getUrl())
+                .set(T_MONITORING_STATISTICS.SUMMARY, monitoring.getSummary())
                 .set(T_MONITORING_STATISTICS.RESULT_CHECK, status)
                 .set(T_MONITORING_STATISTICS.CREATE_DATE, LocalDateTime.now())
                 .set(T_MONITORING_STATISTICS.DELETED, false)
                 .execute();
     }
 
-    public void deactivateStatsByIdMonitoring(Long serviceId) {
-        List<Long> monitoringId = dsl.select(T_MONITORING.ID)
+    public void deactivateStatsByIdMonitoring(Long id) {
+        List<MonitoringData> monitoring = dsl.select(T_MONITORING.URL, T_MONITORING.SERVICE_NAME)
                 .from(T_MONITORING)
-                .join(T_SERVICE_DATE).on(T_MONITORING.SERVICE_DATE_ID.eq(T_SERVICE_DATE.ID))
-                .where(T_MONITORING.SERVICE_DATE_ID.eq(serviceId))
-                .fetchInto(Long.class);
+                .where(T_MONITORING.ID.eq(id))
+                .fetchInto(MonitoringData.class);
 
-        monitoringId.forEach(id ->
+        monitoring.forEach(m ->
                 dsl.update(T_MONITORING_STATISTICS)
                         .set(T_MONITORING_STATISTICS.DELETED, true)
-                        .where(T_MONITORING_STATISTICS.MONITORING_ID.eq(id))
+                        .where(T_MONITORING_STATISTICS.URL.eq(m.getUrl()).and(T_MONITORING_STATISTICS.SERVICE_NAME.eq(m.getServiceName())))
                         .and(T_MONITORING_STATISTICS.DELETED.eq(false))
                         .execute());
     }

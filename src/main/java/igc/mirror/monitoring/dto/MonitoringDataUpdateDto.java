@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.URL;
 @Data
 public class MonitoringDataUpdateDto {
 
-    private String name;
+    private String serviceName;
 
     @URL(message = "Ошибка: Некорректный формат URL")
     private String url;

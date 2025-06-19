@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.URL;
 public class MonitoringDataSaveDto {
 
     @NotBlank(message = "Имя сервиса не может быть пустым")
-    private String name;
+    private String serviceName;
 
     @NotBlank(message = "URL не может быть пустым")
     @URL(message = "Ошибка: Некорректный формат URL")

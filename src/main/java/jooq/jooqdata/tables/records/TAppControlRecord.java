@@ -18,7 +18,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 /**
  * Управление сервисами(заглушка)
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TAppControlRecord extends UpdatableRecordImpl<TAppControlRecord> implements Record7<String, String, Boolean, LocalDateTime, String, LocalDateTime, String> {
 
     private static final long serialVersionUID = 1L;

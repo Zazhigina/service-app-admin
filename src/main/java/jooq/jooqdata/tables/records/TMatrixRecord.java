@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Настройка матрицы Компания организатор / Организатор &lt;&gt; Заказчик /
  * Инициатор"
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TMatrixRecord extends UpdatableRecordImpl<TMatrixRecord> implements Record10<Long, String, String, String, String, LocalDateTime, String, LocalDateTime, String, Boolean> {
 
     private static final long serialVersionUID = 1L;

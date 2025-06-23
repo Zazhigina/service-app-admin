@@ -34,7 +34,7 @@ import org.jooq.impl.TableImpl;
 /**
  * Преднастроенный вопрос
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TQuestion extends TableImpl<TQuestionRecord> {
 
     private static final long serialVersionUID = 1L;

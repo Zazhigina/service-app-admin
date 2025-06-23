@@ -32,7 +32,7 @@ import org.jooq.impl.TableImpl;
 /**
  * Обратная связь
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TFeedback extends TableImpl<TFeedbackRecord> {
 
     private static final long serialVersionUID = 1L;

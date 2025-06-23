@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 /**
  * Файлы обратной связи
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TFeedbackFileRecord extends UpdatableRecordImpl<TFeedbackFileRecord> implements Record8<UUID, Long, Long, String, LocalDateTime, String, LocalDateTime, String> {
 
     private static final long serialVersionUID = 1L;

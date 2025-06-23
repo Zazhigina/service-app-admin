@@ -34,7 +34,7 @@ import org.jooq.impl.TableImpl;
 /**
  * FAQ: ответ на вопрос
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TFaqAnswer extends TableImpl<TFaqAnswerRecord> {
 
     private static final long serialVersionUID = 1L;

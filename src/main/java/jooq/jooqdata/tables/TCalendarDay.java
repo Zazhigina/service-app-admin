@@ -35,7 +35,7 @@ import org.jooq.impl.TableImpl;
 /**
  * Календарь рабочих и выходных дней (исключения)
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TCalendarDay extends TableImpl<TCalendarDayRecord> {
 
     private static final long serialVersionUID = 1L;

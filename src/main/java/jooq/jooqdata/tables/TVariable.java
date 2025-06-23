@@ -32,7 +32,7 @@ import org.jooq.impl.TableImpl;
 /**
  * Переменная
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TVariable extends TableImpl<TVariableRecord> {
 
     private static final long serialVersionUID = 1L;

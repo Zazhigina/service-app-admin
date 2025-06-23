@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 /**
  * Календарь рабочих и выходных дней (исключения)
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TCalendarDayRecord extends UpdatableRecordImpl<TCalendarDayRecord> implements Record7<Long, LocalDate, Boolean, LocalDateTime, String, LocalDateTime, String> {
 
     private static final long serialVersionUID = 1L;

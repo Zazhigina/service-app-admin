@@ -30,7 +30,7 @@ import org.jooq.impl.TableImpl;
 /**
  * Справочник тем для обратной связи
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TFeedbackThemes extends TableImpl<TFeedbackThemesRecord> {
 
     private static final long serialVersionUID = 1L;

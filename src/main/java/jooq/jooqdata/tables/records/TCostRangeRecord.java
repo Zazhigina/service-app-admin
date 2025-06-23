@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 /**
  * Диапазоны стоимостных показателей
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TCostRangeRecord extends UpdatableRecordImpl<TCostRangeRecord> implements Record9<Long, BigDecimal, BigDecimal, BigDecimal, String, LocalDateTime, String, LocalDateTime, String> {
 
     private static final long serialVersionUID = 1L;

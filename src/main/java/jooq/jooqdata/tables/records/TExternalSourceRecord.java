@@ -18,7 +18,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 /**
  * Системы-источники
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TExternalSourceRecord extends UpdatableRecordImpl<TExternalSourceRecord> implements Record9<Long, String, String, String, Boolean, LocalDateTime, String, LocalDateTime, String> {
 
     private static final long serialVersionUID = 1L;

@@ -16,7 +16,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 /**
  * Вид шаблона (Enum)
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TLetterTemplateTypeTemplateEnumRecord extends UpdatableRecordImpl<TLetterTemplateTypeTemplateEnumRecord> implements Record3<Long, String, String> {
 
     private static final long serialVersionUID = 1L;

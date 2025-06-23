@@ -34,7 +34,7 @@ import org.jooq.impl.TableImpl;
 /**
  * Вид шаблона КП для услуги
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TServiceOfferType extends TableImpl<TServiceOfferTypeRecord> {
 
     private static final long serialVersionUID = 1L;

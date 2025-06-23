@@ -29,7 +29,7 @@ import jooqdata.tables.TVariable;
 /**
  * Convenience access to all tables in admin.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Tables {
 
     /**

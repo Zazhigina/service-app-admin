@@ -17,7 +17,7 @@ import org.jooq.impl.TableRecordImpl;
 /**
  * Справочник тем для обратной связи
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TFeedbackThemesRecord extends TableRecordImpl<TFeedbackThemesRecord> implements Record7<Long, String, LocalDateTime, LocalDateTime, String, String, Integer> {
 
     private static final long serialVersionUID = 1L;

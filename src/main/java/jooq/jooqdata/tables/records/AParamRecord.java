@@ -18,7 +18,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 /**
  * Ведение параметров приложения
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class AParamRecord extends UpdatableRecordImpl<AParamRecord> implements Record8<String, String, String, LocalDateTime, String, LocalDateTime, String, String> {
 
     private static final long serialVersionUID = 1L;

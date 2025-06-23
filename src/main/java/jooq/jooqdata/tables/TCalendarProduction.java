@@ -35,7 +35,7 @@ import org.jooq.impl.TableImpl;
 /**
  * Производственный календарь
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TCalendarProduction extends TableImpl<TCalendarProductionRecord> {
 
     private static final long serialVersionUID = 1L;

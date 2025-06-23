@@ -18,7 +18,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 /**
  * Переменные к шаблону письма
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TLetterTemplateVariableRecord extends UpdatableRecordImpl<TLetterTemplateVariableRecord> implements Record7<Long, Long, LocalDateTime, String, LocalDateTime, String, Long> {
 
     private static final long serialVersionUID = 1L;

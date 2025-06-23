@@ -18,7 +18,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 /**
  * Вариант ответа на вопрос
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TAnswerVersionRecord extends UpdatableRecordImpl<TAnswerVersionRecord> implements Record10<Long, Long, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean, String> {
 
     private static final long serialVersionUID = 1L;

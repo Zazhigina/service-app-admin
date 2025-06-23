@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 /**
  * Допустимый формат документа (Enum)
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TLetterTemplateAcceptableDocumentFormatEnum extends TableImpl<TLetterTemplateAcceptableDocumentFormatEnumRecord> {
 
     private static final long serialVersionUID = 1L;

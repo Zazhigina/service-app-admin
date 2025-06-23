@@ -32,7 +32,7 @@ import org.jooq.impl.TableImpl;
 /**
  * Управление сервисами(заглушка)
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TAppControl extends TableImpl<TAppControlRecord> {
 
     private static final long serialVersionUID = 1L;

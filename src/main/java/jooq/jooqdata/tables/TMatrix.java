@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
  * Настройка матрицы Компания организатор / Организатор &lt;&gt; Заказчик /
  * Инициатор"
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TMatrix extends TableImpl<TMatrixRecord> {
 
     private static final long serialVersionUID = 1L;

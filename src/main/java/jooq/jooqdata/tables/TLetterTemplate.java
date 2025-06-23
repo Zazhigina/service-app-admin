@@ -34,7 +34,7 @@ import org.jooq.impl.TableImpl;
 /**
  * Шаблон письма
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TLetterTemplate extends TableImpl<TLetterTemplateRecord> {
 
     private static final long serialVersionUID = 1L;

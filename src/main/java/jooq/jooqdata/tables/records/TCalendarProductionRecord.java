@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 /**
  * Производственный календарь
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes" })
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class TCalendarProductionRecord extends UpdatableRecordImpl<TCalendarProductionRecord> implements Record8<Long, Integer, BigDecimal, BigDecimal, LocalDateTime, String, LocalDateTime, String> {
 
     private static final long serialVersionUID = 1L;

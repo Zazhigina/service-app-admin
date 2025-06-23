@@ -1,5 +1,5 @@
-ARG BUILD_IMAGE_TAG=7.6.0-jdk17 \
-	APP_IMAGE_TAG=17 \
+ARG BUILD_IMAGE_TAG=8.11.1-jdk21 \
+	APP_IMAGE_TAG=21 \
 	QUAYIO_IMAGE_REPOSITORY=quay-registry.dso.techpark.local \
 	IMAGE_REPOSITORY=redsoft-registry.dso.techpark.local \
 	UBI9_REPO_URL="" \
@@ -41,10 +41,10 @@ RUN JKS_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) \
 	gradle build --init-script init.gradle -PmavenRepository=$MAVEN_REPOSITORY -PmavenRepositoryPlugin=$MAVEN_REPOSITORY_PLUGIN; fi
 
 ## Add project
-RUN java -Djarmode=layertools -jar $BUILD_APP_DIR/build/libs/root.jar extract
+RUN java -Djarmode=tools -jar $BUILD_APP_DIR/build/libs/root.jar extract --layers --launcher --destination extracted
 
 ## OpenJDK runtime image
-FROM $IMAGE_REPOSITORY/ubi8/openjdk-17:$APP_IMAGE_TAG
+FROM $IMAGE_REPOSITORY/ubi8/openjdk-21:$APP_IMAGE_TAG
 
 ARG BUILD_APP_DIR \
 	UBI9_REPO_URL \
@@ -67,10 +67,10 @@ WORKDIR /application
 COPY --chown=$UID:0 ./docker/entrypoint.sh /
 RUN chmod a+x /entrypoint.sh
 
-COPY --chown=$UID:0 --from=build-stage $BUILD_APP_DIR/dependencies/ .
-COPY --chown=$UID:0 --from=build-stage $BUILD_APP_DIR/spring-boot-loader/ .
-COPY --chown=$UID:0 --from=build-stage $BUILD_APP_DIR/snapshot-dependencies/ .
-COPY --chown=$UID:0 --from=build-stage $BUILD_APP_DIR/application/ .
+COPY --chown=$UID:0 --from=build-stage $BUILD_APP_DIR/extracted/dependencies/ .
+COPY --chown=$UID:0 --from=build-stage $BUILD_APP_DIR/extracted/spring-boot-loader/ .
+COPY --chown=$UID:0 --from=build-stage $BUILD_APP_DIR/extracted/snapshot-dependencies/ .
+COPY --chown=$UID:0 --from=build-stage $BUILD_APP_DIR/extracted/application/ .
 
 VOLUME ["$RUNTIME_PATH"]
 

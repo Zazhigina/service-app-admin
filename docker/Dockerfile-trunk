@@ -1,70 +1,65 @@
-## Set docker registry location
-ARG QUAYIO_IMAGE_REPOSITORY=nexus-quayio-registry.inlinegroup-c.ru
-ARG RH_IMAGE_REPOSITORY=nexus-rh-registry.inlinegroup-c.ru
-ARG UBI9_REPO_URL=""
-ARG UBI9_REPO_URL_CA=""
-ARG UBI9_REPO_URL_SUB_CA=""
-## Set maven registry
-ARG MAVEN_REPOSITORY=https://nexus-oss.inlinegroup-c.ru/repository/maven-public/
-ARG MAVEN_REPOSITORY_PLUGIN=https://nexus-oss.inlinegroup-c.ru/repository/maven2-gradle-plugin/
-## Set optional maven registry certificates
-ARG MAVEN_REPOSITORY_ROOT_CA_URL=""
-ARG MAVEN_REPOSITORY_SUB_CA_URL=""
-## Set application build path
-ARG BUILD_APP_DIR='/application'
+ARG BUILD_IMAGE_TAG=8.11.1-jdk21 \
+	APP_IMAGE_TAG=21 \
+	QUAYIO_IMAGE_REPOSITORY=nexus-quayio-registry.inlinegroup-c.ru \
+	IMAGE_REPOSITORY=nexus-redsoft-registry.inlinegroup-c.ru \
+	UBI9_REPO_URL="" \
+	UBI9_REPO_URL_CA="" \
+	UBI9_REPO_URL_SUB_CA="" \
+	MAVEN_REPOSITORY=https://nexus-oss.inlinegroup-c.ru/repository/maven-public/ \
+	MAVEN_REPOSITORY_PLUGIN=https://nexus-oss.inlinegroup-c.ru/repository/maven2-gradle-plugin/ \
+	MAVEN_REPOSITORY_ROOT_CA_URL="" \
+	MAVEN_REPOSITORY_SUB_CA_URL="" \
+	BUILD_APP_DIR='/application'
 
-#
-FROM $QUAYIO_IMAGE_REPOSITORY/klovercloud/gradle:7.6.0-jdk17 as build
+## Build image
+FROM $QUAYIO_IMAGE_REPOSITORY/klovercloud/gradle:$BUILD_IMAGE_TAG AS build-stage
 
-ARG BUILD_APP_DIR
-ARG MAVEN_REPOSITORY
-ARG MAVEN_REPOSITORY_PLUGIN
-ARG MAVEN_REPOSITORY_ROOT_CA_URL
-ARG MAVEN_REPOSITORY_SUB_CA_URL
+ARG BUILD_APP_DIR \
+	MAVEN_REPOSITORY \
+	MAVEN_REPOSITORY_PLUGIN \
+	MAVEN_REPOSITORY_ROOT_CA_URL \
+	MAVEN_REPOSITORY_SUB_CA_URL
 
-ENV TZ Europe/Moscow
+## Set build envirnoment
+ENV TZ=Europe/Moscow \
+	GRADLE_USER_HOME=$BUILD_APP_DIR/gradle
+
 WORKDIR /application
-COPY . .
 
-ENV GRADLE_USER_HOME=$BUILD_APP_DIR/gradle
+## Copy application
+COPY . .
 
 ## Add certificate
 RUN JKS_KEY=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1) \
-    && if [ -n "$MAVEN_REPOSITORY_ROOT_CA_URL" ]; then wget --no-check-certificate -q -O - $MAVEN_REPOSITORY_ROOT_CA_URL > ./root-ca-maven.crt \
-    && keytool -import -noprompt -alias root -file ./root-ca-maven.crt -keystore ./maven.jks -storepass $JKS_KEY; fi \
-    && if [ -n "$MAVEN_REPOSITORY_SUB_CA_URL" ]; then wget --no-check-certificate -q -O - $MAVEN_REPOSITORY_SUB_CA_URL > ./sub-ca-maven.crt \
-    && keytool -import -noprompt -alias sub -file ./sub-ca-maven.crt -keystore ./maven.jks -storepass $JKS_KEY; fi \
-    && gradle build --init-script init.gradle -PmavenRepository=$MAVEN_REPOSITORY -PmavenRepositoryPlugin=$MAVEN_REPOSITORY_PLUGIN
+	&& if [ -n "$MAVEN_REPOSITORY_ROOT_CA_URL" ]; then wget --no-check-certificate -q -O - $MAVEN_REPOSITORY_ROOT_CA_URL > ./root-ca-maven.crt \
+	&& keytool -import -noprompt -alias root -file ./root-ca-maven.crt -keystore ./maven.jks -storepass $JKS_KEY; fi \
+	&& if [ -n "$MAVEN_REPOSITORY_SUB_CA_URL" ]; then wget --no-check-certificate -q -O - $MAVEN_REPOSITORY_SUB_CA_URL > ./sub-ca-maven.crt \
+	&& keytool -import -noprompt -alias sub -file ./sub-ca-maven.crt -keystore ./maven.jks -storepass $JKS_KEY; fi \
+	&& if [ -n "$MAVEN_REPOSITORY_ROOT_CA_URL" ] || [ -n "$MAVEN_REPOSITORY_SUB_CA_URL" ]; then \
+	gradle build --init-script init.gradle -PmavenRepository=$MAVEN_REPOSITORY -PmavenRepositoryPlugin=$MAVEN_REPOSITORY_PLUGIN \
+	-Djavax.net.ssl.trustStore="/application/maven.jks" -Djavax.net.ssl.trustStorePassword=$JKS_KEY; else \
+	gradle build --init-script init.gradle -PmavenRepository=$MAVEN_REPOSITORY -PmavenRepositoryPlugin=$MAVEN_REPOSITORY_PLUGIN; fi
 
-RUN java -Djarmode=layertools -jar $BUILD_APP_DIR/build/libs/root.jar extract
-#
-FROM $RH_IMAGE_REPOSITORY/ubi9/openjdk-17-runtime:1.21-1.1733995521
-ARG BUILD_APP_DIR
-ARG UID=1001
-ARG UBI9_REPO_URL
-ARG UBI9_REPO_URL_CA
-ARG UBI9_REPO_URL_SUB_CA
+## Add project
+RUN java -Djarmode=tools -jar $BUILD_APP_DIR/build/libs/root.jar extract --layers --launcher --destination extracted
 
-ENV TZ Europe/Moscow
+## OpenJDK runtime image
+FROM $IMAGE_REPOSITORY/ubi8/openjdk-21:$APP_IMAGE_TAG
 
-# USER root
-# # update Important packages
-# RUN if [ -n "$UBI9_REPO_URL" ]; then \
-#        curl -k -s $UBI9_REPO_URL_CA --output /etc/pki/ca-trust/source/anchors/root-ca-gazprom-neft.pem; \
-#        curl -k -s $UBI9_REPO_URL_SUB_CA --output /etc/pki/ca-trust/source/anchors/sub-ca-gazprom-neft.pem; \
-#        update-ca-trust; \
-#        rm -rf /etc/yum.repos.d/ubi.repo; \
-#        curl -k $UBI9_REPO_URL --output /etc/yum.repos.d/ubi.repo; \
-#     fi; \
-#     microdnf --setopt=tsflags=nodocs install -y \
-#     python3-3.9.18-3.el9_4.6 python3-libs-3.9.18-3.el9_4.6 && \
-#     microdnf clean all && \
-#     rm -rf /var/cache/yum
+ARG BUILD_APP_DIR \
+	UBI9_REPO_URL \
+	UBI9_REPO_URL_CA \
+	UBI9_REPO_URL_SUB_CA \
+	UID=1001
 
-# Set permissions so that the container runs without root access
-USER 0
-RUN mkdir -p ${BUILD_APP_DIR}
-RUN chown -R $UID:0 ${BUILD_APP_DIR}
+## Set runtime envirnoment
+ENV TZ=Europe/Moscow \
+	RUNTIME_PATH='/tmp'
+
+## Set permissions so that the container runs without root access
+USER root
+RUN mkdir -p ${BUILD_APP_DIR} && \
+	chown -R $UID:0 ${BUILD_APP_DIR}
 USER $UID
 
 WORKDIR /application
@@ -72,13 +67,10 @@ WORKDIR /application
 COPY --chown=$UID:0 ./docker/entrypoint.sh /
 RUN chmod a+x /entrypoint.sh
 
-COPY --chown=$UID:0 --from=build $BUILD_APP_DIR/dependencies/ ./
-COPY --chown=$UID:0 --from=build $BUILD_APP_DIR/spring-boot-loader/ ./
-COPY --chown=$UID:0 --from=build $BUILD_APP_DIR/snapshot-dependencies/ ./
-COPY --chown=$UID:0 --from=build $BUILD_APP_DIR/application/ ./
-
-## Set application runtime path
-ENV RUNTIME_PATH='/tmp'
+COPY --chown=$UID:0 --from=build-stage $BUILD_APP_DIR/extracted/dependencies/ .
+COPY --chown=$UID:0 --from=build-stage $BUILD_APP_DIR/extracted/spring-boot-loader/ .
+COPY --chown=$UID:0 --from=build-stage $BUILD_APP_DIR/extracted/snapshot-dependencies/ .
+COPY --chown=$UID:0 --from=build-stage $BUILD_APP_DIR/extracted/application/ .
 
 VOLUME ["$RUNTIME_PATH"]
 

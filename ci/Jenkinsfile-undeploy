@@ -10,21 +10,28 @@ withFolderProperties{
     OCP_NAMESPACE = "${env.OCP_NAMESPACE}"
     OCP_CRED_ID = "${env.OCP_CRED_ID}"
     VAULT_URL = "${env.VAULT_URL}"
+    LANDSCAPE_ID = "${env.LANDSCAPE_ID}"
+    CLUSTER_ID = "${env.CLUSTER_ID}"
     REGISTRY_TRUST = "${env.REGISTRY_TRUST}"
     REGISTRY_TRUST_CRED_ID = "${env.REGISTRY_TRUST_CRED_ID}"
     REGISTRY_DEV = "${env.REGISTRY_DEV}"
     REGISTRY_DEV_CRED_ID = "${env.REGISTRY_DEV_CRED_ID}"
 }
 
-if (DEPLOY_ENVIRONMENT == 'trust') {
+if (DEPLOY_ENVIRONMENT == 'trust' && LANDSCAPE_ID == 'uat' && CLUSTER_ID == 'uat4') {
     REGISTRY = REGISTRY_TRUST
     REGISTRY_CRED_ID = REGISTRY_TRUST_CRED_ID
-}
-
-if (DEPLOY_ENVIRONMENT == 'dev') {
+    KUBE_TYPE = "ocp"
+} else if (DEPLOY_ENVIRONMENT == 'trust' && LANDSCAPE_ID == 'uat' && CLUSTER_ID == 'spb99dhu') {
+    REGISTRY = REGISTRY_TRUST
+    REGISTRY_CRED_ID = REGISTRY_TRUST_CRED_ID
+    KUBE_TYPE = "k8s"
+} else if (DEPLOY_ENVIRONMENT == 'dev') {
     REGISTRY = REGISTRY_DEV
     REGISTRY_CRED_ID = REGISTRY_DEV_CRED_ID
+    KUBE_TYPE = "ocp"
 }
+
 pipeline {
     agent {
         label "$DEPLOY_ENVIRONMENT"
@@ -37,7 +44,7 @@ pipeline {
 
     environment {
         GIT_COMMIT_SHORT = sh(
-            script: "printf \$(git rev-parse --short ${GIT_COMMIT})",
+            script: "printf \$(git rev-parse --short=7 ${GIT_COMMIT})",
             returnStdout: true
         )
     }
@@ -53,7 +60,7 @@ pipeline {
 
         stage("Helm uninstall") {
             steps {
-                withKubeConfig([login_type: "ocp", auth_provider: "vault"]) {
+                withKubeConfig([login_type: "${KUBE_TYPE}", auth_provider: "vault"]) {
                     doHelm "uninstall"
                 }
             }

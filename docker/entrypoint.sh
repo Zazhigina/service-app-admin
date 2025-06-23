@@ -13,4 +13,8 @@ if [ -n "$KEYCLOAK_SUB_CA_URL" ]; then curl -k -s $KEYCLOAK_SUB_CA_URL --output 
   && keytool -noprompt -import -keystore /tmp/truststore.jks -storepass $JKS_KEY -alias keycloak.subca.pem -file /tmp/sub-root.ca.pem &>/dev/null; fi
 
 # Run
-exec java -Djavax.net.ssl.trustStore=/tmp/truststore.jks -Djavax.net.ssl.trustStorePassword=$JKS_KEY "$@"
+if [ -f /tmp/truststore.jks ]; then
+  exec java -Djavax.net.ssl.trustStore=/tmp/truststore.jks -Djavax.net.ssl.trustStorePassword=$JKS_KEY "$@"
+else
+  exec java "$@"
+fi

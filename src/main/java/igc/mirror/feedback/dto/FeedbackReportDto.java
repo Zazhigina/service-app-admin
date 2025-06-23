@@ -17,6 +17,7 @@ public class FeedbackReportDto {
     private String fbThemeName;
     private String feedbackText;
     private String userFullname;
+    private String createUser;
     private LocalDateTime createDate;
     private String filename;
     private UUID uid;

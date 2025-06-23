@@ -9,10 +9,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class FeedbackThemeDto {
-    private Integer id;
+    private Long id;
     private String fbThemeName;
     private LocalDateTime createDate;
     private String createUser;
     private LocalDateTime lastUpdateDate;
     private String lastUpdateUser;
+    private Integer num;
 }

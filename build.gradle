@@ -23,8 +23,9 @@ base {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 repositories {
@@ -46,6 +47,9 @@ configurations {
     }
     annotationProcessor {
         resolutionStrategy.activateDependencyLocking()
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
     }
 }
 
@@ -84,11 +88,6 @@ dependencies {
 
     // Security
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-    // fix vulnerability version com.nimbusds:nimbus-jose-jwt
-    // implementation ('org.springframework.boot:spring-boot-starter-oauth2-resource-server') {
-    //     exclude group: 'com.nimbusds', module: 'nimbus-jose-jwt'
-    // }
-    // implementation 'com.nimbusds:nimbus-jose-jwt:9.37.2'
 
     // swagger and OpenAPI
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocOpenApiStarterWebmvcUiVersion}"
@@ -97,8 +96,8 @@ dependencies {
     implementation "org.flywaydb:flyway-core:${flywayVersion}"
 
     // lombok
-    compileOnly "org.projectlombok:lombok:${lombokVersion}"
-    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
     // mapstruct
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"

@@ -35,15 +35,15 @@ application:
       - key: MIRROR_ENDPOINT_NOTIFICATION
         value: http://service-app-notification.mirror-demo:8080
       - key: MIRROR_KEYCLOAK_BASE_URL
-        value: https://effect-authn.inlinegroup-c.ru
+        value: #H#//effect-authn.inlinegroup-c.ru
       - key: MIRROR_KEYCLOAK_REALM
         value: mirror-demo
       - key: MIRROR_KEYCLOAK_CLIENT_ID
         value: mirror-integration-app
       - key: KEYCLOAK_ROOT_CA_URL
-        value: https://nexus-oss.inlinegroup-c.ru/repository/local-repo/CA/root.x1.pem
+        value: #H#//nexus-oss.inlinegroup-c.ru/repository/local-repo/CA/root.x1.pem
       - key: KEYCLOAK_SUB_CA_URL
-        value: https://nexus-oss.inlinegroup-c.ru/repository/local-repo/CA/r3.pem
+        value: #H#//nexus-oss.inlinegroup-c.ru/repository/local-repo/CA/r3.pem
       - key: MIRROR_SCHEDULE_TASKS_CRON_REPLICATE_PROCEDURE_RECORDS
         value: 0 0 1 20 * ?
       - key: MIRROR_SCHEDULE_TASKS_CRON_SAVE_SEARCH_HISTORY

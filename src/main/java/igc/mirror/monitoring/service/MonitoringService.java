@@ -2,15 +2,10 @@ package igc.mirror.monitoring.service;
 
 import igc.mirror.appcontrol.dto.AppControlDto;
 import igc.mirror.appcontrol.repository.AppControlRepository;
-import igc.mirror.appcontrol.service.AppControlService;
-import igc.mirror.exception.common.EntityDuplicatedException;
 import igc.mirror.exception.common.EntityNotFoundException;
 import igc.mirror.monitoring.dto.*;
 import igc.mirror.monitoring.mapper.MonitoringDataMapper;
-import igc.mirror.monitoring.mapper.ServiceDataMapper;
 import igc.mirror.monitoring.model.MonitoringData;
-import igc.mirror.monitoring.model.MonitoringStatistic;
-import igc.mirror.monitoring.model.ServiceData;
 import igc.mirror.monitoring.repository.MonitoringRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,8 +37,17 @@ public class MonitoringService {
         log.info("Запрос на сохранение MonitoringData");
 
         List<String> serviceNameList = getServiceData();
-        if (serviceNameList.contains(monitoringDataSaveDto.getServiceName())) {
+
+        String inputServiceName = monitoringDataSaveDto.getServiceName();
+
+        Optional<String> matchedServiceName = serviceNameList.stream()
+                .filter(s -> s.equalsIgnoreCase(inputServiceName))
+                .findFirst();
+
+        if (matchedServiceName.isPresent()) {
             log.info("Имя сервиса найден в списке сервисов");
+
+            monitoringDataSaveDto.setServiceName(matchedServiceName.get());
 
             MonitoringData savedData = monitoringRepository.add(monitoringDataSaveDto);
             log.info("Успешно сохранено MonitoringData с ID: {}", savedData.getId());
@@ -71,21 +75,22 @@ public class MonitoringService {
         if (updateDto.getServiceName() != null) {
             List<String> serviceNameList = getServiceData();
 
-            if (serviceNameList.contains(updateDto.getServiceName())) {
-                String newService = updateDto.getServiceName();
+            String inputServiceName = updateDto.getServiceName();
+
+            Optional<String> matchedServiceName = serviceNameList.stream()
+                    .filter(s -> s.equalsIgnoreCase(inputServiceName))
+                    .findFirst();
+
+            if (matchedServiceName.isPresent()) {
+                String newService = matchedServiceName.get().toUpperCase();
 
                 log.info("ServiceData найден: {}", newService);
 
                 String oldServiceName = existingData.getServiceName();
 
-                if (!Objects.equals(newService, oldServiceName)) {
-                    log.info("Обновление Service: {} -> {}", oldServiceName, newService);
-
-                    existingData.setServiceName(newService);
-
-                    updateFields.put(T_MONITORING.SERVICE_NAME, newService);
-                }
+                updateField(matchedServiceName.get(), oldServiceName, "service_name", existingData::setServiceName, T_MONITORING.SERVICE_NAME, updateFields);
             }
+
         }
 
         if (updateFields.isEmpty()) {
@@ -126,7 +131,7 @@ public class MonitoringService {
     }
 
     @Transactional
-    public List<MonitoringDataDto> getListMonitoringData() {
+    public List<MonitoringData> getListMonitoringData() {
         log.info("Запрос на получение всех записей MonitoringData");
 
         List<MonitoringData> data = monitoringRepository.findAllMonitoringData();
@@ -134,7 +139,7 @@ public class MonitoringService {
 
         log.info("Найдено {} записей", data.size());
 
-        return data.stream().map(monitoringDataMapper::entityToSaveDto).toList();
+        return data;
     }
 
     @Transactional
@@ -172,6 +177,7 @@ public class MonitoringService {
         return allService.stream().map(service -> service.getName().substring(3).toUpperCase()).toList();
     }
 
+    @Transactional
     public Workbook generateExcel(List<MonitoringStatisticDto> records) {
 
         Workbook workbook = new XSSFWorkbook();
@@ -200,6 +206,10 @@ public class MonitoringService {
         return workbook;
     }
 
+    @Transactional
+    public void setAllActual(boolean active) {
+        monitoringRepository.setAllActual(active);
+    }
 }
 
 

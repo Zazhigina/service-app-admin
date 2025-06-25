@@ -35,7 +35,7 @@ public class MonitoringRepository {
      * @return сохраненная в базе данных новая запись
      */
     public MonitoringData add(MonitoringDataSaveDto data) {
-        if (checkExist(data)) {
+        if (checkExist(data.getUrl())) {
             throw new EntityDuplicatedException(
                     String.format("Ошибка: запись с URL %s уже существует!", data.getUrl()),
                     null, MonitoringData.class
@@ -47,14 +47,13 @@ public class MonitoringRepository {
     /**
      * Проверка существования записи
      *
-     * @param data запись
+     * @param url путь запроса
      */
-    private Boolean checkExist(MonitoringDataSaveDto data) {
+    private Boolean checkExist(String url) {
         return dsl
                 .fetchExists(selectOne()
                         .from(T_MONITORING)
-                        .where(T_MONITORING.SERVICE_NAME.eq(data.getServiceName())
-                                .and(T_MONITORING.URL.eq(data.getUrl())))
+                        .where(T_MONITORING.URL.eq(url))
                 );
     }
 
@@ -87,6 +86,12 @@ public class MonitoringRepository {
      * @return обновленные данные в записи мониторинга сервисов
      */
     public MonitoringData updateInDb(Map<Field<?>, Object> updateFields, Long id) {
+        if (checkExist(updateFields.get(T_MONITORING.URL).toString())) {
+            throw new EntityDuplicatedException(
+                    String.format("Ошибка: запись с URL %s уже существует!", updateFields.get(T_MONITORING.URL).toString()),
+                    null, MonitoringData.class
+            );
+        }
         MonitoringData updateData = dsl.update(T_MONITORING)
                 .set(updateFields)
                 .where(T_MONITORING.ID.eq(id))
@@ -277,5 +282,12 @@ public class MonitoringRepository {
 
     public void deleteMonitoringStatistic() {
         dsl.delete(T_MONITORING_STATISTICS).execute();
+    }
+
+
+    public void setAllActual(boolean active) {
+        dsl.update(T_MONITORING)
+                .set(T_MONITORING.IS_ACTIVE, active)
+                .execute();
     }
 }

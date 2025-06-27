@@ -2,6 +2,7 @@ package igc.mirror.monitoring.controller;
 
 import igc.mirror.exception.handler.SuccessInfo;
 import igc.mirror.monitoring.dto.*;
+import igc.mirror.monitoring.model.MonitoringData;
 import igc.mirror.monitoring.service.MonitoringService;
 import igc.mirror.param.dto.ParamEditableDto;
 import igc.mirror.param.service.ParamService;
@@ -40,7 +41,7 @@ public class MonitoringController {
     @GetMapping()
     @CrossOrigin(origins = {"http://localhost:3000"})
     @Operation(summary = "Получить список сервисов для мониторинга")
-    public List<MonitoringDataDto> getMonitoringData() {
+    public List<MonitoringData> getMonitoringData() {
         return monitoringService.getListMonitoringData();
     }
 
@@ -65,6 +66,13 @@ public class MonitoringController {
         return monitoringService.updateMonitoringData(monitoringDataUpdateDto, id);
     }
 
+    @PostMapping({"/set-actual"})
+    @CrossOrigin(origins = {"http://localhost:3000"})
+    @Operation(summary = "Массовое обновление актуальности всех записей Monitoring")
+    public void setAllActual(@RequestBody @Valid MonitoringBatchUpdateRequest request) {
+        monitoringService.setAllActual(request.isActive());
+    }
+
     @DeleteMapping({"/{id}"})
     @CrossOrigin(origins = {"http://localhost:3000"})
     @Operation(summary = "Удаление данных для мониторинга")
@@ -73,12 +81,20 @@ public class MonitoringController {
         return new SuccessInfo("Операция выполнена");
     }
 
+    @DeleteMapping("/statistics/cleanup")
+    @CrossOrigin(origins = {"http://localhost:3000"})
+    @Operation(summary = "Удаление старых данных статистики")
+    public SuccessInfo cleanupStatistics() {
+        monitoringService.removeOldMonitoringStatistics();
+        return new SuccessInfo("Статистика очищена");
+    }
+
     @PatchMapping("/start")
     @CrossOrigin(origins = {"http://localhost:3000"})
     @ResponseStatus(HttpStatus.OK)
     public void start() {
         log.info("PATCH запрос на включение проверки заявок");
-        paramService.changeParam("HEALTH_MONITORING_ON",new ParamEditableDto("Мониторинг сервисов 'Включен'", "TRUE"));
+        paramService.changeParam("HEALTH_MONITORING_ON", new ParamEditableDto("Мониторинг сервисов 'Включен'", "TRUE"));
     }
 
     @PatchMapping("/stop")
@@ -86,7 +102,7 @@ public class MonitoringController {
     @ResponseStatus(HttpStatus.OK)
     public void stop() {
         log.info("PATCH запрос на выключение проверки заявок");
-        paramService.changeParam("HEALTH_MONITORING_ON",new ParamEditableDto("Мониторинг сервисов 'Выключен'", "FALSE"));
+        paramService.changeParam("HEALTH_MONITORING_ON", new ParamEditableDto("Мониторинг сервисов 'Выключен'", "FALSE"));
     }
 
     @GetMapping("/export")
@@ -116,6 +132,7 @@ public class MonitoringController {
             throw new RuntimeException("Ошибка при создании Excel-файла", e);
         }
     }
+
     @GetMapping("/service")
     @Operation(summary = "Получить список сервисов")
     @CrossOrigin(origins = {"http://localhost:3000"})

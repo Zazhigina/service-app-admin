@@ -23,6 +23,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -159,6 +160,13 @@ public class MonitoringService {
         monitoringRepository.deleteMonitoringStatistic();
     }
 
+    @Scheduled(cron = "0 0 6 * * *", zone = "Europe/Moscow")
+    @Transactional
+    public void removeOldMonitoringStatistics() {
+        LocalDateTime twoWeeksAgo = LocalDateTime.now().minusWeeks(2);
+        int deletedCount = monitoringRepository.deleteOldMonitoringStatistics(twoWeeksAgo);
+        log.info("Удалено {} записей статистики мониторинга старше {}", deletedCount, twoWeeksAgo);
+    }
 
     @Transactional
     public List<String> getServiceData() {

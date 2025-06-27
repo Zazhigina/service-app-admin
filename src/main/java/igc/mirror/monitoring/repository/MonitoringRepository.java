@@ -278,4 +278,10 @@ public class MonitoringRepository {
     public void deleteMonitoringStatistic() {
         dsl.delete(T_MONITORING_STATISTICS).execute();
     }
+
+    public int deleteOldMonitoringStatistics(LocalDateTime oldDate) {
+        return dsl.deleteFrom(T_MONITORING_STATISTICS)
+                .where(T_MONITORING_STATISTICS.CREATE_DATE.lt(oldDate))
+                .execute();
+    }
 }

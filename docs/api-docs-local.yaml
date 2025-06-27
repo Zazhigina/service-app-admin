@@ -1,0 +1,4004 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+paths:
+  /system-config:
+    get:
+      tags:
+      - Администрирование поиска
+      summary: Получить конфигурацию
+      operationId: getSystemConfig
+      parameters:
+      - name: configType
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ACTIVE
+          enum:
+          - ACTIVE
+          - LATEST
+          - ALL
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SystemConfigFrontDto"
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Администрирование поиска
+      summary: Добавить конфигурацию
+      operationId: addSystemConfig
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SystemConfigFrontDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ElasticSearchOperations"
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Администрирование поиска
+      summary: Удалить конфигурацию
+      operationId: deleteSystemConfig
+      parameters:
+      - name: version
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ElasticSearchOperations"
+      security:
+      - bearerAuth: []
+  /service-version:
+    put:
+      tags:
+      - Ведение маппинга услуг и шаблонов КП
+      summary: Сохранение/изменение мэппинга услуг справочника КТ-777
+      operationId: updateServiceVersion
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ServiceVersionChangedDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ServiceVersionChangedDto"
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Ведение маппинга услуг и шаблонов КП
+      summary: Загрузка мэппинга услуг справочника КТ-777
+      operationId: updateServiceVersion_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/ServiceVersionChangedDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ReferenceSavingResult"
+      security:
+      - bearerAuth: []
+  /service-offer-type:
+    put:
+      tags:
+      - Ведение маппинга услуг и шаблонов КП
+      summary: Сохранение записей таблицы маппинга услуг и типов КП
+      operationId: saveServicesOfferTypes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/ServiceOfferTypeDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+      security:
+      - bearerAuth: []
+  /request/version/processing-status:
+    put:
+      tags:
+      - Обработка оценок версий поиска
+      summary: Изменение статуса обработки версии поиска
+      operationId: changeRequestVersionProcessingStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RequestVersionProcessingStatus"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SuccessInfo"
+      security:
+      - bearerAuth: []
+  /question:
+    get:
+      tags:
+      - Стандартные вопросы
+      summary: Получить полный перечень вопросов
+      operationId: findAllQuestions
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuestionDto"
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Стандартные вопросы
+      summary: Изменение данных вопросов
+      operationId: changeQuestions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/QuestionDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SuccessInfo"
+      security:
+      - bearerAuth: []
+  /param/{key}:
+    get:
+      tags:
+      - Ведение параметров
+      summary: Поиск параметра по ключу
+      operationId: findByKey
+      parameters:
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ParamDto"
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Ведение параметров
+      summary: Изменение значения параметра
+      operationId: editParam
+      parameters:
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ParamEditableDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ParamDto"
+      security:
+      - bearerAuth: []
+  /param/prcat-integration-start-date:
+    put:
+      tags:
+      - Ведение параметров
+      summary: Заполнение значения параметра PRCAT_INTEGRATION.START_DATE
+      operationId: fillPrcatIntegrationStartDateParam
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              format: date-time
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ParamDto"
+      security:
+      - bearerAuth: []
+  /monitoring/{id}:
+    put:
+      tags:
+      - Управление URL для мониторинга
+      summary: Обновление данных мониторинга по id
+      operationId: updateMonitoringData
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MonitoringDataUpdateDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/MonitoringDataDto"
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Управление URL для мониторинга
+      summary: Удаление данных для мониторинга
+      operationId: removeMonitoringData
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SuccessInfo"
+      security:
+      - bearerAuth: []
+  /feedback/theme/{id}:
+    put:
+      tags:
+      - feedback-controller
+      operationId: changeTheme
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FeedbackThemeDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/FeedbackThemeDto"
+    delete:
+      tags:
+      - feedback-controller
+      operationId: deleteTheme
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SuccessInfo"
+  /faq/questions/{id}:
+    get:
+      tags:
+      - FAQ
+      summary: Данные FAQ вопроса
+      operationId: getQuestion
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/FaqQuestionDto"
+    put:
+      tags:
+      - FAQ
+      summary: Изменение FAQ вопроса
+      operationId: changeQuestion
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FaqQuestionSaveDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/FaqQuestionDto"
+    delete:
+      tags:
+      - FAQ
+      summary: Удаление FAQ вопроса
+      operationId: removeQuestion
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SuccessInfo"
+  /exchange/ref/external-source:
+    get:
+      tags:
+      - Обмен с внешними сервисами
+      summary: Получить все записи из справочника систем
+      operationId: getExternalSources
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ExternalSourceDto"
+      security:
+      - bearerAuth: []
+    put:
+      tags:
+      - Обмен с внешними сервисами
+      summary: Изменить запись в справочнике систем
+      operationId: changeExternalSource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExternalSourceDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SuccessInfo"
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Обмен с внешними сервисами
+      summary: Создать запись в справочнике систем
+      operationId: createExternalSource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExternalSourceDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: integer
+                format: int64
+      security:
+      - bearerAuth: []
+  /exchange/ref/external-source/{id}/switch-deleted:
+    put:
+      tags:
+      - Обмен с внешними сервисами
+      summary: Изменить метку удаления для записи в справочнике систем
+      operationId: switchDeletedExternalSource
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ExternalSourceDto"
+      security:
+      - bearerAuth: []
+  /cost-range:
+    get:
+      tags:
+      - Диапазоны стоимостных показателей
+      summary: Диапазоны стоимостных показателей
+      operationId: getCostRanges
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CostRangeDto"
+    put:
+      tags:
+      - Диапазоны стоимостных показателей
+      summary: Сохранение/изменение диапазона стоимостных показателей
+      operationId: changeCostRange
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CostRangeDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CostRangeDto"
+  /calendar-production:
+    get:
+      tags:
+      - Производственный календарь
+      summary: Получение всех данных производственного календаря
+      operationId: findAllCalendarProduction
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CalendarProductionDto"
+    put:
+      tags:
+      - Производственный календарь
+      summary: Сохранение данных производственного календаря
+      operationId: saveCalendarProduction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/CalendarProductionDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GroupProcessInfo"
+  /appservice/{name}:
+    put:
+      tags:
+      - Управление сервисами(заглушка)
+      summary: Изменение значения сервиса
+      operationId: editAppControl
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppControlEditableDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AppControlDto"
+      security:
+      - bearerAuth: []
+  /appservice/setenabled:
+    put:
+      tags:
+      - Управление сервисами(заглушка)
+      summary: Изменение enabled всех сервисов
+      operationId: setAppControlEnabledAll
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AppControlEnabledAllDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AppControlDto"
+      security:
+      - bearerAuth: []
+  /variable:
+    post:
+      tags:
+      - Переменные
+      summary: Получение списка переменных по указанным идентификаторам
+      operationId: findVariables
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VariableDto"
+      security:
+      - bearerAuth: []
+  /system-config/activate:
+    post:
+      tags:
+      - Администрирование поиска
+      summary: Активировать конфигурацию
+      operationId: activateSystemConfig
+      parameters:
+      - name: version
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ElasticSearchOperations"
+      security:
+      - bearerAuth: []
+  /service-version/send-to-prcat:
+    post:
+      tags:
+      - Ведение маппинга услуг и шаблонов КП
+      summary: Отправить мэппинг в Справочник расценок
+      operationId: sendServiceVersionToPrcat
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SuccessInfo"
+      security:
+      - bearerAuth: []
+  /service-version/filter:
+    post:
+      tags:
+      - Ведение маппинга услуг и шаблонов КП
+      summary: Mэппинг услуг справочника КТ-777
+      operationId: findServiceVersionByFilters
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataFilterServiceVersionSearchCriteria"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageServiceVersionDto"
+      security:
+      - bearerAuth: []
+  /service-product/filter:
+    post:
+      tags:
+      - Справочники
+      summary: Справочник услуг
+      operationId: findServiceProduct
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataFilterServiceProductSearchCriteria"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageServiceProductDto"
+      security:
+      - bearerAuth: []
+  /service-offer-type/service-product/filter:
+    post:
+      tags:
+      - Ведение маппинга услуг и шаблонов КП
+      summary: Справочник услуг
+      operationId: findServiceProduct_1
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataFilterServiceProductSearchCriteria"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageServiceProductDto"
+      security:
+      - bearerAuth: []
+  /service-offer-type/filter:
+    post:
+      tags:
+      - Ведение маппинга услуг и шаблонов КП
+      summary: Перечень записей таблицы маппинга услуг и типов КП
+      operationId: findServiceOfferTypes
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataFilterServiceOfferTypeSearchCriteria"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageServiceOfferTypeDto"
+      security:
+      - bearerAuth: []
+  /segment/filter:
+    post:
+      tags:
+      - segment-controller
+      summary: Справочник сегментов/подсегментов
+      operationId: getSegmentsByType
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataFilterSegmentSearchCriteria"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageSegmentDto"
+  /request/version/{requestVersionId}/contractor:
+    post:
+      tags:
+      - Обработка оценок версий поиска
+      summary: Перечень найденных поставщиков по версии поиска
+      operationId: getExcelReportRequestContractorVersion
+      parameters:
+      - name: requestVersionId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+      security:
+      - bearerAuth: []
+  /request/version-rating/filter:
+    post:
+      tags:
+      - Обработка оценок версий поиска
+      summary: Список оценок версий поиска
+      operationId: findRequestVersionRatingsByFilter
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataFilterIncomingRequestVersionRatingSearchCriteria"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PagePreparedRequestVersionRatingDto"
+      security:
+      - bearerAuth: []
+  /rating:
+    post:
+      tags:
+      - rating-controller
+      summary: Обратная связь
+      operationId: getExcelReportRating
+      parameters:
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: to
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+      security:
+      - bearerAuth: []
+  /param/map:
+    post:
+      tags:
+      - Ведение параметров
+      summary: Карта соответствия параметров по ключам
+      operationId: getParamKeysAsMap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: "#/components/schemas/ParamDto"
+      security:
+      - bearerAuth: []
+  /param/find:
+    post:
+      tags:
+      - Ведение параметров
+      summary: "Поиск параметров, поддерживается фильтрация/сортировка/пагинация"
+      operationId: findParamsByFilters
+      parameters:
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+          default: 20
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataFilterObject"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageParamDto"
+      security:
+      - bearerAuth: []
+  /monitoring/create:
+    post:
+      tags:
+      - Управление URL для мониторинга
+      summary: Создание новых данных для мониторинга
+      operationId: createMonitoringData
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MonitoringDataSaveDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/MonitoringDataDto"
+      security:
+      - bearerAuth: []
+  /matrix/org/filter:
+    post:
+      tags:
+      - Матрица Компания организатор / Организатор - Заказчик / Инициатор
+      summary: Получить организаторов по фильтру
+      operationId: getOrgByFiltersAsMap
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataFilterOrgSearchCriteria"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Org"
+  /matrix/initiator/filter:
+    post:
+      tags:
+      - Матрица Компания организатор / Организатор - Заказчик / Инициатор
+      summary: Получить инициаторов по фильтру
+      operationId: getInitiatorByFiltersAsList
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataFilterInitiatorSearchCriteria"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Initiator"
+  /matrix/delete:
+    post:
+      tags:
+      - Матрица Компания организатор / Организатор - Заказчик / Инициатор
+      summary: Удалить заказчика и инициатора
+      operationId: matrixDeleteByObject
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/MatrixDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /matrix/customer/map:
+    post:
+      tags:
+      - Матрица Компания организатор / Организатор - Заказчик / Инициатор
+      summary: Получить заказчиков по списку кодов
+      operationId: getCustomerByCodes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Customer"
+  /matrix/customer/filter:
+    post:
+      tags:
+      - Матрица Компания организатор / Организатор - Заказчик / Инициатор
+      summary: Получить заказчиков по фильтру
+      operationId: getCustomerByFiltersAsMap
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataFilterMatrixSearchCriteria"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Customer"
+  /matrix/add:
+    post:
+      tags:
+      - Матрица Компания организатор / Организатор - Заказчик / Инициатор
+      summary: Сохранить матрицу
+      operationId: matrixAddInfo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/MatrixDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /letter-template/{id}:
+    post:
+      tags:
+      - Шаблоны
+      summary: Изменение данных шаблона
+      operationId: changeLetterTemplate
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - request
+              type: object
+              properties:
+                request:
+                  $ref: "#/components/schemas/LetterTemplateDto"
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SuccessInfo"
+      security:
+      - bearerAuth: []
+  /letter-template/filter:
+    post:
+      tags:
+      - Шаблоны
+      summary: Поиск шаблонов с фильтром
+      operationId: findLetterTemplatesByFilter
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataFilterLetterTemplateSearchCriteria"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageLetterTemplateBriefInfoDto"
+      security:
+      - bearerAuth: []
+  /letter-template/by-letter-types/info:
+    post:
+      tags:
+      - Шаблоны
+      summary: Информация о шаблонах по списку имен
+      operationId: getTemplatesInfo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LetterTemplateInfoDto"
+      security:
+      - bearerAuth: []
+  /feedback:
+    post:
+      tags:
+      - feedback-controller
+      operationId: addFeedback
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - feedbackDto
+              type: object
+              properties:
+                feedbackDto:
+                  $ref: "#/components/schemas/FeedbackDto"
+                fileBlobs:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /feedback/theme:
+    get:
+      tags:
+      - feedback-controller
+      operationId: findThemes
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FeedbackThemeDto"
+    post:
+      tags:
+      - feedback-controller
+      operationId: addTheme
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FeedbackThemeDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/FeedbackThemeDto"
+  /faq/questions/filter:
+    post:
+      tags:
+      - FAQ
+      summary: Список FAQ вопросов
+      operationId: getQuestionsByFilters
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataFilterFaqQuestionSearchCriteria"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageFaqQuestionDto"
+  /faq/question:
+    post:
+      tags:
+      - FAQ
+      summary: Создание FAQ вопроса
+      operationId: createQuestion
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FaqQuestionSaveDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/FaqQuestionDto"
+  /exchange/{source}/procedure:
+    post:
+      tags:
+      - Обмен с внешними сервисами
+      summary: Загрузка закупочных процедур из собственного опыта
+      operationId: loadPurchaseProcedureByFile
+      parameters:
+      - name: source
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SuccessInfo"
+      security:
+      - bearerAuth: []
+  /exchange/{source}/procedure/test:
+    post:
+      tags:
+      - Обмен с внешними сервисами
+      summary: "Тестовый метод: Загрузка закупочных процедур из собственного опыта\
+        \ - только разбор файла"
+      operationId: loadPurchaseProcedureByFileTest
+      parameters:
+      - name: source
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProcedureData"
+      security:
+      - bearerAuth: []
+  /cost-range/filter:
+    post:
+      tags:
+      - Диапазоны стоимостных показателей
+      summary: Диапазоны стоимостных показателей
+      operationId: findCostRangeByFilters
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataFilterCostRangeSearchCriteria"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageCostRangeDto"
+  /calendar-production/filter:
+    post:
+      tags:
+      - Производственный календарь
+      summary: Получение всех данных производственного календаря c по указанному фильтру
+      operationId: findCalendarProduction
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataFilterCalendarProductionSearchCriteria"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageCalendarProductionDto"
+  /build-vectors:
+    post:
+      tags:
+      - Администрирование поиска
+      summary: Перегенерировать вектора в ElasticSearch
+      operationId: buildEsVectors
+      parameters:
+      - name: version
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ElasticSearchOperations"
+      security:
+      - bearerAuth: []
+  /monitoring/stop:
+    patch:
+      tags:
+      - Управление URL для мониторинга
+      operationId: stop
+      responses:
+        "200":
+          description: OK
+      security:
+      - bearerAuth: []
+  /monitoring/start:
+    patch:
+      tags:
+      - Управление URL для мониторинга
+      operationId: start
+      responses:
+        "200":
+          description: OK
+      security:
+      - bearerAuth: []
+  /monitoring/statistics/cleanup:
+    delete:
+      tags:
+      - Управление URL для мониторинга
+      summary: Удаление статистики мониторинга старше 2 недель
+      operationId: cleanupStatistics
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SuccessInfo"
+      security:
+      - bearerAuth: []
+  /standard-question:
+    get:
+      tags:
+      - Стандартные вопросы
+      summary: Получить перечень стандартных вопросов
+      operationId: findAllStandardQuestions
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StandardQuestion"
+      security:
+      - bearerAuth: []
+  /standard-question/{owner}:
+    get:
+      tags:
+      - Стандартные вопросы
+      summary: Получить перечень стандартных вопросов для указанного родителя
+      operationId: findAllStandardQuestions_1
+      parameters:
+      - name: owner
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - SERVICE_INTEREST_REQUEST
+          - MATERIAL_INTEREST_REQUEST
+          - EP_INITIATOR_RATING
+          - EP_CONTRACTOR_RATING
+          - MA_INITIATOR_RATING
+          - MA_SEARCH_RESULT
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StandardQuestion"
+      security:
+      - bearerAuth: []
+  /standard-question-by-id/{id}:
+    get:
+      tags:
+      - Стандартные вопросы
+      summary: Получить вопрос по идентификатору и список возможных ответов к нему
+      operationId: findStandardQuestionById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/StandardQuestion"
+      security:
+      - bearerAuth: []
+  /service/{serviceCode}/{segmentRecordType}:
+    get:
+      tags:
+      - segment-controller
+      summary: Актуальные сочетания услуга-сегмент-подсегмент
+      operationId: getServiceSegmentSubsegmentsByServiceCode
+      parameters:
+      - name: serviceCode
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: segmentRecordType
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - SEGMENT
+          - SUBSEGMENT
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ServiceSegmentSubsegmentDto"
+  /service-offer-type/{service}:
+    get:
+      tags:
+      - Ведение маппинга услуг и шаблонов КП
+      summary: Тип КП по коду услуги
+      operationId: getOfferTypeByServiceCode
+      parameters:
+      - name: service
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ServiceOfferTypeForEPDto"
+      security:
+      - bearerAuth: []
+  /service-offer-type/offer-types:
+    get:
+      tags:
+      - Ведение маппинга услуг и шаблонов КП
+      summary: Перечень типов КП
+      operationId: getOfferTypes
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OfferTypeDto"
+      security:
+      - bearerAuth: []
+  /param/professional-email:
+    get:
+      tags:
+      - Ведение параметров
+      summary: Почтовые ящики для Профессионал 4.0
+      operationId: findProfessionalEmail
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProfessionalEmailDto"
+      security:
+      - bearerAuth: []
+  /neuronet:
+    get:
+      tags:
+      - Администрирование поиска
+      summary: Получить список нейросетей
+      operationId: getNeuronets
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NeuronetInfoDto"
+      security:
+      - bearerAuth: []
+  /monitoring:
+    get:
+      tags:
+      - Управление URL для мониторинга
+      summary: Получить список сервисов для мониторинга
+      operationId: getMonitoringData
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MonitoringDataDto"
+      security:
+      - bearerAuth: []
+  /monitoring/service:
+    get:
+      tags:
+      - Управление URL для мониторинга
+      summary: Получить список имен сервисов
+      operationId: getServiceData
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  type: string
+      security:
+      - bearerAuth: []
+  /monitoring/export:
+    get:
+      tags:
+      - Управление URL для мониторинга
+      operationId: exportMonitoringData
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+      security:
+      - bearerAuth: []
+  /monitoring/actual:
+    get:
+      tags:
+      - Управление URL для мониторинга
+      summary: 'Получить все актуальные данные по статистике сервисов для мониторинга '
+      operationId: getInfoMonitoringData
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MonitoringStatisticDto"
+      security:
+      - bearerAuth: []
+  /matrix:
+    get:
+      tags:
+      - Матрица Компания организатор / Организатор - Заказчик / Инициатор
+      summary: Получить связи
+      operationId: matrixGetInfo
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Matrix"
+  /letter-template/{id}/doc:
+    get:
+      tags:
+      - Шаблоны
+      summary: Выгрузка шаблона
+      operationId: downloadLetterTemplateDoc
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+      security:
+      - bearerAuth: []
+  /letter-template/{id}/doc/info:
+    get:
+      tags:
+      - Шаблоны
+      summary: Данные загруженного документа шаблона
+      operationId: getLetterTemplateDocInfo
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/DocumentDto"
+      deprecated: true
+      security:
+      - bearerAuth: []
+  /letter-template/type:
+    get:
+      tags:
+      - Шаблоны
+      summary: Поиск типов шаблонов
+      operationId: findLetterTemplateTypes
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LetterTemplateTypeDto"
+      security:
+      - bearerAuth: []
+  /letter-template/by-param:
+    get:
+      tags:
+      - Шаблоны
+      summary: Запрос шаблона по наименованию параметра
+      operationId: retrieveTemplate
+      parameters:
+      - name: param
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TemplateDto"
+      security:
+      - bearerAuth: []
+  /letter-template/by-param/doc:
+    get:
+      tags:
+      - Шаблоны
+      summary: Получение шаблона по наименованию параметра
+      operationId: downloadTemplateByLetter
+      parameters:
+      - name: param
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+      security:
+      - bearerAuth: []
+  /letter-template/by-letter-type:
+    get:
+      tags:
+      - Шаблоны
+      summary: Поиск информации о шаблоне по наименованию параметра
+      operationId: findLetterTemplateByLetterType
+      parameters:
+      - name: letterType
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LetterTemplateDto"
+      security:
+      - bearerAuth: []
+  /ldapuser/{name}:
+    get:
+      tags:
+      - Права пользователей AD
+      summary: Получение списка прав пользователя mirror из AD
+      operationId: getLdapUser
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LdapUser"
+      security:
+      - bearerAuth: []
+  /ldapuser/svc_users:
+    get:
+      tags:
+      - Права пользователей AD
+      summary: Получение списка СУЗ mirror из AD
+      operationId: ldapUserSvc
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LdapUser"
+      security:
+      - bearerAuth: []
+  /feedback/report:
+    get:
+      tags:
+      - feedback-controller
+      operationId: getFeedbackReport
+      parameters:
+      - name: date1
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: date2
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+  /feedback/file:
+    get:
+      tags:
+      - feedback-controller
+      operationId: getFeedbackFile
+      parameters:
+      - name: uid
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+  /faq/user-guides:
+    get:
+      tags:
+      - FAQ
+      summary: "Информация об инструкциях пользователя, соответствующих сервису Effect.Mirror"
+      operationId: getUserGuides
+      parameters:
+      - name: mirrorService
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - MA
+          - BP
+          - EP
+          - PRCAT
+          - MTR_MA
+          - MTR_EP
+          - ANALYTICS
+          - PDD
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserGuideDto"
+  /faq/reference/question-types:
+    get:
+      tags:
+      - Справочники FAQ
+      summary: Список типов FAQ вопросов
+      operationId: getFaqQuestionTypes
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReferenceDto"
+  /faq/reference/mirror-services:
+    get:
+      tags:
+      - Справочники FAQ
+      summary: Список сервисов Effect.Mirror
+      operationId: getMirrorServices
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReferenceDto"
+  /exchange/ref/external-source/{id}:
+    get:
+      tags:
+      - Обмен с внешними сервисами
+      summary: Получить запись из справочника систем по id
+      operationId: findExternalSourceById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ExternalSourceDto"
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Обмен с внешними сервисами
+      summary: Пометить на удаление запись в справочнике систем
+      operationId: deleteExternalSource
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SuccessInfo"
+      security:
+      - bearerAuth: []
+  /exchange/procedure/template:
+    get:
+      tags:
+      - Обмен с внешними сервисами
+      summary: Получить шаблон для загрузки закупочных процедур
+      operationId: getPurchaseProcedureTemplate
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+      security:
+      - bearerAuth: []
+  /calendar-production/by-year/{year}:
+    get:
+      tags:
+      - Производственный календарь
+      summary: Получение данных производственного календаря по году
+      operationId: findCalendarProductionByYear
+      parameters:
+      - name: year
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CalendarProductionDto"
+  /appservice:
+    get:
+      tags:
+      - Управление сервисами(заглушка)
+      summary: Получение списка сервисов
+      operationId: findAppControl
+      parameters:
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AppControlDto"
+      security:
+      - bearerAuth: []
+  /service-version/{id}:
+    delete:
+      tags:
+      - Ведение маппинга услуг и шаблонов КП
+      summary: Удаление мэппинга услуг справочника КТ-777
+      operationId: deleteServiceVersion
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: integer
+                format: int64
+      security:
+      - bearerAuth: []
+  /param/cache-remote:
+    delete:
+      tags:
+      - Ведение параметров
+      summary: Очистка кеша параметров удаленных сервисов
+      operationId: clearRemoteServiceParamCache
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      security:
+      - bearerAuth: []
+  /matrix/{code}:
+    delete:
+      tags:
+      - Матрица Компания организатор / Организатор - Заказчик / Инициатор
+      summary: Удалить компанию организатора и его связи
+      operationId: matrixDeleteByCompanyCode
+      parameters:
+      - name: code
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+  /index:
+    delete:
+      tags:
+      - Администрирование поиска
+      summary: Удалить индексы для заданной версии конфигурации
+      operationId: deleteIndexes
+      parameters:
+      - name: version
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ElasticSearchOperations"
+      security:
+      - bearerAuth: []
+  /cost-range/{id}:
+    delete:
+      tags:
+      - Диапазоны стоимостных показателей
+      summary: Удаление диапазона стоимостных показателей
+      operationId: deleteCostRange
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: integer
+                format: int64
+  /calendar-production/{id}:
+    delete:
+      tags:
+      - Производственный календарь
+      summary: Удаление данных производственного календаря по идентификатору записи
+      operationId: deleteCalendarProduction
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SuccessInfo"
+components:
+  schemas:
+    IndexDto:
+      type: object
+      properties:
+        name:
+          type: string
+        size:
+          type: integer
+          format: int64
+    SystemConfigFrontDto:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        isActive:
+          type: boolean
+        configVersion:
+          type: number
+          format: float
+        neuronetVersion:
+          type: number
+          format: float
+        neuronetPath:
+          type: string
+        reindexStatus:
+          type: string
+        defaultIndexes:
+          type: array
+          items:
+            $ref: "#/components/schemas/IndexDto"
+    ElasticSearchOperations:
+      type: object
+      properties:
+        acknowledged:
+          type: boolean
+        log:
+          type: string
+    ServiceVersionChangedDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        newServiceCode:
+          type: string
+        oldServiceCode:
+          type: string
+        oldSegmentId:
+          type: integer
+          format: int64
+        oldSubsegmentId:
+          type: integer
+          format: int64
+        newSegmentId:
+          type: integer
+          format: int64
+        newSubsegmentId:
+          type: integer
+          format: int64
+        changeVersion:
+          type: string
+        versionDate:
+          type: string
+          format: date-time
+        createDate:
+          type: string
+          format: date-time
+        createUser:
+          type: string
+        lastUpdateDate:
+          type: string
+          format: date-time
+        lastUpdateUser:
+          type: string
+    ServiceOfferTypeDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        serviceCode:
+          type: string
+        serviceName:
+          type: string
+        offerType:
+          type: string
+          enum:
+          - COMMON
+          - AUTO_TRANSPORT
+          - IT_LICENSE
+          - SHANK
+        offerTypeName:
+          type: string
+        withCostingDefault:
+          type: boolean
+    RequestVersionProcessingStatus:
+      type: object
+      properties:
+        requestVersionId:
+          type: integer
+          format: int64
+        processingStatus:
+          type: string
+          enum:
+          - NOT_PROCESSED
+          - PROCESSED
+    SuccessInfo:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    AnswerVersionDto:
+      required:
+      - name
+      - orderNo
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        orderNo:
+          type: integer
+          format: int32
+        answerType:
+          type: string
+          enum:
+          - POSITIVE
+          - NEGATIVE
+          - GREEN
+          - LIGHT_GREEN
+          - YELLOW
+          - ORANGE
+          - RED
+          - ANY
+        isDefault:
+          type: boolean
+    QuestionDto:
+      required:
+      - name
+      - orderNo
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        orderNo:
+          type: integer
+          format: int32
+        actualTo:
+          type: string
+          format: date-time
+        code:
+          type: string
+        owner:
+          type: string
+          enum:
+          - SERVICE_INTEREST_REQUEST
+          - MATERIAL_INTEREST_REQUEST
+          - EP_INITIATOR_RATING
+          - EP_CONTRACTOR_RATING
+          - MA_INITIATOR_RATING
+          - MA_SEARCH_RESULT
+        annex:
+          type: string
+        answerVersions:
+          type: array
+          items:
+            $ref: "#/components/schemas/AnswerVersionDto"
+    ParamEditableDto:
+      required:
+      - name
+      - val
+      type: object
+      properties:
+        name:
+          type: string
+        val:
+          type: string
+    ParamDto:
+      type: object
+      properties:
+        key:
+          type: string
+        name:
+          type: string
+        val:
+          type: string
+        createDate:
+          type: string
+          format: date-time
+        createUser:
+          type: string
+        lastUpdateDate:
+          type: string
+          format: date-time
+        lastUpdateUser:
+          type: string
+    MonitoringDataUpdateDto:
+      type: object
+      properties:
+        serviceName:
+          type: string
+        url:
+          type: string
+        summary:
+          type: string
+        isActive:
+          type: boolean
+    MonitoringDataDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        serviceName:
+          type: string
+        url:
+          type: string
+        summary:
+          type: string
+    FeedbackThemeDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        fbThemeName:
+          type: string
+        createDate:
+          type: string
+          format: date-time
+        createUser:
+          type: string
+        lastUpdateDate:
+          type: string
+          format: date-time
+        lastUpdateUser:
+          type: string
+    FaqAnswerSaveDto:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+    FaqQuestionSaveDto:
+      required:
+      - answer
+      - name
+      - questionType
+      - serviceName
+      type: object
+      properties:
+        name:
+          type: string
+        questionType:
+          type: string
+          enum:
+          - GENERAL_QUESTIONS
+          - ADDITIONAL_AGREEMENTS
+        serviceName:
+          type: string
+          enum:
+          - MA
+          - BP
+          - EP
+          - PRCAT
+          - MTR_MA
+          - MTR_EP
+          - ANALYTICS
+          - PDD
+        answer:
+          $ref: "#/components/schemas/FaqAnswerSaveDto"
+    FaqAnswerDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    FaqQuestionDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        questionType:
+          type: string
+          enum:
+          - GENERAL_QUESTIONS
+          - ADDITIONAL_AGREEMENTS
+        questionTypeName:
+          type: string
+        serviceName:
+          type: string
+          enum:
+          - MA
+          - BP
+          - EP
+          - PRCAT
+          - MTR_MA
+          - MTR_EP
+          - ANALYTICS
+          - PDD
+        serviceFullName:
+          type: string
+        answer:
+          $ref: "#/components/schemas/FaqAnswerDto"
+    ExternalSourceDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        code:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        deleted:
+          type: boolean
+    CostRangeDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        lowerBound:
+          type: number
+        upperBound:
+          type: number
+        intervalStep:
+          type: number
+        rangeText:
+          type: string
+        createDate:
+          type: string
+          format: date-time
+        createUser:
+          type: string
+        lastUpdateDate:
+          type: string
+          format: date-time
+        lastUpdateUser:
+          type: string
+    CalendarProductionDto:
+      required:
+      - year
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        year:
+          maximum: 2999
+          minimum: 1900
+          type: integer
+          format: int32
+        hourWorkCount:
+          type: number
+        monthWorkHourCount:
+          type: number
+    DetailExceptionInfo:
+      type: object
+      properties:
+        message:
+          type: string
+        field:
+          type: string
+    EntityExceptionInfo:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+          format: int32
+        error:
+          type: string
+        path:
+          type: string
+        cause:
+          type: string
+        advice:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/DetailExceptionInfo"
+        objectId:
+          type: integer
+          format: int64
+        errorField:
+          type: string
+    GroupProcessInfo:
+      type: object
+      properties:
+        processName:
+          type: string
+        successfulResults:
+          type: integer
+          format: int32
+        exceptions:
+          type: array
+          items:
+            $ref: "#/components/schemas/EntityExceptionInfo"
+    AppControlEditableDto:
+      required:
+      - description
+      - enabled
+      type: object
+      properties:
+        description:
+          type: string
+        enabled:
+          type: boolean
+    AppControlDto:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        createDate:
+          type: string
+          format: date-time
+        createUser:
+          type: string
+        lastUpdateDate:
+          type: string
+          format: date-time
+        lastUpdateUser:
+          type: string
+    AppControlEnabledAllDto:
+      required:
+      - enabled
+      type: object
+      properties:
+        enabled:
+          type: boolean
+    VariableDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        defaultVal:
+          type: string
+    Log:
+      type: object
+      properties:
+        logType:
+          type: string
+          enum:
+          - SUCCESS
+          - WARNING
+          - ERROR
+          - INFO
+        logText:
+          type: string
+    ReferenceSavingResult:
+      type: object
+      properties:
+        exchangeId:
+          type: integer
+          format: int64
+        result:
+          type: string
+          enum:
+          - SUCCESS
+          - WARNING
+          - ERROR
+          - INFO
+        logs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Log"
+    DataFilterServiceVersionSearchCriteria:
+      type: object
+      properties:
+        searchCriteria:
+          $ref: "#/components/schemas/ServiceVersionSearchCriteria"
+        subFilter:
+          $ref: "#/components/schemas/QueryFilter"
+    QueryCondition:
+      type: object
+      properties:
+        field:
+          type: string
+        operator:
+          type: string
+          enum:
+          - like
+          - not_like
+          - ilike
+          - not_ilike
+          - eq
+          - not_eq
+          - gt
+          - gte
+          - lt
+          - lte
+          - "null"
+          - not_null
+        value:
+          type: string
+        format:
+          type: string
+        filter:
+          $ref: "#/components/schemas/QueryFilter"
+    QueryFilter:
+      type: object
+      properties:
+        logic:
+          type: string
+          enum:
+          - and
+          - or
+          - not
+        cond:
+          type: array
+          items:
+            $ref: "#/components/schemas/QueryCondition"
+        selectField:
+          type: string
+    ServiceVersionSearchCriteria:
+      type: object
+      properties:
+        serviceCodes:
+          type: array
+          items:
+            type: string
+        version:
+          type: string
+        newServiceName:
+          type: string
+        oldServiceName:
+          type: string
+    Pageable:
+      type: object
+      properties:
+        page:
+          minimum: 0
+          type: integer
+          format: int32
+        size:
+          minimum: 1
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            type: string
+    PageServiceVersionDto:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/ServiceVersionDto"
+        number:
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            $ref: "#/components/schemas/SortObject"
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        empty:
+          type: boolean
+    PageableObject:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        sort:
+          type: array
+          items:
+            $ref: "#/components/schemas/SortObject"
+        pageNumber:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        pageSize:
+          type: integer
+          format: int32
+        unpaged:
+          type: boolean
+    ServiceVersionDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        newServiceCode:
+          type: string
+        newServiceName:
+          type: string
+        oldServiceCode:
+          type: string
+        oldServiceName:
+          type: string
+        oldServiceCatalog:
+          type: string
+        oldSegmentId:
+          type: integer
+          format: int64
+        oldSegmentName:
+          type: string
+        oldSubsegmentId:
+          type: integer
+          format: int64
+        oldSubsegmentName:
+          type: string
+        newSegmentId:
+          type: integer
+          format: int64
+        newSegmentName:
+          type: string
+        newSubsegmentId:
+          type: integer
+          format: int64
+        newSubsegmentName:
+          type: string
+        changeVersion:
+          type: string
+        versionDate:
+          type: string
+          format: date-time
+        createDate:
+          type: string
+          format: date-time
+        createUser:
+          type: string
+        lastUpdateDate:
+          type: string
+          format: date-time
+        lastUpdateUser:
+          type: string
+    SortObject:
+      type: object
+      properties:
+        direction:
+          type: string
+        nullHandling:
+          type: string
+        ascending:
+          type: boolean
+        property:
+          type: string
+        ignoreCase:
+          type: boolean
+    DataFilterServiceProductSearchCriteria:
+      type: object
+      properties:
+        searchCriteria:
+          $ref: "#/components/schemas/ServiceProductSearchCriteria"
+        subFilter:
+          $ref: "#/components/schemas/QueryFilter"
+    ServiceProductSearchCriteria:
+      type: object
+      properties:
+        fromDate:
+          type: string
+          format: date-time
+        toDate:
+          type: string
+          format: date-time
+        searchKey:
+          type: string
+        withHistData:
+          type: boolean
+        catalogs:
+          type: array
+          items:
+            type: string
+    PageServiceProductDto:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/ServiceProductDto"
+        number:
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            $ref: "#/components/schemas/SortObject"
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        empty:
+          type: boolean
+    ServiceProductDto:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+    DataFilterServiceOfferTypeSearchCriteria:
+      type: object
+      properties:
+        searchCriteria:
+          $ref: "#/components/schemas/ServiceOfferTypeSearchCriteria"
+        subFilter:
+          $ref: "#/components/schemas/QueryFilter"
+    ServiceOfferTypeSearchCriteria:
+      type: object
+      properties:
+        serviceCode:
+          type: string
+    PageServiceOfferTypeDto:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/ServiceOfferTypeDto"
+        number:
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            $ref: "#/components/schemas/SortObject"
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        empty:
+          type: boolean
+    DataFilterSegmentSearchCriteria:
+      type: object
+      properties:
+        searchCriteria:
+          $ref: "#/components/schemas/SegmentSearchCriteria"
+        subFilter:
+          $ref: "#/components/schemas/QueryFilter"
+    SegmentSearchCriteria:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - SEGMENT
+          - SUBSEGMENT
+    PageSegmentDto:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/SegmentDto"
+        number:
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            $ref: "#/components/schemas/SortObject"
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        empty:
+          type: boolean
+    SegmentDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        type:
+          type: string
+    DataFilterIncomingRequestVersionRatingSearchCriteria:
+      type: object
+      properties:
+        searchCriteria:
+          $ref: "#/components/schemas/IncomingRequestVersionRatingSearchCriteria"
+        subFilter:
+          $ref: "#/components/schemas/QueryFilter"
+    IncomingRequestVersionRatingSearchCriteria:
+      type: object
+      properties:
+        fromDate:
+          type: string
+          format: date-time
+        toDate:
+          type: string
+          format: date-time
+        answerTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - POSITIVE
+            - NEGATIVE
+            - GREEN
+            - LIGHT_GREEN
+            - YELLOW
+            - ORANGE
+            - RED
+            - ANY
+        processingStatus:
+          type: string
+          enum:
+          - NOT_PROCESSED
+          - PROCESSED
+    PagePreparedRequestVersionRatingDto:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/PreparedRequestVersionRatingDto"
+        number:
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            $ref: "#/components/schemas/SortObject"
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        empty:
+          type: boolean
+    PreparedRequestVersionRatingDto:
+      type: object
+      properties:
+        requestVersionId:
+          type: integer
+          format: int64
+        requestId:
+          type: integer
+          format: int64
+        answerType:
+          type: string
+          enum:
+          - POSITIVE
+          - NEGATIVE
+          - GREEN
+          - LIGHT_GREEN
+          - YELLOW
+          - ORANGE
+          - RED
+          - ANY
+        comment:
+          type: string
+        createDate:
+          type: string
+          format: date-time
+        createUser:
+          type: string
+        processingStatus:
+          type: string
+          enum:
+          - NOT_PROCESSED
+          - PROCESSED
+    DataFilterObject:
+      type: object
+      properties:
+        searchCriteria:
+          type: object
+        subFilter:
+          $ref: "#/components/schemas/QueryFilter"
+    PageParamDto:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/ParamDto"
+        number:
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            $ref: "#/components/schemas/SortObject"
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        empty:
+          type: boolean
+    MonitoringDataSaveDto:
+      required:
+      - serviceName
+      - url
+      type: object
+      properties:
+        serviceName:
+          type: string
+        url:
+          type: string
+        summary:
+          type: string
+    DataFilterOrgSearchCriteria:
+      type: object
+      properties:
+        searchCriteria:
+          $ref: "#/components/schemas/OrgSearchCriteria"
+        subFilter:
+          $ref: "#/components/schemas/QueryFilter"
+    OrgSearchCriteria:
+      type: object
+      properties:
+        fromDate:
+          type: string
+          format: date-time
+        toDate:
+          type: string
+          format: date-time
+        searchKey:
+          type: string
+        companyCode:
+          type: string
+    Org:
+      type: object
+      properties:
+        companyCode:
+          type: string
+        name:
+          type: string
+        block:
+          type: string
+        code:
+          type: string
+    DataFilterInitiatorSearchCriteria:
+      type: object
+      properties:
+        searchCriteria:
+          $ref: "#/components/schemas/InitiatorSearchCriteria"
+        subFilter:
+          $ref: "#/components/schemas/QueryFilter"
+    InitiatorSearchCriteria:
+      type: object
+      properties:
+        fromDate:
+          type: string
+          format: date-time
+        toDate:
+          type: string
+          format: date-time
+        searchKey:
+          type: string
+        customerCode:
+          type: string
+    Initiator:
+      type: object
+      properties:
+        initiatorCode:
+          type: string
+        initiatorName:
+          type: string
+        initiatorBlock:
+          type: string
+        customerCode:
+          type: string
+        name:
+          type: string
+          writeOnly: true
+        code:
+          type: string
+          writeOnly: true
+        block:
+          type: string
+          writeOnly: true
+    MatrixDto:
+      type: object
+      properties:
+        companyCode:
+          type: string
+        orgCode:
+          type: string
+        customerCode:
+          type: string
+        initiatorCode:
+          type: string
+        isDeleted:
+          type: boolean
+    Customer:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+    DataFilterMatrixSearchCriteria:
+      type: object
+      properties:
+        searchCriteria:
+          $ref: "#/components/schemas/MatrixSearchCriteria"
+        subFilter:
+          $ref: "#/components/schemas/QueryFilter"
+    MatrixSearchCriteria:
+      type: object
+      properties:
+        fromDate:
+          type: string
+          format: date-time
+        toDate:
+          type: string
+          format: date-time
+        searchKey:
+          type: string
+    FileInfoDto:
+      type: object
+      properties:
+        fileId:
+          type: integer
+          format: int64
+        fileName:
+          type: string
+        fileSize:
+          type: integer
+          format: int64
+        fileCreateDate:
+          type: string
+          format: date-time
+        fileType:
+          type: string
+    LetterTemplateDto:
+      required:
+      - letterType
+      - status
+      - typeTemplate
+      type: object
+      properties:
+        letterType:
+          type: string
+        typeTemplate:
+          type: string
+          enum:
+          - DOCUMENT
+          - TEMPLATE
+        title:
+          type: string
+        variableIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+        fileInfo:
+          $ref: "#/components/schemas/FileInfoDto"
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - ACTUAL
+    DataFilterLetterTemplateSearchCriteria:
+      type: object
+      properties:
+        searchCriteria:
+          $ref: "#/components/schemas/LetterTemplateSearchCriteria"
+        subFilter:
+          $ref: "#/components/schemas/QueryFilter"
+    LetterTemplateSearchCriteria:
+      type: object
+      properties:
+        letterType:
+          type: string
+        title:
+          type: string
+        letterTemplateType:
+          type: string
+          enum:
+          - DOCUMENT
+          - TEMPLATE
+    LetterTemplateBriefInfoDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        letterType:
+          type: string
+        title:
+          type: string
+        typeTemplate:
+          type: string
+        typeTemplateName:
+          type: string
+        letterSample:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - ACTUAL
+    PageLetterTemplateBriefInfoDto:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/LetterTemplateBriefInfoDto"
+        number:
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            $ref: "#/components/schemas/SortObject"
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        empty:
+          type: boolean
+    LetterTemplateInfoDto:
+      type: object
+      properties:
+        letterType:
+          type: string
+        title:
+          type: string
+        typeTemplate:
+          type: string
+        typeTemplateName:
+          type: string
+        letterSample:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - ACTUAL
+        lastUpdateDate:
+          type: string
+          format: date-time
+    FeedbackDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        fbThemeName:
+          type: string
+        feedbackText:
+          type: string
+        userFullname:
+          type: string
+        createDate:
+          type: string
+          format: date-time
+        createUser:
+          type: string
+        lastUpdateDate:
+          type: string
+          format: date-time
+        lastUpdateUser:
+          type: string
+    DataFilterFaqQuestionSearchCriteria:
+      type: object
+      properties:
+        searchCriteria:
+          $ref: "#/components/schemas/FaqQuestionSearchCriteria"
+        subFilter:
+          $ref: "#/components/schemas/QueryFilter"
+    FaqQuestionSearchCriteria:
+      type: object
+      properties:
+        mirrorService:
+          type: string
+          enum:
+          - MA
+          - BP
+          - EP
+          - PRCAT
+          - MTR_MA
+          - MTR_EP
+          - ANALYTICS
+          - PDD
+        name:
+          type: string
+        questionType:
+          type: string
+          enum:
+          - GENERAL_QUESTIONS
+          - ADDITIONAL_AGREEMENTS
+    PageFaqQuestionDto:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/FaqQuestionDto"
+        number:
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            $ref: "#/components/schemas/SortObject"
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        empty:
+          type: boolean
+    ProcedureData:
+      type: object
+      properties:
+        syncDate:
+          type: string
+          format: date-time
+        messageGuid:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProcedureItem"
+    ProcedureItem:
+      type: object
+      properties:
+        lotNr:
+          type: string
+        lotId:
+          type: string
+        lotName:
+          type: string
+        procedureNr:
+          type: string
+        procedureId:
+          type: string
+        planCompletionDate:
+          type: string
+        dateOfPublication:
+          type: string
+        organizer:
+          type: string
+        organizerCode:
+          type: string
+        initiator:
+          type: string
+        purchaseCategory:
+          type: string
+        purchaseForm:
+          type: string
+        serviceCode:
+          type: string
+        customer:
+          type: string
+        nmc:
+          type: string
+        protocolDate:
+          type: string
+        okved:
+          type: array
+          items:
+            type: string
+        okpd:
+          type: array
+          items:
+            type: string
+        okato:
+          type: array
+          items:
+            type: string
+        offers:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProcedureOffer"
+    ProcedureOffer:
+      type: object
+      properties:
+        contractorCode:
+          type: string
+        contractorName:
+          type: string
+        contractorEsuCode:
+          type: string
+        inn:
+          type: string
+        kpp:
+          type: string
+        cost:
+          type: string
+        contractDate:
+          type: string
+        offerStatus:
+          type: string
+    CostRangeSearchCriteria:
+      type: object
+      properties:
+        lowerBound:
+          type: string
+        upperBound:
+          type: string
+        intervalStep:
+          type: string
+        rangeText:
+          type: string
+    DataFilterCostRangeSearchCriteria:
+      type: object
+      properties:
+        searchCriteria:
+          $ref: "#/components/schemas/CostRangeSearchCriteria"
+        subFilter:
+          $ref: "#/components/schemas/QueryFilter"
+    PageCostRangeDto:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/CostRangeDto"
+        number:
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            $ref: "#/components/schemas/SortObject"
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        empty:
+          type: boolean
+    CalendarProductionSearchCriteria:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+    DataFilterCalendarProductionSearchCriteria:
+      type: object
+      properties:
+        searchCriteria:
+          $ref: "#/components/schemas/CalendarProductionSearchCriteria"
+        subFilter:
+          $ref: "#/components/schemas/QueryFilter"
+    PageCalendarProductionDto:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/CalendarProductionDto"
+        number:
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            $ref: "#/components/schemas/SortObject"
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        empty:
+          type: boolean
+    StandardAnswerVersion:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        orderNo:
+          type: integer
+          format: int32
+        answerType:
+          type: string
+          enum:
+          - POSITIVE
+          - NEGATIVE
+          - GREEN
+          - LIGHT_GREEN
+          - YELLOW
+          - ORANGE
+          - RED
+          - ANY
+        isDefault:
+          type: boolean
+    StandardQuestion:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        orderNo:
+          type: integer
+          format: int32
+        code:
+          type: string
+        annex:
+          type: string
+        answerVersions:
+          type: array
+          items:
+            $ref: "#/components/schemas/StandardAnswerVersion"
+    ServiceSegmentSubsegmentDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        serviceCode:
+          type: string
+        segmentId:
+          type: integer
+          format: int64
+        subsegmentId:
+          type: integer
+          format: int64
+        segmentName:
+          type: string
+        subsegmentName:
+          type: string
+    ServiceOfferTypeForEPDto:
+      type: object
+      properties:
+        serviceCode:
+          type: string
+        offerType:
+          type: string
+        withCostingDefault:
+          type: boolean
+    OfferTypeDto:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+    ProfessionalEmailDto:
+      type: object
+      properties:
+        professionalEmailSender:
+          type: string
+        professionalEmailCopySender:
+          type: string
+    NeuronetInfoDto:
+      type: object
+      properties:
+        name:
+          type: string
+        version:
+          type: number
+          format: float
+        path:
+          type: string
+        isActive:
+          type: boolean
+        isLatest:
+          type: boolean
+    MonitoringStatisticDto:
+      type: object
+      properties:
+        serviceName:
+          type: string
+        url:
+          type: string
+        summary:
+          type: string
+        resultCheck:
+          type: string
+        createDate:
+          type: string
+          format: date-time
+    Matrix:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        companyCode:
+          type: string
+        orgCode:
+          type: string
+        customerCode:
+          type: string
+        initiatorCode:
+          type: string
+        createDate:
+          type: string
+          format: date-time
+        createUser:
+          type: string
+        lastUpdateDate:
+          type: string
+          format: date-time
+        lastUpdateUser:
+          type: string
+        isDeleted:
+          type: boolean
+    DocumentDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        filename:
+          type: string
+        fileMimeType:
+          type: string
+        fileSize:
+          type: integer
+          format: int64
+        createDate:
+          type: string
+          format: date-time
+        createUser:
+          type: string
+        lastUpdateDate:
+          type: string
+          format: date-time
+        lastUpdateUser:
+          type: string
+    LetterTemplateTypeDto:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    TemplateDto:
+      type: object
+      properties:
+        title:
+          type: string
+        variables:
+          type: object
+          additionalProperties:
+            type: string
+        templateFileInfo:
+          $ref: "#/components/schemas/FileInfoDto"
+    LdapGroup:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    LdapUser:
+      type: object
+      properties:
+        login:
+          type: string
+        fullName:
+          type: string
+        description:
+          type: string
+        accountExpires:
+          type: string
+          format: date-time
+        isDisabled:
+          type: boolean
+          writeOnly: true
+        memberof:
+          type: array
+          items:
+            $ref: "#/components/schemas/LdapGroup"
+        disabled:
+          type: boolean
+    DocumentInfoDto:
+      type: object
+      properties:
+        name:
+          type: string
+        size:
+          type: integer
+          format: int64
+        mimeType:
+          type: string
+        createDate:
+          type: string
+          format: date-time
+        lastUpdateDate:
+          type: string
+          format: date-time
+    UserGuideDto:
+      type: object
+      properties:
+        templateId:
+          type: integer
+          format: int64
+        description:
+          type: string
+        documentInfo:
+          $ref: "#/components/schemas/DocumentInfoDto"
+    ReferenceDto:
+      type: object
+      properties:
+        key:
+          type: object
+        value:
+          type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

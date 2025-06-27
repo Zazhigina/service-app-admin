@@ -81,6 +81,14 @@ public class MonitoringController {
         return new SuccessInfo("Операция выполнена");
     }
 
+    @DeleteMapping("/statistics/cleanup")
+    @CrossOrigin(origins = {"http://localhost:3000"})
+    @Operation(summary = "Удаление старых данных статистики")
+    public SuccessInfo cleanupStatistics() {
+        monitoringService.removeOldMonitoringStatistics();
+        return new SuccessInfo("Статистика очищена");
+    }
+
     @PatchMapping("/start")
     @CrossOrigin(origins = {"http://localhost:3000"})
     @ResponseStatus(HttpStatus.OK)

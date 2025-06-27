@@ -165,7 +165,7 @@ public class MonitoringService {
         monitoringRepository.deleteMonitoringStatistic();
     }
 
-    @Scheduled(cron = "0 0 6 * * *", zone = "Europe/Moscow")
+    @Scheduled(cron = "0 0 * * * *", zone = "Europe/Moscow")
     @Transactional
     public void removeOldMonitoringStatistics() {
         LocalDateTime twoWeeksAgo = LocalDateTime.now().minusWeeks(2);

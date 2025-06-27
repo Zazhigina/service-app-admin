@@ -284,6 +284,7 @@ public class MonitoringRepository {
         dsl.delete(T_MONITORING_STATISTICS).execute();
     }
 
+
     public void setAllActual(boolean active) {
         dsl.update(T_MONITORING)
                 .set(T_MONITORING.IS_ACTIVE, active)
